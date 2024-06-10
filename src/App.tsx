@@ -1,7 +1,12 @@
 import React from "react";
 import Counter from "./components/Counter";
 import UserMain from "./pages/user/main/UserMain";
+import InstructorMain from "./pages/instructor/main/InstructorMain";
+import Coupon from './pages/user/coupon/coupon';
 import { Link, Route, Routes } from "react-router-dom";
+import SetFilter from './pages/user/reservation/SetFilter';
+import FilterResult from './pages/user/reservation/FilterResult';
+
 
 const App: React.FC = () => {
   return (
@@ -25,6 +30,10 @@ const App: React.FC = () => {
       </div>
       <Routes>
         <Route path="/user/main" element={<UserMain />} />
+        <Route path="/user/coupon" element={<Coupon />} />
+        <Route path="/reserve/set" element={<SetFilter />} />
+        <Route path="/reserve/result" element={<FilterResult />} />
+        <Route path="/instructor/main" element={<InstructorMain />} />
       </Routes>
     </div>
   );
