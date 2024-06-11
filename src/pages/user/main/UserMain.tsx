@@ -3,44 +3,39 @@ import apiClient from "../../../utils/config/axiosConfig";
 
 import NavbarUser from "../../../components/common/NavbarUser";
 import ADCarousel from "../../../components/user/ADCarousel";
+import Footer from "../../../components/common/Footer";
+import ReservationBox from "../../../components/user/ResservationBox";
+import TeamAD from "../../../components/user/TeamAD";
 
 const UserMain: React.FC = () => {
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get("/user/main");
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await apiClient.get("/user/main");
+  //       setData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
-  {
-    /* {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>Loading...</p>} */
-  }
+  //   fetchData();
+  // }, []);
+
+  // {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>Loading...</p>}
+
   return (
-    <div className="flex flex-col min-h-screen">
-      <div>
-        <NavbarUser />
+    <div className="flex flex-col">
+      <NavbarUser />
+      <ADCarousel />
+      <div className="flex-1 p-4">
+        <ReservationBox />
       </div>
-      <div className="flex flex-col flex-1">
-        <div className="flex-1 w-full">
-          <div className="w-full">
-            <ADCarousel />
-          </div>
-        </div>
-        <div className="flex-1 p-4">
-          <div className="bg-white p-4 shadow">reservation</div>
-        </div>
-        <div className="flex-1 p-4">
-          <div className="bg-white p-4 shadow">team</div>
-        </div>
+      <div className="flex-1 p-4">
+        <TeamAD />
       </div>
-      <div className="bg-gray-800 text-white p-4">footer</div>
+      <Footer />
     </div>
   );
 };
