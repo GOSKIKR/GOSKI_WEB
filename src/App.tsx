@@ -3,7 +3,7 @@ import Counter from "./components/Counter";
 import UserMain from "./pages/user/main/UserMain";
 import InstructorMain from "./pages/instructor/main/InstructorMain";
 import Coupon from './pages/user/coupon/coupon';
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import SetFilter from './pages/user/reservation/SetFilter';
 import FilterResult from './pages/user/reservation/FilterResult';
 import BeforePay from './pages/user/payment/BeforePay';
@@ -14,25 +14,8 @@ import PayDetail from './pages/user/payment/PayDetail';
 const App: React.FC = () => {
   return (
     <div>
-      <nav className="bg-gray-800 p-4">
-        <div className="flex items-center space-x-4">
-          <h1 className="text-white text-2xl font-bold">
-            <Link to="/" className="text-white">
-              GOSKI
-            </Link>
-          </h1>
-          <h1 className="text-white text-xl font-bold">
-            <Link to="/user/main" className="text-white">
-              User Main
-            </Link>
-          </h1>
-        </div>
-      </nav>
-      <div className="p-4">
-        <Counter />
-      </div>
       <Routes>
-        <Route path="/user/main" element={<UserMain />} />
+        <Route path="/" element={<UserMain />} />
         <Route path="/user/coupon" element={<Coupon />} />
         <Route path="/reserve/set" element={<SetFilter />} />
         <Route path="/reserve/result" element={<FilterResult />} />
@@ -41,6 +24,9 @@ const App: React.FC = () => {
         <Route path="/user/payment" element={<Payment />} />
         <Route path="/user/lessonlist" element={<UserLessonlist/>} />
         <Route path="/instructor/main" element={<InstructorMain />} />
+
+        <Route path="/counter" element={<Counter />} />
+        <Route path="*" element={<div>Not Found</div>} />
       </Routes>
     </div>
   );
