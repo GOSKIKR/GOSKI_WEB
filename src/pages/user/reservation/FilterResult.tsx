@@ -13,14 +13,6 @@ interface Team {
 }
 
 const FilterResult = () => {
-    const [team, setTeam] = useState<Team[]>([]);
-
-    useEffect(() => {
-        const response = apiClient.post('/lesson/reserve/novice');
-        setTeam(response.data);
-        console.log(team);
-    },[]);
-
     return (
         <div>
             <div>검색결과</div>
