@@ -1,7 +1,6 @@
 import React from "react";
 
-const TeamRevise : React.FC = () => {
-
+const TeamProfile : React.FC = () => {
 
     return (
         <div>
@@ -10,4 +9,4 @@ const TeamRevise : React.FC = () => {
     )
 }
 
-export default TeamRevise;
+export default TeamProfile

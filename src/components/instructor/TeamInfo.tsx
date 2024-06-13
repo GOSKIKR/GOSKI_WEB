@@ -1,7 +1,6 @@
 import React from "react";
 
-const SetTeamLessonFee : React.FC = () => {
-    
+const TeamInfo : React.FC = () => {
 
     return (
         <div>
@@ -10,4 +9,4 @@ const SetTeamLessonFee : React.FC = () => {
     )
 }
 
-export default SetTeamLessonFee
+export default TeamInfo

@@ -10,6 +10,7 @@ import BeforePay from './pages/user/payment/BeforePay';
 import Payment from './pages/user/payment/Payment';
 import UserLessonlist from './pages/user/mypage/UserLessonlist';
 import PayDetail from './pages/user/payment/PayDetail';
+import TeamManageMain from "./pages/instructor/manage/TeamManageMain"
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,8 @@ const App: React.FC = () => {
         <Route path="/user/payment" element={<Payment />} />
         <Route path="/user/lessonlist" element={<UserLessonlist/>} />
         <Route path="/instructor/main" element={<InstructorMain />} />
+
+        <Route path="/instructor/team" element={<TeamManageMain/>}/>
 
         <Route path="/counter" element={<Counter />} />
         <Route path="*" element={<div>Not Found</div>} />

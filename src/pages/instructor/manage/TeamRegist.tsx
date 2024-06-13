@@ -5,7 +5,7 @@ const TeamRegist : React.FC = () => {
 
     return (
         <div>
-
+            팀 등록
         </div>
     )
 }
