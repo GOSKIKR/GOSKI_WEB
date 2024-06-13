@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import NavbarUser from '../../../components/common/NavbarUser';
+import { useNavigate } from 'react-router-dom';
 
 const SetFilter: React.FC = () => {
+    const navigate = useNavigate();
     const [location, setLocation] = useState('');
     const [participants, setParticipants] = useState(1);
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [level, setLevel] = useState(1);
+
+    const goToResult = () => {
+        navigate(`/reserve/result`);
+    }
 
     return (
         <div>
@@ -72,6 +78,7 @@ const SetFilter: React.FC = () => {
                     </select>
                 </label>
             </div>
+            <div onClick={goToResult} className='w-20 h-12 bg-primary-500 text-white'>강습 조회</div>
         </div>
         </div>
     
