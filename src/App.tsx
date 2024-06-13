@@ -6,12 +6,22 @@ import Coupon from "./pages/user/coupon/coupon";
 import { Route, Routes } from "react-router-dom";
 import SetFilter from "./pages/user/reservation/SetFilter";
 import FilterResult from "./pages/user/reservation/FilterResult";
+import Login from "./pages/user/auth/Login";
+import ForgotPassword from "./pages/user/auth/ForgotPassword";
+import Register from "./pages/user/auth/Register";
+import DM from "./pages/user/dm/DM";
 
 const App: React.FC = () => {
   return (
     <div>
       <Routes>
         <Route path="/" element={<UserMain />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/login/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login/register" element={<Register />} />
+
+        <Route path="/dm" element={<DM />} />
+
         <Route path="/user/coupon" element={<Coupon />} />
         <Route path="/reserve/set" element={<SetFilter />} />
         <Route path="/reserve/result" element={<FilterResult />} />
