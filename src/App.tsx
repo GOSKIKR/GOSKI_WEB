@@ -13,6 +13,7 @@ import UserModify from './components/user/UserModify';
 import PayDetail from './pages/user/payment/PayDetail';
 import UserMypage from './pages/user/mypage/UserMypage';
 import LessonDetail from './pages/user/reservation/LessonDetail';
+import TeamManageMain from "./pages/instructor/manage/TeamManageMain"
 
 const App: React.FC = () => {
   return (
@@ -27,6 +28,8 @@ const App: React.FC = () => {
         <Route path="/user/payment" element={<Payment />} />
         <Route path="/user/my" element={<UserMypage />} />
         <Route path="/instructor/main" element={<InstructorMain />} />
+
+        <Route path="/instructor/team" element={<TeamManageMain/>}/>
 
         <Route path="/counter" element={<Counter />} />
         <Route path="*" element={<div>Not Found</div>} />
