@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
+import { FaCircle } from "react-icons/fa";
+import { FaRegCircle } from "react-icons/fa";
+import { MdArrowForwardIos } from "react-icons/md";
+import { MdArrowBackIosNew } from "react-icons/md";
 
 const ADCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,7 +43,7 @@ const ADCarousel = () => {
   return (
     <div className="flex relative overflow-hidden w-full">
       <div
-        className="whitespace-nowrap transition-transform duration-1000"
+        className="whitespace-nowrap w-full transition-transform duration-1000"
         style={{ transform: `translateX(${-currentIndex * 100}%)` }}
       >
         {images.map((src, index) => (
@@ -51,16 +55,16 @@ const ADCarousel = () => {
           />
         ))}
       </div>
-      <div className="absolute top-1/2 transform -translate-y-1/2 w-full flex justify-between px-4">
+      <div className="absolute top-1/2 transform -translate-y-1/2 w-full h-40 flex justify-between px-4">
         <button
           onClick={() =>
             setCurrentIndex((prevIndex) =>
               prevIndex === 0 ? images.length - 1 : prevIndex - 1
             )
           }
-          className="bg-gray-800 text-white p-2 rounded-full w-20 h-20"
+          className="flex text-white text-9xl justify-center items-center"
         >
-          이전
+          <MdArrowBackIosNew />
         </button>
         <button
           onClick={() =>
@@ -68,19 +72,19 @@ const ADCarousel = () => {
               prevIndex === images.length - 1 ? 0 : prevIndex + 1
             )
           }
-          className="bg-gray-800 text-white p-2 rounded-full w-20 h-20"
+          className="flex text-white text-9xl justify-center items-center"
         >
-          다음
+          <MdArrowForwardIos />
         </button>
       </div>
       <div className="absolute bottom-10 w-full flex justify-center p-2">
         {images.map((_, idx) => (
           <div
             key={idx}
-            className={`h-4 w-4 rounded-full mx-1 ${
-              idx === currentIndex ? "bg-white" : "bg-black"
-            }`}
-          ></div>
+            className="flex h-10 w-20 text-white text-3xl justify-center items-center"
+          >
+            {idx === currentIndex ? <FaCircle /> : <FaRegCircle />}
+          </div>
         ))}
       </div>
     </div>

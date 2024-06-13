@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const NavbarUser = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
+
+  const handleLoginBtn = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="flex flex-row h-20 w-full justify-between items-center bg-primary-600">
@@ -17,14 +21,17 @@ const NavbarUser = () => {
       </div>
       {isLogin ? (
         <div className="basis-1/4 flex flex-row justify-around">
-          <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5">
+          <div
+            onClick={() => navigate("/dm")}
+            className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5"
+          >
             알림
           </div>
           <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5">
             설정
           </div>
           <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5">
-            <button onClick={() => setIsLogin(false)}>Logout</button>
+            <button onClick={() => setIsLogin(false)}>로그아웃</button>
           </div>
           <div className="navbar-user__profile">
             <img
@@ -37,10 +44,13 @@ const NavbarUser = () => {
       ) : (
         <div className="basis-1/4 flex flex-row justify-end">
           <div
-            onClick={() => setIsLogin(true)}
+            onClick={() => {
+              setIsLogin(true);
+              handleLoginBtn();
+            }}
             className="text-white p-5 cursor-pointer"
           >
-            Login
+            로그인
           </div>
         </div>
       )}
