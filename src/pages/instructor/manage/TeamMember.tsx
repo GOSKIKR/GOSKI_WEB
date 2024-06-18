@@ -29,7 +29,7 @@ const TeamMember: React.FC = () => {
                     <DropdownMenu />
                     <div className="team-member mb-6 bg-primary-100 rounded-lg w-[1200px]">
                         <div className="flex justify-between items-center p-6">
-                            <div className="text-lg font-bold">고승민의 스키교실 (5명)</div>
+                            <div className="text-lg font-bold">고승민의 스키교실 <span className="text-black">({members.length}명)</span></div>
                             <div className="space-x-2">
                                 <button className="bg-primary-500 text-white rounded px-4 py-2">수정하기</button>
                                 <button className="bg-primary-700 text-white rounded px-4 py-2">저장하기</button>
