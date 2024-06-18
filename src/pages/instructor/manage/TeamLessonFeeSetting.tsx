@@ -1,11 +1,16 @@
 import React from "react";
+import TeamManageHeader from "../../../components/instructor/TeamManageHeader";
 
 const TeamLessonFeeSetting : React.FC = () => {
     
 
     return (
         <div>
-            강습비 설정
+            <TeamManageHeader/>
+            <div className="flex justify-center mt-10">
+                
+            </div>
+            
         </div>
     )
 }

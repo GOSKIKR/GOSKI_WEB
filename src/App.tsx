@@ -3,7 +3,7 @@ import Counter from "./components/Counter";
 import UserMain from "./pages/user/main/UserMain";
 import InstructorMain from "./pages/instructor/main/InstructorMain";
 import Coupon from './components/user/coupon';
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Login from "./pages/user/auth/Login";
 import ForgotPassword from "./pages/user/auth/ForgotPassword";
 import Register from "./pages/user/auth/Register";
@@ -17,7 +17,10 @@ import UserModify from './components/user/UserModify';
 import PayDetail from './pages/user/payment/PayDetail';
 import UserMypage from './pages/user/mypage/UserMypage';
 import LessonDetail from './pages/user/reservation/LessonDetail';
-import TeamManageMain from "./pages/instructor/manage/TeamManageMain"
+import TeamRegist from "./pages/instructor/manage/TeamRegist";
+import TeamInfoEdit from "./pages/instructor/manage/TeamInfoEdit";
+import TeamLessonFeeSetting from "./pages/instructor/manage/TeamLessonFeeSetting";
+import TeamMember from "./pages/instructor/manage/TeamMember";
 
 const App: React.FC = () => {
   return (
@@ -43,7 +46,12 @@ const App: React.FC = () => {
 
         <Route path="/instructor/main" element={<InstructorMain />} />
 
-        <Route path="/instructor/team" element={<TeamManageMain/>}/>
+        <Route path="/instructor/team" element={<Navigate to="/instructor/team/regist"/>}/>
+
+        <Route path="/instructor/team/regist" element={<TeamRegist/>}/>
+        <Route path="/instructor/team/edit" element={<TeamInfoEdit/>}/>
+        <Route path="/instructor/team/lessonfee" element={<TeamLessonFeeSetting/>}/>
+        <Route path="/instructor/team/member" element={<TeamMember/>}/>
 
         <Route path="/counter" element={<Counter />} />
         <Route path="*" element={<div>Not Found</div>} />
