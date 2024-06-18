@@ -41,9 +41,9 @@ const TeamManagementMain : React.FC = () => {
                     <span className={`ml-4 cursor-pointer ${activeButton === "teamInfoEdit" ? "text-primary-700" : ""}`} 
                         onClick={() => renderComponent("teamInfoEdit")}>팀 정보 수정</span>
                     <span className={`ml-4 cursor-pointer ${activeButton === "teamMember" ? "text-primary-700" : ""}`} 
-                        onClick={() => renderComponent("teamMember")}>팀 정보 수정</span>
+                        onClick={() => renderComponent("teamMember")}>팀원 관리</span>
                     <span className={`ml-4 cursor-pointer ${activeButton === "teamLessonFeeSetting" ? "text-primary-700" : ""}`} 
-                        onClick={() => renderComponent("teamLessonFeeSetting")}>팀 정보 수정</span>
+                        onClick={() => renderComponent("teamLessonFeeSetting")}>강습비 설정</span>
                 </div>
             </div>
             <div className="flex justify-center mt-10">
