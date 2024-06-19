@@ -1,7 +1,7 @@
 import React from "react";
-import TeamManageHeader from "../../../components/instructor/TeamManageHeader";
+import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import Editor from "../../../components/common/Editor";
-import DropdownMenu from "../../../components/instructor/TeamListDropdown";
+import DropdownMenu from "../../../components/instructor/manage/TeamListDropdown";
 
 const TeamInfoEdit : React.FC = () => {
 

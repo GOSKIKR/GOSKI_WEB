@@ -1,5 +1,5 @@
 import React from "react";
-import TeamManageHeader from "../../../components/instructor/TeamManageHeader";
+import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 
 const TeamLessonFeeSetting : React.FC = () => {
     

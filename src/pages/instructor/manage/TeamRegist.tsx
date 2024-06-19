@@ -1,6 +1,6 @@
 import React from "react";
 import Editor from "../../../components/common/Editor";
-import TeamManageHeader from "../../../components/instructor/TeamManageHeader";
+import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 
 const TeamRegist : React.FC = () => {
 
