@@ -1,38 +1,53 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { TeamMemberDTO } from "../../../dto/TeamMemberDTO";
 import { FiMoreHorizontal } from 'react-icons/fi';
+import TeamMemberDeleteConfirmModal from "./TeamMemberDeleteConfirmModal";
 
 interface TeamMemberListProps {
-    members : TeamMemberDTO[];
+    members: TeamMemberDTO[];
 }
 
+const TeamMemberList: React.FC<TeamMemberListProps> = ({ members }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+    const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
+    const [selectedMember, setSelectedMember] = useState<{ name: string; role: string } | null>(null);
 
-const TeamMemberList : React.FC<TeamMemberListProps> = ({members}) => {
-
-    const [modalVisible,setModalVisible] = useState(false);
-    const [modalPosition, setModalPosition] = useState({top: 0, left:0});
-
-    const handleIconClick = (event : React.MouseEvent) => {
+    const handleIconClick = (event: React.MouseEvent, member : TeamMemberDTO) => {
         event.stopPropagation();
         const rect = event.currentTarget.getBoundingClientRect();
-        setModalPosition({top: rect.top + window.scrollY, left: rect.left + window.scrollX + rect.width -20 })
-        setModalVisible(!modalVisible)
-    }
+        setModalPosition({ top: rect.top + window.scrollY, left: rect.left + window.scrollX + rect.width - 20 });
+        setSelectedMember(member)
+        setModalVisible(true);
+    };
 
+    const handleDeleteClick = () => {
+        setModalVisible(false);
+        setConfirmationModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setModalVisible(false);
+        setConfirmationModalVisible(false);
+    };
+
+    const confirmDelete = () => {
+        closeModal();
+    };
 
     useEffect(() => {
         const handleClickOutside = () => {
             setModalVisible(false);
-        }
+        };
 
-        if (modalVisible){
-            window.addEventListener("click",handleClickOutside)
+        if (modalVisible) {
+            window.addEventListener("click", handleClickOutside);
         }
 
         return () => {
-            window.removeEventListener("click",handleClickOutside)
-        }
-    })
+            window.removeEventListener("click", handleClickOutside);
+        };
+    }, [modalVisible]);
 
     return (
         <div className="team-member mb-6 bg-primary-100 rounded-lg w-[1200px]">
@@ -67,31 +82,38 @@ const TeamMemberList : React.FC<TeamMemberListProps> = ({members}) => {
                             </td>
                             <td className="py-2 px-4">{member.price}</td>
                             <td className="py-2 px-4">
-                                <span className="text-primary-900 cursor-pointer">팀 초대</span> | 
-                                <span className="text-primary-900 cursor-pointer"> 팀 스케줄 추가</span> | 
-                                <span className="text-black cursor-pointer"> 팀 스케줄 조정</span> | 
+                                <span className="text-primary-900 cursor-pointer">팀 초대</span> |
+                                <span className="text-primary-900 cursor-pointer"> 팀 스케줄 추가</span> |
+                                <span className="text-black cursor-pointer"> 팀 스케줄 조정</span> |
                                 <span className="text-black cursor-pointer"> 팀 스케줄 삭제</span>
                             </td>
                             <td className="py-2 px-4">{member.phoneNumber}</td>
-                            <td className="py-2 px-4 cursor-pointer" onClick={handleIconClick}><FiMoreHorizontal/></td>
+                            <td className="py-2 px-4 cursor-pointer" onClick={(e) => handleIconClick(e,member)}><FiMoreHorizontal /></td>
+                            {modalVisible && (
+                                <div
+                                    className="absolute bg-white border rounded shadow-lg p-4"
+                                    style={{ top: modalPosition.top, left: modalPosition.left }}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <div className="flex flex-col space-y-2">
+                                        <button className="text-left text-customRed" onClick={handleDeleteClick}>팀원삭제</button>
+                                    </div>
+                                </div>
+                            )}
                         </tr>
                     ))}
                 </tbody>
             </table>
-            {modalVisible && (
-                <div
-                className="absolute bg-white border rounded shadow-lg p-4"
-                style={{ top: modalPosition.top, left: modalPosition.left }}
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="flex flex-col space-y-2">
-                    <button className="text-left text-customRed">팀원삭제</button>
-                </div>
-            </div>
+            {confirmationModalVisible && selectedMember && (
+                <TeamMemberDeleteConfirmModal
+                    onClose={closeModal}
+                    onConfirm={confirmDelete}
+                    memberName={selectedMember.name}
+                    memberRole={selectedMember.role}
+                />
             )}
         </div>
-        
-    )
-}
+    );
+};
 
-export default TeamMemberList
+export default TeamMemberList;
