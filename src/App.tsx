@@ -16,11 +16,14 @@ import UserLessonlist from './components/user/UserLessonlist';
 import UserModify from './components/user/UserModify';
 import PayDetail from './pages/user/payment/PayDetail';
 import UserMypage from './pages/user/mypage/UserMypage';
-import LessonDetail from './pages/user/reservation/LessonDetail';
 import TeamRegist from "./pages/instructor/manage/TeamRegist";
 import TeamInfoEdit from "./pages/instructor/manage/TeamInfoEdit";
 import TeamLessonFeeSetting from "./pages/instructor/manage/TeamLessonFeeSetting";
 import TeamMember from "./pages/instructor/manage/TeamMember";
+import PayCancle from './pages/user/payment/PayCancle';
+import WriteReview from './pages/user/mypage/WriteReview';
+import LessonInfo from './pages/user/reservation/LessonInformation';
+import UserFeedback from './pages/user/mypage/UserFeedback';
 
 const App: React.FC = () => {
   return (
@@ -35,10 +38,13 @@ const App: React.FC = () => {
         <Route path="/user/coupon" element={<Coupon />} />
         <Route path="/reserve/set" element={<SetFilter />} />
         <Route path="/reserve/result" element={<FilterResult />} />
-        <Route path="/reserve/detail" element={<LessonDetail />} />
+        <Route path="/reserve/info" element={<LessonInfo />} />
         <Route path="/user/payment/before" element={<BeforePay />} />
         <Route path="/user/payment/detail" element={<PayDetail />} />
+        <Route path="/user/payment/cancle" element={<PayCancle />} />
         <Route path="/user/payment" element={<Payment />} />
+        <Route path="/user/review" element={<WriteReview />} />
+        <Route path="/user/feedback" element={<UserFeedback />} />
 
         <Route path="/user/lessonlist" element={<UserLessonlist />} />
 
