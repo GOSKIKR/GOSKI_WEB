@@ -34,15 +34,6 @@ const TeamInfoEdit : React.FC = () => {
                             <Editor/>
                         </div>
                     </div>
-                    <div className="team-member mb-6 bg-primary-100 rounded-lg">
-                        <div className="flex justify-between items-center p-6">
-                            <div className="text-lg font-bold text-center align-middle">팀원 정보</div>
-                            <button className="bg-primary-500 text-white rounded px-4 py-2">수정하기</button>
-                        </div>
-                        <div className="">
-
-                        </div>
-                    </div>
                     <div className="flex justify-center">
                         <button className="bg-primary-700 text-white m-2 px-4 py-2 rounded">
                             수정완료
