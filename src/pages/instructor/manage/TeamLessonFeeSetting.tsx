@@ -7,7 +7,7 @@ import LessonFeeByLevel from "../../../components/instructor/manage/LessonFeeByL
 import LessonFeeByInstructor from "../../../components/instructor/manage/LessonFeeByInstructor";
 
 const TeamLessonFeeSetting : React.FC = () => {
-    
+
 
     return (
         <div>

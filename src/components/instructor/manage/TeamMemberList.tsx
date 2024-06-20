@@ -73,7 +73,7 @@ const TeamMemberList : React.FC<TeamMemberListProps> = ({members}) => {
                                 <span className="text-black cursor-pointer"> 팀 스케줄 삭제</span>
                             </td>
                             <td className="py-2 px-4">{member.phoneNumber}</td>
-                            <td className="py-2 px-4 cursor-pointer" onClick={handleIconClick}><FiMoreHorizontal /></td>
+                            <td className="py-2 px-4 cursor-pointer" onClick={handleIconClick}><FiMoreHorizontal/></td>
                         </tr>
                     ))}
                 </tbody>
