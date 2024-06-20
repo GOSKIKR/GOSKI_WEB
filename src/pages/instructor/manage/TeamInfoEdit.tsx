@@ -2,12 +2,14 @@ import React from "react";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import Editor from "../../../components/common/Editor";
 import DropdownMenu from "../../../components/instructor/manage/TeamListDropdown";
+import NavbarInstructor from "../../../components/common/NavbarInstructor";
 
 const TeamInfoEdit : React.FC = () => {
 
 
     return (
         <div>
+            <NavbarInstructor/>
             <TeamManageHeader/>
             <div className="flex justify-center">
                 <div className="p-6">

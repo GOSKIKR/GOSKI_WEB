@@ -1,4 +1,5 @@
 import React from "react";
+import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import DropdownMenu from "../../../components/instructor/manage/TeamListDropdown";
 import TeamLessonFeeInfo from "../../../components/instructor/manage/TeamLessonFeeInfo";
@@ -11,6 +12,7 @@ const TeamLessonFeeSetting : React.FC = () => {
 
     return (
         <div>
+            <NavbarInstructor/>
             <TeamManageHeader/>
             <div className="flex justify-center">
                 <div className="p-6">
