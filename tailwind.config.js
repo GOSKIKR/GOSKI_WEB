@@ -17,6 +17,7 @@ module.exports = {
           900: "#343b7b",
           950: "#1e2048",
         },
+        customRed : '#FF0202'
       },
     },
     fontFamily: {
