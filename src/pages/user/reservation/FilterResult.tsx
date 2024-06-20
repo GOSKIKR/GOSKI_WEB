@@ -1,6 +1,8 @@
 import React from 'react';
 import NavbarUser from '../../../components/common/NavbarUser';
+import { FaPersonSnowboarding } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
+import { FaSkiing } from "react-icons/fa";
 
 interface CertificateInfo {
     certificateId: number;
@@ -184,12 +186,20 @@ const FilterResult: React.FC = () => {
         navigate(`/reserve/detail`);
     }
 
-
     return (
         <div>
             <NavbarUser />
-            <div>검색결과</div>
-            <div className='flex flex-col space-y-10'>
+            <div className='flex flex-col space-y-10 w-full h-full'>
+                <div className='flex flex-row py-16 w-full justify-center space-x-5 justify-items-center'>
+                    <div className='flex flex-row bg-primary-600 w-2/5 h-14 rounded-lg items-center place-content-between'>
+                        <FaSkiing color='white' size='35' className='w-1/6'/>
+                        <div className='text-white w-2/3 font-bold text-lg text-center'>스키</div>
+                    </div>
+                    <div className='flex flex-row bg-gray-200 w-2/5 h-14 rounded-lg items-center place-content-between'>
+                        <div className='text-gray-700 w-2/3 font-bold text-lg text-center'>보드</div>
+                        <FaPersonSnowboarding color='gray-700' size='35' className='w-1/6 -scale-x-100'/>
+                    </div>
+                </div>
                 {dummyTeamData.map((team, index) => (
                     <div onClick={goToDetail} key={index} className='flex flex-row h-28 w-3/5 rounded-lg shadow-md bg-primary-50 cursor-pointer'>
                         <img src={team.teamProfileUrl} className='h-24 w-24'/>
