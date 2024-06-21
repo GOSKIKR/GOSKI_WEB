@@ -18,10 +18,6 @@ import TeamRegist from "./pages/instructor/manage/TeamRegist";
 import TeamInfoEdit from "./pages/instructor/manage/TeamInfoEdit";
 import TeamLessonFeeSetting from "./pages/instructor/manage/TeamLessonFeeSetting";
 import TeamMember from "./pages/instructor/manage/TeamMember";
-import PayCancle from './pages/user/payment/PayCancle';
-import WriteReview from './pages/user/mypage/WriteReview';
-import LessonInfo from './pages/user/reservation/LessonInformation';
-import UserFeedback from './pages/user/mypage/UserFeedback';
 import PayCancle from "./pages/user/payment/PayCancle";
 import WriteReview from "./pages/user/mypage/WriteReview";
 import LessonInfo from "./pages/user/reservation/LessonInformation";
@@ -81,12 +77,6 @@ const App: React.FC = () => {
                     path="/instructor/team/member"
                     element={<TeamMember />}
                 />
-
-
-        <Route path="/instructor/team/regist" element={<TeamRegist/>}/>
-        <Route path="/instructor/team/edit" element={<TeamInfoEdit/>}/>
-        <Route path="/instructor/team/lessonfee" element={<TeamLessonFeeSetting/>}/>
-        <Route path="/instructor/team/member" element={<TeamMember/>}/>
 
         <Route path="/instructor/my-lesson" element={<MyLessonList/>}/>
         <Route path="/instructor/regist-feedback" element={<FeedbackRegist/>}/>
