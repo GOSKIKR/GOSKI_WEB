@@ -1,12 +1,14 @@
 import React from "react";
 import Editor from "../../../components/common/Editor";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
+import NavbarInstructor from "../../../components/common/NavbarInstructor";
 
 const TeamRegist : React.FC = () => {
 
 
     return (
         <div>
+            <NavbarInstructor/>
             <TeamManageHeader/>
             <div className="flex justify-center mt-10"> 
                 <div className="p-6">

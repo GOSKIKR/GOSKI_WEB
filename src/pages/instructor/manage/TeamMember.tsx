@@ -6,6 +6,7 @@ import { TeamInviteDTO } from "../../../dto/TeamInviteDTO";
 
 import TeamMemberList from "../../../components/instructor/manage/TeamMemberList";
 import TeamInviteList from "../../../components/instructor/manage/TeamInviteList";
+import NavbarInstructor from "../../../components/common/NavbarInstructor";
 
 const TeamMember: React.FC = () => {
     const members: TeamMemberDTO[] = [
@@ -25,6 +26,7 @@ const TeamMember: React.FC = () => {
 
     return (
         <div>
+            <NavbarInstructor/>
             <TeamManageHeader />
             <div className="flex justify-center">
                 <div className="p-6">
