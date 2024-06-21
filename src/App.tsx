@@ -24,6 +24,8 @@ import PayCancle from './pages/user/payment/PayCancle';
 import WriteReview from './pages/user/mypage/WriteReview';
 import LessonInfo from './pages/user/reservation/LessonInformation';
 import UserFeedback from './pages/user/mypage/UserFeedback';
+import MyLessonList from "./pages/instructor/mypage/MyLessonList";
+import FeedbackRegist from "./pages/instructor/mypage/FeedbackRegist";
 
 const App: React.FC = () => {
   return (
@@ -52,12 +54,13 @@ const App: React.FC = () => {
 
         <Route path="/instructor/main" element={<InstructorMain />} />
 
-        <Route path="/instructor/team" element={<Navigate to="/instructor/team/regist"/>}/>
-
         <Route path="/instructor/team/regist" element={<TeamRegist/>}/>
         <Route path="/instructor/team/edit" element={<TeamInfoEdit/>}/>
         <Route path="/instructor/team/lessonfee" element={<TeamLessonFeeSetting/>}/>
         <Route path="/instructor/team/member" element={<TeamMember/>}/>
+
+        <Route path="/instructor/my-lesson" element={<MyLessonList/>}/>
+        <Route path="/instructor/regist-feedback" element={<FeedbackRegist/>}/>
 
         <Route path="/counter" element={<Counter />} />
         <Route path="*" element={<div>Not Found</div>} />
