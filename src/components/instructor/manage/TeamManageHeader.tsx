@@ -6,11 +6,11 @@ const TeamManageHeader: React.FC = () => {
     
     return (
         <div>
-            <div className="flex justify-center items-center mx-10 mt-20">
+            <div className="flex justify-between items-center mt-20">
                 <div className="text-left">
-                    <span className="text-2xl font-bold mr-20">팀 관리</span>
+                    <span className="text-2xl font-bold ml-[450px]">팀 관리</span>
                 </div>
-                <div className="text-right ml-10">
+                <div className="text-right mr-[450px]">
                     <Link 
                         to="/instructor/team/regist" 
                         className={`ml-4 cursor-pointer ${location.pathname ==='/instructor/team/regist' ? 'text-primary-700' : 'text-black'}`}>팀 등록</Link>

@@ -21,8 +21,8 @@ const NavbarInstructor = () => {
       </div>
       <div className="flex flex-row flex-1 justify-normal">
         <div className="text-black text-xl p-5 cursor-pointer" >스케줄</div>
-        <div className="text-black text-xl p-5 cursor-pointer" onClick={() => navigate("/instructor/team")}>팀 관리</div>
-        <div className="text-black text-xl p-5 cursor-pointer">강습내역</div>
+        <div className="text-black text-xl p-5 cursor-pointer" onClick={() => navigate("/instructor/team/regist")}>팀 관리</div>
+        <div className="text-black text-xl p-5 cursor-pointer" onClick={() => navigate("/instructor/my-lesson")}>강습내역</div>
         <div className="text-black text-xl p-5 cursor-pointer">정산</div>
       </div>
       {isLogin ? (

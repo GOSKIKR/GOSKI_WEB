@@ -18,12 +18,18 @@ import TeamRegist from "./pages/instructor/manage/TeamRegist";
 import TeamInfoEdit from "./pages/instructor/manage/TeamInfoEdit";
 import TeamLessonFeeSetting from "./pages/instructor/manage/TeamLessonFeeSetting";
 import TeamMember from "./pages/instructor/manage/TeamMember";
+import PayCancle from './pages/user/payment/PayCancle';
+import WriteReview from './pages/user/mypage/WriteReview';
+import LessonInfo from './pages/user/reservation/LessonInformation';
+import UserFeedback from './pages/user/mypage/UserFeedback';
 import PayCancle from "./pages/user/payment/PayCancle";
 import WriteReview from "./pages/user/mypage/WriteReview";
 import LessonInfo from "./pages/user/reservation/LessonInformation";
 import UserFeedback from "./pages/user/mypage/UserFeedback";
 import LessonDetail from "./pages/instructor/main/LessonDetail";
 import BossMain from "./pages/instructor/main/BossMain";
+import MyLessonList from "./pages/instructor/mypage/MyLessonList";
+import FeedbackRegist from "./pages/instructor/mypage/FeedbackRegist";
 
 const App: React.FC = () => {
     return (
@@ -76,11 +82,21 @@ const App: React.FC = () => {
                     element={<TeamMember />}
                 />
 
-                <Route path="/counter" element={<Counter />} />
-                <Route path="*" element={<div>Not Found</div>} />
-            </Routes>
-        </div>
-    );
+
+        <Route path="/instructor/team/regist" element={<TeamRegist/>}/>
+        <Route path="/instructor/team/edit" element={<TeamInfoEdit/>}/>
+        <Route path="/instructor/team/lessonfee" element={<TeamLessonFeeSetting/>}/>
+        <Route path="/instructor/team/member" element={<TeamMember/>}/>
+
+        <Route path="/instructor/my-lesson" element={<MyLessonList/>}/>
+        <Route path="/instructor/regist-feedback" element={<FeedbackRegist/>}/>
+
+        <Route path="/counter" element={<Counter />} />
+        <Route path="*" element={<div>Not Found</div>} />
+      </Routes>
+    </div>
+  );
+
 };
 
 export default App;
