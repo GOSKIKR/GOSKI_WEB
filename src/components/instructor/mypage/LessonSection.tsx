@@ -26,7 +26,7 @@ const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
             <Slider {...settings}>
                 {lessons.map((lesson, index) => (
                     <div key={index} className="px-2">
-                        <LessonCard lesson={lesson} />
+                        <LessonCard key={lesson.lessonId} lesson={lesson} />
                     </div>
                 ))}
             </Slider>
