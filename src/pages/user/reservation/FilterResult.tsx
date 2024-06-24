@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
 import { FaPersonSnowboarding } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
 import { FaSkiing } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCalendarAlt } from "react-icons/fa";
-import { IoTimeOutline } from "react-icons/io5";
-import { IoIosSearch } from "react-icons/io";
+import { FaStar } from "react-icons/fa";
 
 interface CertificateInfo {
     certificateId: number;
@@ -80,9 +80,10 @@ const dummyTeamData: Team[] = [
     {
         teamId: 1,
         teamName: "Team A",
-        description: "This is Team A, specializing in skiing lessons.",
+        description:
+            "팀 소개가 들어가는 부분1\n팀 소개가 들어가는 부분2\n팀 소개가 들어가는 부분3",
         teamProfileUrl: "https://example.com/teamA-profile.jpg",
-        rating: 3,
+        rating: 3.5,
         instructors: [1, 2],
         teamImages: [
             {
@@ -94,13 +95,13 @@ const dummyTeamData: Team[] = [
                 imageUrl: "https://example.com/teamA-image2.jpg",
             },
         ],
-        cost: 50,
-        basicFee: 30,
-        peopleOptionFee: 10,
-        designatedFee: 5,
-        levelOptionFee: 5,
+        cost: 100000,
+        basicFee: 30000,
+        peopleOptionFee: 10000,
+        designatedFee: 5000,
+        levelOptionFee: 5000,
         lessonType: "Ski",
-        reviewCount: 15,
+        reviewCount: 30,
         reviews: [
             {
                 reviewId: 1,
@@ -139,7 +140,8 @@ const dummyTeamData: Team[] = [
     {
         teamId: 2,
         teamName: "Team B",
-        description: "Team B provides snowboarding lessons for all levels.",
+        description:
+            "팀 소개가 들어가는 부분1\n팀 소개가 들어가는 부분2\n팀 소개가 들어가는 부분3",
         teamProfileUrl: "https://example.com/teamB-profile.jpg",
         rating: 4,
         instructors: [3],
@@ -153,13 +155,13 @@ const dummyTeamData: Team[] = [
                 imageUrl: "https://example.com/teamB-image2.jpg",
             },
         ],
-        cost: 60,
-        basicFee: 35,
-        peopleOptionFee: 15,
-        designatedFee: 7,
-        levelOptionFee: 5,
+        cost: 100000,
+        basicFee: 35000,
+        peopleOptionFee: 15000,
+        designatedFee: 7000,
+        levelOptionFee: 5000,
         lessonType: "Snowboard",
-        reviewCount: 12,
+        reviewCount: 30,
         reviews: [
             {
                 reviewId: 3,
@@ -198,67 +200,124 @@ const dummyTeamData: Team[] = [
     // Add more dummy data entries as needed
 ];
 
-const renderStars = (score: number) => {
-    const filledStars = Math.floor(score);
-    const emptyStars = Math.floor(5 - score);
+const dummyInstructorData: Instructor[] = [
+    {
+        instructorId: 1,
+        userName: "Instructor A",
+        teamId: 1,
+        teamName: "Team A",
+        position: 1,
+        description: "강사 레벨",
+        instructorUrl: "https://example.com/instructorA-profile.jpg",
+        gender: "Male",
+        certificateInfo: [
+            {
+                certificateId: 1,
+                certificateName: "Ski Instructor Level 1",
+                certificateType: "Ski",
+                certificateImageUrl: "https://example.com/certificate1.jpg",
+            },
+        ],
+        rating: 3.5,
+        reviewCount: 30,
+        cost: 100000,
+        basicFee: 30000,
+        peopleOptionFee: 10000,
+        designatedFee: 5000,
+        levelOptionFee: 5000,
+        lessonType: "Ski",
+        reviews: [
+            {
+                reviewId: 1,
+                rating: 4,
+                content: "Great instructor with a lot of patience.",
+                createdAt: "2024-06-15T14:30:00",
+                instructorTags: [
+                    {
+                        tagReviewId: 101,
+                        tagName: "Patient",
+                    },
+                    {
+                        tagReviewId: 102,
+                        tagName: "Friendly",
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        instructorId: 2,
+        userName: "Instructor B",
+        teamId: 1,
+        teamName: "Team A",
+        position: 2,
+        description: "Experienced snowboard instructor",
+        instructorUrl: "https://example.com/instructorB-profile.jpg",
+        gender: "Female",
+        certificateInfo: [
+            {
+                certificateId: 2,
+                certificateName: "Snowboard Instructor Level 2",
+                certificateType: "Snowboard",
+                certificateImageUrl: "https://example.com/certificate2.jpg",
+            },
+        ],
+        rating: 3.5,
+        reviewCount: 30,
+        cost: 100000,
+        basicFee: 35000,
+        peopleOptionFee: 15000,
+        designatedFee: 7000,
+        levelOptionFee: 5000,
+        lessonType: "Snowboard",
+        reviews: [
+            {
+                reviewId: 2,
+                rating: 5,
+                content: "Fantastic instructor!",
+                createdAt: "2024-06-16T10:00:00",
+                instructorTags: [
+                    {
+                        tagReviewId: 103,
+                        tagName: "Experienced",
+                    },
+                    {
+                        tagReviewId: 104,
+                        tagName: "Knowledgeable",
+                    },
+                ],
+            },
+        ],
+    },
+    // Add more dummy instructor entries as needed
+];
 
-    const stars = [];
-    for (let i = 0; i < filledStars; i++) {
-        stars.push(
-            <svg
-                xmlns="https://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="#FFFF00"
-                className="w-6 h-6"
-            >
-                <path
-                    fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                    clip-rule="evenodd"
-                />
-            </svg>
-        );
-    }
-    for (let i = 0; i < emptyStars; i++) {
-        stars.push(
-            <svg
-                xmlns="https://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-6 h-6"
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-                />
-            </svg>
-        );
-    }
-    return stars;
-};
 
 const FilterResult: React.FC = () => {
     const navigate = useNavigate();
-    const [location, setLocation] = useState("");
-    const locations = ["a스키장", "b스키장", "c스키장"];
-    const [participant, setParticipant] = useState(0);
-    const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
-    const [startTime, setStartTime] = useState("");
-    const [entireTime, setEntireTime] = useState(0);
-    const [level, setLevel] = useState(1);
+    const filterState = useLocation().state as {
+        type: string;
+        location: string;
+        participant: number;
+        dateRange: [Date, Date] | null;
+        startTime: string;
+        entireTime: number;
+        level: number;
+    };
+    const [type, setType] = useState("스키");
+    const [location, setLocation] = useState(filterState.location);
+    const [participant, setParticipant] = useState(filterState.participant);
+    const [dateRange, setDateRange] = useState<[Date, Date] | null>(
+        filterState.dateRange
+    );
+    const [startTime, setStartTime] = useState(filterState.startTime);
+    const [entireTime, setEntireTime] = useState(filterState.entireTime);
+    const [level, setLevel] = useState(filterState.level);
     const [calendarOpen, setCalendarOpen] = useState(false);
-    const [type, setType] = useState("ski");
 
-    const goToDetail = () => {
-        navigate(`/reserve/info`);
-    };
-
-    const handleTypeChange = (selectedType: string) => {
-        setType(selectedType);
-    };
+    const [filteredData, setFilteredData] = useState(
+        level === 1 ? dummyTeamData : dummyInstructorData
+    );
 
     const handleParticipantIncrement = () => {
         if (participant < 10) {
@@ -297,13 +356,23 @@ const FilterResult: React.FC = () => {
         return slots;
     };
 
-    const goToResult = () => {
-        navigate(`/reserve/result`);
-    };
-
     const timeSlots = generateTimeSlots();
 
     const today = new Date();
+
+    const applyFilter = () => {
+        const newFilteredData =
+            level === 1 ? dummyTeamData : dummyInstructorData;
+        setFilteredData(newFilteredData);
+    };
+
+    const goToTeamDetail = () => {
+        navigate("/reserve/info/team");
+    };
+
+    const goToInstructorDetail = () => {
+        navigate("/reserve/info/instructor");
+    };
 
     return (
         <div>
@@ -314,22 +383,18 @@ const FilterResult: React.FC = () => {
                     <div className="flex flex-row pt-16 w-full justify-center space-x-5 px-3">
                         <div
                             className={`flex flex-row ${
-                                type === "ski"
-                                    ? "bg-primary-600"
-                                    : "bg-gray-200"
+                                type==='스키' ? "bg-primary-600" : "bg-gray-200"
                             } w-2/5 h-14 rounded-lg items-center place-content-between cursor-pointer`}
-                            onClick={() => handleTypeChange("ski")}
+                            onClick={() => setType('스키')}
                         >
                             <FaSkiing
-                                color={type === "ski" ? "white" : "black"}
+                                color={type==='스키' ? "white" : "black"}
                                 size="30"
                                 className="w-1/6"
                             />
                             <div
                                 className={`text-base font-bold text-center w-2/3 ${
-                                    type === "ski"
-                                        ? "text-white"
-                                        : "text-gray-700"
+                                    type==='스키' ? "text-white" : "text-gray-700"
                                 }`}
                             >
                                 스키
@@ -337,15 +402,15 @@ const FilterResult: React.FC = () => {
                         </div>
                         <div
                             className={`flex flex-row ${
-                                type === "board"
+                                type==='보드'
                                     ? "bg-primary-600"
                                     : "bg-gray-200"
                             } w-2/5 h-14 rounded-lg items-center place-content-between cursor-pointer`}
-                            onClick={() => handleTypeChange("board")}
+                            onClick={() => setType('보드')}
                         >
                             <div
                                 className={`text-base font-bold text-center w-2/3 ${
-                                    type === "board"
+                                    type==='보드'
                                         ? "text-white"
                                         : "text-gray-700"
                                 }`}
@@ -353,7 +418,11 @@ const FilterResult: React.FC = () => {
                                 보드
                             </div>
                             <FaPersonSnowboarding
-                                color={type === "board" ? "white" : "black"}
+                                color={
+                                    type==='보드'
+                                        ? "white"
+                                        : "black"
+                                }
                                 size="35"
                                 className="w-1/6 -scale-x-100"
                             />
@@ -369,11 +438,13 @@ const FilterResult: React.FC = () => {
                                 onChange={(e) => setLocation(e.target.value)}
                                 className="mt-1 p-2 block border border-gray-300 rounded"
                             >
-                                {locations.map((loc, index) => (
-                                    <option key={index} value={loc}>
-                                        {loc}
-                                    </option>
-                                ))}
+                                {["a스키장", "b스키장", "c스키장"].map(
+                                    (loc, index) => (
+                                        <option key={index} value={loc}>
+                                            {loc}
+                                        </option>
+                                    )
+                                )}
                             </select>
                         </div>
                         {/* 강습 인원 */}
@@ -443,7 +514,7 @@ const FilterResult: React.FC = () => {
                             <div>시작 시간</div>
                             <input
                                 type="time"
-                                value={entireTime}
+                                value={startTime}
                                 onChange={(e) => setStartTime(e.target.value)}
                                 className="mt-1 p-2 block border border-gray-300 rounded"
                                 step="1800" // 30 minutes
@@ -517,8 +588,8 @@ const FilterResult: React.FC = () => {
                         </div>
                         {/* 검색 */}
                         <div
-                            onClick={goToResult}
-                            className="flex flex-col mb-4 justify-center items-center"
+                            onClick={applyFilter}
+                            className="flex flex-col mb-4 justify-center items-center cursor-pointer"
                         >
                             <IoIosSearch size="20" />
                         </div>
@@ -526,35 +597,60 @@ const FilterResult: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col space-y-8 pt-12 w-full items-center">
-                    {dummyTeamData.map((team, index) => (
-                        <div
-                            onClick={goToDetail}
-                            key={index}
-                            className="flex flex-row w-4/5 h-28 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center"
-                        >
-                            <img
-                                src={team.teamProfileUrl}
-                                className="h-24 w-24"
-                            />
-                            <div className="flex flex-col pl-10 justify-center">
-                                <div className="text-lg">{team.teamName}</div>
-                                <div>{team.description}</div>
-                                <div className="flex flex-row">
-                                    <div className="flex flex-row">
-                                        {renderStars(team.rating)}
+                    {filteredData.map((data, index) =>
+                        level === 1 ? (
+                            <div
+                                onClick={goToTeamDetail}
+                                key={index}
+                                className="flex flex-row w-4/5 h-28 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
+                            >
+                                <div className="h-24 w-24 bg-gray-300 rounded-md flex justify-center items-center">
+                                    팀/개인 사진
+                                </div>
+                                <div className="flex flex-col pl-10 justify-center w-3/5">
+                                    <div className="text-lg font-bold">
+                                        {data.teamName}
                                     </div>
-                                    <div>{team.rating}</div>
-                                    <div>({team.reviewCount})</div>
+                                    <div className="text-sm text-gray-600 whitespace-pre-line">
+                                        {data.description}
+                                    </div>
+                                    <div className="flex flex-row items-center mt-2">
+                                        <FaStar color="#FEFD48"/>
+                                        <div className="ml-2 text-sm text-gray-600">
+                                            {data.rating}
+                                        </div>
+                                        <div className="text-sm text-gray-600">
+                                            ({data.reviewCount})
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col justify-center w-1/5 items-end">
+                                    <div className="text-lg font-bold">
+                                        {data.cost}원~
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col pl-20 justify-center">
-                                <div>
-                                    {team.basicFee}
-                                    원~
+                        ) : (
+                            <div
+                                onClick={goToInstructorDetail}
+                                key={index}
+                                className="flex flex-col w-60 h-80 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
+                            >
+                                <img
+                                    src={data.instructorUrl}
+                                    className="h-24 w-24 rounded-full"
+                                />
+                                <div className="flex flex-col justify-center items-center mt-4">
+                                    <div className="text-lg">
+                                        {data.userName}
+                                    </div>
+                                    <div>{data.description}</div>
+                                    
+                                    <div className="mt-2">{data.cost}원~</div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    )}
                 </div>
             </div>
         </div>
@@ -562,3 +658,4 @@ const FilterResult: React.FC = () => {
 };
 
 export default FilterResult;
+
