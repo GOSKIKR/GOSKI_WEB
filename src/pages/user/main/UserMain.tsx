@@ -33,8 +33,7 @@ const UserMain: React.FC = () => {
         <ReservationBox />
       </div>
       <div className="flex-1 p-4">
-        {/* <TeamAD /> */}
-        <ADCarousel />
+        <TeamAD />
       </div>
       <Footer />
     </div>
