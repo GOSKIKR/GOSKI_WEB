@@ -4,15 +4,20 @@ import { FaRegCircle } from "react-icons/fa";
 import { MdArrowForwardIos } from "react-icons/md";
 import { MdArrowBackIosNew } from "react-icons/md";
 
+const dummyImages = [
+  "https://via.placeholder.com/800x400?text=Slide+1",
+  "https://via.placeholder.com/800x400?text=Slide+2",
+  "https://via.placeholder.com/800x400?text=Slide+3",
+  "https://via.placeholder.com/800x400?text=Slide+4",
+];
+
 const ADCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = [
-    "https://via.placeholder.com/800x400?text=Slide+1",
-    "https://via.placeholder.com/800x400?text=Slide+2",
-    "https://via.placeholder.com/800x400?text=Slide+3",
-    "https://via.placeholder.com/800x400?text=Slide+4",
-  ];
-
+  const [images, setImages] = useState([
+    dummyImages[dummyImages.length - 1],
+    ...dummyImages,
+    dummyImages[0],
+  ]);
   const timeoutRef = useRef<number | null>(null);
 
   const resetTimeout = () => {
@@ -30,11 +35,10 @@ const ADCarousel = () => {
         setCurrentIndex(
           (
             prevIndex // 현재 인덱스를 변경
-          ) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1) // 마지막 인덱스인 경우 0으로 변경
+          ) => (prevIndex === dummyImages.length - 1 ? 0 : prevIndex + 1) // 마지막 인덱스인 경우 0으로 변경
         ),
       5000 // 5초
     );
-
     return () => {
       resetTimeout(); // 컴포넌트가 언마운트 될 때 타이머 제거
     };
@@ -46,7 +50,7 @@ const ADCarousel = () => {
         className="whitespace-nowrap w-full transition-transform duration-1000"
         style={{ transform: `translateX(${-currentIndex * 100}%)` }}
       >
-        {images.map((src, index) => (
+        {dummyImages.map((src, index) => (
           <img
             key={index}
             src={src}
@@ -59,7 +63,7 @@ const ADCarousel = () => {
         <button
           onClick={() =>
             setCurrentIndex((prevIndex) =>
-              prevIndex === 0 ? images.length - 1 : prevIndex - 1
+              prevIndex === 0 ? dummyImages.length - 1 : prevIndex - 1
             )
           }
           className="flex text-white text-9xl justify-center items-center"
@@ -69,7 +73,7 @@ const ADCarousel = () => {
         <button
           onClick={() =>
             setCurrentIndex((prevIndex) =>
-              prevIndex === images.length - 1 ? 0 : prevIndex + 1
+              prevIndex === dummyImages.length - 1 ? 0 : prevIndex + 1
             )
           }
           className="flex text-white text-9xl justify-center items-center"
@@ -78,7 +82,7 @@ const ADCarousel = () => {
         </button>
       </div>
       <div className="absolute bottom-10 w-full flex justify-center p-2">
-        {images.map((_, idx) => (
+        {dummyImages.map((_, idx) => (
           <div
             key={idx}
             className="flex h-10 w-20 text-white text-3xl justify-center items-center"

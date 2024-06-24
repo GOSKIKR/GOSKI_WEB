@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { IoMdNotificationsOutline } from "react-icons/io";
+import { IoSettingsOutline } from "react-icons/io5";
+import { IoMdLogOut } from "react-icons/io";
+
 const NavbarUser = () => {
   const [isLogin, setIsLogin] = useState(true);
 
@@ -25,13 +29,19 @@ const NavbarUser = () => {
             onClick={() => navigate("/dm")}
             className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5"
           >
-            알림
+            <button className="text-2xl">
+              <IoMdNotificationsOutline />
+            </button>
           </div>
           <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5">
-            설정
+            <button className="text-2xl">
+              <IoSettingsOutline />
+            </button>
           </div>
           <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5">
-            <button onClick={() => setIsLogin(false)}>로그아웃</button>
+            <button onClick={() => setIsLogin(false)} className="text-2xl">
+              <IoMdLogOut />
+            </button>
           </div>
           <div className="navbar-user__profile">
             <img
