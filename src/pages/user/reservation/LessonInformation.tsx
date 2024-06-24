@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const LessonDetail = () => {
+const LessonInformation = () => {
 
     const navigate = useNavigate();
 
@@ -28,4 +28,4 @@ const LessonDetail = () => {
     );
 };
 
-export default LessonDetail;
+export default LessonInformation;
