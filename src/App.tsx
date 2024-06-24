@@ -20,7 +20,8 @@ import TeamLessonFeeSetting from "./pages/instructor/manage/TeamLessonFeeSetting
 import TeamMember from "./pages/instructor/manage/TeamMember";
 import PayCancle from "./pages/user/payment/PayCancle";
 import WriteReview from "./pages/user/mypage/WriteReview";
-import LessonInfo from "./pages/user/reservation/LessonInformation";
+import TeamInfo from "./pages/user/reservation/TeamInfo";
+import InstructorInfo from './pages/user/reservation/InstructorInfo';
 import UserFeedback from "./pages/user/mypage/UserFeedback";
 import LessonDetail from "./pages/instructor/main/LessonDetail";
 import BossMain from "./pages/instructor/main/BossMain";
@@ -43,7 +44,8 @@ const App: React.FC = () => {
                 <Route path="/user/coupon" element={<Coupon />} />
                 <Route path="/reserve/set" element={<SetFilter />} />
                 <Route path="/reserve/result" element={<FilterResult />} />
-                <Route path="/reserve/info" element={<LessonInfo />} />
+                <Route path="/reserve/info/team" element={<TeamInfo />} />
+                <Route path="/reserve/info/instructor" element={<InstructorInfo/>} />
                 <Route path="/user/payment/before" element={<BeforePay />} />
                 <Route path="/user/payment/detail" element={<PayDetail />} />
                 <Route path="/user/payment/cancle" element={<PayCancle />} />
