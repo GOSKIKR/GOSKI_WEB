@@ -80,8 +80,12 @@ const App: React.FC = () => {
                     element={<TeamMember />}
                 />
 
-        <Route path="/instructor/my-lesson" element={<MyLessonList/>}/>
-        <Route path="/instructor/regist-feedback" element={<FeedbackRegist/>}/>
+                <Route 
+                    path="/instructor/my-lesson" 
+                    element={<MyLessonList/>}/>
+                <Route 
+                    path="/instructor/regist-feedback" 
+                    element={<FeedbackRegist/>}/>
 
         <Route path="/counter" element={<Counter />} />
         <Route path="*" element={<div>Not Found</div>} />
