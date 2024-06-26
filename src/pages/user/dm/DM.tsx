@@ -44,13 +44,13 @@ const DM: React.FC = () => {
   const [userSelected, setUserSelected] = useState(false);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-dvh">
       <NavbarUser />
       <h2 className="text-lg font-semibold mb-4">Direct Messages</h2>
 
       <div className="flex justify-center items-center w-full h-full">
         <div className="flex w-4/5 h-full flex-row justify-center">
-          <div className="flex flex-col w-1/3 rounded-2xl border-solid border-primary-950 overflow-auto p-4 space-y-4 bg-primary-50 m-10">
+          <div className="flex flex-col w-1/3 rounded-2xl border-solid border-primary-950 overflow-auto p-4 space-y-4 bg-primary-50 m-10 shadow-lg">
             <div className="relative">
               <input
                 type="text"
@@ -76,7 +76,7 @@ const DM: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="w-2/3 p-4 flex flex-col space-y-4 rounded-2xl bg-primary-50 m-10">
+          <div className="w-2/3 p-4 flex flex-col space-y-4 rounded-2xl bg-primary-50 m-10 shadow-lg">
             <div className="border-b border-gray-300 mb-4 flex items-center space-x-3 rounded-2xl p-4 bg-white">
               <div className="w-10 h-10 rounded-full bg-gray-200"></div>
               <div className="font-medium text-gray-900">User 1</div>
