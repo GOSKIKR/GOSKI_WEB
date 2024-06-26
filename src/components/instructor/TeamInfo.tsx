@@ -4,7 +4,7 @@ const TeamInfo : React.FC = () => {
 
     return (
         <div>
-
+            
         </div>
     )
 }
