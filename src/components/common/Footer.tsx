@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white p-4">
+    <footer className="bg-gray-800 text-white p-4 w-full">
       <p>
         이용약관 | 개인정보처리방침 | 사업자정보 | 환불정책 | 제휴문의 |
         고객센터

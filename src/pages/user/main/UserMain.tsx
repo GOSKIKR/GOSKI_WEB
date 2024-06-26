@@ -26,13 +26,13 @@ const UserMain: React.FC = () => {
   // {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>Loading...</p>}
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center justify-center">
       <NavbarUser />
-      <ADCarousel />
-      <div className="flex-1 p-4">
-        <ReservationBox />
+      <div className="w-full">
+        <ADCarousel />
       </div>
-      <div className="flex-1 p-4">
+      <div className="flex flex-col gap-10 w-4/5 self-center mt-20 mb-20">
+        <ReservationBox />
         <TeamAD />
       </div>
       <Footer />
