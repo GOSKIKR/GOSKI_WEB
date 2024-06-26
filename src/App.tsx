@@ -27,6 +27,7 @@ import LessonDetail from "./pages/instructor/main/LessonDetail";
 import BossMain from "./pages/instructor/main/BossMain";
 import MyLessonList from "./pages/instructor/mypage/MyLessonList";
 import FeedbackRegist from "./pages/instructor/mypage/FeedbackRegist";
+import Settlement from "./pages/instructor/calculate/Settlement";
 
 const App: React.FC = () => {
     return (
@@ -86,6 +87,10 @@ const App: React.FC = () => {
                 <Route 
                     path="/instructor/regist-feedback" 
                     element={<FeedbackRegist/>}/>
+
+                <Route 
+                    path="/instructor/settlement" 
+                    element={<Settlement/>}/>
 
         <Route path="/counter" element={<Counter />} />
         <Route path="*" element={<div>Not Found</div>} />
