@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { FaCircle, FaRegCircle } from "react-icons/fa";
 import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
 
@@ -10,80 +10,96 @@ const dummyImages = [
 ];
 
 const TeamAD = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [images, setImages] = useState([
-    dummyImages[dummyImages.length - 1],
-    ...dummyImages,
-    dummyImages[0],
-  ]);
-
-  const slideRef = useRef(null);
+  const [currCarousel, setCurrCarousel] = useState(1);
+  const [carouselTransition, setCarouselTransition] = useState(
+    "transform duration-1000 ease-in-out"
+  );
 
   useEffect(() => {
-    setImages([
-      dummyImages[
-        currentIndex === 0 ? dummyImages.length - 1 : currentIndex - 1
-      ],
-      dummyImages[currentIndex],
-      dummyImages[(currentIndex + 1) % dummyImages.length],
-    ]);
-    const timer = setInterval(() => {
-      handleNextSlide();
-    }, 5000);
+    // useEffect
+    return () => {
+      // Cleanup code
+    };
+  }, []);
 
-    return () => clearInterval(timer);
-  }, [currentIndex]);
-
-  const handleNextSlide = () => {
-    setCurrentIndex((prevIndex) => {
-      if (prevIndex === dummyImages.length - 1) {
-        return 0;
-      } else {
-        return prevIndex + 1;
-      }
-    });
+  const makeNewImageArray = () => {
+    const dataStart = dummyImages[0];
+    const dataEnd = dummyImages[dummyImages.length - 1];
+    const modifiedImages = [dataEnd, ...dummyImages, dataStart];
+    return modifiedImages;
   };
 
-  const handlePrevSlide = () => {
-    setCurrentIndex((prevIndex) => {
-      if (prevIndex === 0) {
-        return dummyImages.length - 1;
-      } else {
-        return prevIndex - 1;
-      }
-    });
+  const slideNextBtn = () => {
+    const slideLength = dummyImages.length;
+    const newCurr = currCarousel + 1;
+    setCurrCarousel(newCurr);
+
+    if (newCurr === slideLength + 1) {
+      initializeCarousel(1);
+    }
+
+    setCarouselTransition("transform duration-1000 ease-in-out");
+  };
+
+  const slidePrevBtn = () => {
+    const slideLength = dummyImages.length;
+    const newCurr = currCarousel - 1;
+    setCurrCarousel(newCurr);
+
+    if (newCurr === 0) {
+      initializeCarousel(slideLength);
+    }
+
+    setCarouselTransition("transform duration-1000 ease-in-out");
+  };
+
+  const initializeCarousel = (n: number) => {
+    const timeoutId = setTimeout(() => {
+      setCarouselTransition("");
+      setCurrCarousel(n);
+    }, 1000);
+
+    return () => clearTimeout(timeoutId); // 컴포넌트가 언마운트될 경우 타임아웃을 지우는 Cleanup function
   };
 
   return (
     <div className="flex relative overflow-hidden w-full">
-      <div className="absolute top-1/2 left-4 transform -translate-y-1/2 cursor-pointer z-10">
-        <MdArrowBackIosNew size={24} onClick={handlePrevSlide} />
-      </div>
       <div
-        className="flex whitespace-nowrap w-full transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        className={`whitespace-nowrap w-full ${carouselTransition}`}
+        style={{ transform: `translateX(${-currCarousel * 100}%)` }}
       >
-        {images.map((src, index) => (
+        {makeNewImageArray().map((src, index) => (
           <img
             key={index}
             src={src}
             alt={`Slide ${index + 1}`}
-            className="w-full h-full"
+            className="w-full h-full inline-block"
           />
         ))}
       </div>
-      <div className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer z-10">
-        <MdArrowForwardIos size={24} onClick={handleNextSlide} />
+      <div className="absolute top-1/2 transform -translate-y-1/2 w-full h-40 flex justify-between px-4">
+        <button
+          onClick={slidePrevBtn}
+          className="flex text-white text-9xl justify-center items-center"
+        >
+          <MdArrowBackIosNew />
+        </button>
+        <button
+          onClick={slideNextBtn}
+          className="flex text-white text-9xl justify-center items-center"
+        >
+          <MdArrowForwardIos />
+        </button>
       </div>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+      <div className="absolute bottom-4 w-full flex justify-center">
         {dummyImages.map((_, index) => (
-          <div key={index} className="cursor-pointer">
-            {index === currentIndex ? (
-              <FaCircle size={12} />
-            ) : (
-              <FaRegCircle size={12} />
-            )}
-          </div>
+          <button
+            key={index}
+            onClick={() => setCurrCarousel(index + 1)}
+            className="text-3xl mx-2 text-white"
+          >
+            {index + 1 === currCarousel ? <FaCircle /> : <FaRegCircle />}
+          </button>
         ))}
       </div>
     </div>

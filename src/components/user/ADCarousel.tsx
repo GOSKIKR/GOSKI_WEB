@@ -12,83 +12,99 @@ const dummyImages = [
 ];
 
 const ADCarousel = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [images, setImages] = useState([
-    dummyImages[dummyImages.length - 1],
-    ...dummyImages,
-    dummyImages[0],
-  ]);
-  const timeoutRef = useRef<number | null>(null);
-
-  const resetTimeout = () => {
-    if (timeoutRef.current) {
-      // null이 아닌 경우
-      clearTimeout(timeoutRef.current); // 타이머 제거
-    }
-  };
+  const [currCarousel, setCurrCarousel] = useState(1);
+  const [carouselTransition, setCarouselTransition] = useState(
+    "transform duration-1000 ease-in-out"
+  );
 
   useEffect(() => {
-    resetTimeout(); // 컴포넌트가 업데이트 될 때마다 타이머 제거
-    timeoutRef.current = setTimeout(
-      // 타이머 설정
-      () =>
-        setCurrentIndex(
-          (
-            prevIndex // 현재 인덱스를 변경
-          ) => (prevIndex === dummyImages.length - 1 ? 0 : prevIndex + 1) // 마지막 인덱스인 경우 0으로 변경
-        ),
-      5000 // 5초
-    );
+    // useEffect
     return () => {
-      resetTimeout(); // 컴포넌트가 언마운트 될 때 타이머 제거
+      // Cleanup code
     };
-  }, [currentIndex]); // currentIndex가 변경될 때마다 useEffect 실행 ^^b
+  }, []);
+
+  const makeNewImageArray = () => {
+    const dataStart = dummyImages[0];
+    const dataEnd = dummyImages[dummyImages.length - 1];
+    const modifiedImages = [dataEnd, ...dummyImages, dataStart];
+    return modifiedImages;
+  };
+
+  const slideNextBtn = () => {
+    const slideLength = dummyImages.length;
+    const newCurr = currCarousel + 1;
+    setCurrCarousel(newCurr);
+
+    if (newCurr === slideLength + 1) {
+      initializeCarousel(1);
+    }
+
+    setCarouselTransition("transform duration-1000 ease-in-out");
+  };
+
+  const slidePrevBtn = () => {
+    const slideLength = dummyImages.length;
+    const newCurr = currCarousel - 1;
+    setCurrCarousel(newCurr);
+
+    if (newCurr === 0) {
+      initializeCarousel(slideLength);
+    }
+
+    setCarouselTransition("transform duration-1000 ease-in-out");
+  };
+
+  const initializeCarousel = (n: number) => {
+    const timeoutId = setTimeout(() => {
+      setCarouselTransition("");
+      setCurrCarousel(n);
+    }, 1000);
+
+    return () => clearTimeout(timeoutId); // 컴포넌트가 언마운트될 경우 타임아웃을 지우는 Cleanup function
+  };
 
   return (
-    <div className="flex relative overflow-hidden w-full">
+    <div
+      className="flex relative overflow-hidden w-full"
+      style={{ height: "650px" }}
+    >
       <div
-        className="whitespace-nowrap w-full transition-transform duration-1000"
-        style={{ transform: `translateX(${-currentIndex * 100}%)` }}
+        className={`whitespace-nowrap w-full ${carouselTransition}`}
+        style={{ transform: `translateX(${-currCarousel * 100}%)` }}
       >
-        {dummyImages.map((src, index) => (
+        {makeNewImageArray().map((src, index) => (
           <img
             key={index}
             src={src}
             alt={`Slide ${index + 1}`}
-            className="w-full h-full inline-block"
+            className="w-full inline-block"
           />
         ))}
       </div>
       <div className="absolute top-1/2 transform -translate-y-1/2 w-full h-40 flex justify-between px-4">
         <button
-          onClick={() =>
-            setCurrentIndex((prevIndex) =>
-              prevIndex === 0 ? dummyImages.length - 1 : prevIndex - 1
-            )
-          }
-          className="flex text-white text-9xl justify-center items-center"
+          onClick={slidePrevBtn}
+          className="flex text-white text-4xl justify-center items-center"
         >
           <MdArrowBackIosNew />
         </button>
         <button
-          onClick={() =>
-            setCurrentIndex((prevIndex) =>
-              prevIndex === dummyImages.length - 1 ? 0 : prevIndex + 1
-            )
-          }
-          className="flex text-white text-9xl justify-center items-center"
+          onClick={slideNextBtn}
+          className="flex text-white text-4xl justify-center items-center"
         >
           <MdArrowForwardIos />
         </button>
       </div>
-      <div className="absolute bottom-10 w-full flex justify-center p-2">
-        {dummyImages.map((_, idx) => (
-          <div
-            key={idx}
-            className="flex h-10 w-20 text-white text-3xl justify-center items-center"
+      <div className="absolute bottom-4 w-full flex justify-center">
+        {dummyImages.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrCarousel(index + 1)}
+            className="text-xl mx-2 text-white"
           >
-            {idx === currentIndex ? <FaCircle /> : <FaRegCircle />}
-          </div>
+            {index + 1 === currCarousel ? <FaCircle /> : <FaRegCircle />}
+          </button>
         ))}
       </div>
     </div>
