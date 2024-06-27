@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import AccountVerifyModal from "./AccountVerifyModal";
 
-const AccountList : React.FC = () => {
+const AccountList: React.FC = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    return(
-        <div className="flex justify-center">
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    return (
+        <div className="flex justify-center relative">
             <div className="flex justify-between w-full max-w-[1000px] m-10">
                 <div className="bg-primary-100 rounded shadow w-[450px] mr-[50px] pt-[100px]">
                     <div className="text-center text-lg font-bold mb-2">정산 가능 금액</div>
@@ -17,7 +27,12 @@ const AccountList : React.FC = () => {
                             placeholder="계좌번호를 입력해주세요"
                         />
                     </div>
-                    <button className="bg-primary-500 text-white py-2 px-4 rounded w-full mb-2">계좌 인증하기</button>
+                    <button 
+                        className="bg-primary-500 text-white py-2 px-4 rounded w-full mb-2"
+                        onClick={openModal}
+                    >
+                        계좌 인증하기
+                    </button>
                     <div className="mb-4">
                         <div className="text-lg font-bold mb-2">출금 금액</div>
                         <input 
@@ -28,8 +43,10 @@ const AccountList : React.FC = () => {
                     <button className="bg-primary-700 text-white py-2 px-4 rounded w-full">정산 신청하기</button>
                 </div>
             </div>
+
+            {isModalOpen && <AccountVerifyModal onClose={closeModal} />}
         </div>
-    )
+    );
 }
 
 export default AccountList;

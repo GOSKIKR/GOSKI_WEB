@@ -111,7 +111,7 @@ const ProfilePage: React.FC = () => {
                             className="w-full p-2 border rounded h-24"
                         />
                     </div>
-                    <button className="bg-primary-700 text-white py-2 px-4 rounded self-end">수정</button>
+                    <button className="bg-primary-700 text-white py-2 px-4 rounded self-end">수정하기</button>
                 </div>
             </div>
         </div>
