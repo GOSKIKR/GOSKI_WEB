@@ -37,7 +37,7 @@ const ProfilePage: React.FC = () => {
                 <div className="flex flex-col items-center mr-10 mt-[200px]">
                     <div className="relative w-40 h-40 mb-4">
                         <img
-                            src={profileImage || "https://via.placeholder.com/150"}
+                            src={profileImage || "https://randomuser.me/api/portraits/men/75.jpg"}
                             alt="Profile"
                             className="w-full h-full object-cover rounded-full"
                         />
