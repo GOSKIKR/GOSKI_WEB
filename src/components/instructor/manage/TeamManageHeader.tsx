@@ -5,12 +5,12 @@ const TeamManageHeader: React.FC = () => {
     const location = useLocation();
     
     return (
-        <div>
-            <div className="flex justify-between items-center mt-20">
+        <div className="flex justify-center">
+            <div className="flex justify-between w-[600px] mt-20">
                 <div className="text-left">
-                    <span className="text-3xl font-bold ml-[450px]">팀 관리</span>
+                    <span className="text-3xl font-bold">팀 관리</span>
                 </div>
-                <div className="text-right mr-[450px]">
+                <div className="text-right">
                     <Link 
                         to="/instructor/team/regist" 
                         className={`ml-4 cursor-pointer ${location.pathname ==='/instructor/team/regist' ? 'text-primary-700' : 'text-black'}`}>팀 등록</Link>

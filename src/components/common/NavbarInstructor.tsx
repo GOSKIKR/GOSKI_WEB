@@ -39,7 +39,7 @@ const NavbarInstructor = () => {
           <div className="flex items-center justify-center w-10 h-10 bg-primary-100 rounded-full cursor-pointer">
             <PiSignOutBold size={24} onClick={() => setIsLogin(false)} />
           </div>
-          <div className="navbar-user__profile">
+          <div className="navbar-user__profile cursor-pointer" onClick={() => navigate("/instructor/edit-info")}>
             <img
               src="https://randomuser.me/api/portraits/men/75.jpg"
               alt="Profile"
