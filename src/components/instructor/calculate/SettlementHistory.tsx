@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import { SettlementHistoryDTO } from "../../../dto/SettlementHistoryDTO";
 
 const settlementData: SettlementHistoryDTO[] = [
-    { type: "입금", bankName: "국민은행", accountHolder: "송준석", accountNumber: "123456-12-123456", amount: "5,000,000원" },
-    { type: "출금", bankName: "국민은행", accountHolder: "송준석", accountNumber: "123456-12-123456", amount: "-5,000,000원" },
-    { type: "입금", bankName: "국민은행", accountHolder: "송준석", accountNumber: "123456-12-123456", amount: "5,000,000원" },
-    { type: "출금", bankName: "국민은행", accountHolder: "송준석", accountNumber: "123456-12-123456", amount: "-5,000,000원" },
-    { type: "입금", bankName: "국민은행", accountHolder: "송준석", accountNumber: "123456-12-123456", amount: "5,000,000원" },
+    {bankName: "국민은행", accountHolder: "송준석", accountNumber: "123456-12-123456", amount: "5,000,000원" },
+    {bankName: "우리은행", accountHolder: "장승호", accountNumber: "123456-12-123456", amount: "3,000,000원" },
+    {bankName: "신한은행", accountHolder: "고승민", accountNumber: "123456-12-123456", amount: "1,000,000원" },
+    {bankName: "카카오뱅크", accountHolder: "임종율", accountNumber: "123456-12-123456", amount: "4,000,000원" },
+    {bankName: "토스뱅크", accountHolder: "고승민", accountNumber: "123456-12-123456", amount: "2,000,000원" },
 ];
 
 const SettlementHistory: React.FC = () => {
     const [filter, setFilter] = useState({
         instructor: "",
         date: "",
-        type: "",
     });
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -24,9 +23,10 @@ const SettlementHistory: React.FC = () => {
         }));
     };
 
+    const holders = Array.from(new Set(settlementData.map(item => item.accountHolder)));
+
     const filteredData = settlementData.filter(item => {
         return (
-            (!filter.type || item.type.includes(filter.type)) &&
             (!filter.instructor || item.accountHolder.includes(filter.instructor)) && 
             (!filter.date || item.accountNumber.includes(filter.date)) 
         );
@@ -39,7 +39,6 @@ const SettlementHistory: React.FC = () => {
                     정산내역
                 </div>
                 <div className="mb-4">
-                    <button className="text-blue-500 mr-2">필터</button>
                     <select
                         name="instructor"
                         className="border mr-2 p-2 rounded"
@@ -47,31 +46,22 @@ const SettlementHistory: React.FC = () => {
                         onChange={handleFilterChange}
                     >
                         <option value="">강사 선택</option>
-                        <option value="송준석">송준석</option>
+                        {holders.map((holder,index) => (
+                            <option key={index} value={holder}>{holder}</option>
+                        ))}
                     </select>
                     <input
                         type="text"
                         name="date"
-                        placeholder="날짜 선택(월별, 일별 등)"
+                        placeholder="추후 드롭다운으로 날짜 선택"
                         className="border mr-2 p-2 rounded"
                         value={filter.date}
                         onChange={handleFilterChange}
                     />
-                    <select
-                        name="type"
-                        className="border mr-2 p-2 rounded"
-                        value={filter.type}
-                        onChange={handleFilterChange}
-                    >
-                        <option value="">입출금</option>
-                        <option value="입금">입금</option>
-                        <option value="출금">출금</option>
-                    </select>
                 </div>
                 <table className="min-w-full bg-white rounded-lg overflow-hidden">
                     <thead>
                         <tr>
-                            <th className="py-2">유형</th>
                             <th className="py-2">은행명</th>
                             <th className="py-2">예금주명</th>
                             <th className="py-2">계좌번호</th>
@@ -81,7 +71,6 @@ const SettlementHistory: React.FC = () => {
                     <tbody>
                         {filteredData.map((item, index) => (
                             <tr key={index} className="border-t">
-                                <td className="py-2 text-center">{item.type}</td>
                                 <td className="py-2 text-center">
                                     <div className="flex justify-center items-center">
                                         <img src="/path/to/bank-logo.png" alt="bank-logo" className="w-6 h-6 mr-2" />
