@@ -13,7 +13,7 @@ const FeedbackVideoRegist = () => {
     };
 
     const handleUpload = () => {
-        // 업로드 기능을 추가하세요
+        // 추후 업로드 기능 추가
         setVideos([...videos, videos.length + 1]);
     };
 
