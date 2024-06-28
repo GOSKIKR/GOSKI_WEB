@@ -292,7 +292,6 @@ const dummyInstructorData: Instructor[] = [
     // Add more dummy instructor entries as needed
 ];
 
-
 const FilterResult: React.FC = () => {
     const navigate = useNavigate();
     const filterState = useLocation().state as {
@@ -304,7 +303,7 @@ const FilterResult: React.FC = () => {
         entireTime: number;
         level: number;
     };
-    const [type, setType] = useState("스키");
+    const [type, setType] = useState(filterState.type);
     const [location, setLocation] = useState(filterState.location);
     const [participant, setParticipant] = useState(filterState.participant);
     const [dateRange, setDateRange] = useState<[Date, Date] | null>(
@@ -380,21 +379,25 @@ const FilterResult: React.FC = () => {
             <div className="flex flex-col w-full h-full items-center">
                 {/* 필터 */}
                 <div className="w-full flex flex-col items-center justify-center space-y-3">
-                    <div className="flex flex-row pt-16 w-full justify-center space-x-5 px-3">
+                    <div className="flex flex-row pt-16 w-full justify-center space-x-5 sm:px-3">
                         <div
                             className={`flex flex-row ${
-                                type==='스키' ? "bg-primary-600" : "bg-gray-200"
-                            } w-2/5 h-14 rounded-lg items-center place-content-between cursor-pointer`}
-                            onClick={() => setType('스키')}
+                                type === "스키"
+                                    ? "bg-primary-600"
+                                    : "bg-gray-200"
+                            } w-2/5 sm:h-14 h-10 rounded-lg items-center place-content-between cursor-pointer`}
+                            onClick={() => setType("스키")}
                         >
                             <FaSkiing
-                                color={type==='스키' ? "white" : "black"}
+                                color={type === "스키" ? "white" : "black"}
                                 size="30"
                                 className="w-1/6"
                             />
                             <div
                                 className={`text-base font-bold text-center w-2/3 ${
-                                    type==='스키' ? "text-white" : "text-gray-700"
+                                    type === "스키"
+                                        ? "text-white"
+                                        : "text-gray-700"
                                 }`}
                             >
                                 스키
@@ -402,15 +405,15 @@ const FilterResult: React.FC = () => {
                         </div>
                         <div
                             className={`flex flex-row ${
-                                type==='보드'
+                                type === "보드"
                                     ? "bg-primary-600"
                                     : "bg-gray-200"
-                            } w-2/5 h-14 rounded-lg items-center place-content-between cursor-pointer`}
-                            onClick={() => setType('보드')}
+                            } w-2/5 sm:h-14 h-10 rounded-lg items-center place-content-between cursor-pointer`}
+                            onClick={() => setType("보드")}
                         >
                             <div
                                 className={`text-base font-bold text-center w-2/3 ${
-                                    type==='보드'
+                                    type === "보드"
                                         ? "text-white"
                                         : "text-gray-700"
                                 }`}
@@ -418,178 +421,184 @@ const FilterResult: React.FC = () => {
                                 보드
                             </div>
                             <FaPersonSnowboarding
-                                color={
-                                    type==='보드'
-                                        ? "white"
-                                        : "black"
-                                }
+                                color={type === "보드" ? "white" : "black"}
                                 size="35"
                                 className="w-1/6 -scale-x-100"
                             />
                         </div>
                     </div>
+
                     {/* 하단 필터 */}
-                    <div className="flex flex-row bg-primary-50 rounded-lg shadow-md w-4/5 px-5 justify-between">
-                        {/* 장소 */}
-                        <div className="flex flex-col justify-center items-center space-y-3">
-                            <div>장소 *</div>
-                            <select
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                className="mt-1 p-2 block border border-gray-300 rounded"
-                            >
-                                {["a스키장", "b스키장", "c스키장"].map(
-                                    (loc, index) => (
-                                        <option key={index} value={loc}>
-                                            {loc}
-                                        </option>
-                                    )
-                                )}
-                            </select>
-                        </div>
-                        {/* 강습 인원 */}
-                        <div className="flex flex-col justify-center items-center">
-                            <div>강습인원 *</div>
-                            <div className="flex flex-row items-center space-x-3">
-                                <button
-                                    onClick={handleParticipantDecrement}
-                                    className={`w-1/3 h-full text-2xl font-extrabold ${
-                                        participant === 0
-                                            ? "cursor-not-allowed opacity-50"
-                                            : ""
-                                    }`}
-                                    disabled={participant === 0}
+                    <div className="flex flex-col sm:flex-row sm:flex-wrap bg-primary-50 rounded-lg shadow-md w-4/5 sm:px-5 justify-between">
+                        <div className="flex flex-row w-full justify-between">
+                            {/* 장소 */}
+                            <div className="flex flex-col sm:w-1/3 justify-center items-center space-y-3">
+                                <div>장소 *</div>
+                                <select
+                                    value={location}
+                                    onChange={(e) =>
+                                        setLocation(e.target.value)
+                                    }
+                                    className="mt-1 p-2 block border border-gray-300 rounded"
                                 >
-                                    -
-                                </button>
-                                <div className="w-1/3 h-full flex justify-center items-center">
-                                    {participant === 10 ? "10+" : participant}
-                                </div>
-                                <button
-                                    onClick={handleParticipantIncrement}
-                                    className={`w-1/3 h-full text-2xl font-extrabold ${
-                                        participant === 10
-                                            ? "cursor-not-allowed opacity-50"
-                                            : ""
-                                    }`}
-                                    disabled={participant === 10}
-                                >
-                                    +
-                                </button>
+                                    {["a스키장", "b스키장", "c스키장"].map(
+                                        (loc, index) => (
+                                            <option key={index} value={loc}>
+                                                {loc}
+                                            </option>
+                                        )
+                                    )}
+                                </select>
                             </div>
-                        </div>
-                        {/* 일정 선택 */}
-                        <div className="flex flex-col justify-center items-center">
-                            <div>일정 선택 *</div>
-                            <div className="flex items-center">
-                                <button
-                                    onClick={toggleCalendar}
-                                    className="p-2 border border-gray-300 rounded"
-                                >
-                                    <FaCalendarAlt />
-                                </button>
-                                {dateRange && (
-                                    <div className="ml-2">
-                                        {dateRange[0].toLocaleDateString()} -{" "}
-                                        {dateRange[1].toLocaleDateString()}
+                            {/* 강습인원 */}
+                            <div className="flex flex-col sm:w-1/3 justify-center items-center">
+                                <div>강습인원 *</div>
+                                <div className="flex flex-row items-center space-x-3">
+                                    <button
+                                        onClick={handleParticipantDecrement}
+                                        className={`w-1/3 h-full text-2xl font-extrabold ${
+                                            participant === 0
+                                                ? "cursor-not-allowed opacity-50"
+                                                : ""
+                                        }`}
+                                        disabled={participant === 0}
+                                    >
+                                        -
+                                    </button>
+                                    <div className="w-1/3 h-full flex justify-center items-center">
+                                        {participant === 10
+                                            ? "10+"
+                                            : participant}
+                                    </div>
+                                    <button
+                                        onClick={handleParticipantIncrement}
+                                        className={`w-1/3 h-full text-2xl font-extrabold ${
+                                            participant === 10
+                                                ? "cursor-not-allowed opacity-50"
+                                                : ""
+                                        }`}
+                                        disabled={participant === 10}
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                            {/* 일정 선택 */}
+                            <div className="flex flex-col sm:w-1/3 justify-center items-center">
+                                <div>일정 선택 *</div>
+                                <div className="flex items-center">
+                                    <button
+                                        onClick={toggleCalendar}
+                                        className="p-2 border border-gray-300 rounded"
+                                    >
+                                        <FaCalendarAlt />
+                                    </button>
+                                    {dateRange && (
+                                        <div className="ml-2">
+                                            {dateRange[0].toLocaleDateString()}{" "}
+                                            -{" "}
+                                            {dateRange[1].toLocaleDateString()}
+                                        </div>
+                                    )}
+                                </div>
+                                {calendarOpen && (
+                                    <div className="absolute mt-2">
+                                        <Calendar
+                                            selectRange
+                                            onChange={(range: [Date, Date]) => {
+                                                setDateRange(range);
+                                                setCalendarOpen(false);
+                                            }}
+                                            className="border border-gray-300 rounded shadow-lg"
+                                            minDate={today}
+                                        />
                                     </div>
                                 )}
                             </div>
-                            {calendarOpen && (
-                                <div className="absolute mt-2">
-                                    <Calendar
-                                        selectRange
-                                        onChange={(range: [Date, Date]) => {
-                                            setDateRange(range);
-                                            setCalendarOpen(false);
-                                        }}
-                                        className="border border-gray-300 rounded shadow-lg"
-                                        minDate={today}
-                                    />
-                                </div>
-                            )}
                         </div>
-                        {/* 강습시간 선택 */}
-                        <div className="flex flex-col justify-center items-center">
-                            <div>시작 시간</div>
-                            <input
-                                type="time"
-                                value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                                className="mt-1 p-2 block border border-gray-300 rounded"
-                                step="1800" // 30 minutes
-                            />
-                        </div>
-                        <div className="flex flex-col justify-center items-center">
-                            <div>강습 시간</div>
-                            <div className="flex flex-row items-center space-x-3">
-                                <button
-                                    onClick={handleTimeDecrement}
-                                    className={`w-1/3 h-full text-2xl font-extrabold ${
-                                        entireTime === 0
-                                            ? "cursor-not-allowed opacity-50"
-                                            : ""
-                                    }`}
-                                    disabled={entireTime === 0}
-                                >
-                                    -
-                                </button>
-                                <div className="w-1/3 h-full flex justify-center items-center">
-                                    {entireTime === 10 ? "10+" : entireTime}
+                        <div className="flex flex-row w-full justify-between">
+                            {/* 시작 시간 */}
+                            <div className="flex flex-col sm:w-1/3 justify-center items-center">
+                                <div>시작 시간</div>
+                                <input
+                                    type="time"
+                                    value={startTime}
+                                    onChange={(e) =>
+                                        setStartTime(e.target.value)
+                                    }
+                                    className="mt-1 p-2 block border border-gray-300 rounded"
+                                    step="1800" // 30 minutes
+                                />
+                            </div>
+                            <div className="flex flex-col sm:w-1/3 justify-center items-center">
+                                <div>강습 시간</div>
+                                <div className="flex flex-row items-center space-x-3">
+                                    <button
+                                        onClick={handleTimeDecrement}
+                                        className={`w-1/3 h-full text-2xl font-extrabold ${
+                                            entireTime === 0
+                                                ? "cursor-not-allowed opacity-50"
+                                                : ""
+                                        }`}
+                                        disabled={entireTime === 0}
+                                    >
+                                        -
+                                    </button>
+                                    <div className="w-1/3 h-full flex justify-center items-center">
+                                        {entireTime === 10 ? "10+" : entireTime}
+                                    </div>
+                                    <button
+                                        onClick={handleTimeIncrement}
+                                        className={`w-1/3 h-full text-2xl font-extrabold ${
+                                            entireTime === 10
+                                                ? "cursor-not-allowed opacity-50"
+                                                : ""
+                                        }`}
+                                        disabled={entireTime === 10}
+                                    >
+                                        +
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={handleTimeIncrement}
-                                    className={`w-1/3 h-full text-2xl font-extrabold ${
-                                        entireTime === 10
-                                            ? "cursor-not-allowed opacity-50"
-                                            : ""
-                                    }`}
-                                    disabled={entireTime === 10}
-                                >
-                                    +
-                                </button>
+                            </div>
+                            <div className="flex flex-col sm:w-1/3 mb-4 justify-center items-center">
+                                <div className="w-16">레벨 선택 *</div>
+                                <div className="w-20 h-10 flex flex-row">
+                                    <button
+                                        className={`w-1/3 h-full ${
+                                            level === 1
+                                                ? "bg-primary-600 text-white"
+                                                : "bg-gray-100"
+                                        } rounded-l-lg border-x-2 border-y-2 border-gray-400`}
+                                        onClick={() => setLevel(1)}
+                                    >
+                                        레벨 1
+                                    </button>
+                                    <button
+                                        className={`w-1/3 h-full ${
+                                            level === 2
+                                                ? "bg-primary-600 text-white"
+                                                : "bg-gray-100"
+                                        } border-x-2 border-y-2 border-gray-400`}
+                                        onClick={() => setLevel(2)}
+                                    >
+                                        레벨 2
+                                    </button>
+                                    <button
+                                        className={`w-1/3 h-full ${
+                                            level === 3
+                                                ? "bg-primary-600 text-white"
+                                                : "bg-gray-100"
+                                        } rounded-r-lg border-x-2 border-y-2 border-gray-400`}
+                                        onClick={() => setLevel(3)}
+                                    >
+                                        레벨 3
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        {/* 레벨 선택 */}
-                        <div className="flex flex-col mb-4 justify-center items-center">
-                            <div className="w-16">레벨 선택 *</div>
-                            <div className="w-20 h-10">
-                                <button
-                                    className={`w-1/3 h-full ${
-                                        level === 1
-                                            ? "bg-primary-600 text-white"
-                                            : "bg-gray-100"
-                                    } rounded-l-lg border-x-2 border-y-2 border-gray-400`}
-                                    onClick={() => setLevel(1)}
-                                >
-                                    레벨 1
-                                </button>
-                                <button
-                                    className={`w-1/3 h-full ${
-                                        level === 2
-                                            ? "bg-primary-600 text-white"
-                                            : "bg-gray-100"
-                                    } border-x-2 border-y-2 border-gray-400`}
-                                    onClick={() => setLevel(2)}
-                                >
-                                    레벨 2
-                                </button>
-                                <button
-                                    className={`w-1/3 h-full ${
-                                        level === 3
-                                            ? "bg-primary-600 text-white"
-                                            : "bg-gray-100"
-                                    } rounded-r-lg border-x-2 border-y-2 border-gray-400`}
-                                    onClick={() => setLevel(3)}
-                                >
-                                    레벨 3
-                                </button>
-                            </div>
-                        </div>
-                        {/* 검색 */}
                         <div
                             onClick={applyFilter}
-                            className="flex flex-col mb-4 justify-center items-center cursor-pointer"
+                            className="flex flex-col sm:w-1/3 mb-4 justify-center items-center cursor-pointer"
                         >
                             <IoIosSearch size="20" />
                         </div>
@@ -602,7 +611,7 @@ const FilterResult: React.FC = () => {
                             <div
                                 onClick={goToTeamDetail}
                                 key={index}
-                                className="flex flex-row w-4/5 h-28 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
+                                className="flex flex-row w-4/5 sm:w-11/12 sm:h-32 h-28 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
                             >
                                 <div className="h-24 w-24 bg-gray-300 rounded-md flex justify-center items-center">
                                     팀/개인 사진
@@ -615,7 +624,7 @@ const FilterResult: React.FC = () => {
                                         {data.description}
                                     </div>
                                     <div className="flex flex-row items-center mt-2">
-                                        <FaStar color="#FEFD48"/>
+                                        <FaStar color="#FEFD48" />
                                         <div className="ml-2 text-sm text-gray-600">
                                             {data.rating}
                                         </div>
@@ -634,7 +643,7 @@ const FilterResult: React.FC = () => {
                             <div
                                 onClick={goToInstructorDetail}
                                 key={index}
-                                className="flex flex-col w-60 h-80 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
+                                className="flex flex-col sm:w-72 w-60 sm:h-96 h-80 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
                             >
                                 <img
                                     src={data.instructorUrl}
@@ -645,7 +654,7 @@ const FilterResult: React.FC = () => {
                                         {data.userName}
                                     </div>
                                     <div>{data.description}</div>
-                                    
+
                                     <div className="mt-2">{data.cost}원~</div>
                                 </div>
                             </div>
@@ -658,4 +667,3 @@ const FilterResult: React.FC = () => {
 };
 
 export default FilterResult;
-
