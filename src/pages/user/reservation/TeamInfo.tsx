@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
+import BeforePay from "../../../components/user/BeforePay";
 
-const TeamInfo = () => {
-    const [startTime, setStartTime] = useState("");
-    const [entireTime, setEntireTime] = useState(0);
+const TeamInfo: React.FC = () => {
+    const [startTime, setStartTime] = useState<string>("");
+    const [entireTime, setEntireTime] = useState<number>(0);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
-
-    const goToPay = () => {
-        navigate(`/user/payment/before`);
-    };
 
     const handleTimeIncrement = () => {
         if (entireTime < 10) {
@@ -21,6 +19,14 @@ const TeamInfo = () => {
         if (entireTime > 0) {
             setEntireTime((prev) => prev - 1);
         }
+    };
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     return (
@@ -106,7 +112,7 @@ const TeamInfo = () => {
                         </div>
 
                         <div
-                            onClick={goToPay}
+                            onClick={openModal}
                             className="h-20 w-1/2 bg-white rounded-lg shadow-md text-black text-center flex items-center justify-center cursor-pointer"
                         >
                             예약하기
@@ -114,6 +120,20 @@ const TeamInfo = () => {
                     </div>
                 </div>
             </div>
+
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg relative sm:w-10/12 h-5/6 overflow-y-auto ">
+                        <button
+                            onClick={closeModal}
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                        >
+                            &times;
+                        </button>
+                        <BeforePay onClose={closeModal} />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
