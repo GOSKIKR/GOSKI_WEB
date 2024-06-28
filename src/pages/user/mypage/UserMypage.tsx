@@ -28,7 +28,7 @@ const UserMypage: React.FC = () => {
                 activePage={activePage}
                 setActivePage={setActivePage}
             />
-            <div className="content w-2/3">{renderActivePage()}</div>
+            <div className="content sm:w-4/6 w-5/6">{renderActivePage()}</div>
         </div>
     );
 };
