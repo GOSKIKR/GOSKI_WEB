@@ -14,14 +14,14 @@ const UserMypageMenu: React.FC<UserMypageMenuProps> = ({
     };
 
     return (
-        <div className="flex flex-row space-x-4 pt-12 pb-12 justify-between w-2/3">
+        <div className="flex flex-row space-x-4 pt-12 pb-12 justify-between w-4/5 sm:w-2/3">
             <div
                 className={`cursor-pointer text-black text-xl font-bold`}
                 onClick={() => setActivePage("lessonHistory")}
             >
                 마이페이지
             </div>
-            <div className="flex flex-row space-x-5">
+            <div className="flex flex-row sm:space-x-5 space-x-3 text-xs sm:text-lg items-center">
                 <div
                     className={`cursor-pointer ${getMenuItemClass(
                         "lessonHistory"
