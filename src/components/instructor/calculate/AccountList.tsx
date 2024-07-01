@@ -14,12 +14,12 @@ const AccountList: React.FC = () => {
 
     return (
         <div className="flex justify-center relative">
-            <div className="flex justify-between w-full max-w-[1000px] m-10">
-                <div className="bg-primary-100 rounded shadow w-[450px] mr-[50px] pt-[100px]">
-                    <div className="text-center text-lg font-bold mb-2">정산 가능 금액</div>
+            <div className="flex flex-col items-center max-w-[350px] sm:flex sm:flex-row sm:w-full sm:max-w-[1000px] sm:m-10 ">
+                <div className="bg-primary-100 rounded shadow w-[350px] my-5 p-6 sm:w-[450px] sm:h-[300px] sm:mr-[50px] sm:pt-[100px]">
+                    <div className="text-center text-lg font-bold">정산 가능 금액</div>
                     <div className="text-center text-3xl font-bold">100,000,000원</div>
                 </div>
-                <div className="bg-primary-100 rounded shadow w-[450px] p-4 ml-[50px]">
+                <div className="bg-primary-100 rounded shadow w-[350px] my-5 p-6 sm:w-[450px] sm:h-[300px] sm:p-4 sm:ml-[50px]">
                     <div className="mb-4">
                         <div className="text-lg font-bold mb-2">출금 계좌</div>
                         <input 
