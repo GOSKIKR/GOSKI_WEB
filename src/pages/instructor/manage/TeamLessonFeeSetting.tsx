@@ -16,13 +16,19 @@ const TeamLessonFeeSetting : React.FC = () => {
             <TeamManageHeader/>
             <div className="flex justify-center">
                 <div className="p-6">
-                    <DropdownMenu/>
-                    <TeamLessonFeeInfo/>
-                    <div className="flex justify-between">
-                        <LessonFeeByGroup/>
-                        <LessonFeeByLevel/>
+                    <div className="flex justify-center sm:justify-start">
+                        <DropdownMenu/>
                     </div>
-                    <div className="text-customRed my-6">
+                    <TeamLessonFeeInfo/>
+                    <div className="sm:flex sm:justify-between">
+                        <div className="flex justify-center">
+                            <LessonFeeByGroup/>
+                        </div>
+                        <div className="flex justify-center">
+                            <LessonFeeByLevel/>
+                        </div>
+                    </div>
+                    <div className="text-customRed my-6 sm:text-left text-center">
                         *지정강습비 추가금액은 강습 1건 기준입니다.
                     </div>
                     <LessonFeeByInstructor/>

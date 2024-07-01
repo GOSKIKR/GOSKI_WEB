@@ -16,9 +16,9 @@ const TeamLessonFeeInfo : React.FC = () => {
 
 
     return(
-        <div className="flex justify-between w-[1100px] items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:w-[1100px] items-center">
             <button 
-                className="flex justify-center items-center p-2 bg-gray-300 rounded shadow-lg"
+                className="flex justify-center items-center p-2 bg-gray-300 rounded shadow-lg sm:ml-0 mr-3"
                 onClick={openModal}
                 >
                 강습비 계산 안내<MdHelpOutline/>
