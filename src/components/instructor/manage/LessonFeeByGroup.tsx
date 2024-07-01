@@ -6,7 +6,7 @@ const LessonFeeByGroup: React.FC = () => {
             <div className="text-lg font-bold sm:text-left text-center p-6">
                 인원수별 수강비
             </div>
-            <div className="p-6 flex flex-col sm:flex-row sm:justify-between items-center">
+            <div className="p-3 flex flex-col sm:flex-row sm:justify-between items-center">
                 <div className="text-center sm:text-left mb-2 sm:mb-0">
                     <div>1:1강습비</div>
                     <div className="text-gray-500">*기본강습비</div>
@@ -19,7 +19,7 @@ const LessonFeeByGroup: React.FC = () => {
                     />
                 </div>
             </div>
-            <div className="p-6 flex flex-col sm:flex-row sm:justify-between items-center">
+            <div className="p-3 flex flex-col sm:flex-row sm:justify-between items-center">
                 <div className="text-center sm:text-left mb-2 sm:mb-0">
                     <div>1:2강습비</div>
                 </div>
@@ -31,7 +31,7 @@ const LessonFeeByGroup: React.FC = () => {
                     />
                 </div>
             </div>
-            <div className="p-6 flex flex-col sm:flex-row sm:justify-between items-center">
+            <div className="p-3 flex flex-col sm:flex-row sm:justify-between items-center">
                 <div className="text-center sm:text-left mb-2 sm:mb-0">
                     <div>1:3강습비</div>
                 </div>
@@ -43,7 +43,7 @@ const LessonFeeByGroup: React.FC = () => {
                     />
                 </div>
             </div>
-            <div className="p-6 flex flex-col sm:flex-row sm:justify-between items-center">
+            <div className="p-3 flex flex-col sm:flex-row sm:justify-between items-center">
                 <div className="text-center sm:text-left mb-2 sm:mb-0">
                     <div>4인 초과</div>
                 </div>

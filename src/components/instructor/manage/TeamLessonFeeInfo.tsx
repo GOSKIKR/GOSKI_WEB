@@ -23,7 +23,7 @@ const TeamLessonFeeInfo : React.FC = () => {
                 >
                 강습비 계산 안내<MdHelpOutline/>
             </button>
-            <div className="text-customRed">
+            <div className="text-customRed mt-2">
                 *결제금액은 1시간 기준입니다.
             </div>
             {modalVisible && <LessonFeeInfoModal onClose={closeModal}/>}
