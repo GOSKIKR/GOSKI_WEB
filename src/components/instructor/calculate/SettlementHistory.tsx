@@ -40,11 +40,11 @@ const SettlementHistory: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center mt-10">
-            <div className="bg-primary-100 rounded-lg w-full sm:w-[1000px] p-6 shadow-lg">
+            <div className="bg-primary-100 rounded-lg w-[350px] sm:w-[1000px] p-6 shadow-lg">
                 <div className="text-2xl font-bold mb-6">
                     정산내역
                 </div>
-                <div className="mb-4">
+                <div className="flex flex-row mb-4">
                     <select
                         name="instructor"
                         className="border mr-2 p-2 rounded"
@@ -60,7 +60,7 @@ const SettlementHistory: React.FC = () => {
                         type="text"
                         name="date"
                         placeholder="추후 드롭다운으로 날짜 선택"
-                        className="border mr-2 p-2 rounded"
+                        className="border p-2 w-full rounded sm:mr-2 sm:w-[200px] "
                         value={filter.date}
                         onChange={handleFilterChange}
                     />
