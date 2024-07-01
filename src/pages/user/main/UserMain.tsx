@@ -10,6 +10,16 @@ import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 const UserMain: React.FC = () => {
   const [data, setData] = useState(null);
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setInnerWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -29,10 +39,7 @@ const UserMain: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="w-full">
-        {
-          // 화면 너비가 640px 이하일 때 모바일 네비게이션을 보여줍니다.
-          window.innerWidth < 640 ? <NavbarUserMobile /> : <NavbarUser />
-        }
+        {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
       </div>
       <div className="w-full">
         <ADCarousel />

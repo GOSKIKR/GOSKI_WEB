@@ -43,7 +43,7 @@ const NavbarUser = () => {
   };
 
   return (
-    <div className="flex flex-row h-12 w-full justify-between items-center bg-primary-600  box-border">
+    <div className="flex flex-row h-12 w-full justify-between items-center bg-primary-600  box-border z-50">
       <div onClick={() => navigate("/")} className="basis-1/6 cursor-pointer">
         GOSKI
       </div>
