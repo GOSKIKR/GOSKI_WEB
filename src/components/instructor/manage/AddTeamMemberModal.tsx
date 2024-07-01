@@ -30,7 +30,7 @@ const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({ onClose, onSave
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg w-[400px]">
+            <div className="bg-white p-6 rounded shadow-lg sm:w-[400px] w-[300px]">
                 <h2 className="text-2xl font-bold mb-4">팀원 추가</h2>
                 <div className="mb-4">
                     <label className="block text-sm font-bold mb-1">이름</label>

@@ -38,8 +38,8 @@ const TeamRegist: React.FC = () => {
             <TeamManageHeader />
             <div className="flex justify-center mt-10">
                 <div className="p-6">
-                    <div className="team-profile-image mb-6 bg-primary-100 rounded-lg w-[600px] h-[350px]">
-                        <div className="text-lg font-bold p-6">
+                    <div className="team-profile-image mb-6 bg-primary-100 rounded-lg sm:w-[700px] h-[350px]">
+                        <div className="text-lg sm:text-left text-center font-bold p-6">
                             팀 프로필 사진
                         </div>
                         <div className="flex items-center justify-center">
