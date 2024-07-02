@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import UserNotification from "../user/UserNotification";
+
 const NavbarUserMobile = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
@@ -30,9 +32,7 @@ const NavbarUserMobile = () => {
         GOSKI
       </div>
       <div className="flex flex-1"></div>
-      <div onClick={() => navigate("/login")} className="flex">
-        프로필
-      </div>
+      <UserNotification />
       <div className="flex">
         <div
           onClick={() => handleShowMenu()}
@@ -63,7 +63,7 @@ const NavbarUserMobile = () => {
               className="px-4 py-2 text-left hover:bg-gray-100"
               onClick={handleCloseMenu}
             >
-              알림
+              프로필
             </button>
             <button
               className="px-4 py-2 text-left hover:bg-gray-100"
