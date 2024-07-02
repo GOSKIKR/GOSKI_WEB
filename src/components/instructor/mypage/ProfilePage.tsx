@@ -33,17 +33,14 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="flex justify-center items-center my-10">
-            <div className="bg-primary-100 rounded-lg p-10 shadow-lg flex w-[800px]">
-                <div className="flex flex-col items-center mr-10 mt-[200px]">
+            <div className="bg-primary-100 rounded-lg p-10 shadow-lg flex flex-col sm:flex-row sm:w-[800px] w-[350px]">
+                <div className="flex flex-col items-center sm:mr-10 sm:mt-[200px] mb-4 sm:mb-0">
                     <div className="relative w-40 h-40 mb-4">
                         <img
                             src={profileImage || "https://randomuser.me/api/portraits/men/75.jpg"}
                             alt="Profile"
                             className="w-full h-full object-cover rounded-full"
                         />
-                        {/* <label htmlFor="profileImage" className="absolute bottom-0 right-0 bg-gray-200 rounded-full p-1 cursor-pointer">
-                            <span role="img" aria-label="edit">✏️</span>
-                        </label> */}
                         <input
                             type="file"
                             id="profileImage"
@@ -111,7 +108,7 @@ const ProfilePage: React.FC = () => {
                             className="w-full p-2 border rounded h-24"
                         />
                     </div>
-                    <button className="bg-primary-700 text-white py-2 px-4 rounded self-end">수정하기</button>
+                    <button className="bg-primary-700 text-white py-2 px-4 rounded self-end sm:w-1/4 w-full">수정하기</button>
                 </div>
             </div>
         </div>

@@ -19,8 +19,8 @@ const FeedbackVideoRegist = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="w-[1000px] my-3 flex justify-between items-center">
-                <div className="text-2xl font-bold">동영상 ({videos.length})</div>
+            <div className="sm:w-[1000px] w-[350px] my-3 flex justify-between items-center">
+                <div className="sm:text-2xl text-xl font-bold">동영상 ({videos.length})</div>
                 <div>
                     <button 
                         className="bg-red-500 text-white py-1 px-4 rounded mr-2"
@@ -36,7 +36,7 @@ const FeedbackVideoRegist = () => {
                     </button>
                 </div>
             </div>
-            <div className={`flex justify-center bg-primary-100 w-[1000px]  rounded p-6 ${videos.length === 0 ? 'h-[300px]' : ''}`}>
+            <div className={`flex justify-center bg-primary-100 sm:w-[1000px] w-[350px] rounded p-6 ${videos.length === 0 ? 'h-[300px]' : ''}`}>
                 <div className="w-full">
                     {videos.length === 0 ? (
                         <div className="h-[300px] flex items-center justify-center">
