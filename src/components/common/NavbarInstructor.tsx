@@ -20,10 +20,10 @@ const NavbarInstructor = () => {
         GOSKI
       </div>
       <div className="flex flex-row flex-1 justify-normal">
-        <div className="text-black text-xl p-5 cursor-pointer" >스케줄</div>
-        <div className="text-black text-xl p-5 cursor-pointer" onClick={() => navigate("/instructor/team/regist")}>팀 관리</div>
-        <div className="text-black text-xl p-5 cursor-pointer" onClick={() => navigate("/instructor/my-lesson")}>강습내역</div>
-        <div className="text-black text-xl p-5 cursor-pointer" onClick={() => navigate("/instructor/settlement")}>정산</div>
+        <div className="text-black sm:text-xl text-sm p-5 cursor-pointer" >스케줄</div>
+        <div className="text-black sm:text-xl text-sm p-5 cursor-pointer" onClick={() => navigate("/instructor/team/regist")}>팀 관리</div>
+        <div className="text-black sm:text-xl text-sm p-5 cursor-pointer" onClick={() => navigate("/instructor/my-lesson")}>강습내역</div>
+        <div className="text-black sm:text-xl text-sm p-5 cursor-pointer" onClick={() => navigate("/instructor/settlement")}>정산</div>
       </div>
       {isLogin ? (
         <div className="basis-1/4 flex flex-row justify-around">

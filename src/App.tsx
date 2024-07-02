@@ -29,6 +29,7 @@ import FeedbackRegist from "./pages/instructor/mypage/FeedbackRegist";
 import Settlement from "./pages/instructor/calculate/Settlement";
 import MyPageInfo from "./pages/instructor/mypage/MyPageInfo";
 import MyPageCert from "./pages/instructor/mypage/MyPageCert";
+import FeedbackEdit from "./pages/instructor/mypage/FeedbackEdit";
 
 const App: React.FC = () => {
     return (
@@ -84,19 +85,23 @@ const App: React.FC = () => {
                     element={<TeamMember />}
                 />
 
-                <Route
-                    path="/instructor/my-lesson"
-                    element={<MyLessonList />}
-                />
-                <Route
-                    path="/instructor/regist-feedback"
-                    element={<FeedbackRegist />}
-                />
+                <Route 
+                    path="/instructor/my-lesson" 
+                    element={<MyLessonList/>}/>
+                    
+                <Route 
+                    path="/instructor/regist-feedback" 
+                    element={<FeedbackRegist/>}/>
 
-                <Route path="/instructor/settlement" element={<Settlement />} />
+                <Route 
+                    path="/instructor/edit-feedback" 
+                    element={<FeedbackEdit/>}/>
+
+                <Route 
+                    path="/instructor/settlement" 
+                    element={<Settlement/>}/>
 
                 <Route path="/instructor/edit-info" element={<MyPageInfo />} />
-
                 <Route path="/instructor/edit-cert" element={<MyPageCert />} />
 
                 <Route path="/counter" element={<Counter />} />

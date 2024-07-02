@@ -7,7 +7,7 @@ const Settlement: React.FC = () => {
     return (
         <div>
             <NavbarInstructor />
-            <div className="flex justify-center text-3xl font-bold mt-20">
+            <div className="flex justify-center sm:text-3xl text-xl font-bold mt-20">
                 정산
             </div>
             <AccountList/>

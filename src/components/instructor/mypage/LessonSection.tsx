@@ -65,7 +65,9 @@ const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
                             )}
                             {lesson.lessonStatus === "yesFeedback" && (
                                 <div className="flex justify-end">
-                                    <button className="mt-2 mr-2 bg-primary-500 text-white py-1 px-2 rounded">피드백 수정하기</button>
+                                    <button 
+                                        className="mt-2 mr-2 bg-primary-500 text-white py-1 px-2 rounded"
+                                        onClick={() => navigate("/instructor/edit-feedback")}>피드백 수정하기</button>
                                     <button className="mt-2 bg-primary-700 text-white py-1 px-2 rounded" onClick={openReviewModal}>리뷰 확인하기</button>
                                 </div>
                             )}
