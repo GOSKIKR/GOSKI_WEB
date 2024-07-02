@@ -6,9 +6,9 @@ const MyPageHeader : React.FC = () => {
 
     return(
         <div className="flex justify-center">
-            <div className="flex justify-between w-[800px] mt-20">
-                <div className="text-2xl font-bold">마이페이지</div>
-                <div className="">
+            <div className="sm:flex sm:justify-between sm:w-[800px] sm:mt-20 w-[400px] mt-10">
+                <div className="sm:text-2xl text-xl text-center font-bold">마이페이지</div>
+                <div className="text-center">
                     <Link 
                         to="/instructor/edit-info" 
                         className={`ml-4 cursor-pointer ${location.pathname ==='/instructor/edit-info' ? 'text-primary-700' : 'text-black'}`}>프로필 수정</Link>

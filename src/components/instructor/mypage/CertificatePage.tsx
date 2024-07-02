@@ -36,7 +36,7 @@ const CertificatePage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center mt-10">
-            <div className="flex justify-end w-full max-w-[1000px] mb-4">
+            <div className="flex justify-end sm:w-full sm:max-w-[1000px] w-[350px] mb-4">
                 <button 
                     className="text-blue-500" 
                     onClick={handleAddCertificate}
@@ -45,7 +45,7 @@ const CertificatePage: React.FC = () => {
                 </button>
             </div>
             {certificates.length === 0 ? (
-                <div className="bg-white rounded-lg flex justify-center items-center w-full max-w-[1000px] h-[300px]">
+                <div className="bg-white rounded-lg flex justify-center items-center sm:w-full sm:max-w-[1000px] sm:h-[300px] w-[350px]">
                     <span className="text-primary-500">자격증을 등록하세요</span>
                 </div>
             ) : (
