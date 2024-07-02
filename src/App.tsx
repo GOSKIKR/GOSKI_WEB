@@ -10,7 +10,6 @@ import Register from "./pages/user/auth/Register";
 import DM from "./pages/user/dm/DM";
 import SetFilter from "./pages/user/reservation/SetFilter";
 import FilterResult from "./pages/user/reservation/FilterResult";
-import BeforePay from "./pages/user/payment/BeforePay";
 import Payment from "./pages/user/payment/Payment";
 import PayDetail from "./pages/user/payment/PayDetail";
 import UserMypage from "./pages/user/mypage/UserMypage";
@@ -21,7 +20,7 @@ import TeamMember from "./pages/instructor/manage/TeamMember";
 import PayCancle from "./pages/user/payment/PayCancle";
 import WriteReview from "./pages/user/mypage/WriteReview";
 import TeamInfo from "./pages/user/reservation/TeamInfo";
-import InstructorInfo from './pages/user/reservation/InstructorInfo';
+import InstructorInfo from "./pages/user/reservation/InstructorInfo";
 import UserFeedback from "./pages/user/mypage/UserFeedback";
 import LessonDetail from "./pages/instructor/main/LessonDetail";
 import BossMain from "./pages/instructor/main/BossMain";
@@ -49,8 +48,10 @@ const App: React.FC = () => {
                 <Route path="/reserve/set" element={<SetFilter />} />
                 <Route path="/reserve/result" element={<FilterResult />} />
                 <Route path="/reserve/info/team" element={<TeamInfo />} />
-                <Route path="/reserve/info/instructor" element={<InstructorInfo/>} />
-                <Route path="/user/payment/before" element={<BeforePay />} />
+                <Route
+                    path="/reserve/info/instructor"
+                    element={<InstructorInfo />}
+                />
                 <Route path="/user/payment/detail" element={<PayDetail />} />
                 <Route path="/user/payment/cancle" element={<PayCancle />} />
                 <Route path="/user/payment" element={<Payment />} />
@@ -99,22 +100,15 @@ const App: React.FC = () => {
                 <Route 
                     path="/instructor/settlement" 
                     element={<Settlement/>}/>
-                
-                <Route
-                    path="/instructor/edit-info"
-                    element={<MyPageInfo/>}/>
 
-                <Route
-                    path="/instructor/edit-cert"
-                    element={<MyPageCert/>}/>
+                <Route path="/instructor/edit-info" element={<MyPageInfo />} />
+                <Route path="/instructor/edit-cert" element={<MyPageCert />} />
 
-
-        <Route path="/counter" element={<Counter />} />
-        <Route path="*" element={<div>Not Found</div>} />
-      </Routes>
-    </div>
-  );
-
+                <Route path="/counter" element={<Counter />} />
+                <Route path="*" element={<div>Not Found</div>} />
+            </Routes>
+        </div>
+    );
 };
 
 export default App;

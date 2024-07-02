@@ -63,14 +63,33 @@ const Payment = () => {
     return (
         <div className="p-10">
             <div className="text-2xl font-bold mb-8">결제하기</div>
-            <div className="flex flex-row space-x-5">
-                <div className="w-3/5 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:space-x-5">
+                <div className="w-full sm:w-3/5 space-y-5">
                     <div className="bg-primary-50 p-5 rounded-lg shadow-md">
-                        <div className="font-bold mb-2">강습 예약 정보</div>
-                        <div>일시: {data.lessonDate}</div>
-                        <div>시간: {data.startTime}</div>
-                        <div>인원: {data.peopleNumber}명</div>
-                        <div>요청사항: {data.requestComplain || "없음"}</div>
+                        <div className="font-extrabold text-lg mb-2">
+                            강습 예약 정보
+                        </div>
+                        <div className="font-bold text-lg">스키장 이름</div>
+                        <div className="flex flex-row space-x-12 pt-3">
+                            <div className="flex flex-col">
+                                <div className="text-xs text-gray-500">
+                                    일시
+                                </div>
+                                <div>{data.lessonDate}</div>
+                            </div>
+                            <div className="flex flex-col">
+                                <div className="text-xs text-gray-500">
+                                    인원
+                                </div>
+                                <div>{data.peopleNumber}명</div>
+                            </div>
+                            <div className="flex flex-col">
+                                <div className="text-xs text-gray-500">
+                                    요청사항
+                                </div>
+                                <div>{data.requestComplain || "없음"}</div>
+                            </div>
+                        </div>
                     </div>
                     <div className="bg-primary-50 p-5 rounded-lg shadow-md">
                         <div className="font-bold mb-2">예약자 정보</div>
@@ -85,7 +104,7 @@ const Payment = () => {
                                 key={index}
                                 className="mb-4 space-y-2 bg-white p-4 "
                             >
-                                <div className="flex flex-row space-x-3">
+                                <div className="flex flex-col sm:flex-row sm:space-x-3 space-y-1 items-center">
                                     <div>
                                         <input
                                             type="text"
@@ -140,7 +159,7 @@ const Payment = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex flex-row space-x-3">
+                                <div className="flex flex-col sm:flex-row sm:space-x-3 space-y-1 items-center">
                                     <div>
                                         <select
                                             value={student.height}
@@ -215,7 +234,7 @@ const Payment = () => {
                                     </div>
                                 </div>
 
-                                <div>
+                                <div className="flex items-center justify-center">
                                     <input
                                         type="number"
                                         value={student.footSize}
@@ -234,27 +253,25 @@ const Payment = () => {
                         ))}
                     </div>
                 </div>
-                <div className="w-2/5 space-y-5">
+                <div className="sm:w-2/5 space-y-5 mt-5 sm:mt-0">
                     <div className="bg-primary-50 p-5 rounded-lg shadow-md">
-                        <div className="font-bold mb-2">최종 결제 금액</div>
-                        <div>
-                            기본 강습비: {data.basicFee.toLocaleString()}원
+                        <div className="font-extrabold pb-2 w-full">
+                            최종 결제금액
                         </div>
-                        <div>
-                            레벨 옵션비: {data.levelOptionFee.toLocaleString()}
-                            원
+                        <div className="w-full flex flex-row justify-between">
+                            <div>기존 강습비</div>
+                            <div>10000원</div>
                         </div>
-                        <div>
-                            지정 강사비: {data.designatedFee.toLocaleString()}원
+                        <div className="w-full flex flex-row justify-between">
+                            <div>레벨 옵션비</div>
+                            <div>10000원</div>
                         </div>
-                        <div>
-                            총 결제 금액:{" "}
-                            {(
-                                data.basicFee +
-                                data.levelOptionFee +
-                                data.designatedFee
-                            ).toLocaleString()}
-                            원
+                        <div className="w-full my-[1%] border-[1px] border-black"></div>
+                        <div className="w-full flex flex-row justify-between pb-3">
+                            <div className="font-extrabold">총 결제금액</div>
+                            <div className="text-blue-500 font-extrabold">
+                                20000원
+                            </div>
                         </div>
                     </div>
                     <div className="bg-primary-50 p-5 rounded-lg shadow-md">

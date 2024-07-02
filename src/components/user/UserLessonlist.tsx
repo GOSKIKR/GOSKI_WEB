@@ -110,7 +110,7 @@ const UserLessonlist = () => {
 
     return (
         <div className="flex flex-col space-y-10 w-full">
-            <div className="w-full h-16 bg-primary-50 rounded-3xl shadow-md flex flex-row items-center text-center divide-x divide-black">
+            <div className="w-full sm:h-16 h-12 sm:text-md text-sm bg-primary-50 rounded-3xl shadow-md flex flex-row items-center text-center divide-x divide-black">
                 {["진행 예정", "진행 중", "강습 완료"].map((status) => (
                     <div
                         key={status}
