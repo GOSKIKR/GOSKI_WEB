@@ -19,8 +19,8 @@ const FeedbackImageRegist = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="w-[1000px] my-3 flex justify-between items-center">
-                <div className="text-left text-2xl font-bold">사진 ({images.length})</div>
+            <div className="sm:w-[1000px] w-[350px] my-3 flex justify-between items-center">
+                <div className="text-left sm:text-2xl text-xl font-bold">사진 ({images.length})</div>
                 <div>
                     <button
                         className="bg-red-500 text-white py-1 px-4 rounded mr-2"
@@ -36,7 +36,7 @@ const FeedbackImageRegist = () => {
                     </button>
                 </div>
             </div>
-            <div className="flex justify-center bg-primary-100 w-[1000px] rounded p-6">
+            <div className="flex justify-center bg-primary-100 sm:w-[1000px] w-[350px] rounded p-6">
                 <div className="w-full">
                     {images.length === 0 ? (
                         <div className="h-[300px] flex items-center justify-center">
