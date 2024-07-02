@@ -150,7 +150,11 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members }) => {
                                     <span>팀 삭제 권한</span>
                                     <input type="checkbox" className="form-checkbox" />
                                 </div>
-                                <button className="bg-primary-500 text-white rounded px-4 py-2 w-full">수정하기</button>
+                                <button className="bg-primary-500 text-white rounded px-4 py-2 w-full my-2">수정하기</button>
+                                <button className="bg-red-500 text-white rounded px-4 py-2 w-full" onClick={() => {
+                                    setSelectedMember(member);
+                                    setConfirmationModalVisible(true);
+                                }}>팀원 강퇴</button>
                             </div>
                         )}
                     </div>

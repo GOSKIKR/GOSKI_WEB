@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import ReviewModal from "./ReviewModal";
@@ -24,13 +24,21 @@ const review: ReviewDTO | null = {
     ],
 };
 
-
 const settings = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 2
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    responsive: [
+        {
+            breakpoint: 640,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 2
+            }
+        }
+    ]
 };
 
 const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
