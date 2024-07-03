@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { CiMail } from "react-icons/ci";
@@ -13,6 +13,17 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userOrInstructor, setUserOrInstructor] = useState("user");
+
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setInnerWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const isFormValid = email !== "" && password !== "";
 
@@ -30,7 +41,7 @@ const Login = () => {
     <div className="flex flex-col h-screen">
       {
         // 화면 너비가 640px 이하일 때 모바일 네비게이션
-        window.innerWidth < 640 ? <NavbarUserMobile /> : <NavbarUser />
+        innerWidth < 640 ? <NavbarUserMobile /> : <NavbarUser />
       }
       <div className="h-full flex items-center justify-center bg-gray-50 ">
         {/* <div
