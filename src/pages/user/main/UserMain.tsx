@@ -1,26 +1,54 @@
 import React, { useEffect, useState } from "react";
 import apiClient from "../../../utils/config/axiosConfig";
 
+import NavbarUser from "../../../components/common/NavbarUser";
+import ADCarousel from "../../../components/user/ADCarousel";
+import Footer from "../../../components/common/Footer";
+import ReservationBox from "../../../components/user/ResservationBox";
+import TeamAD from "../../../components/user/TeamAD";
+import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
+
 const UserMain: React.FC = () => {
   const [data, setData] = useState(null);
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setInnerWidth(window.innerWidth);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get("/user/main");
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await apiClient.get("/user/main");
+  //       setData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>Loading...</p>}
+
   return (
-    <div>
-      <h1>User Main Page</h1>
-      {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>Loading...</p>}
+    <div className="flex flex-col items-center justify-center">
+      <div className="w-full">
+        {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+      </div>
+      <div className="w-full">
+        <ADCarousel />
+      </div>
+      <div className="flex flex-col gap-6 w-4/5 self-center mt-10 mb-16">
+        <ReservationBox />
+        <TeamAD />
+      </div>
+      <Footer />
     </div>
   );
 };
