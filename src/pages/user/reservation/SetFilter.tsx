@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCalendarAlt } from "react-icons/fa";
+import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 const SetFilter: React.FC = () => {
     const navigate = useNavigate();
@@ -75,7 +76,9 @@ const SetFilter: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <NavbarUser />
+            <div className="w-full">
+                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+            </div>
             <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
                 <img
                     src="/assets/images/AppLogo.png"
@@ -85,7 +88,7 @@ const SetFilter: React.FC = () => {
                 <div className="text-xl font-extrabold">GOSKI 강습 예약</div>
             </div>
             <div className="flex flex-col sm:flex-row sm:space-x-10 w-full justify-center items-center sm:items-stretch">
-                <div className="p-6 w-full sm:w-1/2 bg-primary-50 border border-gray-300 rounded-lg shadow-sm space-y-4">
+                <div className="p-6 w-[380px] sm:w-1/2 bg-primary-50 rounded-lg shadow-md space-y-4">
                     <div className="flex items-center mb-4">
                         <label className="mb-1 mr-4 sm:w-20 w-24 font-bold">
                             종류 *
@@ -178,8 +181,8 @@ const SetFilter: React.FC = () => {
                         {calendarOpen && (
                             <div className="relative mt-2">
                                 <Calendar
-                                    onChange={(date: Date) => {
-                                        setSelectedDate(date);
+                                    onChange={(value) => {
+                                        setSelectedDate(value as Date);
                                         setCalendarOpen(false);
                                     }}
                                     className="border border-gray-300 rounded shadow-lg"
@@ -246,7 +249,7 @@ const SetFilter: React.FC = () => {
                                 onClick={() => setLevel(1)}
                             >
                                 <div className="sm:text-lg text-md">초급</div>
-                                <div className="sm:text-xs text-[10px]">
+                                <div className="sm:text-xs text-[8px]">
                                     Level 1 이상 강사진
                                 </div>
                             </button>
@@ -259,7 +262,7 @@ const SetFilter: React.FC = () => {
                                 onClick={() => setLevel(2)}
                             >
                                 <div className="sm:text-lg text-md">중급</div>
-                                <div className="sm:text-xs text-[10px]">
+                                <div className="sm:text-xs text-[8px]">
                                     Level 2 이상 강사진
                                 </div>
                             </button>
@@ -272,7 +275,7 @@ const SetFilter: React.FC = () => {
                                 onClick={() => setLevel(3)}
                             >
                                 <div className="sm:text-lg text-md">고급</div>
-                                <div className="sm:text-xs text-[10px]">
+                                <div className="sm:text-xs text-[8px]">
                                     Level 3 이상 프리미엄 강사진
                                 </div>
                             </button>
@@ -281,15 +284,15 @@ const SetFilter: React.FC = () => {
                     <div className="flex justify-center mt-4">
                         <div
                             onClick={goToResult}
-                            className="w-full sm:w-20 h-12 bg-primary-500 text-white flex justify-center items-center cursor-pointer rounded-lg"
+                            className="mt-3 w-32 h-8 sm:w-20 sm:h-12 bg-primary-500 text-white flex justify-center items-center cursor-pointer rounded-lg shadow-md"
                         >
                             강습 조회
                         </div>
                     </div>
                 </div>
 
-                <div className="w-full sm:w-2/6 h-4/5 bg-primary-50 rounded-lg shadow-md flex justify-center items-center mt-8 sm:mt-0">
-                    hi
+                <div className="w-[380px] sm:w-2/6 h-4/5 bg-primary-50 rounded-lg shadow-md flex justify-center items-center mt-8 sm:mt-0">
+                    레벨 선택 설명 들어갈 공간
                 </div>
             </div>
         </div>

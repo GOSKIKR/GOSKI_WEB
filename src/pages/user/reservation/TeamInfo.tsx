@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
 import BeforePay from "../../../components/user/BeforePay";
+import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 const TeamInfo: React.FC = () => {
     const [startTime, setStartTime] = useState<string>("");
@@ -31,7 +32,9 @@ const TeamInfo: React.FC = () => {
 
     return (
         <div>
-            <NavbarUser />
+            <div className="w-full">
+                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+            </div>
             <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
                 <img
                     src="/assets/images/AppLogo.png"
@@ -91,7 +94,7 @@ const TeamInfo: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col px-8 py-6 space-y-3 w-full h-60 bg-primary-50 rounded-lg shadow-md items-center justify-center">
+                    <div className="flex flex-col px-8 py-6 space-y-3 w-full h-60 bg-primary-50 rounded-lg shadow-md items-center justify-center mb-8">
                         <div className="font-extrabold pb-2 w-full">
                             최종 결제금액
                         </div>
