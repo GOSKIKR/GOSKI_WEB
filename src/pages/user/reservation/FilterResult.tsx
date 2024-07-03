@@ -8,6 +8,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 interface CertificateInfo {
     certificateId: number;
@@ -306,9 +307,7 @@ const FilterResult: React.FC = () => {
     const [type, setType] = useState(filterState.type);
     const [location, setLocation] = useState(filterState.location);
     const [participant, setParticipant] = useState(filterState.participant);
-    const [dateRange, setDateRange] = useState<[Date, Date] | null>(
-        filterState.dateRange
-    );
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [startTime, setStartTime] = useState(filterState.startTime);
     const [entireTime, setEntireTime] = useState(filterState.entireTime);
     const [level, setLevel] = useState(filterState.level);
@@ -317,18 +316,6 @@ const FilterResult: React.FC = () => {
     const [filteredData, setFilteredData] = useState(
         level === 1 ? dummyTeamData : dummyInstructorData
     );
-
-    const handleParticipantIncrement = () => {
-        if (participant < 10) {
-            setParticipant((prev) => prev + 1);
-        }
-    };
-
-    const handleParticipantDecrement = () => {
-        if (participant > 0) {
-            setParticipant((prev) => prev - 1);
-        }
-    };
 
     const handleTimeIncrement = () => {
         if (entireTime < 10) {
@@ -375,7 +362,9 @@ const FilterResult: React.FC = () => {
 
     return (
         <div>
-            <NavbarUser />
+            <div className="w-full">
+                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+            </div>
             <div className="flex flex-col w-full h-full items-center">
                 {/* 필터 */}
                 <div className="w-full flex flex-col items-center justify-center space-y-3">
@@ -429,213 +418,206 @@ const FilterResult: React.FC = () => {
                     </div>
 
                     {/* 하단 필터 */}
-                    <div className="flex flex-col sm:flex-row sm:flex-wrap bg-primary-50 rounded-lg shadow-md w-4/5 sm:px-5 justify-between">
-                        <div className="flex flex-row w-full justify-between">
-                            {/* 장소 */}
-                            <div className="flex flex-col sm:w-1/3 justify-center items-center space-y-3">
-                                <div>장소 *</div>
-                                <select
-                                    value={location}
-                                    onChange={(e) =>
-                                        setLocation(e.target.value)
-                                    }
-                                    className="mt-1 p-2 block border border-gray-300 rounded"
-                                >
-                                    {["a스키장", "b스키장", "c스키장"].map(
-                                        (loc, index) => (
-                                            <option key={index} value={loc}>
-                                                {loc}
-                                            </option>
-                                        )
-                                    )}
-                                </select>
-                            </div>
-                            {/* 강습인원 */}
-                            <div className="flex flex-col sm:w-1/3 justify-center items-center">
-                                <div>강습인원 *</div>
-                                <div className="flex flex-row items-center space-x-3">
-                                    <button
-                                        onClick={handleParticipantDecrement}
-                                        className={`w-1/3 h-full text-2xl font-extrabold ${
-                                            participant === 0
-                                                ? "cursor-not-allowed opacity-50"
-                                                : ""
-                                        }`}
-                                        disabled={participant === 0}
-                                    >
-                                        -
-                                    </button>
-                                    <div className="w-1/3 h-full flex justify-center items-center">
-                                        {participant === 10
-                                            ? "10+"
-                                            : participant}
+                    <div className="flex flex-col sm:flex-row sm:flex-wrap bg-primary-50 rounded-lg shadow-md w-11/12 sm:mx-5 justify-between">
+                        <div className="flex flex-col sm:flex-row w-full justify-between sm:justify-center py-5 px-3 space-y-4 sm:space-y-0">
+                            <div className="flex flex-row ">
+                                {/* 장소 */}
+                                <div className="flex flex-row w-32 justify-center items-center">
+                                    <div className="flex sm:text-sm text-xs w-1/3">
+                                        장소 *
                                     </div>
-                                    <button
-                                        onClick={handleParticipantIncrement}
-                                        className={`w-1/3 h-full text-2xl font-extrabold ${
-                                            participant === 10
-                                                ? "cursor-not-allowed opacity-50"
-                                                : ""
-                                        }`}
-                                        disabled={participant === 10}
+                                    <select
+                                        value={location}
+                                        onChange={(e) =>
+                                            setLocation(e.target.value)
+                                        }
+                                        className="flex sm:text-sm text-xs sm:w-2/3 w-7/12 px-0.5 py-1 rounded shadow-md"
                                     >
-                                        +
-                                    </button>
+                                        {["a스키장", "b스키장", "c스키장"].map(
+                                            (loc, index) => (
+                                                <option key={index} value={loc}>
+                                                    {loc}
+                                                </option>
+                                            )
+                                        )}
+                                    </select>
+                                </div>
+                                {/* 강습인원 */}
+                                <div className="flex flex-row w-32 justify-center items-center">
+                                    <div className="flex sm:text-sm text-xs w-1/3">
+                                        인원 *
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-3">
+                                        <select
+                                            value={participant}
+                                            onChange={(e) =>
+                                                setParticipant(
+                                                    parseInt(e.target.value)
+                                                )
+                                            }
+                                            className="flex sm:text-sm text-xs w-2/3 px-0.5 py-1 rounded shadow-md"
+                                        >
+                                            <option value="1">1명</option>
+                                            <option value="2">2명</option>
+                                            <option value="3">3명</option>
+                                            <option value="4">4명</option>
+                                            <option value="5">5명</option>
+                                            <option value="6">6명</option>
+                                            <option value="7">7명</option>
+                                            <option value="8">8명</option>
+                                            <option value="9">9명</option>
+                                            <option value="10">
+                                                10명 이상
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {/* 난이도 */}
+                                <div className="flex flex-row w-32 justify-center items-center">
+                                    <div className="flex sm:text-sm text-xs w-5/12">
+                                        난이도 *
+                                    </div>
+                                    <div className="flex flex-row w-2/3 items-center">
+                                        <select
+                                            value={level}
+                                            onChange={(e) =>
+                                                setLevel(
+                                                    parseInt(e.target.value)
+                                                )
+                                            }
+                                            className="flex sm:text-sm text-xs px-0.5 py-1 rounded shadow-md"
+                                        >
+                                            <option value="1">초급</option>
+                                            <option value="2">중급</option>
+                                            <option value="3">고급</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            {/* 일정 선택 */}
-                            <div className="flex flex-col sm:w-1/3 justify-center items-center">
-                                <div>일정 선택 *</div>
-                                <div className="flex items-center">
-                                    <button
-                                        onClick={toggleCalendar}
-                                        className="p-2 border border-gray-300 rounded"
-                                    >
-                                        <FaCalendarAlt />
-                                    </button>
-                                    {dateRange && (
-                                        <div className="ml-2">
-                                            {dateRange[0].toLocaleDateString()}{" "}
-                                            -{" "}
-                                            {dateRange[1].toLocaleDateString()}
+                            <div className="flex flex-row">
+                                {/* 일정 선택 */}
+                                <div className="flex flex-row sm:w-40 w-32 items-center">
+                                    <div className="flex sm:text-sm text-xs w-1/3">
+                                        날짜 *
+                                    </div>
+                                    <div className="flex flex-row items-center w-3/4">
+                                        <button
+                                            onClick={toggleCalendar}
+                                            className="flex sm:text-sm text-xs w-1/8 px-0.5 py-1 rounded shadow-md bg-white"
+                                        >
+                                            <FaCalendarAlt />
+                                        </button>
+                                        {selectedDate && (
+                                            <div className="ml-2 w-2/3 sm:text-sm text-xs">
+                                                {selectedDate.toLocaleDateString()}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {calendarOpen && (
+                                        <div className="absolute mt-2">
+                                            <Calendar
+                                                onChange={(value) => {
+                                                    setSelectedDate(
+                                                        value as Date
+                                                    );
+                                                    setCalendarOpen(false);
+                                                }}
+                                                className="border border-gray-300 rounded shadow-lg"
+                                                minDate={today}
+                                            />
                                         </div>
                                     )}
                                 </div>
-                                {calendarOpen && (
-                                    <div className="absolute mt-2">
-                                        <Calendar
-                                            selectRange
-                                            onChange={(range: [Date, Date]) => {
-                                                setDateRange(range);
-                                                setCalendarOpen(false);
-                                            }}
-                                            className="border border-gray-300 rounded shadow-lg"
-                                            minDate={today}
+                                {/* 시작 시간 */}
+                                <div className="flex flex-row sm:w-40 justify-center items-center">
+                                    <div className="flex sm:text-sm text-xs sm:w-[60px] w-[48px]">
+                                        시작 시간
+                                    </div>
+                                    <div className="flex sm:w-[100px] w-[60px]">
+                                        <input
+                                            type="time"
+                                            value={startTime}
+                                            onChange={(e) =>
+                                                setStartTime(e.target.value)
+                                            }
+                                            className="flex sm:text-sm text-xs px-1 py-1 rounded shadow-md"
+                                            step="1800" // 30 minutes
                                         />
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="flex flex-row w-full justify-between">
-                            {/* 시작 시간 */}
-                            <div className="flex flex-col sm:w-1/3 justify-center items-center">
-                                <div>시작 시간</div>
-                                <input
-                                    type="time"
-                                    value={startTime}
-                                    onChange={(e) =>
-                                        setStartTime(e.target.value)
-                                    }
-                                    className="mt-1 p-2 block border border-gray-300 rounded"
-                                    step="1800" // 30 minutes
-                                />
-                            </div>
-                            <div className="flex flex-col sm:w-1/3 justify-center items-center">
-                                <div>강습 시간</div>
-                                <div className="flex flex-row items-center space-x-3">
-                                    <button
-                                        onClick={handleTimeDecrement}
-                                        className={`w-1/3 h-full text-2xl font-extrabold ${
-                                            entireTime === 0
-                                                ? "cursor-not-allowed opacity-50"
-                                                : ""
-                                        }`}
-                                        disabled={entireTime === 0}
-                                    >
-                                        -
-                                    </button>
-                                    <div className="w-1/3 h-full flex justify-center items-center">
-                                        {entireTime === 10 ? "10+" : entireTime}
+                                </div>
+                                {/* 강습인원 */}
+                                <div className="flex flex-row w-40 justify-center items-center">
+                                    <div className="flex sm:text-sm text-xs w-[70px]">
+                                        강습 시간 *
                                     </div>
-                                    <button
-                                        onClick={handleTimeIncrement}
-                                        className={`w-1/3 h-full text-2xl font-extrabold ${
-                                            entireTime === 10
-                                                ? "cursor-not-allowed opacity-50"
-                                                : ""
-                                        }`}
-                                        disabled={entireTime === 10}
-                                    >
-                                        +
-                                    </button>
+                                    <div className="flex flex-row items-center space-x-3">
+                                        <select
+                                            value={entireTime}
+                                            onChange={(e) =>
+                                                setEntireTime(
+                                                    parseInt(e.target.value)
+                                                )
+                                            }
+                                            className="flex sm:text-sm text-xs w-2/3 px-0.5 py-1 rounded shadow-md"
+                                        >
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10+</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col sm:w-1/3 mb-4 justify-center items-center">
-                                <div className="w-16">레벨 선택 *</div>
-                                <div className="w-20 h-10 flex flex-row">
-                                    <button
-                                        className={`w-1/3 h-full ${
-                                            level === 1
-                                                ? "bg-primary-600 text-white"
-                                                : "bg-gray-100"
-                                        } rounded-l-lg border-x-2 border-y-2 border-gray-400`}
-                                        onClick={() => setLevel(1)}
-                                    >
-                                        레벨 1
-                                    </button>
-                                    <button
-                                        className={`w-1/3 h-full ${
-                                            level === 2
-                                                ? "bg-primary-600 text-white"
-                                                : "bg-gray-100"
-                                        } border-x-2 border-y-2 border-gray-400`}
-                                        onClick={() => setLevel(2)}
-                                    >
-                                        레벨 2
-                                    </button>
-                                    <button
-                                        className={`w-1/3 h-full ${
-                                            level === 3
-                                                ? "bg-primary-600 text-white"
-                                                : "bg-gray-100"
-                                        } rounded-r-lg border-x-2 border-y-2 border-gray-400`}
-                                        onClick={() => setLevel(3)}
-                                    >
-                                        레벨 3
-                                    </button>
-                                </div>
+
+                            <div
+                                onClick={applyFilter}
+                                className="flex flex-col sm:w-8 justify-center items-center cursor-pointer"
+                            >
+                                <IoIosSearch size="20" />
                             </div>
-                        </div>
-                        <div
-                            onClick={applyFilter}
-                            className="flex flex-col sm:w-1/3 mb-4 justify-center items-center cursor-pointer"
-                        >
-                            <IoIosSearch size="20" />
                         </div>
                     </div>
                 </div>
 
-                <div className="flex flex-col space-y-8 pt-12 w-full items-center">
+                <div className="flex flex-col space-y-8 pt-4 w-11/12 items-center">
                     {filteredData.map((data, index) =>
                         level === 1 ? (
-                            <div
-                                onClick={goToTeamDetail}
-                                key={index}
-                                className="flex flex-row w-4/5 sm:w-11/12 sm:h-32 h-28 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
-                            >
-                                <div className="h-24 w-24 bg-gray-300 rounded-md flex justify-center items-center">
-                                    팀/개인 사진
-                                </div>
-                                <div className="flex flex-col pl-10 justify-center w-3/5">
-                                    <div className="text-lg font-bold">
-                                        {data.teamName}
+                            <div className="flex flex-col space-y-8 pt-12 w-11/12 items-center">
+                                <div
+                                    onClick={goToTeamDetail}
+                                    key={index}
+                                    className="flex flex-row sm:w-full sm:h-32 h-28 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
+                                >
+                                    <div className="h-24 w-24 bg-gray-300 rounded-md flex justify-center items-center">
+                                        팀/개인 사진
                                     </div>
-                                    <div className="text-sm text-gray-600 whitespace-pre-line">
-                                        {data.description}
-                                    </div>
-                                    <div className="flex flex-row items-center mt-2">
-                                        <FaStar color="#FEFD48" />
-                                        <div className="ml-2 text-sm text-gray-600">
-                                            {data.rating}
+                                    <div className="flex flex-col space-y-1 pl-10 justify-center w-3/5">
+                                        <div className="sm:text-lg text-base font-bold">
+                                            {data.teamName}
                                         </div>
-                                        <div className="text-sm text-gray-600">
-                                            ({data.reviewCount})
+                                        <div className="sm:text-sm text-xs text-gray-600 whitespace-pre-line">
+                                            {data.description}
+                                        </div>
+                                        <div className="flex flex-row items-center mt-2">
+                                            <FaStar color="#FEFD48" />
+                                            <div className="ml-2 text-sm text-gray-600">
+                                                {data.rating}
+                                            </div>
+                                            <div className="text-sm text-gray-600">
+                                                ({data.reviewCount})
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="flex flex-col justify-center w-1/5 items-end">
-                                    <div className="text-lg font-bold">
-                                        {data.cost}원~
+                                    <div className="flex flex-col justify-center w-1/4 items-end">
+                                        <div className="sm:text-lg text-sm font-bold">
+                                            {data.cost}원~
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -643,18 +625,12 @@ const FilterResult: React.FC = () => {
                             <div
                                 onClick={goToInstructorDetail}
                                 key={index}
-                                className="flex flex-col sm:w-72 w-60 sm:h-96 h-80 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
+                                className="flex flex-col sm:w-72 w-60 sm:h-60 h-80 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
                             >
-                                <img
-                                    src={data.instructorUrl}
-                                    className="h-24 w-24 rounded-full"
-                                />
+                                <div className="h-24 w-full rounded-md bg-gray-300" />
                                 <div className="flex flex-col justify-center items-center mt-4">
-                                    <div className="text-lg">
-                                        {data.userName}
-                                    </div>
-                                    <div>{data.description}</div>
-
+                                    <div className="text-lg">강사 이름</div>
+                                    <div>한줄소개</div>
                                     <div className="mt-2">{data.cost}원~</div>
                                 </div>
                             </div>
