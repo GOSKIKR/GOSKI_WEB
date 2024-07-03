@@ -55,9 +55,14 @@ jobs:
         name: production-build
         path: build
 
-    - name: Copy files to server and execute deploy script
+    - name: Add SSH key
       run: |
-        echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+        echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
         mkdir -p ~/.ssh
-        scp -i private_key -o StrictHostKeyChecking=no -r build/* ${SSH_USER}@${SSH_HOST}:/home/${SSH_USER}/goski
-        ssh -t -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'bash /home/${SSH_USER}/reactDeploy.sh'
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Copy files to server
+      run: scp -r build/* ${SSH_USER}@${SSH_HOST}:/home/${SSH_USER}/goski
+
+    - name: Execute deploy script on server
+      run: ssh ${SSH_USER}@${SSH_HOST} 'bash /home/${SSH_USER}/reactDeploy.sh'
