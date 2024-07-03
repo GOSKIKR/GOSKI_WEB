@@ -37,9 +37,6 @@ jobs:
     - name: Build project
       run: npm run build
 
-    - name: List build directory
-      run: ls -la build
-
     - name: Remove old build files on server
       run: |
         echo "${SSH_PRIVATE_KEY}" > private_key
