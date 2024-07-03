@@ -17,13 +17,20 @@ const NavbarUserMobile = () => {
   };
 
   const handleShowMenu = () => {
-    setAnimateMenu(true);
-    setShowMenu(!showMenu);
+    // setAnimateMenu(true);
+    // setShowMenu(!showMenu);
+    if (showMenu) {
+      setAnimateMenu(false);
+      setTimeout(() => setShowMenu(false), 300);
+    } else {
+      setShowMenu(true);
+      setAnimateMenu(true);
+    }
   };
 
   const handleCloseMenu = () => {
     setAnimateMenu(false);
-    setTimeout(() => setShowMenu(false), 300); // match the animation duration
+    setTimeout(() => setShowMenu(false), 300);
   };
 
   return (
