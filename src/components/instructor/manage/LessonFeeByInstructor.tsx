@@ -3,11 +3,11 @@ import React from "react";
 const LessonFeeByInstructor : React.FC = () => {
 
     return(
-        <div className="bg-primary-100 rounded">
-            <div className="text-lg font-bold text-left p-6">
+        <div className="bg-primary-100 shadow-sm sm:w-[500px] w-[300px] rounded mt-6">
+            <div className="text-lg font-bold sm:text-left text-center p-6">
                 강사 별 강습 지정비
             </div>
-            <div className="flex justify-between p-6">
+            <div className="p-3 flex flex-col sm:p-6 sm:flex-row sm:justify-between items-center">
                 <div>
                     <div>AA 강사 지정 강습비</div>
                 </div>
@@ -19,7 +19,7 @@ const LessonFeeByInstructor : React.FC = () => {
                     />
                 </div>
             </div>
-            <div className="flex justify-between p-6">
+            <div className="p-3 flex flex-col sm:p-6 sm:flex-row sm:justify-between items-center">
                 <div>
                     <div>BB 강사 지정 강습비</div>
                 </div>
@@ -31,7 +31,7 @@ const LessonFeeByInstructor : React.FC = () => {
                     />
                 </div>
             </div>
-            <div className="flex justify-between p-6">
+            <div className="p-3 flex flex-col sm:p-6 sm:flex-row sm:justify-between items-center">
                 <div>
                     <div>CC 강사 지정 강습비</div>
                 </div>

@@ -3,7 +3,7 @@ import React from "react";
 const LessonFeeInfoModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={onClose}>
-            <div className="bg-white rounded-lg p-6 w-[400px] max-h-[80vh]" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-white rounded-lg p-6 sm:w-[400px] w-[350px] max-h-[80vh]" onClick={(e) => e.stopPropagation()}>
                 <div className="text-lg text-center font-bold mb-4">강습비 계산 안내</div>
                 <div className="content bg-primary-100 p-4 rounded-lg overflow-y-auto max-h-[50vh]">
                     <div className="mb-4">강습비 관련 정보</div>

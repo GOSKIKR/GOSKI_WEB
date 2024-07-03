@@ -7,11 +7,11 @@ const MyLessonList: React.FC = () => {
     return (
         <div>
             <NavbarInstructor />
-            <div className="flex justify-center mt-20">
-                <div className="text-2xl font-bold mb-10">강습내역</div>
+            <div className="flex justify-center mt-20 text-3xl font-bold mb-10">
+                강습 내역
             </div>
             <div className="flex justify-center">
-                <div className="bg-primary-100 w-[1000px] rounded p-6">
+                <div className="bg-primary-100 w-[350px] sm:w-[1000px] rounded p-8">
                     <LessonSection
                         title="진행 예정"
                         lessons={dummyInstructorLessonData.filter(lesson => lesson.lessonStatus === "notStart")}

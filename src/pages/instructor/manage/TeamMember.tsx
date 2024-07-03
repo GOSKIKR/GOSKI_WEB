@@ -30,7 +30,9 @@ const TeamMember: React.FC = () => {
             <TeamManageHeader />
             <div className="flex justify-center">
                 <div className="p-6">
-                    <DropdownMenu />
+                    <div className="flex justify-center sm:justify-start">
+                        <DropdownMenu/>
+                    </div>
                     <TeamMemberList members={members}/>
                     <TeamInviteList inviteMembers={inviteMembers}/>
                 </div>
