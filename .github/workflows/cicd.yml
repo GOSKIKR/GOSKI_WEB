@@ -49,7 +49,7 @@ jobs:
 
     - name: Execute deploy script on server
       run: |
-        ssh -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'bash /home/${SSH_USER}/reactDeploy.sh'
+        ssh -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'bash /home/ubuntu/reactDeploy.sh'
 
     - name: Clean up
       run: rm -f private_key
