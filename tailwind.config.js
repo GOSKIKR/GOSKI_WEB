@@ -17,7 +17,21 @@ module.exports = {
           900: "#343b7b",
           950: "#1e2048",
         },
-        customRed : '#FF0202'
+        customRed: "#FF0202",
+      },
+      keyframes: {
+        slideIn: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        slideOut: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+      },
+      animation: {
+        slideIn: "slideIn 0.3s forwards",
+        slideOut: "slideOut 0.3s forwards",
       },
     },
     fontFamily: {

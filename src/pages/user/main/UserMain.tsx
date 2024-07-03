@@ -6,9 +6,20 @@ import ADCarousel from "../../../components/user/ADCarousel";
 import Footer from "../../../components/common/Footer";
 import ReservationBox from "../../../components/user/ResservationBox";
 import TeamAD from "../../../components/user/TeamAD";
+import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 const UserMain: React.FC = () => {
   const [data, setData] = useState(null);
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setInnerWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -27,11 +38,13 @@ const UserMain: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <NavbarUser />
+      <div className="w-full">
+        {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+      </div>
       <div className="w-full">
         <ADCarousel />
       </div>
-      <div className="flex flex-col gap-10 w-4/5 self-center mt-20 mb-20">
+      <div className="flex flex-col gap-6 w-4/5 self-center mt-10 mb-16">
         <ReservationBox />
         <TeamAD />
       </div>

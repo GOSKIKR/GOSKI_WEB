@@ -5,10 +5,10 @@ import { MdArrowForwardIos } from "react-icons/md";
 import { MdArrowBackIosNew } from "react-icons/md";
 
 const dummyImages = [
-  "https://via.placeholder.com/800x400?text=Slide+1",
-  "https://via.placeholder.com/800x400?text=Slide+2",
-  "https://via.placeholder.com/800x400?text=Slide+3",
-  "https://via.placeholder.com/800x400?text=Slide+4",
+  "https://via.placeholder.com/800x300?text=Slide+1",
+  "https://via.placeholder.com/800x300?text=Slide+2",
+  "https://via.placeholder.com/800x300?text=Slide+3",
+  "https://via.placeholder.com/800x300?text=Slide+4",
 ];
 
 const ADCarousel = () => {
@@ -65,10 +65,7 @@ const ADCarousel = () => {
   };
 
   return (
-    <div
-      className="flex relative overflow-hidden w-full"
-      style={{ height: "650px" }}
-    >
+    <div className="flex relative overflow-hidden w-full">
       <div
         className={`whitespace-nowrap w-full ${carouselTransition}`}
         style={{ transform: `translateX(${-currCarousel * 100}%)` }}
@@ -79,6 +76,11 @@ const ADCarousel = () => {
             src={src}
             alt={`Slide ${index + 1}`}
             className="w-full inline-block"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
           />
         ))}
       </div>

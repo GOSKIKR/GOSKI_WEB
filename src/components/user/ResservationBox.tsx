@@ -1,69 +1,102 @@
 import React, { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 
+type skiOrBoardType = "ski" | "board";
+type levelType = "lv1" | "lv2" | "lv3";
+type resortType = "resort1" | "resort2" | "resort3";
+type peopleType = number;
+
 const ReservationBox = () => {
+  const [isSkiHovered, setIsSkiHovered] = useState(false);
+  const [isBoardHovered, setIsBoardHovered] = useState(false);
   const [skiOrBoard, setSkiOrBoard] = useState("ski");
   const [resort, setResort] = useState("");
   const [people, setPeople] = useState(0);
   const [level, setLevel] = useState("lv1");
 
-  const handleSkiOrBoard = (type: string) => {
+  const handleSkiOrBoard = (type: skiOrBoardType) => {
     setSkiOrBoard(type);
   };
 
-  const handleResort = (resort: string) => {
+  const handleResort = (resort: any) => {
     setResort(resort);
   };
 
-  const handlePeople = (people: number) => {
+  const handlePeople = (people: peopleType) => {
+    if (people > 8) return alert("최대 8명까지 예약 가능합니다.");
     setPeople(people);
   };
 
-  const handleLevel = (level: string) => {
+  const handleLevel = (level: levelType) => {
     setLevel(level);
   };
 
   return (
-    <div className="w-full bg-primary-50 rounded-lg shadow-md p-5">
-      <div className="flex flex-col xl:flex-row justify-between items-center">
-        <div className="basis-1/5 flex items-center justify-center">
-          <div className="flex flex-row w-4/5 h-2/3 justify-center items-center rounded-full overflow-hidden">
+    <div className="w-full bg-white rounded-lg shadow-lg p-8">
+      <div className="flex flex-col xl:flex-row justify-between items-center gap-4">
+        <div className="w-full flex items-center justify-center">
+          <div className="flex w-full h-14 justify-center items-center rounded-lg overflow-hidden shadow-md">
             <div
               onClick={() => handleSkiOrBoard("ski")}
+              onMouseEnter={() => setIsSkiHovered(true)}
+              onMouseLeave={() => setIsSkiHovered(false)}
               className={`${
                 skiOrBoard === "ski"
                   ? "bg-primary-500 text-white"
-                  : "bg-gray-400 text-balck"
-              }  cursor-pointer w-1/2 h-full items-center justify-center flex hover:bg-primary-500 hover:text-white`}
+                  : "bg-white text-black"
+              } cursor-pointer w-1/2 h-14 flex items-center justify-center hover:bg-primary-500 hover:text-white transition-colors duration-300`}
             >
+              <img
+                className="w-8 h-8 mr-2"
+                style={{
+                  filter:
+                    isSkiHovered || skiOrBoard === "ski"
+                      ? "invert(0)"
+                      : "invert(1)",
+                }}
+                src="/assets/images/ski.svg"
+                alt="GOSKI"
+              />
               스키
             </div>
             <div
               onClick={() => handleSkiOrBoard("board")}
+              onMouseEnter={() => setIsBoardHovered(true)}
+              onMouseLeave={() => setIsBoardHovered(false)}
               className={`${
                 skiOrBoard === "board"
                   ? "bg-primary-500 text-white"
-                  : "bg-gray-400 text-black"
-              } w-1/2 h-full cursor-pointer items-center justify-center flex hover:bg-primary-500 hover:text-white`}
+                  : "bg-white text-black"
+              } cursor-pointer w-1/2 h-14 flex items-center justify-center hover:bg-primary-500 hover:text-white transition-colors duration-300`}
             >
               보드
+              <img
+                className="w-8 h-8 ml-2"
+                style={{
+                  filter:
+                    isBoardHovered || skiOrBoard === "board"
+                      ? "invert(1)"
+                      : "invert(0)",
+                }}
+                src="/assets/images/board.svg"
+                alt="GOSKI"
+              />
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-4 justify-center items-center basis-2/3">
-          <div className="basis-1/5 flex flex-col">
-            <div className="text-xl flex justify-center">스키장</div>
+        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center">
+          <div className="flex flex-col w-full">
             <div className="flex justify-center">
               <select
-                className="w-40 h-10 border border-gray-300 rounded-lg p-2 text-gray-400 cursor-pointer"
+                className="w-full h-14 border border-gray-300 rounded-lg p-4 text-gray-500 cursor-pointer shadow-md"
                 defaultValue="select"
                 onChange={(e) => {
-                  e.target.classList.remove("text-gray-400");
+                  e.target.classList.remove("text-gray-500");
                   handleResort(e.target.value);
                 }}
               >
-                <option value="select" selected disabled hidden>
-                  선택하세요
+                <option value="select" disabled hidden>
+                  스키장 선택
                 </option>
                 <option value="resort1" className="text-black">
                   리조트1
@@ -77,53 +110,55 @@ const ReservationBox = () => {
               </select>
             </div>
           </div>
-          <div className="basis-1/5 flex flex-col">
-            <div className="text-xl flex justify-center">인원</div>
-            <div className="flex justify-center">
+          <div className="flex flex-col w-full">
+            <div className="relative flex justify-center">
               <input
                 type="number"
-                placeholder="인원 입력(최대 8명)"
-                className="w-20 h-10 border border-gray-300 rounded-lg p-2"
+                min={1}
+                max={8}
+                placeholder="강습 인원"
+                className="w-full h-14 border border-gray-300 rounded-lg pl-4 pr-12 shadow-md"
                 onChange={(e) => {
                   const numValue = Number(e.target.value);
                   handlePeople(numValue);
                 }}
               />
-              <p className="flex items-center text-xl p-1">명</p>
+              <div className="absolute flex items-center justify-center text-gray-600 text-lg top-0 right-4 h-full">
+                명
+              </div>
             </div>
           </div>
-          <div className=" flex-1 flex-col">
-            <div className="text-xl flex justify-center">레벨</div>
-            <div className="flex flex-col md:flex-row justify-between">
+          <div className="flex flex-col w-full">
+            <div className="flex flex-col md:flex-row justify-center gap-2">
               <div
                 onClick={() => handleLevel("lv1")}
-                className={`md:w-1/4 w-full h-10 ${
+                className={`w-full h-14 ${
                   level === "lv1"
                     ? "bg-primary-500 text-white"
                     : "bg-white text-black"
-                } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white`}
+                } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white transition-colors duration-300 shadow-md`}
               >
                 초급
                 <p className="text-xs text-gray-400">lv1 이상 강사진</p>
               </div>
               <div
                 onClick={() => handleLevel("lv2")}
-                className={`md:w-1/4 w-full h-10 ${
+                className={`w-full h-14 ${
                   level === "lv2"
                     ? "bg-primary-500 text-white"
                     : "bg-white text-black"
-                } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white`}
+                } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white transition-colors duration-300 shadow-md`}
               >
                 중급
                 <p className="text-xs text-gray-400">lv2 이상 강사진</p>
               </div>
               <div
                 onClick={() => handleLevel("lv3")}
-                className={`md:w-1/4 w-full h-10 ${
+                className={`w-full h-14 ${
                   level === "lv3"
                     ? "bg-primary-500 text-white"
                     : "bg-white text-black"
-                } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white`}
+                } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white transition-colors duration-300 shadow-md`}
               >
                 고급
                 <p className="text-xs text-gray-400">lv3 이상 강사진</p>
@@ -131,9 +166,8 @@ const ReservationBox = () => {
             </div>
           </div>
         </div>
-
-        <div className="basis-1/12 flex flex-col justify-center items-center">
-          <button className="w-20 h-20 bg-primary-100 text-black rounded-full flex justify-center items-center text-3xl">
+        <div className="flex justify-center items-center w-full xl:w-auto mt-4 xl:mt-0">
+          <button className="w-16 h-16 bg-primary-500 text-white rounded-full flex justify-center items-center text-3xl shadow-md hover:bg-primary-600 transition-colors duration-300">
             <IoMdSearch />
           </button>
         </div>
