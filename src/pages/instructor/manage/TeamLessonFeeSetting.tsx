@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import DropdownMenu from "../../../components/instructor/manage/TeamListDropdown";
@@ -6,13 +6,23 @@ import TeamLessonFeeInfo from "../../../components/instructor/manage/TeamLessonF
 import LessonFeeByGroup from "../../../components/instructor/manage/LessonFeeByGroup";
 import LessonFeeByLevel from "../../../components/instructor/manage/LessonFeeByLevel";
 import LessonFeeByInstructor from "../../../components/instructor/manage/LessonFeeByInstructor";
+import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 
 const TeamLessonFeeSetting : React.FC = () => {
+    const[innerWidth,setInnerWidth] = useState(window.innerWidth);
 
+    const handleResize = () => {
+        setInnerWidth(window.innerWidth);
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize",handleResize);
+        return(() => window.removeEventListener("resize",handleResize))
+    })
 
     return (
         <div>
-            <NavbarInstructor/>
+            {innerWidth > 640 ? <NavbarInstructor/> : <NavbarInstructorMobile/>}
             <TeamManageHeader/>
             <div className="flex justify-center">
                 <div className="p-6">
