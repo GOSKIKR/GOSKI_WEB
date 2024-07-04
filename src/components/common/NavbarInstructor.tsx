@@ -5,11 +5,6 @@ import UserNotification from "../user/UserNotification";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
 
-import { FaRegBell } from "react-icons/fa";
-import { PiSignOutBold } from "react-icons/pi";
-
-import { HiOutlineCog } from "react-icons/hi";
-
 const NavbarInstructor = () => {
   const [isLogin, setIsLogin] = useState(true);
 

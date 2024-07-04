@@ -10,21 +10,9 @@ const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({ onClose, onSave
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [role, setRole] = useState("교육팀장");
-    const [image, setImage] = useState<string | ArrayBuffer | null>(null);
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
 
     const handleSave = () => {
-        onSave({ name, phone, role, image });
+        onSave({ name, phone, role });
         onClose();
     };
 
@@ -61,18 +49,6 @@ const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({ onClose, onSave
                         <option value="코치">코치</option>
                         <option value="강사">강사</option>
                     </select>
-                </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-bold mb-1">사진</label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="w-full p-2 border rounded"
-                    />
-                    {image && (
-                        <img src={image as string} alt="프로필 사진" className="w-full h-40 object-cover rounded mt-2" />
-                    )}
                 </div>
                 <div className="flex justify-end">
                     <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded mr-2">
