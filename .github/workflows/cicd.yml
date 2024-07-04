@@ -41,7 +41,7 @@ jobs:
       run: |
         echo "${SSH_PRIVATE_KEY}" > private_key
         chmod 400 private_key
-        ssh -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} "rm -rf /home/${SSH_USER}/goski/*"
+        ssh -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} "sudo rm -rf /home/${SSH_USER}/goski/*"
       
     - name: Copy files to server
       run: |
