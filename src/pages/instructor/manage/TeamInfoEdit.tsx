@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import Editor from "../../../components/common/Editor";
 import DropdownMenu from "../../../components/instructor/manage/TeamListDropdown";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
+import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 
 const TeamInfoEdit : React.FC = () => {
     const [profileImage, setProfileImage] = useState<string | ArrayBuffer | null>(null);
+    const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -25,9 +27,18 @@ const TeamInfoEdit : React.FC = () => {
         }
     };
 
+    const handleResize = () => {
+        setInnerWidth(window.innerWidth);
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize",handleResize)
+        return (() => window.removeEventListener("resize",handleResize))
+    })
+
     return (
         <div>
-            <NavbarInstructor/>
+            {innerWidth > 640 ? <NavbarInstructor/> : <NavbarInstructorMobile/>}
             <TeamManageHeader/>
             <div className="flex justify-center">
                 <div className="p-6">
