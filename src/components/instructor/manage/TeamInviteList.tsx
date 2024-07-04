@@ -14,7 +14,7 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers }) => {
                     수락 대기 중 <span className="text-black">({inviteMembers.length}명)</span>
                 </div>
                 <div className="space-x-2">
-                    <button className="bg-primary-600 text-white rounded px-4 py-2">+팀원초대</button>
+                    <button className="bg-primary-600 text-white rounded px-4 py-2 hover:bg-primary-500">+팀원초대</button>
                 </div>
             </div>
             <div className="hidden sm:block shadow-lg">
@@ -36,7 +36,7 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers }) => {
                                 <td className="py-2 px-4">{member.phoneNumber}</td>
                                 <td className="py-2 px-4">{member.enrollDate}</td>
                                 <td className="py-2 px-4">
-                                    <button className="bg-primary-700 text-white rounded px-2 py-1">
+                                    <button className="bg-primary-700 text-white rounded px-2 py-1 hover:bg-primary-500">
                                         신청취소
                                     </button>
                                 </td>

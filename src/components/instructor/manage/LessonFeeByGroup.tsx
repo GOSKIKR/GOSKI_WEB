@@ -1,6 +1,19 @@
 import React from "react";
 
-const LessonFeeByGroup: React.FC = () => {
+interface LessonFeeByGroupProps {
+    oneOnOneFee: number;
+    setOneOnOneFee: React.Dispatch<React.SetStateAction<number>>;
+    isEditing: boolean;
+}
+
+const LessonFeeByGroup: React.FC<LessonFeeByGroupProps> = ({ oneOnOneFee, setOneOnOneFee, isEditing }) => {
+    const handleFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (/^\d*$/.test(value)) {
+            setOneOnOneFee(Number(value));
+        }
+    };
+
     return (
         <div className="bg-primary-100 shadow-sm sm:w-[500px] w-[300px] rounded mt-6">
             <div className="text-lg font-bold sm:text-left text-center p-6">
@@ -15,7 +28,9 @@ const LessonFeeByGroup: React.FC = () => {
                     <input
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
-                        defaultValue={10000}
+                        value={oneOnOneFee}
+                        onChange={handleFeeChange}
+                        readOnly={!isEditing} 
                     />
                 </div>
             </div>
@@ -28,6 +43,7 @@ const LessonFeeByGroup: React.FC = () => {
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
                         defaultValue={20000}
+                        readOnly={!isEditing} 
                     />
                 </div>
             </div>
@@ -40,23 +56,26 @@ const LessonFeeByGroup: React.FC = () => {
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
                         defaultValue={30000}
+                        readOnly={!isEditing} 
                     />
                 </div>
             </div>
             <div className="p-3 flex flex-col sm:flex-row sm:justify-between items-center">
                 <div className="text-center sm:text-left mb-2 sm:mb-0">
                     <div>4인 초과</div>
+                    <div className="text-gray-500">*1인 강습 기준입니다.</div>
                 </div>
                 <div>
-                    1인당<input
+                    <input
                         type="text"
                         className="border ml-2 px-3 py-2 border-black rounded text-center w-[200px] h-8"
                         defaultValue={50000}
+                        readOnly={!isEditing} 
                     />
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default LessonFeeByGroup;

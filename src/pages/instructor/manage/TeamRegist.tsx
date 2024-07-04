@@ -114,7 +114,7 @@ const TeamRegist: React.FC = () => {
                         <button className="bg-primary-700 text-white m-2 px-4 py-2 rounded hover:bg-primary-500">
                             팀 등록
                         </button>
-                        <button className="bg-primary-900 text-white m-2 px-4 py-2 rounded hover:bg-primary-600">
+                        <button className="bg-primary-900 text-white m-2 px-4 py-2 rounded hover:bg-primary-700">
                             돌아가기
                         </button>
                     </div>

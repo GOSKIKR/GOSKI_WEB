@@ -1,6 +1,18 @@
 import React from "react";
 
-const LessonFeeByLevel : React.FC = () => {
+interface LessonFeeByLevelProps {
+    oneOnOneFee: number;
+    isEditing: boolean;
+}
+
+const LessonFeeByLevel: React.FC<LessonFeeByLevelProps> = ({ oneOnOneFee, isEditing }) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (/^\d*$/.test(value)) {
+            // 추후 api연결
+        }
+    };
+
 
     return (
         <div className="bg-primary-100 shadow-sm sm:w-[500px] w-[300px] rounded mt-6">
@@ -16,7 +28,8 @@ const LessonFeeByLevel : React.FC = () => {
                     <input
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
-                        defaultValue={50000}
+                        value={oneOnOneFee}
+                        readOnly
                     />
                 </div>
             </div>
@@ -29,6 +42,8 @@ const LessonFeeByLevel : React.FC = () => {
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
                         defaultValue={100000}
+                        readOnly={!isEditing} 
+                        onChange={handleInputChange}
                     />
                 </div>
             </div>
@@ -41,11 +56,13 @@ const LessonFeeByLevel : React.FC = () => {
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
                         defaultValue={150000}
+                        readOnly={!isEditing} 
+                        onChange={handleInputChange}
                     />
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default LessonFeeByLevel;
