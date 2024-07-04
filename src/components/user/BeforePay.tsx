@@ -66,7 +66,7 @@ const BeforePay: React.FC<BeforePayProps> = ({ onClose }) => {
                 <div className="flex justify-center pt-3">
                     <div
                         onClick={goToPay}
-                        className="w-16 h-6 bg-primary-500 rounded-lg text-white flex items-center justify-center cursor-pointer"
+                        className="w-16 h-6 bg-primary-500 rounded-lg text-white flex items-center justify-center cursor-pointer my-4"
                     >
                         결제하기
                     </div>

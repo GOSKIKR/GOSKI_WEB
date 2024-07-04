@@ -9,6 +9,7 @@ import {
     FaStar,
 } from "react-icons/fa";
 import NavbarUser from "../../../components/common/NavbarUser";
+import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 interface CertificateInfo {
     certificateId: number;
@@ -209,7 +210,9 @@ const InstructorInfo = () => {
 
     return (
         <div>
-            <NavbarUser />
+            <div className="w-full">
+                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+            </div>
             <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
                 <img
                     src="/assets/images/AppLogo.png"
@@ -219,7 +222,7 @@ const InstructorInfo = () => {
                 <div className="text-xl font-extrabold">GOSKI 강습 예약</div>
             </div>
             <div className="flex flex-col sm:flex-row px-6 sm:px-12 sm:space-x-6 space-y-6 h-screen w-screen">
-                <div className="flex flex-col w-full sm:w-7/12 bg-primary-50 rounded-lg shadow-md items-center px-8">
+                <div className="flex flex-col w-full sm:w-7/12 bg-primary-50 rounded-lg shadow-md items-center px-8 ">
                     <div className="w-full pt-5 sm:pt-10 sm:pb-6 pb-3 text-lg font-extrabold">
                         강사 소개
                     </div>
@@ -269,7 +272,7 @@ const InstructorInfo = () => {
                                         key={index}
                                         className="flex flex-col items-center px-3 py-5"
                                     >
-                                        <div className="w-full h-auto object-cover bg-gray-200">
+                                        <div className="w-full sm:h-24 object-cover bg-gray-200">
                                             자격증 이미지
                                         </div>
                                         <div>{data.certificateName}</div>
@@ -292,7 +295,7 @@ const InstructorInfo = () => {
                     {dummyInstructorData.reviews.map((data, index) => (
                         <div
                             key={index}
-                            className="flex flex-col w-full h-32 bg-white space-y-2 px-3 py-2"
+                            className="flex flex-col w-full h-32 bg-white space-y-2 px-3 py-2 my-2 rounded-md"
                         >
                             <div className="flex flex-row justify-between pr-3">
                                 <div className="flex flex-row">
@@ -317,7 +320,7 @@ const InstructorInfo = () => {
                     ))}
                 </div>
                 <div className="flex flex-col sm:w-4/12">
-                    <div className="flex flex-col px-8 py-6 space-y-3 w-full h-60 bg-primary-50 rounded-lg shadow-md items-center justify-center">
+                    <div className="flex flex-col px-8 py-6 space-y-3 w-full h-60 bg-primary-50 rounded-lg shadow-md items-center justify-center mb-4">
                         <div className="font-extrabold pb-2 w-full">
                             최종 결제금액
                         </div>
