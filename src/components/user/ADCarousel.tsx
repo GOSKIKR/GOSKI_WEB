@@ -18,11 +18,11 @@ const ADCarousel = () => {
   );
 
   useEffect(() => {
-    // useEffect
-    return () => {
-      // Cleanup code
-    };
-  }, []);
+    const timer = setInterval(() => {
+      slideNextBtn();
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [currCarousel]);
 
   const makeNewImageArray = () => {
     const dataStart = dummyImages[0];
