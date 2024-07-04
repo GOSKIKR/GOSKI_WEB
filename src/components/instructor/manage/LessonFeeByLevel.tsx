@@ -15,7 +15,7 @@ const LessonFeeByLevel: React.FC<LessonFeeByLevelProps> = ({ oneOnOneFee, isEdit
 
 
     return (
-        <div className="bg-primary-100 shadow-sm sm:w-[500px] w-[300px] rounded mt-6">
+        <div className="bg-primary-50 shadow-sm sm:w-[500px] w-[300px] rounded mt-6">
             <div className="text-lg font-bold sm:text-left text-center p-6">
                 강습 단계별 추가비용
             </div>

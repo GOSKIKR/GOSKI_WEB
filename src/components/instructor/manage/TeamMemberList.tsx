@@ -85,10 +85,10 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members }) => {
                 <div className="text-lg font-bold">고승민의 스키교실 <span className="text-black">({members.length}명)</span></div>
                 <div className="space-x-2 hidden sm:flex">
                     <button
-                        className={`rounded px-4 py-2 ${isEditMode ? 'bg-primary-600' : 'bg-primary-300'} text-white hover:bg-primary-400`}
+                        className={`rounded px-4 py-2 ${isEditMode ? 'bg-primary-500' : 'bg-primary-600'} text-white hover:bg-primary-400`}
                         onClick={() => setIsEditMode(!isEditMode)}
                     >
-                        수정하기
+                        {isEditMode ? "수정완료" : "수정하기"}
                     </button>
                     <button className="bg-primary-700 text-white rounded px-4 py-2 hover:bg-primary-500">저장하기</button>
                 </div>
