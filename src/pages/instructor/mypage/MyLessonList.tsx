@@ -23,7 +23,7 @@ const MyLessonList: React.FC = () => {
                 강습 내역
             </div>
             <div className="flex justify-center">
-                <div className="bg-primary-100 w-[350px] sm:w-[1000px] rounded p-8">
+                <div className="bg-primary-50 w-[350px] sm:w-[1000px] rounded p-8">
                     <LessonSection
                         title="진행 예정"
                         lessons={dummyInstructorLessonData.filter(lesson => lesson.lessonStatus === "notStart")}

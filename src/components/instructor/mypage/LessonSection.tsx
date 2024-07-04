@@ -65,18 +65,20 @@ const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
                             <div className="text-gray-800 text-md">{lesson.teamName}</div>
                             <div className="text-gray-500 text-sm">{lesson.representativeName} 외 {lesson.studentCount}명</div>
                             {lesson.lessonStatus === "lessonFinished" && (
-                                <div className="flex justify-end">
+                                <div className="flex justify-center">
                                     <button 
-                                        className="mt-2 bg-primary-500 text-white py-1 px-2 rounded"
+                                        className="mt-2 bg-primary-500 text-white py-1 px-2 rounded w-[120px]"
                                         onClick={() => navigate("/instructor/regist-feedback")}>피드백 작성하기</button>
                                 </div>
                             )}
                             {lesson.lessonStatus === "yesFeedback" && (
-                                <div className="flex justify-end">
+                                <div className="flex justify-center">
                                     <button 
-                                        className="mt-2 mr-2 bg-primary-500 text-white py-1 px-2 rounded"
+                                        className="mt-2 mr-2 bg-primary-500 text-white py-1 px-2 rounded w-[120px]"
                                         onClick={() => navigate("/instructor/edit-feedback")}>피드백 수정하기</button>
-                                    <button className="mt-2 bg-primary-700 text-white py-1 px-2 rounded" onClick={openReviewModal}>리뷰 확인하기</button>
+                                    <button 
+                                        className="mt-2 bg-primary-700 text-white py-1 px-2 rounded w-[120px]" 
+                                        onClick={openReviewModal}>리뷰 확인하기</button>
                                 </div>
                             )}
                             
