@@ -37,23 +37,15 @@ jobs:
     - name: Build project
       run: npm run build
 
-    - name: Change permissions on server
+    - name: Remove old build files on server
       run: |
         echo "${SSH_PRIVATE_KEY}" > private_key
         chmod 400 private_key
-        ssh -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} "sudo chown -R ${SSH_USER}:${SSH_USER} /home/${SSH_USER}/goski && sudo chmod -R 755 /home/${SSH_USER}/goski"
-
-    - name: Remove old build files on server
-      run: |
-        ssh -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} "rm -rf /home/${SSH_USER}/goski/*"
+        ssh -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} "sudo rm -rf /home/${SSH_USER}/goski/*"
 
     - name: Copy files to server
       run: |
         scp -i private_key -o StrictHostKeyChecking=no -r dist/* ${SSH_USER}@${SSH_HOST}:/home/${SSH_USER}/goski
-
-    - name: Set permissions on server
-      run: |
-        ssh -i private_key -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} "sudo chown -R www-data:www-data /home/${SSH_USER}/goski && sudo chmod -R 755 /home/${SSH_USER}/goski"
 
     - name: Execute deploy script on server
       run: |
