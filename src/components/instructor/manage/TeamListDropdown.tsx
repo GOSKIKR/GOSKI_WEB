@@ -15,7 +15,7 @@ const DropdownMenu: React.FC = () => {
     },[location.pathname])
 
     return (
-        <div className="relative mb-6 sm:my-6 bg-primary-50 rounded-lg shadow-lg w-64">
+        <div className="relative mb-6 bg-primary-50 rounded-lg shadow-lg w-64">
             <div className="border-t text-center px-4 py-2 cursor-pointer" onClick={toggleDropdown}>
                 팀 리스트 {dropdownVisible ? '▲' : '▼'}
             </div>
@@ -24,7 +24,6 @@ const DropdownMenu: React.FC = () => {
                     <div className="border-t px-4 py-2">고승민의 스키 교실</div>
                     <div className="border-t px-4 py-2">김태훈의 스키 교실</div>
                     <div className="border-t px-4 py-2">송준석의 스키 교실</div>
-                    <div className="border-t px-4 py-2 cursor-pointer text-primary-700">+ 팀 추가하기</div>
                 </div>
             )}
         </div>

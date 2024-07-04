@@ -74,7 +74,7 @@ const TeamRegist: React.FC = () => {
                                     accept="image/*"
                                     onChange={handleImageChange}
                                 />
-                                <button onClick={triggerFileInput} className="bg-primary-500 text-white px-4 py-2 rounded">
+                                <button onClick={triggerFileInput} className="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-700">
                                     사진 찾기
                                 </button>
                             </div>
@@ -83,7 +83,7 @@ const TeamRegist: React.FC = () => {
                     <div className="team-intro mb-6 bg-primary-50 rounded-lg shadow-lg">
                         <div className="flex justify-between items-center p-6">
                             <div className="text-lg font-bold text-center align-middle">팀 소개글</div>
-                            <button className="bg-primary-500 text-white rounded px-4 py-2">업로드</button>
+                            <button className="bg-primary-500 text-white rounded px-4 py-2 hover:bg-primary-700">업로드</button>
                         </div>
                         <div className="px-6 pb-6">
                             <Editor />
@@ -92,7 +92,11 @@ const TeamRegist: React.FC = () => {
                     <div className={`team-member mb-6 bg-primary-50 rounded-lg shadow-lg ${teamMembers.length === 0 ? 'h-[300px]' : ''}`}>
                         <div className="flex justify-between items-center p-6">
                             <div className="text-lg font-bold text-center align-middle">팀원 정보</div>
-                            <button onClick={() => setIsModalOpen(true)} className="bg-primary-500 text-white rounded px-4 py-2">추가하기</button>
+                            <button 
+                                onClick={() => setIsModalOpen(true)} 
+                                className="bg-primary-500 text-white rounded px-4 py-2 hover:bg-primary-700">
+                                추가하기
+                            </button>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-6">
                             {teamMembers.map((member, index) => (
