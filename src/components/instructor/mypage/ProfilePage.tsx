@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const ProfilePage: React.FC = () => {
-    const [profileImage, setProfileImage] = useState<string | ArrayBuffer | null>(null);
+    const [profileImage, setProfileImage] = useState<string | null>(null);
     const [selectedGender, setSelectedGender] = useState<string | null>(null);
     const [isTeamLeader, setIsTeamLeader] = useState<boolean>(false);
 
@@ -10,7 +10,9 @@ const ProfilePage: React.FC = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setProfileImage(reader.result);
+                if (typeof reader.result === "string") {
+                    setProfileImage(reader.result);
+                }
             };
             reader.readAsDataURL(file);
         }
@@ -25,7 +27,7 @@ const ProfilePage: React.FC = () => {
     };
 
     const triggerFileInput = () => {
-        const fileInput = document.getElementById('profileImage')
+        const fileInput = document.getElementById('profileImage') as HTMLInputElement;
         if(fileInput){
             fileInput.click();
         }

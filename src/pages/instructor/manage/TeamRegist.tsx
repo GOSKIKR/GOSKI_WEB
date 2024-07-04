@@ -6,7 +6,7 @@ import AddTeamMemberModal from "../../../components/instructor/manage/AddTeamMem
 import TeamMember from "../../../interface/TeamMember";
 
 const TeamRegist: React.FC = () => {
-    const [profileImage, setProfileImage] = useState<string | ArrayBuffer | null>(null);
+    const [profileImage, setProfileImage] = useState<string | null>(null);
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,14 +15,16 @@ const TeamRegist: React.FC = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setProfileImage(reader.result);
+                if (typeof reader.result === "string") {
+                    setProfileImage(reader.result);
+                }
             };
             reader.readAsDataURL(file);
         }
     };
 
     const triggerFileInput = () => {
-        const fileInput = document.getElementById('profileImage');
+        const fileInput = document.getElementById('profileImage') as HTMLInputElement;
         if (fileInput) {
             fileInput.click();
         }
@@ -30,6 +32,13 @@ const TeamRegist: React.FC = () => {
 
     const addTeamMember = (member: TeamMember) => {
         setTeamMembers([...teamMembers, member]);
+    };
+
+    const renderImage = (image: string | ArrayBuffer | null) => {
+        if (typeof image === "string") {
+            return image;
+        }
+        return "https://randomuser.me/api/portraits/men/75.jpg";
     };
 
     return (
@@ -46,7 +55,7 @@ const TeamRegist: React.FC = () => {
                             <div className="inner bg-white p-3 rounded-lg text-center w-[200px]">
                                 <div className="w-40 h-40 bg-primary-100 mx-auto flex items-center justify-center text-gray-500 rounded mb-4">
                                     {profileImage ? (
-                                        <img src={profileImage as string} alt="Profile" className="w-full h-full object-cover rounded" />
+                                        <img src={profileImage ?? undefined} alt="Profile" className="w-full h-full object-cover rounded" />
                                     ) : (
                                         "팀 프로필 사진"
                                     )}
@@ -82,7 +91,7 @@ const TeamRegist: React.FC = () => {
                             {teamMembers.map((member, index) => (
                                 <div key={index} className="bg-white rounded shadow p-4">
                                     <div className="text-center mb-4">
-                                        <img src={member.image} alt="Team Member" className="w-full h-40 object-cover rounded" />
+                                        <img src={renderImage(member.image)} alt="Team Member" className="w-full h-40 object-cover rounded" />
                                     </div>
                                     <div className="text-center">
                                         <div className="text-sm font-bold">{member.role}</div>
@@ -110,7 +119,7 @@ const TeamRegist: React.FC = () => {
                 />
             )}
         </div>
-    )
-}
+    );
+};
 
 export default TeamRegist;

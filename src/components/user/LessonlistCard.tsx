@@ -29,11 +29,11 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({ lesson }) => {
     };
 
     const goToWriteReview = () => {
-        navigate(`/user/review`);
+        navigate(`/user/review`, { state: { lesson } });
     };
 
     const goToFeedback = () => {
-        navigate(`/user/feedback`);
+        navigate(`/user/feedback`, { state: { lesson } });
     };
 
     return (

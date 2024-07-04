@@ -4,6 +4,7 @@ import UserMypageMenu from "../../../components/user/UserMypageMenu";
 import Coupon from "../../../components/user/coupon";
 import UserLessonlist from "../../../components/user/UserLessonlist";
 import UserModify from "../../../components/user/UserModify";
+import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 const UserMypage: React.FC = () => {
     const [activePage, setActivePage] = useState<string>("home");
@@ -23,7 +24,9 @@ const UserMypage: React.FC = () => {
 
     return (
         <div className="w-screen flex flex-col items-center">
-            <NavbarUser />
+            <div className="w-full">
+                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+            </div>
             <UserMypageMenu
                 activePage={activePage}
                 setActivePage={setActivePage}
