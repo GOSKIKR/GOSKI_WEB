@@ -42,7 +42,8 @@ const NavbarInstructor = () => {
           <img
             src="https://randomuser.me/api/portraits/men/75.jpg"
             alt="Profile"
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full cursor-pointer"
+            onClick={() => {navigate("/instructor/edit-info")}}
           />
         </div>
       </div>
