@@ -33,35 +33,27 @@ import MyPageInfo from "./pages/instructor/mypage/MyPageInfo";
 import MyPageCert from "./pages/instructor/mypage/MyPageCert";
 import FeedbackEdit from "./pages/instructor/mypage/FeedbackEdit";
 
-
 const App: React.FC = () => {
   return (
     <div>
       <Routes>
         <Route path="/" element={<UserMain />} />
 
-                <Route path="/login" element={<Login />} />
-                <Route
-                    path="/login/forgot-password"
-                    element={<ForgotPassword />}
-                />
-                <Route path="/login/register" element={<Register />} />
-                <Route path="/dm" element={<DM />} />
-                <Route path="/dm/ws" element={<ChatComponent />} />
-                <Route path="/user/coupon" element={<Coupon />} />
-                <Route path="/reserve/set" element={<SetFilter />} />
-                <Route path="/reserve/result" element={<FilterResult />} />
-                <Route path="/reserve/info/team" element={<TeamInfo />} />
-                <Route
-                    path="/reserve/info/instructor"
-                    element={<InstructorInfo />}
-                />
-                <Route path="/user/payment/detail" element={<PayDetail />} />
-                <Route path="/user/payment/cancle" element={<PayCancle />} />
-                <Route path="/user/payment" element={<Payment />} />
-                <Route path="/user/review" element={<WriteReview />} />
-                <Route path="/user/feedback" element={<UserFeedback />} />
-
+        <Route path="/login" element={<Login />} />
+        <Route path="/login/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login/register" element={<Register />} />
+        <Route path="/dm" element={<DM />} />
+        <Route path="/dm/ws" element={<ChatComponent />} />
+        <Route path="/user/coupon" element={<Coupon />} />
+        <Route path="/reserve/set" element={<SetFilter />} />
+        <Route path="/reserve/result" element={<FilterResult />} />
+        <Route path="/reserve/info/team" element={<TeamInfo />} />
+        <Route path="/reserve/info/instructor" element={<InstructorInfo />} />
+        <Route path="/user/payment/detail" element={<PayDetail />} />
+        <Route path="/user/payment/cancle" element={<PayCancle />} />
+        <Route path="/user/payment" element={<Payment />} />
+        <Route path="/user/review" element={<WriteReview />} />
+        <Route path="/user/feedback" element={<UserFeedback />} />
 
         <Route path="/user/my" element={<UserMypage />} />
 
@@ -81,31 +73,25 @@ const App: React.FC = () => {
         />
         <Route path="/instructor/team/member" element={<TeamMember />} />
 
-                <Route 
-                    path="/instructor/my-lesson" 
-                    element={<MyLessonList/>}/>
-                    
-                <Route 
-                    path="/instructor/regist-feedback" 
-                    element={<FeedbackRegist/>}/>
+        <Route path="/instructor/my-lesson" element={<MyLessonList />} />
 
-                <Route 
-                    path="/instructor/edit-feedback" 
-                    element={<FeedbackEdit/>}/>
+        <Route
+          path="/instructor/regist-feedback"
+          element={<FeedbackRegist />}
+        />
 
-                <Route 
-                    path="/instructor/settlement" 
-                    element={<Settlement/>}/>
+        <Route path="/instructor/edit-feedback" element={<FeedbackEdit />} />
 
-                <Route path="/instructor/edit-info" element={<MyPageInfo />} />
-                <Route path="/instructor/edit-cert" element={<MyPageCert />} />
+        <Route path="/instructor/settlement" element={<Settlement />} />
 
-                <Route path="/counter" element={<Counter />} />
-                <Route path="*" element={<div>Not Found</div>} />
-            </Routes>
-        </div>
-    );
+        <Route path="/instructor/edit-info" element={<MyPageInfo />} />
+        <Route path="/instructor/edit-cert" element={<MyPageCert />} />
 
+        <Route path="/counter" element={<Counter />} />
+        <Route path="*" element={<div>Not Found</div>} />
+      </Routes>
+    </div>
+  );
 };
 
 export default App;

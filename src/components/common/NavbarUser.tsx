@@ -27,7 +27,10 @@ const NavbarUser = () => {
         GOSKI
       </div>
       <div className="flex box-border flex-1 justify-start">
-        <div className="text-white text-xl p-3 cursor-pointer  box-border flex">
+        <div
+          onClick={() => navigate("/reserve/set")}
+          className="text-white text-xl p-3 cursor-pointer  box-border flex"
+        >
           강습 예약
         </div>
         <div className="text-white text-xl p-3 cursor-pointer  box-border">
@@ -53,6 +56,9 @@ const NavbarUser = () => {
               src="https://randomuser.me/api/portraits/men/75.jpg"
               alt="Profile"
               className="w-10 h-10 rounded-full"
+              onClick={() => {
+                navigate("/user/my");
+              }}
             />
           </div>
         </div>
