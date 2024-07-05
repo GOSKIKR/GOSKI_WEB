@@ -2,29 +2,31 @@ import React from "react";
 
 interface AccountVerifyModalProps {
     onClose: () => void;
+    selectedBank: string;
+    accountNumber: string;
 }
 
-const AccountVerifyModal: React.FC<AccountVerifyModalProps> = ({ onClose }) => {
+const AccountVerifyModal: React.FC<AccountVerifyModalProps> = ({ onClose, selectedBank, accountNumber }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white rounded-lg shadow-lg p-6 w-[400px]">
                 <h2 className="text-xl font-bold mb-4 text-center">계좌 정보 입력</h2>
                 <div className="mb-4">
-                    <select className="w-full p-2 border rounded mb-2">
-                        <option value="">은행을 선택해주세요</option>
-                        <option value="kookmin">국민은행</option>
-                        <option value="shinhan">신한은행</option>
-                        <option value="woori">우리은행</option>
-                        <option value="hana">하나은행</option>
-                    </select>
                     <input
                         type="text"
-                        placeholder="예금주명을 입력해주세요"
+                        value={selectedBank}
                         className="w-full p-2 border rounded mb-2"
+                        disabled
                     />
                     <input
                         type="text"
-                        placeholder="계좌번호를 입력해주세요"
+                        value={accountNumber}
+                        className="w-full p-2 border rounded mb-2"
+                        disabled
+                    />
+                    <input
+                        type="text"
+                        placeholder="예금주명을 입력해주세요"
                         className="w-full p-2 border rounded mb-2"
                     />
                 </div>
@@ -35,6 +37,6 @@ const AccountVerifyModal: React.FC<AccountVerifyModalProps> = ({ onClose }) => {
             </div>
         </div>
     );
-}
+};
 
 export default AccountVerifyModal;
