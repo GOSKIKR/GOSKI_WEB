@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { IoMdNotificationsOutline } from "react-icons/io";
+import { IoMdNotificationsOutline, IoMdLogOut } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
-import { IoMdLogOut } from "react-icons/io";
-
 import UserNotification from "../user/UserNotification";
+import UserSettings from "../user/UserSettings";
 
 const NavbarUser = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-
   const navigate = useNavigate();
 
   const handleLoginBtn = () => {
@@ -22,54 +19,53 @@ const NavbarUser = () => {
   };
 
   return (
-    <div className="flex flex-row h-12 w-full justify-between items-center bg-primary-600  box-border z-50">
-      <div onClick={() => navigate("/")} className="basis-1/6 cursor-pointer">
+    <div className="flex flex-row h-12 w-full justify-between items-center bg-primary-600 px-4 shadow-md z-50">
+      <div
+        onClick={() => navigate("/")}
+        className="text-white text-2xl font-bold cursor-pointer"
+      >
         GOSKI
       </div>
-      <div className="flex box-border flex-1 justify-start">
+      <div className="flex flex-1 pl-10 justify-start space-x-8">
         <div
           onClick={() => navigate("/reserve/set")}
-          className="text-white text-xl p-3 cursor-pointer  box-border flex"
+          className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
         >
           강습 예약
         </div>
-        <div className="text-white text-xl p-3 cursor-pointer  box-border">
+        <div
+          onClick={() => navigate("/notice")}
+          className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
+        >
           이용 안내
         </div>
       </div>
       {isLogin ? (
-        <div className="basis-1/4 flex flex-row justify-around  box-border">
+        <div className="flex items-center space-x-6">
           <UserNotification />
-
-          <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5  box-border">
-            <button className="text-2xl">
-              <IoSettingsOutline />
-            </button>
+          <UserSettings />
+          <div
+            className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer"
+            onClick={() => setIsLogin(false)}
+          >
+            <IoMdLogOut className="text-primary-600 text-2xl" />
           </div>
-          <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5  box-border">
-            <button onClick={() => setIsLogin(false)} className="text-2xl">
-              <IoMdLogOut />
-            </button>
-          </div>
-          <div className="navbar-user__profile">
+          <div className="cursor-pointer" onClick={() => navigate("/user/my")}>
             <img
               src="https://randomuser.me/api/portraits/men/75.jpg"
               alt="Profile"
-              className="w-10 h-10 rounded-full"
-              onClick={() => {
-                navigate("/user/my");
-              }}
+              className="w-10 h-10 rounded-full border-2 border-white"
             />
           </div>
         </div>
       ) : (
-        <div className="basis-1/4 flex flex-row justify-end">
+        <div className="flex items-center">
           <div
             onClick={() => {
               setIsLogin(true);
               handleLoginBtn();
             }}
-            className="text-white p-5 cursor-pointer  box-border"
+            className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
           >
             로그인
           </div>
