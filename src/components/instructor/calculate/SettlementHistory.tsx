@@ -70,14 +70,6 @@ const SettlementHistory: React.FC = () => {
                             <option key={index} value={type}>{type}</option>
                         ))}
                     </select>
-                    <input
-                        type="text"
-                        name="date"
-                        placeholder="추후 드롭다운으로 날짜 선택"
-                        className="border p-2 w-full rounded sm:mr-2 sm:w-[200px]"
-                        value={filter.date}
-                        onChange={handleFilterChange}
-                    />
                 </div>
                 <div className="hidden sm:block">
                     <table className="min-w-full bg-white rounded-lg overflow-hidden">
