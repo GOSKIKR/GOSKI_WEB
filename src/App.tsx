@@ -26,6 +26,7 @@ import LessonDetail from "./pages/instructor/main/LessonDetail";
 import BossMain from "./pages/instructor/main/BossMain";
 import MyLessonList from "./pages/instructor/mypage/MyLessonList";
 import FeedbackRegist from "./pages/instructor/mypage/FeedbackRegist";
+import Notice from "./pages/user/main/Notice";
 
 import ChatComponent from "./pages/user/dm/ChatComponent";
 import Settlement from "./pages/instructor/calculate/Settlement";
@@ -33,11 +34,15 @@ import MyPageInfo from "./pages/instructor/mypage/MyPageInfo";
 import MyPageCert from "./pages/instructor/mypage/MyPageCert";
 import FeedbackEdit from "./pages/instructor/mypage/FeedbackEdit";
 
+import NotFound from "./pages/NotFound";
+
 const App: React.FC = () => {
   return (
     <div>
       <Routes>
         <Route path="/" element={<UserMain />} />
+
+        <Route path="/notice" element={<Notice />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/login/forgot-password" element={<ForgotPassword />} />
@@ -88,7 +93,7 @@ const App: React.FC = () => {
         <Route path="/instructor/edit-cert" element={<MyPageCert />} />
 
         <Route path="/counter" element={<Counter />} />
-        <Route path="*" element={<div>Not Found</div>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
