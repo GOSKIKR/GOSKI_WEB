@@ -51,11 +51,11 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-50">
+    <div className="flex flex-col items-center justify-center">
       <div className="w-full">
         {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
       </div>
-      <div className="flex w-full sm:w-1/3 h-full">
+      <div className="flex w-full sm:w-1/2 h-full">
         <div className="flex flex-col justify-center items-center w-full h-full p-4 sm:p-0">
           <div className="flex flex-col justify-center items-center text-center p-4">
             <img
@@ -64,7 +64,7 @@ const Register: React.FC = () => {
               src="/path/to/goski-logo.svg"
               alt="GOSKI"
             />
-            <h2 className="mt-6 text-center text-2xl sm:text-3xl font-extrabold text-gray-900">
+            <h2 className="mt-6 text-center text-xl 2xl:text-2xl sm:text-3xl font-extrabold text-gray-900">
               GOSKI 회원가입
             </h2>
           </div>
@@ -72,10 +72,12 @@ const Register: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-center w-full">
               <div className="w-full flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
                 <div className="flex flex-col items-center">
-                  <div className="w-24 h-24 sm:w-36 sm:h-36 bg-gray-200 rounded-full flex items-center justify-center">
-                    <span className="text-gray-400 text-sm sm:text-base">
-                      사진
-                    </span>
+                  <div className="w-40 h-40 sm:w-44 sm:h-44  rounded-full flex items-center justify-center">
+                    <img
+                      className="w-full h-full object-cover rounded-full bg-gray-200"
+                      src="https://randomuser.me/api/portraits/women/40.jpg  " //random profile image
+                      alt="profile"
+                    />
                   </div>
                   <button
                     onClick={() => {
@@ -86,7 +88,7 @@ const Register: React.FC = () => {
                     사진 업로드
                   </button>
                 </div>
-                <div className="min-w-80 basis-2/3 w-full flex flex-col gap-4">
+                <div className="min-w-80 basis-3/5 w-full flex flex-col gap-4">
                   <div className="relative flex justify-center items-center">
                     <CiMail className="absolute left-2 h-6 w-6 text-gray-400 z-50" />
                     <label className="sr-only">이메일</label>
@@ -116,10 +118,10 @@ const Register: React.FC = () => {
                         placeholder="이름을 입력해 주세요"
                       />
                     </div>
-                    <div>
+                    <div className="p-2">
                       <label className="sr-only">성별</label>
                       <div className="flex items-center space-x-4">
-                        <div className="flex">
+                        <div className="flex items-center">
                           <input
                             type="radio"
                             id="male"
@@ -131,10 +133,10 @@ const Register: React.FC = () => {
                             htmlFor="male"
                             className="ml-2 block text-sm sm:text-base text-gray-900"
                           >
-                            남성
+                            남
                           </label>
                         </div>
-                        <div className="flex">
+                        <div className="flex items-center">
                           <input
                             type="radio"
                             id="female"
@@ -146,7 +148,7 @@ const Register: React.FC = () => {
                             htmlFor="female"
                             className="ml-2 block text-sm sm:text-base text-gray-900"
                           >
-                            여성
+                            여
                           </label>
                         </div>
                       </div>
@@ -233,7 +235,7 @@ const Register: React.FC = () => {
                   onClick={() => {
                     alert("회원가입 기능");
                   }}
-                  className="w-full p-3 rounded bg-primary-600 text-white font-bold hover:bg-indigo-700 text-sm sm:text-base"
+                  className="w-1/3 p-3 rounded bg-primary-600 text-white font-bold hover:bg-indigo-700 text-sm sm:text-base"
                 >
                   회원가입
                 </button>

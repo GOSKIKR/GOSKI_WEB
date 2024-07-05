@@ -1,12 +1,24 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import LessonSection from "../../../components/instructor/mypage/LessonSection";
 import { dummyInstructorLessonData } from "../../../dto/InstructorLessonInfoDTO";
+import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 
 const MyLessonList: React.FC = () => {
+    const[innerWidth,setInnerWidth] = useState(window.innerWidth);
+
+    const handleResize = () => {
+        setInnerWidth(window.innerWidth);
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize",handleResize);
+        return(() => window.removeEventListener("resize",handleResize))
+    })
+
     return (
         <div>
-            <NavbarInstructor />
+            {innerWidth > 640 ? <NavbarInstructor/>  : <NavbarInstructorMobile/>}
             <div className="flex justify-center mt-20 text-3xl font-bold mb-10">
                 강습 내역
             </div>

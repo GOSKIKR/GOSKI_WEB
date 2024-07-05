@@ -29,6 +29,24 @@ const notifications = [
   },
 ];
 
+type NotificationItemProps = {
+  detail: string;
+  lessonDate: string;
+  lessonTime: string;
+};
+
+const NotificationItem = ({
+  detail,
+  lessonDate,
+  lessonTime,
+}: NotificationItemProps) => (
+  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 border-b last:border-b-0">
+    <div className="text-sm sm:text-base">{detail}</div>
+    <div className="text-sm sm:text-base">{lessonDate}</div>
+    <div className="text-sm sm:text-base">{lessonTime}</div>
+  </div>
+);
+
 const UserNotification = () => {
   const [showNotification, setShowNotification] = useState(false);
 
@@ -37,38 +55,31 @@ const UserNotification = () => {
   };
 
   return (
-    <div className="flex flex-row justify-around w-10 h-10 box-border">
-      <div
+    <div className="relative flex items-center justify-center w-10 h-10">
+      <button
         onClick={handleNotificationBtn}
-        className="relative flex items-center justify-center w-10 h-10 p-5 bg-white rounded-full cursor-pointer box-border"
+        className="text-2xl p-2 rounded-full bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+        aria-label="Notifications"
       >
-        <button className="text-2xl">
-          <IoMdNotificationsOutline />
-        </button>
-        {showNotification && (
-          <div className="absolute z-50 w-40 h-auto p-2 bg-white rounded-lg shadow-lg top-10 sm:w-64">
-            <div className="w-full h-10 bg-primary-400 text-white text-center flex items-center justify-center rounded-t-lg">
-              알림
-            </div>
+        <IoMdNotificationsOutline />
+      </button>
+      {showNotification && (
+        <div className="absolute top-12 right-0 z-50 w-64 p-4 bg-white rounded-lg shadow-lg">
+          <div className="w-full bg-primary-400 text-white text-center py-2 rounded-t-lg">
+            알림
+          </div>
+          <div className="flex flex-col p-2">
             {notifications.map((notification, index) => (
-              <div
+              <NotificationItem
                 key={index}
-                className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 border-b last:border-b-0"
-              >
-                <div className="text-sm sm:text-base">
-                  {notification.detail}
-                </div>
-                <div className="text-sm sm:text-base">
-                  {notification.lessonDate}
-                </div>
-                <div className="text-sm sm:text-base">
-                  {notification.lessonTime}
-                </div>
-              </div>
+                detail={notification.detail}
+                lessonDate={notification.lessonDate}
+                lessonTime={notification.lessonTime}
+              />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

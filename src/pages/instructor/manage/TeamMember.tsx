@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import DropdownMenu from "../../../components/instructor/manage/TeamListDropdown";
 import { TeamMemberDTO } from "../../../dto/TeamMemberDTO";
@@ -7,8 +7,20 @@ import { TeamInviteDTO } from "../../../dto/TeamInviteDTO";
 import TeamMemberList from "../../../components/instructor/manage/TeamMemberList";
 import TeamInviteList from "../../../components/instructor/manage/TeamInviteList";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
+import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 
 const TeamMember: React.FC = () => {
+    const[innerWidth,setInnerWidth] = useState(window.innerWidth);
+
+    const handleResize = () => {
+        setInnerWidth(window.innerWidth);
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize",handleResize);
+        return(() => window.removeEventListener("resize",handleResize))
+    })
+
     const members: TeamMemberDTO[] = [
         { role: "교육팀장", name: "고승민", price: "+100,000원", phoneNumber: "010-9995-5107" },
         { role: "팀장", name: "유제훈", price: "+100,000원", phoneNumber: "010-9995-5107" },
@@ -26,7 +38,7 @@ const TeamMember: React.FC = () => {
 
     return (
         <div>
-            <NavbarInstructor/>
+            {innerWidth > 640 ? <NavbarInstructor/>  : <NavbarInstructorMobile/>}
             <TeamManageHeader />
             <div className="flex justify-center">
                 <div className="p-6">

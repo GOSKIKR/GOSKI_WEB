@@ -1,14 +1,27 @@
-import React, { useState } from "react";
+import React,{useState, useEffect} from "react";
 import Editor from "../../../components/common/Editor";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import AddTeamMemberModal from "../../../components/instructor/manage/AddTeamMemberModal";
 import TeamMember from "../../../interface/TeamMember";
+import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 
 const TeamRegist: React.FC = () => {
     const [profileImage, setProfileImage] = useState<string | null>(null);
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const[innerWidth,setInnerWidth] = useState(window.innerWidth);
+
+    const handleResize = () => {
+        setInnerWidth(window.innerWidth);
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize",handleResize);
+        return(() => window.removeEventListener("resize",handleResize))
+    })
+
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -43,7 +56,7 @@ const TeamRegist: React.FC = () => {
 
     return (
         <div>
-            <NavbarInstructor />
+            {innerWidth > 640 ? <NavbarInstructor/>  : <NavbarInstructorMobile/>}
             <TeamManageHeader />
             <div className="flex justify-center mt-10">
                 <div className="p-6">
