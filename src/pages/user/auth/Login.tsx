@@ -67,12 +67,12 @@ const Login = () => {
               GOSKI 로그인
             </h2>
           </div>
-          <div className="relative mt-8 space-y-6 bg-white shadow-lg px-6 pb-6 rounded-md">
+          <div className="relative p-8 space-y-6 bg-white shadow-lg px-6 pb-6 rounded-md">
             <div className="flex justify-center">
               <div className="flex flex-row w-full justify-center rounded-md overflow-hidden">
                 <div
                   onClick={() => setUserOrInstructor("user")}
-                  className={`flex w-1/2 justify-center cursor-pointer hover:bg-primary-500 hover:text-white
+                  className={`flex w-1/2 justify-center cursor-pointer rounded-tl-lg hover:bg-primary-500 hover:text-white
                             ${
                               userOrInstructor === "user"
                                 ? "border-x-2 border-t-2 border-primary-500 text-primary-500"
@@ -84,7 +84,7 @@ const Login = () => {
                 </div>
                 <div
                   onClick={() => setUserOrInstructor("instructor")}
-                  className={`flex w-1/2 justify-center cursor-pointer hover:bg-primary-500 hover:text-white
+                  className={`flex w-1/2 justify-center cursor-pointer rounded-tr-lg hover:bg-primary-500 hover:text-white
               ${
                 userOrInstructor === "instructor"
                   ? "border-x-2 border-t-2 border-primary-500 text-primary-500"
@@ -96,7 +96,7 @@ const Login = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-4 rounded-md shadow-sm -space-y-px">
+            <div className="flex flex-col gap-4 rounded-md -space-y-px">
               <div className="relative flex items-center">
                 <CiMail className="absolute left-2 h-6 w-6 text-gray-400 z-50" />
                 <label htmlFor="email" className="sr-only">
@@ -123,7 +123,7 @@ const Login = () => {
                   name="password"
                   type="password"
                   required
-                  className="appearance-none rounded-none relative block w-full px-10 py-3 border border-gray-300 placeholder-gray-300 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-10 py-2 border border-gray-300 placeholder-gray-300 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -145,16 +145,16 @@ const Login = () => {
               </button>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-around">
               <div
                 onClick={() => navigate("/login/register")}
-                className="font-medium text-primary-500 cursor-pointer"
+                className="font-medium text-primary-500 cursor-pointer hover:underline"
               >
                 회원가입
               </div>
               <div
                 onClick={() => navigate("/login/forgot-password")}
-                className="font-medium text-primary-500 cursor-pointer"
+                className="font-medium text-primary-500 cursor-pointer hover:underline"
               >
                 ID / PW 찾기
               </div>
@@ -164,7 +164,7 @@ const Login = () => {
                 소셜 계정으로 로그인
               </span>
               <div className="flex justify-around">
-                <div className="flex flex-col items-center justify-center p-2 rounded-full cursor-pointer hover:shadow-lg transition duration-500 ease-in-out">
+                <div className="flex flex-row w-full items-center justify-center p-2 rounded-full cursor-pointer hover:shadow-lg transition duration-500 ease-in-out bg-yellow-300">
                   <div
                     className="flex items-center justify-center"
                     onClick={() => navigate("/login/kakao")}
@@ -177,7 +177,7 @@ const Login = () => {
                   </div>
                   <div>Kakao</div>
                 </div>
-                <div className="flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:scale-125 hover:shadow-lg transition duration-300 ease-in-out">
+                {/* <div className="flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:scale-125 hover:shadow-lg transition duration-300 ease-in-out">
                   <div
                     className="flex items-center justify-center"
                     onClick={() => alert("애플 로그인")}
@@ -189,7 +189,7 @@ const Login = () => {
                     />
                   </div>
                   <div>Apple</div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
