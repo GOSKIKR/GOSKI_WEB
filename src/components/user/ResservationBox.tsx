@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 type skiOrBoardType = "ski" | "board";
 type levelType = "lv1" | "lv2" | "lv3";
@@ -13,6 +14,10 @@ const ReservationBox = () => {
   const [resort, setResort] = useState("");
   const [people, setPeople] = useState(0);
   const [level, setLevel] = useState("lv1");
+  const [hoveredLv, setHoveredLv] = useState<levelType | "">("");
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSkiOrBoard = (type: skiOrBoardType) => {
     setSkiOrBoard(type);
@@ -31,8 +36,13 @@ const ReservationBox = () => {
     setLevel(level);
   };
 
+  const handleLvHover = (isLvHovered: boolean, level: levelType) => {
+    setIsTooltipVisible(isLvHovered);
+    setHoveredLv(level);
+  };
+
   return (
-    <div className="w-full bg-white rounded-lg shadow-lg p-8">
+    <div className="w-full bg-primary-50 rounded-lg shadow-lg p-8">
       <div className="flex flex-col xl:flex-row justify-between items-center gap-4">
         <div className="w-full flex items-center justify-center">
           <div className="flex w-full h-14 justify-center items-center rounded-lg overflow-hidden shadow-md">
@@ -129,19 +139,22 @@ const ReservationBox = () => {
             </div>
           </div>
           <div className="flex flex-col w-full">
-            <div className="flex flex-col md:flex-row justify-center gap-2">
+            <div className="relative flex flex-col md:flex-row justify-center gap-2">
               <div
+                onMouseEnter={() => handleLvHover(true, "lv1")}
+                onMouseLeave={() => setHoveredLv("")}
                 onClick={() => handleLevel("lv1")}
                 className={`w-full h-14 ${
                   level === "lv1"
                     ? "bg-primary-500 text-white"
                     : "bg-white text-black"
-                } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white transition-colors duration-300 shadow-md`}
+                }  rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white transition-colors duration-300 shadow-md`}
               >
                 초급
-                <p className="text-xs text-gray-400">lv1 이상 강사진</p>
               </div>
               <div
+                onMouseEnter={() => handleLvHover(true, "lv2")}
+                onMouseLeave={() => setHoveredLv("")}
                 onClick={() => handleLevel("lv2")}
                 className={`w-full h-14 ${
                   level === "lv2"
@@ -150,9 +163,10 @@ const ReservationBox = () => {
                 } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white transition-colors duration-300 shadow-md`}
               >
                 중급
-                <p className="text-xs text-gray-400">lv2 이상 강사진</p>
               </div>
               <div
+                onMouseEnter={() => handleLvHover(true, "lv3")}
+                onMouseLeave={() => setHoveredLv("")}
                 onClick={() => handleLevel("lv3")}
                 className={`w-full h-14 ${
                   level === "lv3"
@@ -161,13 +175,28 @@ const ReservationBox = () => {
                 } rounded-lg flex flex-col justify-center items-center cursor-pointer hover:bg-primary-500 hover:text-white transition-colors duration-300 shadow-md`}
               >
                 고급
-                <p className="text-xs text-gray-400">lv3 이상 강사진</p>
               </div>
+              {isTooltipVisible && hoveredLv && (
+                <div
+                  className={`${
+                    hoveredLv === "lv1"
+                      ? "sm:-top-10 sm:left-0 "
+                      : hoveredLv === "lv2"
+                      ? "top-1/4 sm:-top-10 sm:left-1/4"
+                      : "top-2/4 sm:-top-10 sm:left-2/4"
+                  } absolute flex items-center justify-center text-gray-600 text-lg -top-10 w-32 h-10 z-50 bg-white rounded-lg shadow-md`}
+                >
+                  {hoveredLv} 이상 강사진
+                </div>
+              )}
             </div>
           </div>
         </div>
         <div className="flex justify-center items-center w-full xl:w-auto mt-4 xl:mt-0">
-          <button className="w-16 h-16 bg-primary-500 text-white rounded-full flex justify-center items-center text-3xl shadow-md hover:bg-primary-600 transition-colors duration-300">
+          <button
+            onClick={() => navigate("/reserve/set")}
+            className="w-16 h-16 bg-primary-500 text-white rounded-full flex justify-center items-center text-3xl shadow-md hover:bg-primary-600 transition-colors duration-300"
+          >
             <IoMdSearch />
           </button>
         </div>
