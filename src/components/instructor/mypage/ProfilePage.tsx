@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const ProfilePage: React.FC = () => {
     const [profileImage, setProfileImage] = useState<string | null>(null);
-    const [selectedGender, setSelectedGender] = useState<string | null>(null);
+    const [selectedGender, setSelectedGender] = useState<string | null>('남자');
     const [isTeamLeader, setIsTeamLeader] = useState<boolean>(false);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,14 +16,6 @@ const ProfilePage: React.FC = () => {
             };
             reader.readAsDataURL(file);
         }
-    };
-
-    const handleGenderSelect = (gender: string) => {
-        setSelectedGender(gender);
-    };
-
-    const handleTeamLeaderChange = () => {
-        setIsTeamLeader(!isTeamLeader);
     };
 
     const triggerFileInput = () => {
@@ -60,20 +52,21 @@ const ProfilePage: React.FC = () => {
                             type="text"
                             placeholder="이름을 입력하세요"
                             className="w-full p-2 border rounded"
+                            disabled
                         />
                     </div>
                     <div className="mb-4">
                         <label className="block text-lg font-bold mb-1">성별</label>
                         <div className="flex space-x-4">
                             <button
-                                onClick={() => handleGenderSelect('남자')}
                                 className={`w-1/2 p-2 rounded ${selectedGender === '남자' ? 'bg-primary-500 text-white' : 'bg-gray-200'}`}
+                                disabled
                             >
                                 남자
                             </button>
                             <button
-                                onClick={() => handleGenderSelect('여자')}
                                 className={`w-1/2 p-2 rounded ${selectedGender === '여자' ? 'bg-primary-500 text-white' : 'bg-gray-200'}`}
+                                disabled
                             >
                                 여자
                             </button>
@@ -84,6 +77,7 @@ const ProfilePage: React.FC = () => {
                         <input
                             type="date"
                             className="w-full p-2 border rounded"
+                            disabled
                         />
                     </div>
                     <div className="mb-4">
@@ -92,6 +86,7 @@ const ProfilePage: React.FC = () => {
                             type="tel"
                             placeholder="000-0000-0000"
                             className="w-full p-2 border rounded"
+                            disabled
                         />
                     </div>
                     <div className="mb-4 flex items-center">
@@ -100,17 +95,19 @@ const ProfilePage: React.FC = () => {
                             type="checkbox" 
                             className="mr-2 h-4 w-4" 
                             checked={isTeamLeader} 
-                            onChange={handleTeamLeaderChange}
+                            onChange={() => {}} // 클릭 이벤트 제거
+                            disabled
                         />
                     </div>
                     <div className="mb-4">
                         <label className="block text-lg font-bold mb-1">자기소개</label>
                         <textarea
                             placeholder="자기소개를 작성해주세요."
-                            className="w-full p-2 border rounded h-24"
+                            className="w-full p-2 border rounded h-24 resize-none"
                         />
                     </div>
-                    <button className="bg-primary-700 text-white py-2 px-4 rounded self-end sm:w-1/4 w-full">수정하기</button>
+                    <button 
+                        className="bg-primary-700 text-white py-2 px-4 rounded self-end sm:w-1/4 w-full hover:bg-primary-500">수정하기</button>
                 </div>
             </div>
         </div>
