@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import {
+  IoMdNotificationsOutline,
+  IoMdLogOut,
+  IoMdPerson,
+  IoMdSettings,
+} from "react-icons/io";
 import UserNotification from "../user/UserNotification";
+import MobileSettingModal from "./MobileSettingModal";
 
 const NavbarUserMobile = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const [animateMenu, setAnimateMenu] = useState(false);
+  const [showSetting, setShowSetting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,8 +24,6 @@ const NavbarUserMobile = () => {
   };
 
   const handleShowMenu = () => {
-    // setAnimateMenu(true);
-    // setShowMenu(!showMenu);
     if (showMenu) {
       setAnimateMenu(false);
       setTimeout(() => setShowMenu(false), 300);
@@ -33,21 +38,28 @@ const NavbarUserMobile = () => {
     setTimeout(() => setShowMenu(false), 300);
   };
 
+  const handleShowSettingModal = () => {
+    setShowSetting(true);
+  };
+
+  const handleCloseSettingModal = () => {
+    setShowSetting(false);
+  };
+
   return (
-    <div className="flex w-full h-12 relative">
-      <div className="basis-1/6 cursor-pointer" onClick={() => navigate("/")}>
+    <div className="flex w-full h-12 bg-primary-600  items-center px-4 relative">
+      <div
+        className="flex-1 text-2xl text-white font-bold cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         GOSKI
       </div>
-      <div className="flex flex-1"></div>
       <UserNotification />
-      <div className="flex">
-        <div
-          onClick={() => handleShowMenu()}
-          className="flex items-center px-4 cursor-pointer"
-        >
+      <div className="flex items-center text-white">
+        <div onClick={() => handleShowMenu()} className="cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className="h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -67,29 +79,38 @@ const NavbarUserMobile = () => {
             }`}
           >
             <button
-              className="px-4 py-2 text-left hover:bg-gray-100"
-              onClick={handleCloseMenu}
+              className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100"
+              onClick={() => {
+                handleCloseMenu();
+                navigate("/user/my");
+              }}
             >
-              프로필
+              <IoMdPerson className="mr-2" /> 프로필
             </button>
             <button
-              className="px-4 py-2 text-left hover:bg-gray-100"
-              onClick={handleCloseMenu}
+              className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100"
+              onClick={() => {
+                handleCloseMenu();
+                handleShowSettingModal();
+              }}
             >
-              설정
+              <IoMdSettings className="mr-2" /> 설정
             </button>
             <button
-              className="px-4 py-2 text-left hover:bg-gray-100"
+              className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100"
               onClick={() => {
                 handleCloseMenu();
                 handleLogout();
               }}
             >
-              로그아웃
+              <IoMdLogOut className="mr-2" /> 로그아웃
             </button>
           </div>
         )}
       </div>
+      {showSetting && (
+        <MobileSettingModal showSettingModal={handleCloseSettingModal} />
+      )}
     </div>
   );
 };
