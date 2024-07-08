@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavbarUser from "../../../components/common/NavbarUser";
 import UserMypageMenu from "../../../components/user/UserMypageMenu";
 import Coupon from "../../../components/user/coupon";
@@ -7,7 +7,7 @@ import UserModify from "../../../components/user/UserModify";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 const UserMypage: React.FC = () => {
-    const [activePage, setActivePage] = useState<string>("home");
+    const [activePage, setActivePage] = useState<string>("lessonHistory");
 
     const renderActivePage = () => {
         switch (activePage) {
