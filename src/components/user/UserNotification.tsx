@@ -64,7 +64,7 @@ const UserNotification = () => {
         <IoMdNotificationsOutline />
       </button>
       {showNotification && (
-        <div className="absolute top-12 right-0 z-50 w-64 p-4 bg-white rounded-lg shadow-lg">
+        <div className="absolute top-12 right-0 z-50 w-64 p-2 bg-white rounded-lg shadow-lg">
           <div className="w-full bg-primary-400 text-white text-center py-2 rounded-t-lg">
             알림
           </div>

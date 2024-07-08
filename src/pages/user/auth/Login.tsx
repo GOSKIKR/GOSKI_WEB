@@ -60,7 +60,7 @@ const Login = () => {
             <img
               onClick={() => navigate("/")}
               className="mx-auto h-12 w-auto cursor-pointer"
-              src="/path/to/goski-logo.svg"
+              src="/assets/images/AppLogo.png"
               alt="GOSKI"
             />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -175,7 +175,7 @@ const Login = () => {
                       className="h-6 w-6 self-center"
                     />
                   </div>
-                  <div>Kakao</div>
+                  <div>카카오로 시작하기</div>
                 </div>
                 {/* <div className="flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:scale-125 hover:shadow-lg transition duration-300 ease-in-out">
                   <div

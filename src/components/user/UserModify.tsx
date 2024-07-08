@@ -53,7 +53,7 @@ const UserModify = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
-      <div className="flex flex-col lg:flex-row justify-center items-center w-full lg:w-2/3 bg-primary-100 shadow-xl p-4">
+      <div className="flex flex-col lg:flex-row justify-center items-center w-full lg:w-2/3 bg-primary-50 rounded-lg shadow-xl p-4">
         <div className="flex flex-col justify-center items-center mb-4 lg:mb-0 lg:mr-4">
           <img
             src={userImage}
