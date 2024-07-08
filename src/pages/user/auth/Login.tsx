@@ -56,7 +56,7 @@ const Login = () => {
     e.preventDefault();
     if (isFormValid) {
       try {
-        const response = await apiClient.post("/user/signin", {
+        const response = await apiClient().post("/user/signin", {
           email,
           password,
         });
