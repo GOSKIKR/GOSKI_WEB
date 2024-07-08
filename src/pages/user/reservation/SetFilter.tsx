@@ -4,10 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../../../../public/assets/css/calendar.css";
-import { FaCalendarAlt } from "react-icons/fa";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 import apiClient from "../../../utils/config/axiosConfig";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 interface Resort {
     resortId: number;
@@ -37,7 +35,7 @@ const SetFilter: React.FC = () => {
         // 컴포넌트가 마운트될 때 API 호출
         const fetchResorts = async () => {
             try {
-                const response = await apiClient.get("/common/resort");
+                const response = await apiClient().get("/common/resort");
                 const resorts: Resort[] = response.data.data.map(
                     (resort: any) => ({
                         resortId: resort.resortId,
