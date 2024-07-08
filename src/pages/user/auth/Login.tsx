@@ -7,6 +7,8 @@ import { IoKeyOutline } from "react-icons/io5";
 import NavbarUser from "../../../components/common/NavbarUser";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
+import apiClient from "../../../utils/config/axiosConfig";
+
 const Login = () => {
   const navigate = useNavigate();
 
@@ -27,13 +29,58 @@ const Login = () => {
 
   const isFormValid = email !== "" && password !== "";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (isFormValid) {
+  //     const login = async () => {
+  //       try {
+  //         const response = await apiClient.post("/user/signin", {
+  //           email,
+  //           password,
+  //         });
+  //         console.log(response.data);
+  //         localStorage.setItem("token", response.data.token);
+  //         navigate("/");
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     };
+  //     login();
+  //     console.log("Form Submitted", { email, password, userOrInstructor });
+  //   } else {
+  //     console.log("Form is not valid");
+  //   }
+  // };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      // Your form submission logic here
-      console.log("Form Submitted", { email, password, userOrInstructor });
+      try {
+        const response = await apiClient.post("/user/signin", {
+          email,
+          password,
+        });
+        localStorage.setItem("accesstoken", response.headers.accesstoken);
+        // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
+        localStorage.setItem("refreshtoken", response.headers.refreshtoken);
+        navigate("/");
+      } catch (error) {
+        localStorage.removeItem("accesstoken");
+        console.error("Login error:", error);
+      }
+      console.log("Form Submitted", { email });
     } else {
       console.log("Form is not valid");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      if (!isFormValid) {
+        return alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+      } else {
+        handleSubmit(e as any); // 강제로 타입 캐스팅
+      }
     }
   };
 
@@ -111,6 +158,7 @@ const Login = () => {
                   placeholder="Email@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
               <div className="relative flex items-center">
@@ -127,6 +175,7 @@ const Login = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
             </div>
