@@ -15,8 +15,8 @@ const NavbarInstructor = () => {
   };
 
   return (
-    <div className="flex flex-row h-12 w-full justify-between items-center bg-primary-200 box-border z-50">
-      <div onClick={() => navigate("/instructor/main")} className="basis-1/6 cursor-pointer">
+    <div className="flex flex-row h-12 w-full justify-between items-center bg-primary-200 box-border px-4 z-50">
+      <div onClick={() => navigate("/instructor/main")} className="basis-1/6 text-2xl font-bold cursor-pointer">
         GOSKI
       </div>
       <div className="flex flex-row flex-1 justify-normal">

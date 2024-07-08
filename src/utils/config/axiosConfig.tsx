@@ -1,35 +1,37 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 
-const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5173/api",
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+const apiClient = (isFormData?: boolean): AxiosInstance => {
+  const client = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL,
+    timeout: 10000,
+    headers: {
+      "Content-Type": !isFormData ? "application/json;charset=utf-8" : "multipart/form-data",
+    },
+  });
 
-// Request interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    // Add any request headers here (e.g., authorization token)
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+  // Request interceptor
+  client.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+  );
 
-// Response interceptor
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // Handle errors here (e.g., show notification, redirect)
-    return Promise.reject(error);
-  }
-);
+  // Response interceptor
+  client.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  return client;
+};
 
 export default apiClient;

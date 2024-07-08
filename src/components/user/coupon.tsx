@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import NavbarUser from "../common/NavbarUser";
-import UserMypageMenu from "./UserMypageMenu";
 
 interface Coupon {
     name: string;
@@ -57,62 +55,8 @@ const Coupon: React.FC = () => {
         currentPage * itemsPerPage
     );
 
-    const renderTableContent = () => (
-        <table className="hidden sm:table min-w-full border-collapse border-t border-b border-gray-300 mt-4">
-            <thead>
-                <tr className="bg-gray-100">
-                    <th className="border border-gray-300 p-2">
-                        <input type="checkbox" />
-                    </th>
-                    <th className="border border-gray-300 p-2 text-left">
-                        쿠폰명/사용혜택
-                    </th>
-                    <th className="border border-gray-300 p-2 text-left">
-                        사용처
-                    </th>
-                    <th className="border border-gray-300 p-2 text-left">
-                        상태
-                    </th>
-                    <th className="border border-gray-300 p-2 text-left">
-                        사용 기간
-                    </th>
-                    <th className="border border-gray-300 p-2 text-left">
-                        등록일
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {currentData.map((coupon, index) => (
-                    <tr key={index}>
-                        <td className="border border-gray-300 p-2">
-                            <input type="checkbox" />
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                            <div>{coupon.name}</div>
-                            <div className="text-sm text-gray-500">
-                                10,000원
-                            </div>
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                            {coupon.place}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                            {coupon.status}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                            {coupon.period}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                            {coupon.registrationDate}
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    );
-
     const renderCardContent = () => (
-        <div className="block sm:hidden mt-4">
+        <div className="block mt-4">
             {currentData.map((coupon, index) => (
                 <div
                     key={index}
@@ -186,7 +130,6 @@ const Coupon: React.FC = () => {
                             )
                         </div>
                     </div>
-                    {renderTableContent()}
                     {renderCardContent()}
                 </div>
                 <div className="flex justify-center mt-4">

@@ -38,10 +38,25 @@ const PayDetail = () => {
                                 {lesson.resortName}
                             </div>
                             <div>{lesson.teamName}</div>
-                            <div className="text-gray-500 text-sm">
-                                {formatDate(lesson.lessonDate)}{" "}
-                                {lesson.startTime}
-                            </div>
+                            <p className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                                lesson.lessonDate
+                            } (${new Date(lesson.lessonDate).toLocaleString(
+                                "ko-KR",
+                                {
+                                    weekday: "short",
+                                }
+                            )}) `}</p>
+                            <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                                lesson.startTime
+                            } ~ ${new Date(
+                                new Date(
+                                    `${lesson.lessonDate}T${lesson.startTime}`
+                                ).getTime() +
+                                    lesson.duration * 60 * 60 * 1000
+                            ).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            })}`}</div>
                             <div>{lesson.instructorName}</div>
                         </div>
                     </div>
