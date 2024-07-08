@@ -83,7 +83,7 @@ const NavbarUser = () => {
       const refreshToken = localStorage.getItem("refreshtoken");
       const accessToken = localStorage.getItem("accesstoken");
 
-      await apiClient.get("/user/signout", {
+      await apiClient().get("/user/signout", {
         headers: {
           Authorization: `Bearer ${refreshToken}`,
           AccessToken: `Bearer ${accessToken}`,
