@@ -1,7 +1,38 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
+interface Lesson {
+    lessonId: number;
+    teamId: number;
+    teamName: string;
+    resortName: string;
+    instructorId: number;
+    instructorName: string;
+    profileUrl: string;
+    lessonDate: string; // Use string for simplicity
+    lessonStatus: string;
+    startTime: string;
+    duration: number;
+    hasReview: boolean;
+    studentCount: number;
+}
+
+const dummyLessonData: Lesson = {
+    lessonId: 1,
+    teamId: 1,
+    teamName: "Team A",
+    resortName: "Resort 1",
+    instructorId: 1,
+    instructorName: "Instructor 1",
+    profileUrl: "profile1.jpg",
+    lessonDate: "2024-06-21",
+    lessonStatus: "진행 예정",
+    startTime: "10:00",
+    duration: 1,
+    hasReview: false,
+    studentCount: 3,
+};
 
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -11,9 +42,12 @@ const formatDate = (dateString: string) => {
     return `${year}.${month}.${day}`;
 };
 
-const PayCancle: React.FC = () => {
-    const location = useLocation();
-    const { lesson } = location.state || {};
+const oncancel = () => {
+    window.confirm("취소 하시겠습니까?");
+};
+
+const PayCancel: React.FC = () => {
+    const lesson = dummyLessonData;
     const [view, setView] = useState<boolean>(false);
 
     return (
@@ -35,10 +69,25 @@ const PayCancle: React.FC = () => {
                                 {lesson.resortName}
                             </div>
                             <div>{lesson.teamName}</div>
-                            <div className="text-gray-500 text-sm">
-                                {formatDate(lesson.lessonDate)}{" "}
-                                {lesson.startTime}
-                            </div>
+                            <p className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                                lesson.lessonDate
+                            } (${new Date(lesson.lessonDate).toLocaleString(
+                                "ko-KR",
+                                {
+                                    weekday: "short",
+                                }
+                            )}) `}</p>
+                            <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                                lesson.startTime
+                            } ~ ${new Date(
+                                new Date(
+                                    `${lesson.lessonDate}T${lesson.startTime}`
+                                ).getTime() +
+                                    lesson.duration * 60 * 60 * 1000
+                            ).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            })}`}</div>
                             <div>{lesson.instructorName}</div>
                         </div>
                     </div>
@@ -84,7 +133,10 @@ const PayCancle: React.FC = () => {
                             </div>
                         )}
                     </div>
-                    <div className="flex items-center justify-center bg-slate-400 sm:w-1/6 h-12 p-1 px-2 rounded-lg text-white cursor-pointer">
+                    <div
+                        onClick={oncancel}
+                        className="flex items-center justify-center bg-slate-400 sm:w-1/6 h-12 p-1 px-2 rounded-lg text-white cursor-pointer"
+                    >
                         예약 취소
                     </div>
                 </div>
@@ -93,4 +145,4 @@ const PayCancle: React.FC = () => {
     );
 };
 
-export default PayCancle;
+export default PayCancel;

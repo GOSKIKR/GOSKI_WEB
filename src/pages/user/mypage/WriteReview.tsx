@@ -34,7 +34,7 @@ const tags: Tag[] = [
     { tagReviewId: 6, tagName: "불친절해요" },
     { tagReviewId: 7, tagName: "무서워요" },
     { tagReviewId: 8, tagName: "대충해요" },
-    { tagReviewId: 9, tagName: "이해하기 어려워요" },
+    { tagReviewId: 9, tagName: "어려워요" },
     { tagReviewId: 10, tagName: "준비 부족" },
 ];
 
@@ -91,14 +91,30 @@ const WriteReview: React.FC = () => {
                         alt="Profile"
                         className="w-24 h-24 rounded-full"
                     />
-                    <div className="flex flex-col ml-4 justify-center items-center space-y-0.5">
+                    <div className="flex flex-col sm:ml-4 justify-center items-center space-y-0.5">
                         <div className="font-bold text-xl">
                             {lesson.resortName}
                         </div>
                         <div>{lesson.teamName}</div>
-                        <div className="text-gray-500 text-sm">
-                            {formatDate(lesson.lessonDate)} {lesson.startTime}
-                        </div>
+                        <p className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                            lesson.lessonDate
+                        } (${new Date(lesson.lessonDate).toLocaleString(
+                            "ko-KR",
+                            {
+                                weekday: "short",
+                            }
+                        )}) `}</p>
+                        <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                            lesson.startTime
+                        } ~ ${new Date(
+                            new Date(
+                                `${lesson.lessonDate}T${lesson.startTime}`
+                            ).getTime() +
+                                lesson.duration * 60 * 60 * 1000
+                        ).toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        })}`}</div>
                         <div>{lesson.instructorName}</div>
                     </div>
                 </div>
@@ -142,11 +158,11 @@ const WriteReview: React.FC = () => {
                                 })}
                             </div>
                         </div>
-                        <div className="grid sm:grid-cols-4 grid-cols-2 sm:gap-4 gap-2 ">
+                        <div className="grid sm:grid-cols-5 grid-cols-2 sm:gap-4 gap-2 justify-items-center">
                             {tags.map((tag) => (
                                 <button
                                     key={tag.tagReviewId}
-                                    className={`px-2 py-2 sm:w-28 w-20 sm:text-md text-xs h-8 rounded-full truncate ${
+                                    className={`px-2 py-2 w-20 sm:text-md text-xs h-8 rounded-full truncate ${
                                         selectedTags.includes(tag.tagReviewId)
                                             ? "bg-blue-500 text-white"
                                             : "bg-blue-100"
@@ -165,12 +181,13 @@ const WriteReview: React.FC = () => {
                     <label htmlFor="review" className="font-bold pb-5">
                         리뷰를 작성해주세요
                     </label>
-                    <textarea
+                    <input
+                        type="text"
                         id="review"
                         value={reviewContent}
                         onChange={(e) => setReviewContent(e.target.value)}
                         className="p-4 bg-gray-100 rounded-lg w-full h-32"
-                    ></textarea>
+                    ></input>
                 </div>
                 <button
                     className="flex items-center justify-center bg-blue-500 sm:w-1/6 w-24 h-12 rounded-lg text-white"
