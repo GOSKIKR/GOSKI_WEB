@@ -7,7 +7,7 @@ const NotFound = () => {
       <div className="text-center p-6 bg-white rounded-lg shadow-lg">
         <div className="mb-6">
           <img
-            src="path/to/your/image.png"
+            src="/assets/images/penguin.png"
             alt="Not Found Penguin"
             className="mx-auto w-1/2 md:w-1/3"
             // onError={(e) => {
