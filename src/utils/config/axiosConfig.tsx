@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-const createApiClient = (isFormData?: boolean): AxiosInstance => {
+const apiClient = (isFormData?: boolean): AxiosInstance => {
   const client = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     timeout: 10000,
@@ -12,7 +12,6 @@ const createApiClient = (isFormData?: boolean): AxiosInstance => {
   // Request interceptor
   client.interceptors.request.use(
     (config) => {
-      // Add any request headers here (e.g., authorization token)
       const token = localStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -28,7 +27,6 @@ const createApiClient = (isFormData?: boolean): AxiosInstance => {
   client.interceptors.response.use(
     (response) => response,
     (error) => {
-      // Handle errors here (e.g., show notification, redirect)
       return Promise.reject(error);
     }
   );
@@ -36,4 +34,4 @@ const createApiClient = (isFormData?: boolean): AxiosInstance => {
   return client;
 };
 
-export default createApiClient;
+export default apiClient;
