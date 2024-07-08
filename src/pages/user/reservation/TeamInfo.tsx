@@ -3,24 +3,16 @@ import { useNavigate } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
 import BeforePay from "../../../components/user/BeforePay";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
+import { IoClose } from "react-icons/io5";
 
 const TeamInfo: React.FC = () => {
     const [startTime, setStartTime] = useState<string>("");
-    const [entireTime, setEntireTime] = useState<number>(0);
+    const [lessonTime, setLessonTime] = useState(0);
+    // const [lessonTimes, setLessonTimes] = useState<number[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    const handleTimeIncrement = () => {
-        if (entireTime < 10) {
-            setEntireTime((prev) => prev + 1);
-        }
-    };
-
-    const handleTimeDecrement = () => {
-        if (entireTime > 0) {
-            setEntireTime((prev) => prev - 1);
-        }
-    };
+    const lessonTimes: number[] = [1, 2, 3];
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -44,54 +36,44 @@ const TeamInfo: React.FC = () => {
                 <div className="text-xl font-extrabold">GOSKI 강습 예약</div>
             </div>
             <div className="flex flex-col sm:flex-row px-12 sm:space-x-6 space-y-6">
-                <div className="w-full sm:w-7/12 h-96 bg-primary-50 rounded-lg shadow-md">
+                <div className="w-full sm:w-7/12 h-[2400px] bg-primary-50 rounded-lg shadow-md">
                     <div className="px-6 py-6 text-lg font-bold">팀 소개</div>
                 </div>
-                <div className="flex flex-col sm:w-4/12 justify-center">
+                <div className="flex flex-col sm:w-4/12 self-start sticky top-4">
                     <div className="w-full">
                         <div className="flex items-center mb-4">
                             <label className="mb-1 mr-4 sm:w-20 w-24 font-bold">
                                 시작 시간
                             </label>
-                            <input
-                                type="time"
-                                value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                                className="flex flex-1 p-2 bg-gray-200 rounded-lg border-2 border-gray-400 h-9"
-                                step="1800" // 30 minutes
-                            />
+                            <div className="flex flex-1">
+                                <input
+                                    type="time"
+                                    value={startTime}
+                                    onChange={(e) =>
+                                        setStartTime(e.target.value)
+                                    }
+                                    className="w-full p-2 bg-white border-2 shadow-md rounded-lg h-9 text-center"
+                                    step="1800" // 30 minutes
+                                />
+                            </div>
                         </div>
                         <div className="flex items-center mb-4">
                             <label className="mb-1 mr-4 sm:w-20 w-24 font-bold">
                                 강습 시간
                             </label>
-                            <div className="flex items-center flex-1 bg-gray-200 rounded-lg border-2 border-gray-400 h-9">
-                                <button
-                                    onClick={handleTimeDecrement}
-                                    className={`h-10 w-1/3 text-2xl font-extrabold ${
-                                        entireTime === 0
-                                            ? "cursor-not-allowed opacity-50"
-                                            : ""
-                                    }`}
-                                    disabled={entireTime === 0}
-                                >
-                                    -
-                                </button>
-                                <div className="h-10 w-1/3 flex justify-center items-center flex-1">
-                                    {entireTime === 10 ? "10+" : entireTime}
-                                </div>
-                                <button
-                                    onClick={handleTimeIncrement}
-                                    className={`h-10 w-1/3 text-2xl font-extrabold ${
-                                        entireTime === 10
-                                            ? "cursor-not-allowed opacity-50"
-                                            : ""
-                                    }`}
-                                    disabled={entireTime === 10}
-                                >
-                                    +
-                                </button>
-                            </div>
+                            <select
+                                onChange={(e) =>
+                                    setLessonTime(parseInt(e.target.value))
+                                }
+                                className="px-6 bg-white border-2 shadow-md rounded-lg flex-1 h-9 text-center items-center justify-center"
+                            >
+                                <option value="">강습 시간을 선택하세요</option>
+                                {lessonTimes.map((time) => (
+                                    <option key={time} value={time}>
+                                        {`${String(time)}시간`}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                     <div className="flex flex-col px-8 py-6 space-y-3 w-full h-60 bg-primary-50 rounded-lg shadow-md items-center justify-center mb-8">
@@ -116,7 +98,7 @@ const TeamInfo: React.FC = () => {
 
                         <div
                             onClick={openModal}
-                            className="h-20 w-1/2 bg-white rounded-lg shadow-md text-black text-center flex items-center justify-center cursor-pointer"
+                            className="h-20 w-1/2 p-1 bg-white rounded-lg shadow-md text-black text-center flex items-center justify-center cursor-pointer hover:bg-slate-200"
                         >
                             예약하기
                         </div>
@@ -129,9 +111,9 @@ const TeamInfo: React.FC = () => {
                     <div className="bg-white p-6 rounded-lg shadow-lg relative sm:w-10/12 h-5/6 overflow-y-auto ">
                         <button
                             onClick={closeModal}
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                            className="absolute top-6 right-6 text-gray-500 hover:text-gray-800"
                         >
-                            &times;
+                            <IoClose size="25px" />
                         </button>
                         <BeforePay onClose={closeModal} />
                     </div>
