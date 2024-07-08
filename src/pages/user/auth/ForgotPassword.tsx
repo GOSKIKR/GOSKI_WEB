@@ -9,6 +9,7 @@ const ForgotPassword = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isFindId, setIsFindId] = useState(true);
   const [isEmailOrPhone, setIsEmailOrPhone] = useState(true); // true for email, false for phone
+  const [userOrInstructor, setUserOrInstructor] = useState(true); // true for user, false for instructor
 
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
@@ -62,9 +63,10 @@ const ForgotPassword = () => {
                     onClick={() => {
                       setIsFindId(true);
                       setIsAuthenticated(false);
+                      setUserOrInstructor(true);
                     }}
                     className={`w-32 bg-gradient-to-r px-6 py-2 rounded-full font-bold text-white shadow-md transition-all duration-300 ease-in-out ${
-                      isFindId
+                      userOrInstructor
                         ? "from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
                         : "from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
                     }`}
@@ -75,9 +77,10 @@ const ForgotPassword = () => {
                     onClick={() => {
                       setIsFindId(true);
                       setIsAuthenticated(false);
+                      setUserOrInstructor(false);
                     }}
                     className={`w-32 bg-gradient-to-r px-6 py-2 rounded-full font-bold text-white shadow-md transition-all duration-300 ease-in-out ${
-                      isFindId
+                      !userOrInstructor
                         ? "from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
                         : "from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
                     }`}
@@ -171,9 +174,13 @@ const ForgotPassword = () => {
                 <div className="mb-2">회원 유형</div>
                 <div className="flex justify-around mb-4">
                   <button
-                    onClick={handleAuthentication}
+                    onClick={() => {
+                      setIsFindId(false);
+                      setIsAuthenticated(false);
+                      setUserOrInstructor(true);
+                    }}
                     className={`w-32 bg-gradient-to-r px-6 py-2 rounded-full font-bold text-white shadow-md transition-all duration-300 ease-in-out ${
-                      isFindId
+                      userOrInstructor
                         ? "from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
                         : "from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
                     }`}
@@ -181,9 +188,13 @@ const ForgotPassword = () => {
                     사용자
                   </button>
                   <button
-                    onClick={handleAuthentication}
+                    onClick={() => {
+                      setIsFindId(false);
+                      setIsAuthenticated(false);
+                      setUserOrInstructor(false);
+                    }}
                     className={`w-32 bg-gradient-to-r px-6 py-2 rounded-full font-bold text-white shadow-md transition-all duration-300 ease-in-out ${
-                      isFindId
+                      !userOrInstructor
                         ? "from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
                         : "from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
                     }`}

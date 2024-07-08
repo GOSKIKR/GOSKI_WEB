@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
+
 const apiClient = (isFormData?: boolean): AxiosInstance => {
   const client = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -8,6 +9,7 @@ const apiClient = (isFormData?: boolean): AxiosInstance => {
       "Content-Type": !isFormData ? "application/json;charset=utf-8" : "multipart/form-data",
     },
   });
+
 
   // Request interceptor
   client.interceptors.request.use(
