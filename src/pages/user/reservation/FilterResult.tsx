@@ -1,645 +1,74 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
-import { FaPersonSnowboarding } from "react-icons/fa6";
-import { FaSkiing } from "react-icons/fa";
-import { IoIosSearch } from "react-icons/io";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import { FaCalendarAlt } from "react-icons/fa";
-import { FaStar } from "react-icons/fa";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
-
-interface CertificateInfo {
-    certificateId: number;
-    certificateName: string;
-    certificateType: string;
-    certificateImageUrl: string;
-}
-interface Review {
-    reviewId: number;
-    rating: number;
-    content: string;
-    createdAt: string; // Assuming LocalDateTime is represented as a string
-    instructorTags: {
-        tagReviewId: number;
-        tagName: string;
-    }[];
-}
-interface Instructor {
-    instructorId: number;
-    userName: string;
-    teamId: number;
-    teamName: string;
-    position: number;
-    description: string;
-    instructorUrl: string;
-    gender: string;
-    certificateInfo: CertificateInfo[];
-    rating: number;
-    reviewCount: number;
-    cost: number;
-    basicFee: number;
-    peopleOptionFee: number;
-    designatedFee: number;
-    levelOptionFee: number;
-    lessonType: string;
-    reviews: Review[];
-}
-
-interface Team {
-    teamId: number;
-    teamName: string;
-    description: string;
-    teamProfileUrl: string;
-    rating: number;
-    instructors: number[];
-    teamImages: {
-        teamImageId: number;
-        imageUrl: string;
-    }[];
-    cost: number;
-    basicFee: number;
-    peopleOptionFee: number;
-    designatedFee: number;
-    levelOptionFee: number;
-    lessonType: string;
-    reviewCount: number;
-    reviews: {
-        reviewId: number;
-        rating: number;
-        content: string;
-        createdAt: string; // Assuming LocalDateTime is represented as a string
-        instructorTags: {
-            tagReviewId: number;
-            tagName: string;
-        }[];
-    }[];
-}
-
-const dummyTeamData: Team[] = [
-    {
-        teamId: 1,
-        teamName: "Team A",
-        description:
-            "팀 소개가 들어가는 부분1\n팀 소개가 들어가는 부분2\n팀 소개가 들어가는 부분3",
-        teamProfileUrl: "https://example.com/teamA-profile.jpg",
-        rating: 3.5,
-        instructors: [1, 2],
-        teamImages: [
-            {
-                teamImageId: 1,
-                imageUrl: "https://example.com/teamA-image1.jpg",
-            },
-            {
-                teamImageId: 2,
-                imageUrl: "https://example.com/teamA-image2.jpg",
-            },
-        ],
-        cost: 100000,
-        basicFee: 30000,
-        peopleOptionFee: 10000,
-        designatedFee: 5000,
-        levelOptionFee: 5000,
-        lessonType: "Ski",
-        reviewCount: 30,
-        reviews: [
-            {
-                reviewId: 1,
-                rating: 4,
-                content: "Great team with experienced instructors.",
-                createdAt: "2024-06-15T14:30:00", // Example date/time in ISO format
-                instructorTags: [
-                    {
-                        tagReviewId: 101,
-                        tagName: "Experienced",
-                    },
-                    {
-                        tagReviewId: 102,
-                        tagName: "Friendly",
-                    },
-                ],
-            },
-            {
-                reviewId: 2,
-                rating: 5,
-                content: "Fantastic lessons, highly recommend!",
-                createdAt: "2024-06-16T10:00:00",
-                instructorTags: [
-                    {
-                        tagReviewId: 103,
-                        tagName: "Patient",
-                    },
-                    {
-                        tagReviewId: 104,
-                        tagName: "Knowledgeable",
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        teamId: 2,
-        teamName: "Team B",
-        description:
-            "팀 소개가 들어가는 부분1\n팀 소개가 들어가는 부분2\n팀 소개가 들어가는 부분3",
-        teamProfileUrl: "https://example.com/teamB-profile.jpg",
-        rating: 4,
-        instructors: [3],
-        teamImages: [
-            {
-                teamImageId: 3,
-                imageUrl: "https://example.com/teamB-image1.jpg",
-            },
-            {
-                teamImageId: 4,
-                imageUrl: "https://example.com/teamB-image2.jpg",
-            },
-        ],
-        cost: 100000,
-        basicFee: 35000,
-        peopleOptionFee: 15000,
-        designatedFee: 7000,
-        levelOptionFee: 5000,
-        lessonType: "Snowboard",
-        reviewCount: 30,
-        reviews: [
-            {
-                reviewId: 3,
-                rating: 4,
-                content: "Good instructors and well-organized lessons.",
-                createdAt: "2024-06-17T09:30:00",
-                instructorTags: [
-                    {
-                        tagReviewId: 105,
-                        tagName: "Organized",
-                    },
-                    {
-                        tagReviewId: 106,
-                        tagName: "Enthusiastic",
-                    },
-                ],
-            },
-            {
-                reviewId: 4,
-                rating: 3,
-                content: "Decent lessons but room for improvement.",
-                createdAt: "2024-06-18T15:00:00",
-                instructorTags: [
-                    {
-                        tagReviewId: 107,
-                        tagName: "Helpful",
-                    },
-                    {
-                        tagReviewId: 108,
-                        tagName: "Informative",
-                    },
-                ],
-            },
-        ],
-    },
-    // Add more dummy data entries as needed
-];
-
-const dummyInstructorData: Instructor[] = [
-    {
-        instructorId: 1,
-        userName: "Instructor A",
-        teamId: 1,
-        teamName: "Team A",
-        position: 1,
-        description: "강사 레벨",
-        instructorUrl: "https://example.com/instructorA-profile.jpg",
-        gender: "Male",
-        certificateInfo: [
-            {
-                certificateId: 1,
-                certificateName: "Ski Instructor Level 1",
-                certificateType: "Ski",
-                certificateImageUrl: "https://example.com/certificate1.jpg",
-            },
-        ],
-        rating: 3.5,
-        reviewCount: 30,
-        cost: 100000,
-        basicFee: 30000,
-        peopleOptionFee: 10000,
-        designatedFee: 5000,
-        levelOptionFee: 5000,
-        lessonType: "Ski",
-        reviews: [
-            {
-                reviewId: 1,
-                rating: 4,
-                content: "Great instructor with a lot of patience.",
-                createdAt: "2024-06-15T14:30:00",
-                instructorTags: [
-                    {
-                        tagReviewId: 101,
-                        tagName: "Patient",
-                    },
-                    {
-                        tagReviewId: 102,
-                        tagName: "Friendly",
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        instructorId: 2,
-        userName: "Instructor B",
-        teamId: 1,
-        teamName: "Team A",
-        position: 2,
-        description: "Experienced snowboard instructor",
-        instructorUrl: "https://example.com/instructorB-profile.jpg",
-        gender: "Female",
-        certificateInfo: [
-            {
-                certificateId: 2,
-                certificateName: "Snowboard Instructor Level 2",
-                certificateType: "Snowboard",
-                certificateImageUrl: "https://example.com/certificate2.jpg",
-            },
-        ],
-        rating: 3.5,
-        reviewCount: 30,
-        cost: 100000,
-        basicFee: 35000,
-        peopleOptionFee: 15000,
-        designatedFee: 7000,
-        levelOptionFee: 5000,
-        lessonType: "Snowboard",
-        reviews: [
-            {
-                reviewId: 2,
-                rating: 5,
-                content: "Fantastic instructor!",
-                createdAt: "2024-06-16T10:00:00",
-                instructorTags: [
-                    {
-                        tagReviewId: 103,
-                        tagName: "Experienced",
-                    },
-                    {
-                        tagReviewId: 104,
-                        tagName: "Knowledgeable",
-                    },
-                ],
-            },
-        ],
-    },
-    // Add more dummy instructor entries as needed
-];
+import FilterComponent from "./FilterComponent";
+import TeamResultComponent from "./TeamResultComponent";
+import InstructorResultComponent from "./InstructorResultComponent";
+import dummyData from "./FilterDummyData";
+import ResultComponent from "./ResultComponent";
 
 const FilterResult: React.FC = () => {
-    const navigate = useNavigate();
-    const filterState = useLocation().state as {
-        type: string;
-        location: string;
-        participant: number;
-        dateRange: [Date, Date] | null;
-        startTime: string;
-        entireTime: number;
-        level: number;
-    };
-    const [type, setType] = useState(filterState.type);
-    const [location, setLocation] = useState(filterState.location);
-    const [participant, setParticipant] = useState(filterState.participant);
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    const [startTime, setStartTime] = useState(filterState.startTime);
-    const [entireTime, setEntireTime] = useState(filterState.entireTime);
-    const [level, setLevel] = useState(filterState.level);
-    const [calendarOpen, setCalendarOpen] = useState(false);
+  const navigate = useNavigate();
+  const filterState = useLocation().state as {
+    type: string;
+    location: string;
+    participant: number;
+    dateRange: [Date, Date] | null;
+    startTime: string;
+    entireTime: number;
+    level: number;
+  };
 
-    const [filteredData, setFilteredData] = useState(
-        level === 1 ? dummyTeamData : dummyInstructorData
-    );
+  const [type, setType] = useState(filterState.type);
+  const [location, setLocation] = useState(filterState.location);
+  const [participant, setParticipant] = useState(filterState.participant);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [startTime, setStartTime] = useState(filterState.startTime);
+  const [entireTime, setEntireTime] = useState(filterState.entireTime);
+  const [level, setLevel] = useState(filterState.level);
+  const [filteredData, setFilteredData] = useState(
+    level === 1 ? dummyData.teams : dummyData.instructors
+  );
+  const [isSearchClicked, setIsSearchClicked] = useState(false);
 
-    const handleTimeIncrement = () => {
-        if (entireTime < 10) {
-            setEntireTime((prev) => prev + 1);
-        }
-    };
+  const applyFilter = () => {
+    const newFilteredData =
+      level === 1 ? dummyData.teams : dummyData.instructors;
+    setFilteredData(newFilteredData);
+  };
 
-    const handleTimeDecrement = () => {
-        if (entireTime > 0) {
-            setEntireTime((prev) => prev - 1);
-        }
-    };
+  const goToTeamDetail = () => {
+    navigate("/reserve/info/team");
+  };
 
-    const toggleCalendar = () => {
-        setCalendarOpen(!calendarOpen);
-    };
+  const goToInstructorDetail = () => {
+    navigate("/reserve/info/instructor");
+  };
 
-    const generateTimeSlots = () => {
-        const slots = [];
-        for (let i = 0; i < 24; i++) {
-            slots.push(`${i.toString().padStart(2, "0")}:00`);
-            slots.push(`${i.toString().padStart(2, "0")}:30`);
-        }
-        return slots;
-    };
+  const handleSearch = () => {
+    setIsSearchClicked(true);
+  };
 
-    const timeSlots = generateTimeSlots();
-
-    const today = new Date();
-
-    const applyFilter = () => {
-        const newFilteredData =
-            level === 1 ? dummyTeamData : dummyInstructorData;
-        setFilteredData(newFilteredData);
-    };
-
-    const goToTeamDetail = () => {
-        navigate("/reserve/info/team");
-    };
-
-    const goToInstructorDetail = () => {
-        navigate("/reserve/info/instructor");
-    };
-
-    return (
-        <div>
-            <div className="w-full">
-                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
-            </div>
-            <div className="flex flex-col w-full h-full items-center">
-                {/* 필터 */}
-                <div className="w-full flex flex-col items-center justify-center space-y-3">
-                    <div className="flex flex-row pt-16 w-full justify-center space-x-5 sm:px-3">
-                        <div
-                            className={`flex flex-row ${
-                                type === "스키"
-                                    ? "bg-primary-600"
-                                    : "bg-gray-200"
-                            } w-2/5 sm:h-14 h-10 rounded-lg items-center place-content-between cursor-pointer`}
-                            onClick={() => setType("스키")}
-                        >
-                            <FaSkiing
-                                color={type === "스키" ? "white" : "black"}
-                                size="30"
-                                className="w-1/6"
-                            />
-                            <div
-                                className={`text-base font-bold text-center w-2/3 ${
-                                    type === "스키"
-                                        ? "text-white"
-                                        : "text-gray-700"
-                                }`}
-                            >
-                                스키
-                            </div>
-                        </div>
-                        <div
-                            className={`flex flex-row ${
-                                type === "보드"
-                                    ? "bg-primary-600"
-                                    : "bg-gray-200"
-                            } w-2/5 sm:h-14 h-10 rounded-lg items-center place-content-between cursor-pointer`}
-                            onClick={() => setType("보드")}
-                        >
-                            <div
-                                className={`text-base font-bold text-center w-2/3 ${
-                                    type === "보드"
-                                        ? "text-white"
-                                        : "text-gray-700"
-                                }`}
-                            >
-                                보드
-                            </div>
-                            <FaPersonSnowboarding
-                                color={type === "보드" ? "white" : "black"}
-                                size="35"
-                                className="w-1/6 -scale-x-100"
-                            />
-                        </div>
-                    </div>
-
-                    {/* 하단 필터 */}
-                    <div className="flex flex-col sm:flex-row sm:flex-wrap bg-primary-50 rounded-lg shadow-md w-11/12 sm:mx-5 justify-between">
-                        <div className="flex flex-col sm:flex-row w-full justify-between sm:justify-center py-5 px-3 space-y-4 sm:space-y-0">
-                            <div className="flex flex-row ">
-                                {/* 장소 */}
-                                <div className="flex flex-row w-32 justify-center items-center">
-                                    <div className="flex sm:text-sm text-xs w-1/3">
-                                        장소 *
-                                    </div>
-                                    <select
-                                        value={location}
-                                        onChange={(e) =>
-                                            setLocation(e.target.value)
-                                        }
-                                        className="flex sm:text-sm text-xs sm:w-2/3 w-7/12 px-0.5 py-1 rounded shadow-md"
-                                    >
-                                        {["a스키장", "b스키장", "c스키장"].map(
-                                            (loc, index) => (
-                                                <option key={index} value={loc}>
-                                                    {loc}
-                                                </option>
-                                            )
-                                        )}
-                                    </select>
-                                </div>
-                                {/* 강습인원 */}
-                                <div className="flex flex-row w-32 justify-center items-center">
-                                    <div className="flex sm:text-sm text-xs w-1/3">
-                                        인원 *
-                                    </div>
-                                    <div className="flex flex-row items-center space-x-3">
-                                        <select
-                                            value={participant}
-                                            onChange={(e) =>
-                                                setParticipant(
-                                                    parseInt(e.target.value)
-                                                )
-                                            }
-                                            className="flex sm:text-sm text-xs w-2/3 px-0.5 py-1 rounded shadow-md"
-                                        >
-                                            <option value="1">1명</option>
-                                            <option value="2">2명</option>
-                                            <option value="3">3명</option>
-                                            <option value="4">4명</option>
-                                            <option value="5">5명</option>
-                                            <option value="6">6명</option>
-                                            <option value="7">7명</option>
-                                            <option value="8">8명</option>
-                                            <option value="9">9명</option>
-                                            <option value="10">
-                                                10명 이상
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                {/* 난이도 */}
-                                <div className="flex flex-row w-32 justify-center items-center">
-                                    <div className="flex sm:text-sm text-xs w-5/12">
-                                        난이도 *
-                                    </div>
-                                    <div className="flex flex-row w-2/3 items-center">
-                                        <select
-                                            value={level}
-                                            onChange={(e) =>
-                                                setLevel(
-                                                    parseInt(e.target.value)
-                                                )
-                                            }
-                                            className="flex sm:text-sm text-xs px-0.5 py-1 rounded shadow-md"
-                                        >
-                                            <option value="1">초급</option>
-                                            <option value="2">중급</option>
-                                            <option value="3">고급</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex flex-row">
-                                {/* 일정 선택 */}
-                                <div className="flex flex-row sm:w-40 w-32 items-center">
-                                    <div className="flex sm:text-sm text-xs w-1/3">
-                                        날짜 *
-                                    </div>
-                                    <div className="flex flex-row items-center w-3/4">
-                                        <button
-                                            onClick={toggleCalendar}
-                                            className="flex sm:text-sm text-xs w-1/8 px-0.5 py-1 rounded shadow-md bg-white"
-                                        >
-                                            <FaCalendarAlt />
-                                        </button>
-                                        {selectedDate && (
-                                            <div className="ml-2 w-2/3 sm:text-sm text-xs">
-                                                {selectedDate.toLocaleDateString()}
-                                            </div>
-                                        )}
-                                    </div>
-                                    {calendarOpen && (
-                                        <div className="absolute mt-2">
-                                            <Calendar
-                                                onChange={(value) => {
-                                                    setSelectedDate(
-                                                        value as Date
-                                                    );
-                                                    setCalendarOpen(false);
-                                                }}
-                                                className="border border-gray-300 rounded shadow-lg"
-                                                minDate={today}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                                {/* 시작 시간 */}
-                                <div className="flex flex-row sm:w-40 justify-center items-center">
-                                    <div className="flex sm:text-sm text-xs sm:w-[60px] w-[48px]">
-                                        시작 시간
-                                    </div>
-                                    <div className="flex sm:w-[100px] w-[60px]">
-                                        <input
-                                            type="time"
-                                            value={startTime}
-                                            onChange={(e) =>
-                                                setStartTime(e.target.value)
-                                            }
-                                            className="flex sm:text-sm text-xs px-1 py-1 rounded shadow-md"
-                                            step="1800" // 30 minutes
-                                        />
-                                    </div>
-                                </div>
-                                {/* 강습인원 */}
-                                <div className="flex flex-row w-40 justify-center items-center">
-                                    <div className="flex sm:text-sm text-xs w-[70px]">
-                                        강습 시간 *
-                                    </div>
-                                    <div className="flex flex-row items-center space-x-3">
-                                        <select
-                                            value={entireTime}
-                                            onChange={(e) =>
-                                                setEntireTime(
-                                                    parseInt(e.target.value)
-                                                )
-                                            }
-                                            className="flex sm:text-sm text-xs w-2/3 px-0.5 py-1 rounded shadow-md"
-                                        >
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10+</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div
-                                onClick={applyFilter}
-                                className="flex flex-col sm:w-8 justify-center items-center cursor-pointer"
-                            >
-                                <IoIosSearch size="20" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex flex-col space-y-8 pt-4 w-11/12 items-center">
-                    {filteredData.map((data, index) =>
-                        level === 1 ? (
-                            <div className="flex flex-col space-y-8 pt-12 w-11/12 items-center">
-                                <div
-                                    onClick={goToTeamDetail}
-                                    key={index}
-                                    className="flex flex-row sm:w-full sm:h-32 h-28 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
-                                >
-                                    <div className="h-24 w-24 bg-gray-300 rounded-md flex justify-center items-center">
-                                        팀/개인 사진
-                                    </div>
-                                    <div className="flex flex-col space-y-1 pl-10 justify-center w-3/5">
-                                        <div className="sm:text-lg text-base font-bold">
-                                            {data.teamName}
-                                        </div>
-                                        <div className="sm:text-sm text-xs text-gray-600 whitespace-pre-line">
-                                            {data.description}
-                                        </div>
-                                        <div className="flex flex-row items-center mt-2">
-                                            <FaStar color="#FEFD48" />
-                                            <div className="ml-2 text-sm text-gray-600">
-                                                {data.rating}
-                                            </div>
-                                            <div className="text-sm text-gray-600">
-                                                ({data.reviewCount})
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col justify-center w-1/4 items-end">
-                                        <div className="sm:text-lg text-sm font-bold">
-                                            {data.cost}원~
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <div
-                                onClick={goToInstructorDetail}
-                                key={index}
-                                className="flex flex-col sm:w-72 w-60 sm:h-60 h-80 rounded-lg shadow-md bg-primary-50 cursor-pointer items-center p-4"
-                            >
-                                <div className="h-24 w-full rounded-md bg-gray-300" />
-                                <div className="flex flex-col justify-center items-center mt-4">
-                                    <div className="text-lg">강사 이름</div>
-                                    <div>한줄소개</div>
-                                    <div className="mt-2">{data.cost}원~</div>
-                                </div>
-                            </div>
-                        )
-                    )}
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <div className="flex flex-col w-full">
+        {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+      </div>
+      <div className="flex flex-col w-full h-full items-center">
+        <FilterComponent
+          applyFilter={applyFilter}
+          isSearchClicked={handleSearch}
+        />
+        <ResultComponent
+          filteredData={filteredData}
+          level={level}
+          goToTeamDetail={goToTeamDetail}
+          goToInstructorDetail={goToInstructorDetail}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default FilterResult;
