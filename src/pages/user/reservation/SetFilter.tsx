@@ -5,54 +5,35 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../../../../public/assets/css/calendar.css";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
-import apiClient from "../../../utils/config/axiosConfig";
-
-interface Resort {
-    resortId: number;
-    resortName: string;
-    resortLocation: string;
-    latitude: number;
-    longitude: number;
-    lessonTime: number[];
-}
+import { ResortService } from "../../../api/ResortService";
+import { ResortDTO } from "../../../dto/ResortDTO";
+import { LessonReserveService } from "../../../api/LessonReserveService";
+import { ReserveDTO } from "../../../dto/ReserveDTO";
 
 const SetFilter: React.FC = () => {
     const navigate = useNavigate();
-    const [type, setType] = useState("스키");
-    const types = ["스키", "보드"];
+    const [type, setType] = useState("SKI");
+    const types = ["SKI", "BOARD"];
     const [location, setLocation] = useState("");
-    const [locations, setLocations] = useState<Resort[]>([]);
+    const [locations, setLocations] = useState<ResortDTO[]>([]);
     const [participant, setParticipant] = useState(0);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [startTime, setStartTime] = useState("");
-
+    const [formattedStartTime, setFormattedStartTime] = useState("");
     const [level, setLevel] = useState(1);
     const [lessonTime, setLessonTime] = useState(0);
     const [lessonTimes, setLessonTimes] = useState<number[]>([]);
 
-    //페이지 처음 들어올때 스키장 목록 가져오기
+    // 페이지 처음 들어올 때 스키장 목록 가져오기
     useEffect(() => {
-        // 컴포넌트가 마운트될 때 API 호출
         const fetchResorts = async () => {
-            try {
-                const response = await apiClient().get("/common/resort");
-                const resorts: Resort[] = response.data.data.map(
-                    (resort: any) => ({
-                        resortId: resort.resortId,
-                        resortName: resort.resortName,
-                        resortLocation: resort.resortLocation,
-                        latitude: resort.latitude,
-                        longitude: resort.longitude,
-                        lessonTime: resort.lessonTime,
-                    })
-                );
+            const resortService = new ResortService();
+            const resorts = await resortService.getResortInformation();
+            if (resorts) {
                 setLocations(resorts);
                 setLessonTimes(resorts[0] ? resorts[0].lessonTime : []);
-            } catch (error) {
-                console.error("Failed to fetch resorts:", error);
             }
         };
-
         fetchResorts();
     }, []);
 
@@ -62,22 +43,74 @@ const SetFilter: React.FC = () => {
         );
         setLocation(e.target.value);
         setLessonTimes(selectedResort ? selectedResort.lessonTime : []);
-
-        console.log(lessonTimes);
     };
 
-    const goToResult = () => {
-        navigate("/reserve/result", {
-            state: {
-                type,
-                location,
-                participant,
-                selectedDate,
-                startTime,
-                lessonTime,
-                level,
-            },
-        });
+    const goToResult = async () => {
+        if (!type) {
+            alert("종류를 선택해주세요.");
+            return;
+        }
+        if (!location) {
+            alert("장소를 선택해주세요.");
+            return;
+        }
+        if (participant === 0) {
+            alert("강습인원을 선택해주세요.");
+            return;
+        }
+        if (!selectedDate) {
+            alert("일정을 선택해주세요.");
+            return;
+        }
+        if (!startTime) {
+            alert("시작 시간을 입력해주세요.");
+            return;
+        }
+        if (lessonTime === 0) {
+            alert("강습 시간을 선택해주세요.");
+            return;
+        }
+        if (level === 0) {
+            alert("레벨을 선택해주세요.");
+            return;
+        }
+        const selectedResort = locations.find(
+            (resort) => resort.resortName === location
+        );
+        if (!selectedResort) {
+            alert("유효한 장소를 선택해주세요.");
+            return;
+        }
+
+        // const ReserveDTO: ReserveDTO = {
+        //     resortId: selectedResort.resortId,
+        //     studentCount: participant,
+        //     lessonType: type,
+        //     lessonDate: selectedDate.toISOString().split("T")[0], // YYYY-MM-DD 형식
+        //     startTime: formattedStartTime,
+        //     duration: lessonTime,
+        // };
+
+        // const reserveService = new LessonReserveService();
+
+        // try {
+        //     console.log(ReserveDTO);
+        //     const response = await reserveService.reserveLesson(ReserveDTO);
+        //     console.log("Reservation successful:", response);
+        //     navigate("/reserve/result", {
+        //         state: {
+        //             type,
+        //             location,
+        //             participant,
+        //             selectedDate,
+        //             startTime: formattedStartTime,
+        //             lessonTime,
+        //             level,
+        //         },
+        //     });
+        // } catch (error) {
+        //     alert("강습 예약에 실패했습니다.");
+        // }
     };
 
     const handleParticipantIncrement = () => {
@@ -107,6 +140,16 @@ const SetFilter: React.FC = () => {
 
     const today = new Date();
 
+    const formatTime = (time: string) => {
+        return time.replace(":", "");
+    };
+
+    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const time = e.target.value;
+        setStartTime(time);
+        setFormattedStartTime(formatTime(time));
+    };
+
     return (
         <div className="min-h-screen flex flex-col">
             <div className="w-full">
@@ -124,26 +167,26 @@ const SetFilter: React.FC = () => {
                 <div className="p-6 w-[380px] sm:w-1/2 bg-primary-50 rounded-lg shadow-md space-y-6 mb-8">
                     <div className="flex items-center mb-4">
                         <label className="mb-1 mr-4 sm:w-28 text-center w-24 font-bold">
-                            종류 *
+                            종류
                         </label>
                         <div className="flex flex-1 rounded-lg shadow-md">
                             <button
-                                className={`flex-1 h-9 rounded-l-lg  ${
-                                    type === "스키"
+                                className={`flex-1 h-9 rounded-l-lg ${
+                                    type === "SKI"
                                         ? "bg-primary-500 text-white"
                                         : "bg-gray-100"
                                 }`}
-                                onClick={() => setType("스키")}
+                                onClick={() => setType("SKI")}
                             >
                                 스키
                             </button>
                             <button
                                 className={`flex-1 h-9 rounded-r-lg ${
-                                    type === "보드"
-                                        ? "bg-gray-700 text-white"
-                                        : "bg-white"
+                                    type === "BOARD"
+                                        ? "bg-primary-500 text-white"
+                                        : "bg-gray-100"
                                 }`}
-                                onClick={() => setType("보드")}
+                                onClick={() => setType("BOARD")}
                             >
                                 보드
                             </button>
@@ -151,13 +194,14 @@ const SetFilter: React.FC = () => {
                     </div>
                     <div className="flex items-center mb-4">
                         <label className="mb-1 mr-4 sm:w-28 text-center w-24 font-bold">
-                            장소 *
+                            장소
                         </label>
                         <select
                             value={location}
                             onChange={handleLocationChange}
                             className="px-6 bg-white rounded-lg shadow-md flex-1 h-9"
                         >
+                            <option value="">장소를 선택하세요</option>
                             {locations.map((loc) => (
                                 <option
                                     key={loc.resortId}
@@ -170,7 +214,7 @@ const SetFilter: React.FC = () => {
                     </div>
                     <div className="flex items-center mb-4">
                         <label className="mb-1 mr-4 sm:w-28 text-center w-24 font-bold">
-                            강습인원 *
+                            강습인원
                         </label>
                         <div className="flex items-center flex-1 bg-white rounded-lg shadow-md h-9">
                             <button
@@ -185,16 +229,16 @@ const SetFilter: React.FC = () => {
                                 -
                             </button>
                             <div className="h-9 w-1/3 flex justify-center items-center flex-1">
-                                {participant === 8 ? "8" : participant}
+                                {participant}
                             </div>
                             <button
                                 onClick={handleParticipantIncrement}
                                 className={`h-9 w-1/3 text-2xl font-extrabold ${
-                                    participant === 8
+                                    participant === 10
                                         ? "cursor-not-allowed opacity-50"
                                         : ""
                                 }`}
-                                disabled={participant === 8}
+                                disabled={participant === 10}
                             >
                                 +
                             </button>
@@ -202,7 +246,7 @@ const SetFilter: React.FC = () => {
                     </div>
                     <div className="flex items-center mb-4">
                         <label className="mb-1 mr-4 sm:w-28 text-center w-24 font-bold">
-                            일정 선택 *
+                            일정 선택
                         </label>
                         <div className="flex flex-col items-center flex-1 space-y-3">
                             <div>
@@ -224,7 +268,7 @@ const SetFilter: React.FC = () => {
                             <input
                                 type="time"
                                 value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
+                                onChange={handleTimeChange}
                                 className="w-full p-2 bg-white shadow-md rounded-lg h-9 text-center"
                                 step="1800" // 30 minutes
                             />
@@ -236,7 +280,7 @@ const SetFilter: React.FC = () => {
                         </label>
                         <select
                             onChange={(e) =>
-                                setLessonTimes([parseInt(e.target.value)])
+                                setLessonTime(parseInt(e.target.value))
                             }
                             className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
                         >
@@ -250,7 +294,7 @@ const SetFilter: React.FC = () => {
                     </div>
                     <div className="flex items-center mb-4">
                         <label className="mb-1 mr-4 sm:w-28 text-center w-24 font-bold">
-                            레벨 선택 *
+                            레벨 선택
                         </label>
                         <div className="flex flex-1 shadow-md rounded-lg">
                             <button
