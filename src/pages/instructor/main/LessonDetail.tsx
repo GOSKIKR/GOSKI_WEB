@@ -118,7 +118,7 @@ const LessonDetail = () => {
                                     `${lessonDate}T${startTime}`
                                 ).getTime() +
                                     duration * 60 * 60 * 1000
-                            ).toLocaleTimeString("ko-KR", {
+                            ).toLocaleTimeString("en-US", {
                                 hour: "2-digit",
                                 minute: "2-digit",
                             })}`}</p>
