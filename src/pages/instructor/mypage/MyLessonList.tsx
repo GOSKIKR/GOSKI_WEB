@@ -1,20 +1,31 @@
 import React,{useState, useEffect} from "react";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import LessonSection from "../../../components/instructor/mypage/LessonSection";
-import { dummyInstructorLessonData } from "../../../dto/InstructorLessonInfoDTO";
+import { InstructorLessonInfoDTO } from "../../../dto/InstructorLessonInfoDTO";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
+import { LessonService } from "../../../api/LessonService";
+
+const lessonService = new LessonService();
 
 const MyLessonList: React.FC = () => {
     const[innerWidth,setInnerWidth] = useState(window.innerWidth);
+    const[lessons, setLessons] = useState<InstructorLessonInfoDTO[]>([]);
 
     const handleResize = () => {
         setInnerWidth(window.innerWidth);
     }
 
+    const fetchLessons = async () => {
+        const data = await lessonService.getInstructorLessonList();
+        if(data) setLessons(data);
+    }
+
     useEffect(() => {
+        fetchLessons();
+
         window.addEventListener("resize",handleResize);
         return(() => window.removeEventListener("resize",handleResize))
-    })
+    },[])
 
     return (
         <div>
@@ -26,15 +37,15 @@ const MyLessonList: React.FC = () => {
                 <div className="bg-primary-50 w-[350px] sm:w-[1000px] rounded p-8">
                     <LessonSection
                         title="진행 예정"
-                        lessons={dummyInstructorLessonData.filter(lesson => lesson.lessonStatus === "notStart")}
+                        lessons={lessons.filter(lesson => lesson.lessonStatus === "notStart")}
                     />
                     <LessonSection
                         title="피드백 미작성"
-                        lessons={dummyInstructorLessonData.filter(lesson => lesson.lessonStatus === "lessonFinished")}
+                        lessons={lessons.filter(lesson => lesson.lessonStatus === "lessonFinished")}
                     />
                     <LessonSection
                         title="피드백 작성"
-                        lessons={dummyInstructorLessonData.filter(lesson => lesson.lessonStatus === "yesFeedback")}
+                        lessons={lessons.filter(lesson => lesson.lessonStatus === "yesFeedback")}
                     />
                 </div>
             </div>

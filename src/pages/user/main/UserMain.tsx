@@ -44,8 +44,10 @@ const UserMain: React.FC = () => {
       <div className="w-full">
         <ADCarousel />
       </div>
-      <div className="flex flex-col gap-6 w-4/5 self-center mt-10 mb-16">
+      <div className=" w-full bg-primary-50 rounded-lg shadow-lg p-8">
         <ReservationBox />
+      </div>
+      <div className="w-full">
         <TeamAD />
       </div>
       <Footer />

@@ -3,30 +3,24 @@ import { useLocation, useNavigate } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 import FilterComponent from "./FilterComponent";
-import TeamResultComponent from "./TeamResultComponent";
-import InstructorResultComponent from "./InstructorResultComponent";
 import dummyData from "./FilterDummyData";
 import ResultComponent from "./ResultComponent";
 
+import useStore from "../../../store/store";
+
 const FilterResult: React.FC = () => {
   const navigate = useNavigate();
-  const filterState = useLocation().state as {
-    type: string;
-    location: string;
-    participant: number;
-    dateRange: [Date, Date] | null;
-    startTime: string;
-    entireTime: number;
-    level: number;
-  };
 
-  const [type, setType] = useState(filterState.type);
-  const [location, setLocation] = useState(filterState.location);
-  const [participant, setParticipant] = useState(filterState.participant);
+  const { type, location, participants, date, startTime, duration, level } =
+    useStore();
+
+  const [selectedType, setType] = useState(type);
+  const [selectedLocation, setLocation] = useState(location);
+  const [participant, setParticipant] = useState(participants);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [startTime, setStartTime] = useState(filterState.startTime);
-  const [entireTime, setEntireTime] = useState(filterState.entireTime);
-  const [level, setLevel] = useState(filterState.level);
+  const [selectedStartTime, setStartTime] = useState(startTime);
+  const [entireTime, setEntireTime] = useState(duration);
+  const [selectedLevel, setLevel] = useState(level);
   const [filteredData, setFilteredData] = useState(
     level === 1 ? dummyData.teams : dummyData.instructors
   );

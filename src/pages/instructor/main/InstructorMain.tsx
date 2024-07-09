@@ -332,11 +332,21 @@ const InstructorMain = () => {
                 <div className="bg-primary-50 flex flex-col sm:mx-12 mx-8 rounded-lg py-8 px-4">
                     {/* 팀 선택 버튼 */}
                     <div className="flex sm:space-x-4 justify-between sm:px-20 mb-4 sm:mb-8">
+                        <button
+                            onClick={() => setSelectedTeam(null)}
+                            className={`sm:w-52 w-16 h-10 ${
+                                selectedTeam === null
+                                    ? "bg-primary-700 text-white"
+                                    : "bg-white text-black"
+                            } text-sm sm:text-lg rounded-lg flex items-center justify-center`}
+                        >
+                            내 스케줄
+                        </button>
                         {dummyTeamData.map((team) => (
                             <button
                                 key={team.teamId}
                                 onClick={() => setSelectedTeam(team.teamId)}
-                                className={`sm:w-32 w-16 h-10 ${
+                                className={`sm:w-52 w-16 h-10 ${
                                     selectedTeam === team.teamId
                                         ? "bg-primary-700 text-white"
                                         : "bg-white text-black"
@@ -345,16 +355,6 @@ const InstructorMain = () => {
                                 {team.teamName}
                             </button>
                         ))}
-                        <button
-                            onClick={() => setSelectedTeam(null)}
-                            className={`sm:w-32 w-16 h-10 ${
-                                selectedTeam === null
-                                    ? "bg-primary-700 text-white"
-                                    : "bg-white text-black"
-                            } text-sm sm:text-lg rounded-lg flex items-center justify-center`}
-                        >
-                            내 스케줄
-                        </button>
                     </div>
 
                     {/* 구분선 */}
@@ -394,20 +394,11 @@ const InstructorMain = () => {
                                 월
                             </button>
                         </div>
-
-                        {selectedTeam && (
-                            <button
-                                className="fixed bottom-8 right-8 bg-primary-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300"
-                                onClick={() => setModalOpen(true)}
-                            >
-                                팀 일정 등록
-                            </button>
-                        )}
                     </div>
                     <div className="sm:text-base text-[10px]">
                         {/* 캘린더 */}
                         {view === "monthly" && (
-                            <div className="flex flex-col w-50 sm:w-full sm:h-auto sm:px-24 h-96">
+                            <div className="relative flex flex-col w-full h-auto sm:px-24 ">
                                 <FullCalendar
                                     plugins={[dayGridPlugin, interactionPlugin]}
                                     initialView="dayGridMonth"
@@ -417,12 +408,24 @@ const InstructorMain = () => {
                                     locale="ko"
                                     editable={true}
                                     eventBackgroundColor="#343B7B"
+                                    defaultAllDay={false}
+                                    navLinkHint={
+                                        "클릭시 해당 날짜로 이동합니다."
+                                    }
                                 />
+                                {selectedTeam && (
+                                    <button
+                                        className="absolute sm:bottom-10 sm:right-16 right-5 bottom-5 bg-primary-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 z-50"
+                                        onClick={() => setModalOpen(true)}
+                                    >
+                                        팀 일정 등록
+                                    </button>
+                                )}
                             </div>
                         )}
 
                         {view === "weekly" && (
-                            <div className="flex flex-col w-50 sm:w-full sm:h-auto sm:px-24 h-96 ">
+                            <div className="relative flex flex-col w-full h-auto sm:px-24">
                                 <FullCalendar
                                     plugins={[
                                         timeGridPlugin,
@@ -435,12 +438,24 @@ const InstructorMain = () => {
                                     locale="ko"
                                     editable={true}
                                     eventBackgroundColor="#343B7B"
+                                    defaultAllDay={false}
+                                    navLinkHint={
+                                        "클릭시 해당 날짜로 이동합니다."
+                                    }
                                 />
+                                {selectedTeam && (
+                                    <button
+                                        className="absolute sm:bottom-10 sm:right-16 right-5 bottom-5 bg-primary-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 z-50"
+                                        onClick={() => setModalOpen(true)}
+                                    >
+                                        팀 일정 등록
+                                    </button>
+                                )}
                             </div>
                         )}
 
                         {view === "daily" && (
-                            <div className="flex flex-col w-50 sm:w-full sm:h-auto sm:px-24 h-96">
+                            <div className="relative flex flex-col w-full h-auto sm:px-24">
                                 <FullCalendar
                                     plugins={[
                                         timeGridPlugin,
@@ -453,7 +468,18 @@ const InstructorMain = () => {
                                     locale="ko"
                                     editable={true}
                                     eventBackgroundColor="#343B7B"
+                                    navLinkHint={
+                                        "클릭시 해당 날짜로 이동합니다."
+                                    }
                                 />
+                                {selectedTeam && (
+                                    <button
+                                        className="absolute sm:bottom-10 sm:right-16 right-5 bottom-5 bg-primary-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 z-50"
+                                        onClick={() => setModalOpen(true)}
+                                    >
+                                        팀 일정 등록
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>

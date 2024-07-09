@@ -119,13 +119,28 @@ const UserFeedback = () => {
                                     {lesson.teamName}
                                 </div>
                             </div>
+                            {/* 지정 강습일 경우 강사명 추가 */}
                             <div className="flex flex-row space-x-8">
                                 <div className="sm:w-12 w-1/4 text-center">
                                     일시
                                 </div>
-                                <div className="w-1/2 sm:3/4 text-xs sm:text-base">
-                                    {formatDate(lesson.lessonDate)}{" "}
-                                    {lesson.startTime}
+                                <div className="flex flex-row w-2/3 sm:3/4">
+                                    <p>{`${lesson.lessonDate} (${new Date(
+                                        lesson.lessonDate
+                                    ).toLocaleString("ko-KR", {
+                                        weekday: "short",
+                                    })}) `}</p>
+                                    <div className="px-1.5">{`${
+                                        lesson.startTime
+                                    } ~ ${new Date(
+                                        new Date(
+                                            `${lesson.lessonDate}T${lesson.startTime}`
+                                        ).getTime() +
+                                            lesson.duration * 60 * 60 * 1000
+                                    ).toLocaleTimeString("en-US", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                    })}`}</div>
                                 </div>
                             </div>
                             <div className="flex flex-row space-x-8">

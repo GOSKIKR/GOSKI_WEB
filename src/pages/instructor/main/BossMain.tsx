@@ -267,7 +267,7 @@ const BossMain = () => {
                             <button
                                 key={team.teamId}
                                 onClick={() => setSelectedTeam(team.teamId)}
-                                className={`sm:w-32 w-16 h-10 ${
+                                className={`sm:w-52 w-16 h-10 ${
                                     selectedTeam === team.teamId
                                         ? "bg-primary-700 text-white"
                                         : "bg-white text-black"

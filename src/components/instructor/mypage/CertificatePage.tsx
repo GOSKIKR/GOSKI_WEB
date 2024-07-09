@@ -1,18 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaTrash } from "react-icons/fa";
+import { useStore } from "zustand";
+import { instStore } from "../../../store/InstStore";
+import { levels } from "../../../utils/levels";
 
-interface Certificate {
-    id: number;
-    image: string | null;
-    level: string;
-}
 
 const CertificatePage: React.FC = () => {
-    const [certificates, setCertificates] = useState<Certificate[]>([]);
+
+    const {certificates, setCertificates} = useStore(instStore)
 
     const handleAddCertificate = () => {
-        const newId = certificates.length > 0 ? certificates[certificates.length - 1].id + 1 : 1;
-        setCertificates([...certificates, { id: newId, image: null, level: "SKI - LEVEL 1" }]);
+        const newId = certificates.length > 0 ? certificates[certificates.length - 1].certificateId + 1 : 1;
+        setCertificates([...certificates, { certificateId: newId, certificateImageUrl : '' }]);
     };
 
     const handleImageChange = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,18 +19,18 @@ const CertificatePage: React.FC = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCertificates(certificates.map(cert => cert.id === id ? { ...cert, image: reader.result as string } : cert));
+                setCertificates(certificates.map(cert => cert.certificateId === id ? { ...cert, image: reader.result as string } : cert));
             };
             reader.readAsDataURL(file);
         }
     };
 
     const handleDeleteCertificate = (id: number) => {
-        setCertificates(certificates.filter(cert => cert.id !== id));
+        setCertificates(certificates.filter(cert => cert.certificateId !== id));
     };
 
     const handleLevelChange = (id: number, e: React.ChangeEvent<HTMLSelectElement>) => {
-        setCertificates(certificates.map(cert => cert.id === id ? { ...cert, level: e.target.value } : cert));
+        setCertificates(certificates.map(cert => cert.certificateId === id ? { ...cert, level: e.target.value } : cert));
     };
 
     return (
@@ -51,22 +50,21 @@ const CertificatePage: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-[1000px]">
                     {certificates.map(cert => (
-                        <div key={cert.id} className="bg-white rounded shadow p-4 flex flex-col items-center">
+                        <div key={cert.certificateId} className="bg-white rounded shadow p-4 flex flex-col items-center">
                             <select 
                                 className="mb-4 border p-2 rounded"
-                                value={cert.level}
-                                onChange={(e) => handleLevelChange(cert.id, e)}
+                                value={cert.certificateId}
+                                onChange={(e) => handleLevelChange(cert.certificateId, e)}
                             >
-                                <option value="SKI - LEVEL 1">SKI - LEVEL 1</option>
-                                <option value="SKI - LEVEL 2">SKI - LEVEL 2</option>
-                                <option value="SKI - LEVEL 3">SKI - LEVEL 3</option>
-                                <option value="SNOWBOARD - LEVEL 1">SNOWBOARD - LEVEL 1</option>
-                                <option value="SNOWBOARD - LEVEL 2">SNOWBOARD - LEVEL 2</option>
-                                <option value="SNOWBOARD - LEVEL 3">SNOWBOARD - LEVEL 3</option>
+                                {levels.map(level => (
+                                    <option key={level.id} value={level.id}>
+                                        {level.type} - {level.name}
+                                    </option>
+                                ))}
                             </select>
                             <div className="relative w-full h-40 bg-blue-100 flex items-center justify-center mb-4">
-                                {cert.image ? (
-                                    <img src={cert.image} alt="certificate" className="w-full h-full object-cover rounded"/>
+                                {cert.certificateImageUrl ? (
+                                    <img src={cert.certificateImageUrl} alt="certificate" className="w-full h-full object-cover rounded"/>
                                 ) : (
                                     <span className="text-gray-500">자격증 사진</span>
                                 )}
@@ -74,12 +72,12 @@ const CertificatePage: React.FC = () => {
                                     type="file" 
                                     className="absolute inset-0 opacity-0 cursor-pointer"
                                     accept="image/*"
-                                    onChange={(e) => handleImageChange(cert.id, e)}
+                                    onChange={(e) => handleImageChange(cert.certificateId, e)}
                                 />
                             </div>
                             <button 
                                 className="bg-primary-500 text-white py-1 px-2 rounded flex items-center justify-center w-full"
-                                onClick={() => handleDeleteCertificate(cert.id)}
+                                onClick={() => handleDeleteCertificate(cert.certificateId)}
                             >
                                 <FaTrash className="mr-1" /> 삭제
                             </button>
