@@ -41,6 +41,24 @@ const settings = (lessonsLength: number) => ({
     ]
 });
 
+const formatTime = (startTime: number, duration: number) => {
+    const startHour = Math.floor(startTime / 100);
+    const startMinutes = startTime % 100;
+
+    let endHour = startHour + duration;
+    const endMinutes = startMinutes;
+
+    if (endHour >= 24){
+        endHour -= 24;
+    }
+
+    const format = (hour: number, minutes: number) => {
+        return `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    };
+
+    return `${format(startHour, startMinutes)} ~ ${format(endHour, endMinutes)}`;
+};
+
 const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const navigate = useNavigate();
@@ -63,7 +81,9 @@ const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
                     {lessons.map((lesson, index) => (
                         <div key={index} className={`px-2 ${lessons.length <= 3 ? 'flex justify-start' : ''}`}>
                             <div className="bg-white rounded shadow p-4 h-full">
-                                <div className="text-gray-600 text-sm mb-1">{lesson.lessonDate} {lesson.startTime} ~ {lesson.startTime}</div>
+                                <div className="text-gray-600 text-sm mb-1">
+                                    {lesson.lessonDate} {formatTime(Number(lesson.startTime), lesson.duration)}
+                                </div>
                                 <div className="font-bold text-lg">{lesson.resortName}</div>
                                 <div className="text-gray-800 text-md">{lesson.teamName}</div>
                                 <div className="text-gray-500 text-sm">{lesson.representativeName} 외 {lesson.studentCount}명</div>
