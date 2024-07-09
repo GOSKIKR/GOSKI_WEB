@@ -1,5 +1,5 @@
 import React from "react";
-import { useStore } from "../store/useStore";
+import useStore from "../store/store";
 
 const Counter: React.FC = () => {
   const { count, increment, decrement } = useStore();

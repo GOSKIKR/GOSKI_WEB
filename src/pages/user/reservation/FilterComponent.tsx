@@ -3,6 +3,7 @@ import { FaSkiing, FaCalendarAlt } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import useStore from "../../../store/store";
 
 interface FilterComponentProps {
   applyFilter: (filters: {
@@ -16,6 +17,19 @@ interface FilterComponentProps {
   }) => void;
   isSearchClicked: () => void;
 }
+
+//전역에서 상태 받아오기
+const ReservationResult = () => {
+  const { type, location, participants, date, startTime, duration, level } =
+    useStore();
+
+  return (
+    <div>
+      <p>종류: {type}</p>
+      <p>장소: {location}</p>
+    </div>
+  );
+};
 
 const FilterComponent: React.FC<FilterComponentProps> = ({
   applyFilter,
