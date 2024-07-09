@@ -6,16 +6,20 @@ const url = "/lesson"
 
 export class LessonService {
 
-    async getInstructorLessonList() : Promise<InstructorLessonInfoDTO | null>{
+    async getInstructorLessonList(): Promise<InstructorLessonInfoDTO[] | null> {
         try {
-            const response = await apiClient().get(`${url}/instructor`);
-            if (response && response.status == httpStatusCode.OK) {
-                return response.data as InstructorLessonInfoDTO
+            const accessToken = localStorage.getItem("accesstoken");
+            const response = await apiClient().get(`${url}/list/instructor`,{
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`,
+                                }});
+            console.log(response.data.data)
+            if (response && response.status === httpStatusCode.OK) {
+                return response.data.data as InstructorLessonInfoDTO[];
             }
-        } catch (error){
-            alert("강사 강습 내역 리스트 조회 실패")
+        } catch (error) {
+            alert("강사 강습 내역 리스트 조회 실패");
         }
         return null;
     }
-
 }
