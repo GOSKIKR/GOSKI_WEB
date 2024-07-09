@@ -10,10 +10,9 @@ export class LessonService {
         try {
             const accessToken = localStorage.getItem("accesstoken");
             const response = await apiClient().get(`${url}/list/instructor`,{
-                                headers: {
-                                    Authorization: `Bearer ${accessToken}`,
-                                }});
-            console.log(response.data.data)
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+            }});
             if (response && response.status === httpStatusCode.OK) {
                 return response.data.data as InstructorLessonInfoDTO[];
             }
