@@ -1,4 +1,4 @@
-interface certificates {
+export interface Certificate {
     certificateId : number,
     certificateImageUrl : string
 }
@@ -13,5 +13,11 @@ export interface InstructorProfileDTO {
     description : string,
     dayoff : number,
     permission : string,				
-    certificates : certificates[]
+    certificates : Certificate[]
 }
+
+export interface NewCertificate {
+    certificateId : number,
+    newCertImage : File
+}
+

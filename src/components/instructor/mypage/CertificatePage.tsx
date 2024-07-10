@@ -1,36 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { useStore } from "zustand";
 import { instStore } from "../../../store/InstStore";
 import { levels } from "../../../utils/levels";
+import { UserService } from "../../../api/UserService";
+import { Certificate, NewCertificate } from "../../../dto/InstructorDTO";
 
+const userService = new UserService();
 
 const CertificatePage: React.FC = () => {
-
-    const {certificates, setCertificates} = useStore(instStore)
+    const { certificates, setCertificates } = useStore(instStore);
+    const [deleteCertificateUrls, setDeleteCertificateUrls] = useState<Certificate[]>([]);
+    const [newCertificates, setNewCertificates] = useState<NewCertificate[]>([]);
 
     const handleAddCertificate = () => {
-        const newId = certificates.length > 0 ? certificates[certificates.length - 1].certificateId + 1 : 1;
-        setCertificates([...certificates, { certificateId: newId, certificateImageUrl : '' }]);
+        const newId = new Date().getTime(); // or another unique id generation strategy
+        setNewCertificates([...newCertificates, { certificateId: newId, newCertImage: new File([], "") }]);
+        setCertificates([...certificates, { certificateId: newId, certificateImageUrl: '' }]);
     };
 
     const handleImageChange = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setNewCertificates(newCertificates.map(cert => cert.certificateId === id ? { ...cert, newCertImage: file } : cert));
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCertificates(certificates.map(cert => cert.certificateId === id ? { ...cert, image: reader.result as string } : cert));
+                setCertificates(certificates.map(cert => cert.certificateId === id ? { ...cert, certificateImageUrl: reader.result as string } : cert));
             };
             reader.readAsDataURL(file);
         }
     };
 
     const handleDeleteCertificate = (id: number) => {
-        setCertificates(certificates.filter(cert => cert.certificateId !== id));
+        const certToDelete = certificates.find(cert => cert.certificateId === id);
+        if (certToDelete) {
+            setDeleteCertificateUrls([...deleteCertificateUrls, certToDelete]);
+            setCertificates(certificates.filter(cert => cert.certificateId !== id));
+            setNewCertificates(newCertificates.filter(cert => cert.certificateId !== id));
+        }
     };
 
     const handleLevelChange = (id: number, e: React.ChangeEvent<HTMLSelectElement>) => {
-        setCertificates(certificates.map(cert => cert.certificateId === id ? { ...cert, level: e.target.value } : cert));
+        const newLevelId = parseInt(e.target.value, 10);
+        setCertificates(certificates.map(cert => cert.certificateId === id ? { ...cert, certificateId: newLevelId } : cert));
+        setNewCertificates(newCertificates.map(cert => cert.certificateId === id ? { ...cert, certificateId: newLevelId } : cert));
+    };
+
+    const instProfileUpdate = async () => {
+        await userService.updateInstructorCerts(deleteCertificateUrls, newCertificates);
     };
 
     return (
@@ -86,7 +103,12 @@ const CertificatePage: React.FC = () => {
                 </div>
             )}
             {certificates.length > 0 && (
-                <button className="bg-primary-700 text-white py-2 px-4 rounded mt-4">저장하기</button>
+                <button 
+                    className="bg-primary-700 text-white py-2 px-4 rounded mt-4"
+                    onClick={instProfileUpdate}
+                >
+                    저장하기
+                </button>
             )}
         </div>
     );
