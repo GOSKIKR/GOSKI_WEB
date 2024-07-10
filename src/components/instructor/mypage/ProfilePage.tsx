@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useStore } from "zustand";
-import { instStore } from "../../../store/InstStore";
-import { UserService } from "../../../api/UserService";
+import React, { useEffect, useState } from 'react';
+import useInstructorStore from '../../../store/InstStore';
+import { UserService } from '../../../api/UserService';
 
 const userService = new UserService();
 
@@ -12,7 +11,7 @@ const ProfilePage: React.FC = () => {
     const [isTeamLeader, setIsTeamLeader] = useState<boolean>(false);
     const [description, setDescription] = useState<string>('');
 
-    const { userName, phoneNumber, birthDate, setProfile } = useStore(instStore);
+    const { userName, phoneNumber, birthDate, profileUrl, setProfile } = useInstructorStore();
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -21,21 +20,23 @@ const ProfilePage: React.FC = () => {
                 setProfile(profile);
                 setProfilePreview(profile.profileUrl);
                 setSelectedGender(profile.gender);
-                setIsTeamLeader(profile.role === "OWNER");
-                setDescription(profile.description)
+                setIsTeamLeader(profile.role === 'OWNER');
+                setDescription(profile.description);
             }
         };
 
-        fetchProfile();
-    }, [setProfile]);
+        if (!profileUrl) { // profileUrl이 없을 때만 fetchProfile 실행
+            fetchProfile();
+        }
+    }, [setProfile, profileUrl]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setProfileImage(file)
+            setProfileImage(file);
             const reader = new FileReader();
             reader.onloadend = () => {
-                if (typeof reader.result === "string") {
+                if (typeof reader.result === 'string') {
                     setProfilePreview(reader.result);
                 }
             };
@@ -51,8 +52,8 @@ const ProfilePage: React.FC = () => {
     };
 
     const instProfileUpdate = async () => {
-        userService.updateInstructorProfile(description, profileImage);
-    }
+        await userService.updateInstructorProfile(description, profileImage);
+    };
 
     return (
         <div className="flex justify-center items-center my-10">
@@ -60,7 +61,7 @@ const ProfilePage: React.FC = () => {
                 <div className="flex flex-col items-center sm:mr-10 sm:mt-[200px] mb-4 sm:mb-0">
                     <div className="relative w-40 h-40 mb-4">
                         <img
-                            src={profilePreview || "https://randomuser.me/api/portraits/men/75.jpg"}
+                            src={profilePreview || 'https://randomuser.me/api/portraits/men/75.jpg'}
                             alt="Profile"
                             className="w-full h-full object-cover rounded-full"
                         />
@@ -138,7 +139,10 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <button
                         className="bg-primary-700 text-white py-2 px-4 rounded self-end sm:w-1/4 w-full hover:bg-primary-500"
-                        onClick={instProfileUpdate}>수정하기</button>
+                        onClick={instProfileUpdate}
+                    >
+                        수정하기
+                    </button>
                 </div>
             </div>
         </div>
