@@ -82,35 +82,35 @@ const SetFilter: React.FC = () => {
             return;
         }
 
-        // const ReserveDTO: ReserveDTO = {
-        //     resortId: selectedResort.resortId,
-        //     studentCount: participant,
-        //     lessonType: type,
-        //     lessonDate: selectedDate.toISOString().split("T")[0], // YYYY-MM-DD 형식
-        //     startTime: formattedStartTime,
-        //     duration: lessonTime,
-        // };
+        const ReserveDTO: ReserveDTO = {
+            resortId: selectedResort.resortId,
+            studentCount: participant,
+            lessonType: type,
+            lessonDate: selectedDate.toISOString().split("T")[0], // YYYY-MM-DD 형식
+            startTime: formattedStartTime,
+            duration: lessonTime,
+        };
 
-        // const reserveService = new LessonReserveService();
+        const reserveService = new LessonReserveService();
 
-        // try {
-        //     console.log(ReserveDTO);
-        //     const response = await reserveService.reserveLesson(ReserveDTO);
-        //     console.log("Reservation successful:", response);
-        //     navigate("/reserve/result", {
-        //         state: {
-        //             type,
-        //             location,
-        //             participant,
-        //             selectedDate,
-        //             startTime: formattedStartTime,
-        //             lessonTime,
-        //             level,
-        //         },
-        //     });
-        // } catch (error) {
-        //     alert("강습 예약에 실패했습니다.");
-        // }
+        try {
+            console.log(ReserveDTO);
+            const response = await reserveService.reserveLesson(ReserveDTO);
+            console.log("Reservation successful:", response);
+            navigate("/reserve/result", {
+                state: {
+                    type,
+                    location,
+                    participant,
+                    selectedDate,
+                    startTime: formattedStartTime,
+                    lessonTime,
+                    level,
+                },
+            });
+        } catch (error) {
+            alert("강습 예약에 실패했습니다.");
+        }
     };
 
     const handleParticipantIncrement = () => {

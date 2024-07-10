@@ -1,31 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineRight } from "react-icons/ai";
-
-interface Lesson {
-    lessonId: number;
-    teamId: number;
-    teamName: string;
-    resortName: string;
-    instructorId: number;
-    instructorName: string;
-    profileUrl: string;
-    lessonDate: string;
-    lessonStatus: string;
-    startTime: string;
-    duration: number;
-    hasReview: boolean;
-    studentCount: number;
-}
-
-interface PaymentDetail {
-    cost: number;
-    paybackRate: number;
-}
+import { UserLessonDTO } from "../../dto/UserLessonDTO";
+import { UserPaylistDTO } from "../../dto/PaymentDTO";
 
 interface LessonlistCardProps {
-    lesson: Lesson;
-    paymentDetail?: PaymentDetail;
+    lesson: UserLessonDTO;
+    paymentDetail?: UserPaylistDTO;
 }
 
 const LessonlistCard: React.FC<LessonlistCardProps> = ({
@@ -35,7 +16,7 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
     const navigate = useNavigate();
 
     const goToPayDetail = () => {
-        navigate(`/user/payment/detail`, { state: { lesson } });
+        navigate(`/user/payment/detail`, { state: { lesson, paymentDetail } });
     };
 
     const goToWriteReview = () => {
@@ -48,27 +29,51 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case "진행 예정":
+            case "notStart":
                 return "bg-yellow-100";
-            case "진행 중":
+            case "onGoing":
                 return "bg-green-100";
-            case "강습 완료":
+            case "lessonFinished":
                 return "bg-blue-100";
+            case "cancelLesson":
+                return "bg-red-100";
             default:
                 return "bg-transparent";
         }
     };
 
+    const getStatusName = (status: string) => {
+        switch (status) {
+            case "notStart":
+                return "강습 예정";
+            case "onGoing":
+                return "진행 중";
+            case "lessonFinished":
+                return "강습 완료";
+            case "cancelLesson":
+                return "취소된 강습";
+            default:
+                return "";
+        }
+    };
+
+    const formatTime = (time: string) => {
+        return time.slice(0, 2) + ":" + time.slice(2);
+    };
+
     return (
         <div className="bg-primary-50 h-40 w-full rounded-md shadow-lg flex flex-row px-3 sm:px-12 py-5 justify-between items-center">
-            <div className="sm:h-32 sm:w-32 h-24 w-24 bg-white">사진</div>
+            <img
+                src={lesson.profileUrl}
+                className="sm:h-32 sm:w-32 h-24 w-24 rounded-lg"
+            />
             <div className="flex flex-col w-1/3 sm:px-0 sm:text-md text-sm sm:space-y-1 space-y-0.5">
                 <div
-                    className={`font-extrabold w-16 text-center rounded-md ${getStatusColor(
+                    className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(
                         lesson.lessonStatus
                     )}`}
                 >
-                    {lesson.lessonStatus}
+                    {getStatusName(lesson.lessonStatus)}
                 </div>
                 <div className="px-1.5">{lesson.resortName}</div>
                 <p className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
@@ -76,11 +81,11 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                 } (${new Date(lesson.lessonDate).toLocaleString("ko-KR", {
                     weekday: "short",
                 })}) `}</p>
-                <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${formatTime(
                     lesson.startTime
-                } ~ ${new Date(
+                )} ~ ${new Date(
                     new Date(
-                        `${lesson.lessonDate}T${lesson.startTime}`
+                        `${lesson.lessonDate}T${formatTime(lesson.startTime)}`
                     ).getTime() +
                         lesson.duration * 60 * 60 * 1000
                 ).toLocaleTimeString("en-US", {
@@ -91,10 +96,11 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                     {lesson.teamName}, {lesson.instructorName}
                 </div>
             </div>
-            <div className="flex flex-col w-1/3 h-full px-1.5 sm:px-0 sm:text-md text-sm justify-start space-y-2 items-center">
+            <div className="flex flex-col w-1/3 h-full px-1.5 pt-2 sm:px-0 sm:text-md text-sm justify-start space-y-2 items-center">
                 {paymentDetail && (
                     <div>
-                        <div>결제 금액 : {paymentDetail.cost}원</div>
+                        <div className="text-gray-500">결제 금액</div>
+                        <div>{paymentDetail.totalAmount}원</div>
                     </div>
                 )}
                 <div
