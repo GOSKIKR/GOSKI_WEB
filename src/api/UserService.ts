@@ -37,10 +37,14 @@ export class UserService {
             });
 
             if (response && response.status === httpStatusCode.OK) {
+                alert("프로필 정보를 수정 완료하였습니다.")
                 console.log("프로필 업데이트 성공");
             }
         } catch (error) {
+            alert("프로필 정보 수정을 실패하였습니다.")
             console.error("프로필 업데이트 실패", error);
         }
     }
+
+    // async updateIntructorCerts
 }
