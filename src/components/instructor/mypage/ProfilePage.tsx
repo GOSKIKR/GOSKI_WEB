@@ -6,20 +6,23 @@ import { UserService } from "../../../api/UserService";
 const userService = new UserService();
 
 const ProfilePage: React.FC = () => {
-    const [profileImage, setProfileImage] = useState<string | null>(null);
+    const [profileImage, setProfileImage] = useState<File | null>(null);
+    const [profilePreview, setProfilePreview] = useState<string | null>(null);
     const [selectedGender, setSelectedGender] = useState<string | null>('남자');
     const [isTeamLeader, setIsTeamLeader] = useState<boolean>(false);
+    const [description, setDescription] = useState<string>('');
 
-    const { userName, profileUrl, phoneNumber, description, birthDate, setProfile } = useStore(instStore);
+    const { userName, phoneNumber, birthDate, setProfile } = useStore(instStore);
 
     useEffect(() => {
         const fetchProfile = async () => {
             const profile = await userService.getInstructorProfile();
             if (profile) {
                 setProfile(profile);
-                setProfileImage(profile.profileUrl);
+                setProfilePreview(profile.profileUrl);
                 setSelectedGender(profile.gender);
                 setIsTeamLeader(profile.role === "OWNER");
+                setDescription(profile.description)
             }
         };
 
@@ -29,10 +32,11 @@ const ProfilePage: React.FC = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setProfileImage(file)
             const reader = new FileReader();
             reader.onloadend = () => {
                 if (typeof reader.result === "string") {
-                    setProfileImage(reader.result);
+                    setProfilePreview(reader.result);
                 }
             };
             reader.readAsDataURL(file);
@@ -46,13 +50,17 @@ const ProfilePage: React.FC = () => {
         }
     };
 
+    const instProfileUpdate = async () => {
+        userService.updateInstructorProfile(description, profileImage);
+    }
+
     return (
         <div className="flex justify-center items-center my-10">
             <div className="bg-primary-100 rounded-lg p-10 shadow-lg flex flex-col sm:flex-row sm:w-[800px] w-[350px]">
                 <div className="flex flex-col items-center sm:mr-10 sm:mt-[200px] mb-4 sm:mb-0">
                     <div className="relative w-40 h-40 mb-4">
                         <img
-                            src={profileUrl || "https://randomuser.me/api/portraits/men/75.jpg"}
+                            src={profilePreview || "https://randomuser.me/api/portraits/men/75.jpg"}
                             alt="Profile"
                             className="w-full h-full object-cover rounded-full"
                         />
@@ -124,11 +132,13 @@ const ProfilePage: React.FC = () => {
                         <label className="block text-lg font-bold mb-1">자기소개</label>
                         <textarea
                             value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                             className="w-full p-2 border rounded h-24 resize-none"
                         />
                     </div>
                     <button
-                        className="bg-primary-700 text-white py-2 px-4 rounded self-end sm:w-1/4 w-full hover:bg-primary-500">수정하기</button>
+                        className="bg-primary-700 text-white py-2 px-4 rounded self-end sm:w-1/4 w-full hover:bg-primary-500"
+                        onClick={instProfileUpdate}>수정하기</button>
                 </div>
             </div>
         </div>
