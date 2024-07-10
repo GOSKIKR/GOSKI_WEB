@@ -2,21 +2,17 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
 
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${year}.${month}.${day}`;
+const formatTime = (time: string) => {
+    return time.slice(0, 2) + ":" + time.slice(2);
 };
 
 const PayDetail = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { lesson } = location.state || {};
+    const { lesson, paymentDetail } = location.state || {};
 
     const goToCancle = () => {
-        navigate(`/user/payment/cancle`, { state: { lesson } });
+        navigate(`/user/payment/cancel`, { state: { lesson, paymentDetail } });
     };
 
     return (
@@ -46,11 +42,13 @@ const PayDetail = () => {
                                     weekday: "short",
                                 }
                             )}) `}</p>
-                            <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                            <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${formatTime(
                                 lesson.startTime
-                            } ~ ${new Date(
+                            )} ~ ${new Date(
                                 new Date(
-                                    `${lesson.lessonDate}T${lesson.startTime}`
+                                    `${lesson.lessonDate}T${formatTime(
+                                        lesson.startTime
+                                    )}`
                                 ).getTime() +
                                     lesson.duration * 60 * 60 * 1000
                             ).toLocaleTimeString("en-US", {
@@ -61,35 +59,57 @@ const PayDetail = () => {
                         </div>
                     </div>
                     <div className="flex flex-col bg-white w-4/5 h-3/6 rounded-lg p-6 space-y-4 sm:text-md text-sm">
-                        <div className="flex justify-between">
-                            <div>간단한 강습 정보</div>
-                            <div>결제 금액</div>
-                        </div>
-                        <div className="flex justify-between">
-                            <div>인원 추가 요금</div>
-                            <div>결제 금액</div>
-                        </div>
-                        <div className="flex justify-between">
-                            <div>난이도 추가 요금</div>
-                            <div>결제 금액</div>
-                        </div>
-                        <div className="flex justify-between">
-                            <div>강사 지정 요금</div>
-                            <div>결제 금액</div>
-                        </div>
-                        <div className="border-t border-gray-300 pt-2 flex justify-between">
-                            <div className="font-bold">최종결제 금액</div>
-                            <div className="font-bold text-primary-500">
-                                총 결제 금액
-                            </div>
-                        </div>
+                        {paymentDetail && (
+                            <>
+                                <div className="flex justify-between">
+                                    <div className="font-extrabold">
+                                        {lesson.teamName}의 강습
+                                    </div>
+                                    <div>{paymentDetail.basicFee}원</div>
+                                </div>
+                                {paymentDetail.peopleOptionFee > 0 && (
+                                    <div className="flex justify-between">
+                                        <div>인원 추가 요금</div>
+                                        <div>
+                                            {paymentDetail.peopleOptionFee}원
+                                        </div>
+                                    </div>
+                                )}
+                                {paymentDetail.levelOptionFee > 0 && (
+                                    <div className="flex justify-between">
+                                        <div>난이도 추가 요금</div>
+                                        <div>
+                                            {paymentDetail.levelOptionFee}원
+                                        </div>
+                                    </div>
+                                )}
+                                {paymentDetail.designatedFee > 0 && (
+                                    <div className="flex justify-between">
+                                        <div>강사 지정 요금</div>
+                                        <div>
+                                            {paymentDetail.designatedFee}원
+                                        </div>
+                                    </div>
+                                )}
+                                <div className="border-t border-gray-300 pt-2 flex justify-between">
+                                    <div className="font-bold">
+                                        최종결제 금액
+                                    </div>
+                                    <div className="font-bold text-primary-500">
+                                        {paymentDetail.totalAmount}원
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
-                    <div
-                        onClick={goToCancle}
-                        className="flex items-center justify-center bg-slate-400 sm:w-1/6 h-12 p-1 px-2 rounded-lg text-white cursor-pointer"
-                    >
-                        예약 취소
-                    </div>
+                    {lesson.lessonStatus !== "cancelLesson" && (
+                        <div
+                            onClick={goToCancle}
+                            className="flex items-center justify-center bg-slate-400 sm:w-1/6 h-12 p-1 px-2 rounded-lg text-white cursor-pointer"
+                        >
+                            예약 취소
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
