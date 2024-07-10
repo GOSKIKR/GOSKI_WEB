@@ -12,42 +12,72 @@ const CertificatePage: React.FC = () => {
     const { certificates, setCertificates } = useStore(instStore);
     const [deleteCertificateUrls, setDeleteCertificateUrls] = useState<Certificate[]>([]);
     const [newCertificates, setNewCertificates] = useState<NewCertificate[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
 
     const handleAddCertificate = () => {
-        const newId = new Date().getTime(); // or another unique id generation strategy
-        setNewCertificates([...newCertificates, { certificateId: newId, newCertImage: new File([], "") }]);
-        setCertificates([...certificates, { certificateId: newId, certificateImageUrl: '' }]);
+        setIsModalOpen(true);
     };
 
-    const handleImageChange = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleLevelSelect = () => {
+        if (selectedLevel !== null) {
+            const newCertIndex = newCertificates.length;
+            setNewCertificates([...newCertificates, { certificateId: selectedLevel }]);
+            setCertificates([...certificates, { certificateId: selectedLevel, certificateImageUrl: '' }]);
+            setIsModalOpen(false);
+            setSelectedLevel(null);
+            
+            const fileInput = document.getElementById(`file-input-${newCertIndex}`) as HTMLInputElement;
+            if (fileInput) {
+                fileInput.click();
+            }
+        } else {
+            alert("레벨을 선택하세요.");
+        }
+    };
+
+    const handleImageChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setNewCertificates(newCertificates.map(cert => cert.certificateId === id ? { ...cert, newCertImage: file } : cert));
+            setNewCertificates(newCertificates.map((cert, i) => i === index ? { ...cert, newCertImage: file } : cert));
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCertificates(certificates.map(cert => cert.certificateId === id ? { ...cert, certificateImageUrl: reader.result as string } : cert));
+                setCertificates(certificates.map((cert, i) => i === index ? { ...cert, certificateImageUrl: reader.result as string } : cert));
             };
             reader.readAsDataURL(file);
         }
     };
 
-    const handleDeleteCertificate = (id: number) => {
-        const certToDelete = certificates.find(cert => cert.certificateId === id);
+    const handleDeleteCertificate = (index: number) => {
+        const certToDelete = certificates[index];
         if (certToDelete) {
             setDeleteCertificateUrls([...deleteCertificateUrls, certToDelete]);
-            setCertificates(certificates.filter(cert => cert.certificateId !== id));
-            setNewCertificates(newCertificates.filter(cert => cert.certificateId !== id));
+            setCertificates(certificates.filter((_, i) => i !== index));
+            setNewCertificates(newCertificates.filter((_, i) => i !== index));
         }
     };
 
-    const handleLevelChange = (id: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleLevelChange = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
         const newLevelId = parseInt(e.target.value, 10);
-        setCertificates(certificates.map(cert => cert.certificateId === id ? { ...cert, certificateId: newLevelId } : cert));
-        setNewCertificates(newCertificates.map(cert => cert.certificateId === id ? { ...cert, certificateId: newLevelId } : cert));
+        setCertificates(certificates.map((cert, i) => i === index ? { ...cert, certificateId: newLevelId } : cert));
+        setNewCertificates(newCertificates.map((cert, i) => i === index ? { ...cert, certificateId: newLevelId } : cert));
     };
 
     const instProfileUpdate = async () => {
-        await userService.updateInstructorCerts(deleteCertificateUrls, newCertificates);
+        const formData = new FormData();
+        
+        deleteCertificateUrls.forEach(cert => {
+            formData.append("deleteCertificateUrls", JSON.stringify(cert));
+        });
+
+        newCertificates.forEach(cert => {
+            formData.append("certificateIds", cert.certificateId.toString());
+            if (cert.newCertImage) {
+                formData.append("certificateImages", cert.newCertImage);
+            }
+        });
+
+        await userService.updateInstructorCerts(formData);
     };
 
     return (
@@ -66,12 +96,12 @@ const CertificatePage: React.FC = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-[1000px]">
-                    {certificates.map(cert => (
-                        <div key={cert.certificateId} className="bg-white rounded shadow p-4 flex flex-col items-center">
+                    {certificates.map((cert, index) => (
+                        <div key={index} className="bg-white rounded shadow p-4 flex flex-col items-center">
                             <select 
                                 className="mb-4 border p-2 rounded"
                                 value={cert.certificateId}
-                                onChange={(e) => handleLevelChange(cert.certificateId, e)}
+                                onChange={(e) => handleLevelChange(index, e)}
                             >
                                 {levels.map(level => (
                                     <option key={level.id} value={level.id}>
@@ -87,14 +117,15 @@ const CertificatePage: React.FC = () => {
                                 )}
                                 <input 
                                     type="file" 
+                                    id={`file-input-${index}`}
                                     className="absolute inset-0 opacity-0 cursor-pointer"
                                     accept="image/*"
-                                    onChange={(e) => handleImageChange(cert.certificateId, e)}
+                                    onChange={(e) => handleImageChange(index, e)}
                                 />
                             </div>
                             <button 
                                 className="bg-primary-500 text-white py-1 px-2 rounded flex items-center justify-center w-full"
-                                onClick={() => handleDeleteCertificate(cert.certificateId)}
+                                onClick={() => handleDeleteCertificate(index)}
                             >
                                 <FaTrash className="mr-1" /> 삭제
                             </button>
@@ -109,6 +140,39 @@ const CertificatePage: React.FC = () => {
                 >
                     저장하기
                 </button>
+            )}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-4 rounded shadow-lg">
+                        <h2 className="text-xl font-bold mb-4">레벨 선택</h2>
+                        <select 
+                            className="mb-4 border p-2 rounded w-full"
+                            value={selectedLevel || ""}
+                            onChange={(e) => setSelectedLevel(parseInt(e.target.value, 10))}
+                        >
+                            <option value="" disabled>레벨을 선택하세요</option>
+                            {levels.map(level => (
+                                <option key={level.id} value={level.id}>
+                                    {level.type} - {level.name}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="flex justify-end">
+                            <button 
+                                className="bg-primary-500 text-white py-2 px-4 rounded mr-2"
+                                onClick={handleLevelSelect}
+                            >
+                                추가
+                            </button>
+                            <button 
+                                className="bg-gray-500 text-white py-2 px-4 rounded"
+                                onClick={() => setIsModalOpen(false)}
+                            >
+                                취소
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );

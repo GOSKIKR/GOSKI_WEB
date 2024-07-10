@@ -1,4 +1,4 @@
-import { Certificate, InstructorProfileDTO, NewCertificate } from "../dto/InstructorDTO";
+import { InstructorProfileDTO} from "../dto/InstructorDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
@@ -46,24 +46,7 @@ export class UserService {
         }
     }
 
-    async updateInstructorCerts(
-        deleteCertificateUrls : Certificate[], 
-        newCertificates : NewCertificate[]) : Promise<void> {
-        const certificateIds : number[] = [];
-        const certificateImages : File[] = [];
-
-        for (const cert of newCertificates) {
-            certificateIds.push(cert.certificateId)
-            certificateImages.push(cert.newCertImage)
-        }
-
-        const formData = new FormData();
-        formData.append("deleteCertificateUrls", JSON.stringify(deleteCertificateUrls));
-        certificateIds.forEach(id => formData.append("certificateIds",id.toString()))
-        certificateImages.forEach((image,index) => {
-            formData.append(`certificateImages[${index}]`,image)
-        })
-        
+    async updateInstructorCerts(formData : FormData) : Promise<void> {
         try {
             const response = await apiClient(true).patch(`${url}/update/inst`, formData, {
                 headers: {
@@ -72,11 +55,11 @@ export class UserService {
             });
 
             if (response && response.status === httpStatusCode.OK) {
-                alert("자격증 정보 수정 완료하였습니다.")
+                alert("자격증 정보 수정 완료하였습니다.");
                 console.log("자격증 정보 업데이트 성공");
             }
         } catch (error) {
-            alert("자격증 정보 수정을 실패하였습니다.")
+            alert("자격증 정보 수정을 실패하였습니다.");
             console.error("자격증 정보 업데이트 실패", error);
         }
 

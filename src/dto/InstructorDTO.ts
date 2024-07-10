@@ -17,7 +17,8 @@ export interface InstructorProfileDTO {
 }
 
 export interface NewCertificate {
-    certificateId : number,
-    newCertImage : File
+    certificateId: number;
+    newCertImage?: File;
 }
+
 
