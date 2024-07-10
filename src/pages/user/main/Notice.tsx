@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavbarUser from "../../../components/common/NavbarUser";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
+import InfiniteBanner from "../../../components/user/NoticeBanner";
 
 const SectionTitle = ({ children }: any) => (
   <span className="font-semibold">{children}</span>
@@ -111,6 +112,7 @@ const Notice = () => {
             감사합니다.
           </div>
         </div>
+        <InfiniteBanner />
       </div>
     </div>
   );

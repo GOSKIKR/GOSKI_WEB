@@ -1,59 +1,91 @@
 import React, { useEffect, useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import useStore from "../../store/store";
+import userReserveStore from "../../store/userReserveStore";
+
+import TimePicker from "../common/TimePicker";
 
 interface Resort {
   resortId: number;
   resortName: string;
-  resortLocation: string;
-  latitude: number;
-  longitude: number;
-  lessonTime: number[];
+  lessonType: string; //'SKI' | 'BOARD';
+  studentCount: number;
+  lessonDate: string; // 'YYYY-MM-DD';
+  startTime: string; // 'hhmm';
+  duration: number;
+  level: string; //'beginner' | 'intermediate' | 'advanced'
 }
 
+type ResortLocations = {
+  resortId: number;
+  resortName: string;
+  resortLocation: string;
+  longitude: number;
+  latitude: number;
+  lessonTime: number[];
+};
+
 // 임시 장소 데이터
-const locations: Resort[] = [
+const locationsData: ResortLocations[] = [
   {
     resortId: 1,
-    resortName: "장소1",
-    resortLocation: "위치1",
-    latitude: 35.0,
-    longitude: 128.0,
+    resortName: "용평",
+    resortLocation: "강원도 평창군",
+    longitude: 128.668,
+    latitude: 37.65,
     lessonTime: [1, 2, 3],
   },
   {
     resortId: 2,
-    resortName: "장소2",
-    resortLocation: "위치2",
-    latitude: 36.0,
-    longitude: 129.0,
-    lessonTime: [2, 3, 4],
+    resortName: "평창",
+    resortLocation: "강원도 평창군",
+    longitude: 128.668,
+    latitude: 37.65,
+    lessonTime: [3, 5, 6],
+  },
+  {
+    resortId: 3,
+    resortName: "강촌",
+    resortLocation: "강원도 춘천시",
+    longitude: 128.668,
+    latitude: 37.65,
+    lessonTime: [2, 3, 7],
   },
 ];
 
 const ReservationBox = () => {
-  const [type, setType] = useState(""); // 상태 추가: 스키 또는 보드 선택
-  const [location, setLocation] = useState(""); // 상태 추가: 장소 선택
-  const [participant, setParticipant] = useState(1); // 상태 추가: 참가자 수
-  const [selectedDate, setSelectedDate] = useState<string | null>(null); // 상태 추가: 선택된 날짜
-  const [startTime, setStartTime] = useState(""); // 상태 추가: 시작 시간
-  const [lessonTimes, setLessonTimes] = useState<number[]>([]); // 상태 추가: 강습 시간
-  const [level, setLevel] = useState<number | null>(null); // 상태 수정: 레벨 선택
+  const [lessonType, setLessonType] = useState<string>("");
+  const [locationsInfo, setLocationsInfo] = useState<ResortLocations[]>([]);
+  const [selectedLocation, setLocation] = useState<string>("");
+  const [participant, setParticipant] = useState<number>(0);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [durationTimes, setdurationTimes] = useState<number[]>([]);
+  const [selectedDurationTime, setDurationTime] = useState<number>(0);
+  const [level, setLevel] = useState<string>("");
 
-  const { setReservationDetails } = useStore();
+  const [lessonStartTime, setLessonStartTime] = useState("");
+
+  const { setReservationInfo } = userReserveStore();
 
   const navigate = useNavigate();
 
+  // 초기 리조트 정보 설정
   useEffect(() => {
-    setLessonTimes(
-      locations.find((loc) => loc.resortName === location)?.lessonTime || []
-    );
-  }, [location]);
+    setLocationsInfo(locationsData);
+  }, []);
 
   // 장소 변경 핸들러
   const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLocation(e.target.value);
+    setLocation(e.target.value); //장소 선택
+    //장소에 따른 시간 설정
+    const selectedResort = locationsInfo.find(
+      //선택된 리조트 정보
+      (location) => location.resortName === e.target.value //선택된 장소와 일치하는 리조트 정보
+    );
+    if (selectedResort) {
+      //선택된 리조트 정보가 있으면
+      setdurationTimes(selectedResort.lessonTime); //가능 시간 설정
+    }
   };
 
   // 참가자 수 감소 핸들러
@@ -69,27 +101,30 @@ const ReservationBox = () => {
   // 예약 데이터 전역 상태에 저장
   const handleSaveReservation = () => {
     if (
-      !type ||
-      !location ||
-      participant === 0 ||
+      !lessonType ||
+      !selectedLocation ||
+      !participant ||
       !selectedDate ||
-      !startTime ||
-      lessonTimes.length === 0 ||
-      level === null
+      !lessonStartTime ||
+      !selectedDurationTime ||
+      !level
     ) {
       alert("모든 필드를 선택해 주세요.");
       return;
     }
 
-    setReservationDetails({
-      type: type,
-      location: location,
-      participants: participant,
-      date: selectedDate as string,
-      startTime: startTime,
-      duration: lessonTimes[0].toString(),
-      level: level as number,
-    });
+    setReservationInfo({
+      resortId: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.resortId as number,
+      resortName: selectedLocation,
+      lessonType: lessonType,
+      studentCount: participant,
+      lessonDate: selectedDate,
+      startTime: lessonStartTime,
+      duration: selectedDurationTime,
+      level: level,
+    } as Resort);
 
     navigate("/reserve/result");
   };
@@ -98,29 +133,30 @@ const ReservationBox = () => {
   const today = new Date().toISOString().split("T")[0]; // Format today as 'YYYY-MM-DD'
 
   return (
-    <div
-      className="flex flex-col lg:flex-row lg:space-x-4 w-full justify-center items-center lg:items-stretch bg-cover bg-center p-4 lg:p-8 rounded-lg shadow-lg"
-      style={{ backgroundImage: "url('/assets/images/bgski.jpg')" }}
-    >
-      <div className="flex flex-col space-y-6 w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-md">
+    <div className="flex flex-col lg:flex-row lg:space-x-4 w-full justify-start items-center lg:items-stretch sm:bg-[url('/assets/images/bgski.jpg')] bg-cover bg-center p-4 lg:p-8 rounded-lg shadow-lg">
+      <div className="flex flex-col space-y-6 w-full lg:w-120 bg-white p-6 rounded-lg shadow-md">
         <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
             종류
           </label>
-          <div className="flex flex-1 rounded-lg shadow-md">
+          <div className="flex flex-1 rounded-lg shadow-md sm:w-28 ">
             <button
               className={`flex-1 h-9 rounded-l-lg ${
-                type === "스키" ? "bg-primary-500 text-white" : "bg-gray-100"
+                lessonType === "SKI"
+                  ? "bg-primary-500 text-white"
+                  : "bg-white hover:bg-gray-50 "
               }`}
-              onClick={() => setType("스키")}
+              onClick={() => setLessonType("SKI")}
             >
               스키
             </button>
             <button
-              className={`flex-1 h-9 rounded-r-lg ${
-                type === "보드" ? "bg-gray-700 text-white" : "bg-white"
+              className={`flex-1 h-9 rounded-r-lg  ${
+                lessonType === "BOARD"
+                  ? "bg-primary-500 text-white"
+                  : "bg-white hover:bg-gray-50"
               }`}
-              onClick={() => setType("보드")}
+              onClick={() => setLessonType("BOARD")}
             >
               보드
             </button>
@@ -141,9 +177,9 @@ const ReservationBox = () => {
             <option value="select" disabled hidden>
               장소를 선택하세요
             </option>
-            {locations.map((loc) => (
-              <option key={loc.resortId} value={loc.resortName}>
-                {loc.resortName}
+            {locationsInfo.map((location) => (
+              <option key={location.resortId} value={location.resortName}>
+                {location.resortName}
               </option>
             ))}
           </select>
@@ -184,37 +220,27 @@ const ReservationBox = () => {
             <input
               type="date"
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="shadow-lg sm:w-[250px] w-[220px] sm:text-sm text-xs"
+              className="shadow-lg w-full sm:text-sm text-xs"
               min={today}
             />
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
-          <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
-            시작 시간
-          </label>
-          <div className="flex flex-1">
-            <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="w-full p-2 bg-white shadow-md rounded-lg h-9 text-center"
-              step="1800" // 30 minutes
-            />
-          </div>
-        </div>
+        <TimePicker
+          startTime={lessonStartTime}
+          setStartTime={setLessonStartTime}
+        />
         <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
             강습 시간
           </label>
           <select
-            onChange={(e) => setLessonTimes([parseInt(e.target.value)])}
+            onChange={(e) => setDurationTime(parseInt(e.target.value))}
             className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
           >
             <option value="">강습 시간을 선택하세요</option>
-            {lessonTimes.map((time) => (
+            {durationTimes.map((time) => (
               <option key={time} value={time}>
-                {`${String(time)}시간`}
+                {time}시간
               </option>
             ))}
           </select>
@@ -223,12 +249,14 @@ const ReservationBox = () => {
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
             레벨 선택
           </label>
-          <div className="flex flex-1 shadow-md rounded-lg">
+          <div className="flex flex-1 shadow-md rounded-lg ">
             <button
               className={`h-14 ${
-                level === 1 ? "bg-primary-500 text-white" : "bg-gray-100"
-              } w-1/3 flex flex-col items-center justify-center rounded-l-lg border-r-2`}
-              onClick={() => setLevel(1)}
+                level === "beginner"
+                  ? "bg-primary-500 text-white"
+                  : "bg-gray-100"
+              } w-1/3 flex flex-col items-center justify-center rounded-l-lg border-r-2 hover:scale-98`}
+              onClick={() => setLevel("beginner")}
             >
               <div className="sm:text-md text-sm">초급</div>
               <div className="sm:text-[10px] text-[8px]">
@@ -237,9 +265,11 @@ const ReservationBox = () => {
             </button>
             <button
               className={`h-14 ${
-                level === 2 ? "bg-primary-500 text-white" : "bg-gray-100"
-              } w-1/3 flex flex-col items-center justify-center border-r-2`}
-              onClick={() => setLevel(2)}
+                level === "intermediate"
+                  ? "bg-primary-500 text-white"
+                  : "bg-gray-100"
+              } w-1/3 flex flex-col items-center justify-center border-r-2 hover:scale-98`}
+              onClick={() => setLevel("intermediate")}
             >
               <div className="sm:text-md text-sm">중급</div>
               <div className="sm:text-[10px] text-[8px]">
@@ -248,9 +278,11 @@ const ReservationBox = () => {
             </button>
             <button
               className={`h-14 ${
-                level === 3 ? "bg-primary-500 text-white" : "bg-gray-100"
-              } w-1/3 flex flex-col items-center justify-center rounded-r-lg px-1`}
-              onClick={() => setLevel(3)}
+                level === "advanced"
+                  ? "bg-primary-500 text-white"
+                  : "bg-gray-100"
+              } w-1/3 flex flex-col items-center justify-center rounded-r-lg hover:scale-98`}
+              onClick={() => setLevel("advanced")}
             >
               <div className="sm:text-md text-sm">고급</div>
               <div className="sm:text-[10px] text-[8px]">
