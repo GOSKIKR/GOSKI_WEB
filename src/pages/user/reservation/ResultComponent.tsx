@@ -5,21 +5,21 @@ import InstructorResultComponent from "./InstructorResultComponent";
 
 interface ResultComponentProps {
   filteredData: any;
-  level: number;
+  selectedLevel: string;
   goToTeamDetail: any;
   goToInstructorDetail: any;
 }
 
 const ResultComponent: React.FC<ResultComponentProps> = ({
   filteredData,
-  level,
+  selectedLevel,
   goToTeamDetail,
   goToInstructorDetail,
 }) => {
   return (
     <div className="flex pt-4 w-11/12 items-center">
       {filteredData.map((data: any) =>
-        level === 1 ? (
+        selectedLevel === "beginner" ? (
           <div key={data.id} className="w-full">
             <TeamResultComponent data={data} goToTeamDetail={goToTeamDetail} />
           </div>
