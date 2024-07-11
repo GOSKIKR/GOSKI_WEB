@@ -24,7 +24,6 @@ const UserLessonlist = () => {
             ]);
             if (userLessons) {
                 setLessons(userLessons);
-                console.log(userLessons);
             }
             if (payments) {
                 setPaymentDetails(payments);

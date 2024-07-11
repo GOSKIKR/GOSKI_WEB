@@ -11,6 +11,7 @@ export interface UserLessonDTO {
     startTime: string;
     duration: number;
     hasReview: boolean;
+    hasFeedback: boolean;
     studentCount: number;
 }
 

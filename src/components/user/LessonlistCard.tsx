@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineRight } from "react-icons/ai";
 import { UserLessonDTO } from "../../dto/UserLessonDTO";
 import { UserPaylistDTO } from "../../dto/PaymentDTO";
 
@@ -62,12 +61,12 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
     };
 
     return (
-        <div className="bg-primary-50 h-40 w-full rounded-md shadow-lg flex flex-row px-3 sm:px-12 py-5 justify-between items-center">
+        <div className="bg-primary-50 h-40 w-full rounded-md shadow-lg flex flex-row px-3 sm:px-8 py-5 sm:space-x-3 space-x-1 items-center">
             <img
                 src={lesson.profileUrl}
-                className="sm:h-32 sm:w-32 h-24 w-24 rounded-lg"
+                className="sm:h-32 sm:w-32 h-20 w-20 rounded-lg cursor-not-allowed"
             />
-            <div className="flex flex-col w-1/3 sm:px-0 sm:text-md text-sm sm:space-y-1 space-y-0.5">
+            <div className="flex flex-col sm:w-1/3 w-2/5 pl-2 sm:px-4 sm:text-md text-sm sm:space-y-1 space-y-1">
                 <div
                     className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(
                         lesson.lessonStatus
@@ -75,13 +74,13 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                 >
                     {getStatusName(lesson.lessonStatus)}
                 </div>
-                <div className="px-1.5">{lesson.resortName}</div>
+                <div className="pl-1.5">{lesson.resortName}</div>
                 <p className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
                     lesson.lessonDate
                 } (${new Date(lesson.lessonDate).toLocaleString("ko-KR", {
                     weekday: "short",
                 })}) `}</p>
-                <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${formatTime(
+                <div className="text-gray-500 sm:text-sm text-xs pl-1.5">{`${formatTime(
                     lesson.startTime
                 )} ~ ${new Date(
                     new Date(
@@ -92,34 +91,43 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                     hour: "2-digit",
                     minute: "2-digit",
                 })}`}</div>
-                <div className="px-1.5">
+                <div className="pl-1.5">
                     {lesson.teamName}, {lesson.instructorName}
                 </div>
             </div>
-            <div className="flex flex-col w-1/3 h-full px-1.5 pt-2 sm:px-0 sm:text-md text-sm justify-start space-y-2 items-center">
+            <div className="flex flex-col w-1/3 h-full sm:px-0 sm:text-md text-xs sm:justify-start justify-center space-y-2 items-end">
                 {paymentDetail && (
-                    <div>
+                    <div className="flex flex-row space-x-2">
                         <div className="text-gray-500">결제 금액</div>
                         <div>{paymentDetail.totalAmount}원</div>
                     </div>
                 )}
                 <div
-                    className="text-center w-24 py-0.5 bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white"
+                    className="text-center sm:w-24 sm:text-base w-20 text-xs py-0.5 bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white"
                     onClick={goToPayDetail}
                 >
                     <div>결제 상세</div>
                 </div>
-                {lesson.lessonStatus === "강습 완료" && (
+                {lesson.lessonStatus === "lessonFinished" && (
                     <>
+                        {lesson.hasFeedback ? (
+                            <div
+                                className="text-center space-x-2 sm:w-24 sm:text-base w-20 text-xs py-0.5 bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white"
+                                onClick={goToFeedback}
+                            >
+                                <div>피드백 확인</div>
+                            </div>
+                        ) : (
+                            <div className="text-center space-x-2 sm:w-24 sm:text-base w-20 text-xs py-0.5 bg-gray-400 rounded-md shadow-md text-white">
+                                <div>피드백 미작성</div>
+                            </div>
+                        )}
+
                         <div
-                            className="text-center space-x-2 w-24 py-0.5 bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white"
-                            onClick={goToFeedback}
-                        >
-                            <div>피드백 확인</div>
-                        </div>
-                        <div
-                            className={`text-center space-x-2 w-24 py-0.5 bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white ${
-                                lesson.hasReview ? "" : "cursor-pointer"
+                            className={`text-center space-x-2 sm:w-24 sm:text-base w-20 text-xs py-0.5 rounded-md shadow-md text-white ${
+                                lesson.hasReview
+                                    ? "bg-gray-400"
+                                    : "bg-primary-500 hover:bg-primary-800  cursor-pointer"
                             }`}
                             onClick={
                                 lesson.hasReview ? undefined : goToWriteReview
