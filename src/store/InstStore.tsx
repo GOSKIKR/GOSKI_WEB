@@ -1,6 +1,6 @@
 import { create,StateCreator} from "zustand";
 import { persist, PersistOptions } from "zustand/middleware";
-import { Certificate, InstructorProfileDTO } from "../dto/InstructorDTO";
+import { CertificateUrlVO, InstructorProfileDTO } from "../dto/InstructorDTO";
 
 interface InstructorState {
     userName: string;
@@ -52,7 +52,7 @@ const useInstructorStore = create<InstructorState>(
                 }))
             })),
             setDescription: (newDesc:string) => set(() => ({ description: newDesc })),
-            setCertificates: (certificates : Certificate[]) => set(() => ({ certificates })),
+            setCertificates: (certificates : CertificateUrlVO[]) => set(() => ({ certificates })),
         }),
         {
             name: "instructor-store", // 이름을 지정하여 localStorage에 저장
