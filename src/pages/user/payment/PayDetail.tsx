@@ -102,7 +102,7 @@ const PayDetail = () => {
                             </>
                         )}
                     </div>
-                    {lesson.lessonStatus !== "cancelLesson" && (
+                    {lesson.lessonStatus == "notStart" && (
                         <div
                             onClick={goToCancle}
                             className="flex items-center justify-center bg-slate-400 sm:w-1/6 h-12 p-1 px-2 rounded-lg text-white cursor-pointer"
