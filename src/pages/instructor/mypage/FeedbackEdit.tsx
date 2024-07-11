@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import LessonReserveInfo from "../../../components/instructor/mypage/LessonReserveInfo";
 import LessonFeedbackForm from "../../../components/instructor/mypage/LessonFeedbackForm";
@@ -7,8 +7,11 @@ import FeedbackVideoRegist from "../../../components/instructor/mypage/FeedbackV
 import FeedbackImageRegist from "../../../components/instructor/mypage/FeedbackImageRegist";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 
+
 const FeedbackEdit : React.FC = () => {
     const navigate = useNavigate();
+    const {state} = useLocation();
+    
     const[innerWidth,setInnerWidth] = useState(window.innerWidth);
 
     const handleResize = () => {
@@ -27,7 +30,7 @@ const FeedbackEdit : React.FC = () => {
             <div className="flex justify-center mt-20 text-3xl font-bold mb-10">
                 피드백 수정
             </div>
-            <LessonReserveInfo/>
+            <LessonReserveInfo lesson={state}/>
             <LessonFeedbackForm/>
             <FeedbackVideoRegist/>
             <FeedbackImageRegist/>
