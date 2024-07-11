@@ -1,60 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import NavbarUser from "../../../components/common/NavbarUser";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
-
-interface Lesson {
-    lessonId: number;
-    teamId: number;
-    teamName: string;
-    resortName: string;
-    instructorId: number;
-    instructorName: string;
-    profileUrl: string;
-    lessonDate: string;
-    lessonStatus: string;
-    startTime: string;
-    duration: number;
-    hasReview: boolean;
-    studentCount: number;
-}
-
-interface Tag {
-    tagReviewId: number;
-    tagName: string;
-}
-
-const tags: Tag[] = [
-    { tagReviewId: 1, tagName: "친절해요" },
-    { tagReviewId: 2, tagName: "재미있어요" },
-    { tagReviewId: 3, tagName: "열정적이에요" },
-    { tagReviewId: 4, tagName: "학생 친화적" },
-    { tagReviewId: 5, tagName: "전문 지식" },
-    { tagReviewId: 6, tagName: "불친절해요" },
-    { tagReviewId: 7, tagName: "무서워요" },
-    { tagReviewId: 8, tagName: "대충해요" },
-    { tagReviewId: 9, tagName: "어려워요" },
-    { tagReviewId: 10, tagName: "준비 부족" },
-];
+import { Tag } from "../../../dto/ReviewDTO";
+import { UserReviewDTO } from "../../../dto/UserReviewDTO";
+import { ReviewTagService } from "../../../api/ReviewTagService";
+import { UserReviewService } from "../../../api/UserReviewService";
 
 const WriteReview: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { lesson } = (location.state as { lesson: Lesson }) || {};
+    const { lesson } = location.state || {};
 
     const [rating, setRating] = useState<number>(0);
     const [hoverRating, setHoverRating] = useState<number>(0);
     const [selectedTags, setSelectedTags] = useState<number[]>([]);
     const [reviewContent, setReviewContent] = useState<string>("");
+    const [tags, setTags] = useState<Tag[]>([]);
 
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-        return `${year}.${month}.${day}`;
-    };
+    useEffect(() => {
+        const fetchTags = async () => {
+            const reviewTagService = new ReviewTagService();
+            const tagList = await reviewTagService.getTags();
+            setTags(tagList);
+        };
+        fetchTags();
+    }, []);
 
     const handleTagClick = (id: number) => {
         setSelectedTags((prevTags) =>
@@ -64,16 +36,44 @@ const WriteReview: React.FC = () => {
         );
     };
 
-    const handleSubmit = () => {
-        const reviewData = {
+    const handleSubmit = async () => {
+        if (rating === 0) {
+            alert("별점을 선택해주세요.");
+            return;
+        }
+
+        if (reviewContent.trim() === "") {
+            alert("리뷰 내용을 작성해주세요.");
+            return;
+        }
+
+        if (selectedTags.length === 0) {
+            alert("태그를 선택해주세요.");
+            return;
+        }
+
+        const reviewData: UserReviewDTO = {
             lessonId: lesson.lessonId,
             rating,
             content: reviewContent,
             reviewTags: selectedTags,
         };
-        console.log(reviewData);
-        // api 요청
-        navigate(-1);
+        // console.log(reviewData);
+
+        const userReviewService = new UserReviewService();
+        const result = await userReviewService.writeUserReview(reviewData);
+
+        if (result) {
+            alert("리뷰가 성공적으로 등록되었습니다.");
+            console.log(reviewData);
+            navigate(-1);
+        } else {
+            alert("리뷰 등록에 실패했습니다.");
+        }
+    };
+
+    const formatTime = (time: string) => {
+        return time.slice(0, 2) + ":" + time.slice(2);
     };
 
     return (
@@ -104,11 +104,13 @@ const WriteReview: React.FC = () => {
                                 weekday: "short",
                             }
                         )}) `}</p>
-                        <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${
+                        <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${formatTime(
                             lesson.startTime
-                        } ~ ${new Date(
+                        )} ~ ${new Date(
                             new Date(
-                                `${lesson.lessonDate}T${lesson.startTime}`
+                                `${lesson.lessonDate}T${formatTime(
+                                    lesson.startTime
+                                )}`
                             ).getTime() +
                                 lesson.duration * 60 * 60 * 1000
                         ).toLocaleTimeString("en-US", {
@@ -134,7 +136,7 @@ const WriteReview: React.FC = () => {
                                                 name="rating"
                                                 value={starValue}
                                                 onClick={() =>
-                                                    setRating(starValue / 2)
+                                                    setRating(starValue)
                                                 }
                                                 className="hidden"
                                             />
@@ -162,7 +164,7 @@ const WriteReview: React.FC = () => {
                             {tags.map((tag) => (
                                 <button
                                     key={tag.tagReviewId}
-                                    className={`px-2 py-2 w-20 sm:text-md text-xs h-8 rounded-full truncate ${
+                                    className={`px-2 py-2 w-36 sm:text-md text-xs h-8 rounded-full truncate ${
                                         selectedTags.includes(tag.tagReviewId)
                                             ? "bg-blue-500 text-white"
                                             : "bg-blue-100"
