@@ -3,13 +3,13 @@ import { FaTrash } from 'react-icons/fa';
 import useInstructorStore from '../../../store/InstStore';
 import { levels } from '../../../utils/levels';
 import { UserService } from '../../../api/UserService';
-import { Certificate, NewCertificate } from '../../../dto/InstructorDTO';
+import { CertificateUrlVO, NewCertificate } from '../../../dto/InstructorDTO';
 
 const userService = new UserService();
 
 const CertificatePage: React.FC = () => {
     const { certificates, setCertificates } = useInstructorStore();
-    const [deleteCertificateUrls, setDeleteCertificateUrls] = useState<Certificate[]>([]);
+    const [deleteCertificateUrls, setDeleteCertificateUrls] = useState<CertificateUrlVO[]>([]);
     const [newCertificates, setNewCertificates] = useState<NewCertificate[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
@@ -65,9 +65,14 @@ const CertificatePage: React.FC = () => {
     const instProfileUpdate = async () => {
         const formData = new FormData();
 
-        formData.append('deleteCertificateUrls', new Blob([JSON.stringify(deleteCertificateUrls)],{type : "application/json"}));
+        // formData.append('deleteCertificateUrls', new Blob([JSON.stringify(deleteCertificateUrls)],{type : "application/json"}));
 
-        console.log(deleteCertificateUrls)
+        // console.log(deleteCertificateUrls)
+
+        deleteCertificateUrls.forEach((cert) => {
+            formData.append("deletedCertificateIds",cert.certificateId.toString());
+            formData.append("deleteCertificateUrls",cert.certificateImageUrl)
+        })
 
         newCertificates.forEach(cert => {
             formData.append('certificateIds', cert.certificateId.toString());
