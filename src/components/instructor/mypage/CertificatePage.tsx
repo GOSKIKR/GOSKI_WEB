@@ -65,9 +65,9 @@ const CertificatePage: React.FC = () => {
     const instProfileUpdate = async () => {
         const formData = new FormData();
 
-        deleteCertificateUrls.forEach(cert => {
-            formData.append('deleteCertificateUrls', JSON.stringify(cert));
-        });
+        formData.append('deleteCertificateUrls', new Blob([JSON.stringify(deleteCertificateUrls)],{type : "application/json"}));
+
+        console.log(deleteCertificateUrls)
 
         newCertificates.forEach(cert => {
             formData.append('certificateIds', cert.certificateId.toString());
