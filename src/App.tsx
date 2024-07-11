@@ -1,5 +1,4 @@
 import React from "react";
-import Counter from "./components/Counter";
 import UserMain from "./pages/user/main/UserMain";
 import InstructorMain from "./pages/instructor/main/InstructorMain";
 import Coupon from "./components/user/coupon";
@@ -37,87 +36,65 @@ import FeedbackEdit from "./pages/instructor/mypage/FeedbackEdit";
 import NotFound from "./pages/NotFound";
 
 const App: React.FC = () => {
-    return (
-        <div>
-            <Routes>
-                <Route path="/" element={<UserMain />} />
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<UserMain />} />
 
-                <Route path="/notice" element={<Notice />} />
+        <Route path="/notice" element={<Notice />} />
 
-                <Route path="/login" element={<Login />} />
-                <Route
-                    path="/login/forgot-password"
-                    element={<ForgotPassword />}
-                />
-                <Route path="/login/register" element={<Register />} />
-                <Route path="/dm" element={<DM />} />
-                <Route path="/dm/ws" element={<ChatComponent />} />
-                <Route path="/user/coupon" element={<Coupon />} />
-                <Route path="/reserve/set" element={<SetFilter />} />
-                <Route path="/reserve/result" element={<FilterResult />} />
-                <Route path="/reserve/info/team" element={<TeamInfo />} />
-                <Route
-                    path="/reserve/info/instructor"
-                    element={<InstructorInfo />}
-                />
-                <Route path="/user/payment/detail" element={<PayDetail />} />
-                <Route path="/user/payment/cancle" element={<PayCancle />} />
-                <Route path="/user/payment" element={<Payment />} />
-                <Route path="/user/review" element={<WriteReview />} />
-                <Route path="/user/feedback" element={<UserFeedback />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/login/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login/register" element={<Register />} />
+        <Route path="/dm" element={<DM />} />
+        <Route path="/dm/ws" element={<ChatComponent />} />
+        <Route path="/user/coupon" element={<Coupon />} />
+        <Route path="/reserve/set" element={<SetFilter />} />
+        <Route path="/reserve/result" element={<FilterResult />} />
+        <Route path="/reserve/info/team" element={<TeamInfo />} />
+        <Route path="/reserve/info/instructor" element={<InstructorInfo />} />
+        <Route path="/user/payment/detail" element={<PayDetail />} />
+        <Route path="/user/payment/cancle" element={<PayCancle />} />
+        <Route path="/user/payment" element={<Payment />} />
+        <Route path="/user/review" element={<WriteReview />} />
+        <Route path="/user/feedback" element={<UserFeedback />} />
 
-                <Route path="/user/my" element={<UserMypage />} />
+        <Route path="/user/my" element={<UserMypage />} />
 
-                <Route path="/instructor/main" element={<InstructorMain />} />
-                <Route path="/instructor/boss/main" element={<BossMain />} />
-                <Route
-                    path="/instructor/team"
-                    element={<Navigate to="/instructor/team/regist" />}
-                />
-                <Route path="/instructor/detail" element={<LessonDetail />} />
+        <Route path="/instructor/main" element={<InstructorMain />} />
+        <Route path="/instructor/boss/main" element={<BossMain />} />
+        <Route
+          path="/instructor/team"
+          element={<Navigate to="/instructor/team/regist" />}
+        />
+        <Route path="/instructor/detail" element={<LessonDetail />} />
 
-                <Route
-                    path="/instructor/team/regist"
-                    element={<TeamRegist />}
-                />
-                <Route
-                    path="/instructor/team/edit"
-                    element={<TeamInfoEdit />}
-                />
-                <Route
-                    path="/instructor/team/lessonfee"
-                    element={<TeamLessonFeeSetting />}
-                />
-                <Route
-                    path="/instructor/team/member"
-                    element={<TeamMember />}
-                />
+        <Route path="/instructor/team/regist" element={<TeamRegist />} />
+        <Route path="/instructor/team/edit" element={<TeamInfoEdit />} />
+        <Route
+          path="/instructor/team/lessonfee"
+          element={<TeamLessonFeeSetting />}
+        />
+        <Route path="/instructor/team/member" element={<TeamMember />} />
 
-                <Route
-                    path="/instructor/my-lesson"
-                    element={<MyLessonList />}
-                />
+        <Route path="/instructor/my-lesson" element={<MyLessonList />} />
 
-                <Route
-                    path="/instructor/regist-feedback"
-                    element={<FeedbackRegist />}
-                />
+        <Route
+          path="/instructor/regist-feedback"
+          element={<FeedbackRegist />}
+        />
 
-                <Route
-                    path="/instructor/edit-feedback"
-                    element={<FeedbackEdit />}
-                />
+        <Route path="/instructor/edit-feedback" element={<FeedbackEdit />} />
 
-                <Route path="/instructor/settlement" element={<Settlement />} />
+        <Route path="/instructor/settlement" element={<Settlement />} />
 
-                <Route path="/instructor/edit-info" element={<MyPageInfo />} />
-                <Route path="/instructor/edit-cert" element={<MyPageCert />} />
+        <Route path="/instructor/edit-info" element={<MyPageInfo />} />
+        <Route path="/instructor/edit-cert" element={<MyPageCert />} />
 
-                <Route path="/counter" element={<Counter />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </div>
-    );
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
+  );
 };
 
 export default App;
