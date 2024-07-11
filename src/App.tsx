@@ -6,7 +6,6 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import Login from "./pages/user/auth/Login";
 import ForgotPassword from "./pages/user/auth/ForgotPassword";
 import Register from "./pages/user/auth/Register";
-import DM from "./pages/user/dm/DM";
 import SetFilter from "./pages/user/reservation/SetFilter";
 import FilterResult from "./pages/user/reservation/FilterResult";
 import Payment from "./pages/user/payment/Payment";
@@ -43,29 +42,20 @@ const App: React.FC = () => {
 
         <Route path="/notice" element={<Notice />} />
 
-
-                <Route path="/login" element={<Login />} />
-                <Route
-                    path="/login/forgot-password"
-                    element={<ForgotPassword />}
-                />
-                <Route path="/login/register" element={<Register />} />
-                <Route path="/dm" element={<DM />} />
-                <Route path="/dm/ws" element={<ChatComponent />} />
-                <Route path="/user/coupon" element={<Coupon />} />
-                <Route path="/reserve/set" element={<SetFilter />} />
-                <Route path="/reserve/result" element={<FilterResult />} />
-                <Route path="/reserve/info/team" element={<TeamInfo />} />
-                <Route
-                    path="/reserve/info/instructor"
-                    element={<InstructorInfo />}
-                />
-                <Route path="/user/payment/detail" element={<PayDetail />} />
-                <Route path="/user/payment/cancel" element={<PayCancel />} />
-                <Route path="/user/payment" element={<Payment />} />
-                <Route path="/user/review" element={<WriteReview />} />
-                <Route path="/user/feedback" element={<UserFeedback />} />
-
+        <Route path="/login" element={<Login />} />
+        <Route path="/login/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login/register" element={<Register />} />
+        <Route path="/dm/ws" element={<ChatComponent />} />
+        <Route path="/user/coupon" element={<Coupon />} />
+        <Route path="/reserve/set" element={<SetFilter />} />
+        <Route path="/reserve/result" element={<FilterResult />} />
+        <Route path="/reserve/info/team" element={<TeamInfo />} />
+        <Route path="/reserve/info/instructor" element={<InstructorInfo />} />
+        <Route path="/user/payment/detail" element={<PayDetail />} />
+        <Route path="/user/payment/cancel" element={<PayCancel />} />
+        <Route path="/user/payment" element={<Payment />} />
+        <Route path="/user/review" element={<WriteReview />} />
+        <Route path="/user/feedback" element={<UserFeedback />} />
 
         <Route path="/user/my" element={<UserMypage />} />
 
