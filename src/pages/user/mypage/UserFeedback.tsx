@@ -3,100 +3,40 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FiDownload } from "react-icons/fi";
 import NavbarUser from "../../../components/common/NavbarUser";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
-
-interface Lesson {
-    lessonId: number;
-    teamId: number;
-    teamName: string;
-    resortName: string;
-    instructorId: number;
-    instructorName: string;
-    profileUrl: string;
-    lessonDate: string;
-    lessonStatus: string;
-    startTime: string;
-    duration: number;
-    hasReview: boolean;
-    studentCount: number;
-}
-interface Media {
-    mediaId: number;
-    mediaUrl: string;
-}
-
-interface FeedbackData {
-    feedbackId: number;
-    content: string;
-    images: Media[];
-    videos: Media[];
-}
-
-const dummyFeedbackData: FeedbackData = {
-    feedbackId: 4,
-    content:
-        "강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다 강습 피드백입니다",
-    images: [
-        {
-            mediaId: 10,
-            mediaUrl:
-                "https://go-ski.s3.ap-northeast-2.amazonaws.com/feedback/images/f8f09ac7-a37c-48df-92b6-0a404bbf7ef3.jpeg",
-        },
-        {
-            mediaId: 11,
-            mediaUrl:
-                "https://go-ski.s3.ap-northeast-2.amazonaws.com/feedback/images/f66529d8-7526-4426-950c-0487f65f8515.png",
-        },
-    ],
-    videos: [
-        {
-            mediaId: 12,
-            mediaUrl:
-                "https://go-ski.s3.ap-northeast-2.amazonaws.com/feedback/videos/c74bbd1a-cb7f-48ae-a27e-e3d308b1eaf5.mp4",
-        },
-    ],
-};
+import { FeedbackDataDTO, MediaDTO } from "../../../dto/FeedbackDTO";
+import { UserFeedbackService } from "../../../api/UserFeedbackService";
 
 const UserFeedback = () => {
-    const [feedback, setFeedback] = useState<FeedbackData | null>(null);
+    const [feedback, setFeedback] = useState<FeedbackDataDTO | null>(null);
+    const navigate = useNavigate();
     const location = useLocation();
-    const { lesson } = (location.state as { lesson: Lesson }) || {};
+    const { lesson } = location.state || {};
 
     useEffect(() => {
-        // 여기서 실제 API 호출을 통해 데이터를 가져옵니다.
-        // const fetchFeedback = async () => {
-        //   try {
-        //     const response = await fetch('/path-to-your-api'); // API 엔드포인트를 설정합니다.
-        //     const result = await response.json();
-        //     if (result.status === 'success') {
-        //       setFeedback(result.data);
-        //     }
-        //   } catch (error) {
-        //     console.error('Error fetching feedback:', error);
-        //   }
-        // };
+        const fetchFeedback = async () => {
+            const userFeedbackService = new UserFeedbackService();
+            const feedbackData = await userFeedbackService.getUserFeedback(
+                lesson.lessonId
+            );
+            if (feedbackData) {
+                setFeedback(feedbackData);
+            }
+        };
+        fetchFeedback();
+    }, [lesson.lessonId]);
 
-        // fetchFeedback();
-
-        // Use dummy data instead of API call
-        setFeedback(dummyFeedbackData);
-    }, []);
-
-    if (!feedback) {
-        return <div>Loading...</div>;
-    }
-
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-        return `${year}.${month}.${day}`;
+    const formatTime = (time: string) => {
+        return time.slice(0, 2) + ":" + time.slice(2);
     };
 
     return (
         <div className="flex flex-col w-full h-screen items-center">
             <div className="w-full">
-                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+                {window.innerWidth > 640 ? (
+                    <NavbarUser />
+                ) : (
+                    <NavbarUserMobile />
+                )}
             </div>
             <div className="flex flex-col w-4/5 rounded-lg items-center py-4 space-y-10">
                 <div className="sm:w-4/5 w-full">
@@ -119,7 +59,6 @@ const UserFeedback = () => {
                                     {lesson.teamName}
                                 </div>
                             </div>
-                            {/* 지정 강습일 경우 강사명 추가 */}
                             <div className="flex flex-row space-x-8">
                                 <div className="sm:w-12 w-1/4 text-center">
                                     일시
@@ -130,11 +69,13 @@ const UserFeedback = () => {
                                     ).toLocaleString("ko-KR", {
                                         weekday: "short",
                                     })}) `}</p>
-                                    <div className="px-1.5">{`${
+                                    <div className="text-gray-500 sm:text-sm text-xs px-1.5">{`${formatTime(
                                         lesson.startTime
-                                    } ~ ${new Date(
+                                    )} ~ ${new Date(
                                         new Date(
-                                            `${lesson.lessonDate}T${lesson.startTime}`
+                                            `${lesson.lessonDate}T${formatTime(
+                                                lesson.startTime
+                                            )}`
                                         ).getTime() +
                                             lesson.duration * 60 * 60 * 1000
                                     ).toLocaleTimeString("en-US", {
@@ -154,71 +95,86 @@ const UserFeedback = () => {
                     <div className="font-bold mb-2">강습 피드백 내용</div>
                     <div className="bg-primary-50 p-4 rounded-lg mb-6">
                         <div className="bg-white sm:p-5 py-2 rounded-lg text-sm sm:text-base w-full">
-                            <div>{feedback.content}</div>
+                            <div>{feedback?.content}</div>
                         </div>
                     </div>
-                    <div className="font-bold mb-2">
-                        동영상 ({feedback.videos.length})
-                    </div>
-                    <div className="bg-primary-50 p-5 rounded-lg shadow-md mb-6">
-                        <div className="flex space-x-4 flex-col">
-                            {feedback.videos.map((video) => (
-                                <div
-                                    key={video.mediaId}
-                                    className="sm:w-1/3 bg-white p-3 rounded-lg"
-                                >
-                                    <video className="w-full h-32" controls>
-                                        <source
-                                            src={video.mediaUrl}
-                                            type="video/mp4"
-                                        />
-                                        Your browser does not support the video
-                                        tag.
-                                    </video>
-                                    <a
-                                        href={video.mediaUrl}
-                                        download
-                                        className="flex items-center justify-center mt-2 py-1 w-full text-white bg-primary-500 rounded-md "
-                                    >
-                                        <div>
-                                            <FiDownload />
+                    {feedback &&
+                        feedback.videos &&
+                        feedback.videos.length > 0 && (
+                            <>
+                                <div className="font-bold mb-2">
+                                    동영상 ({feedback.videos.length})
+                                </div>
+                                <div className="bg-primary-50 p-5 rounded-lg shadow-md mb-6">
+                                    <div className="grid sm:grid-cols-4 grid-cols-2 gap-4">
+                                        {feedback.videos.map((video) => (
+                                            <div
+                                                key={video.mediaId}
+                                                className="flex flex-col justify-between items-center sm:w-40 bg-white p-3 rounded-lg"
+                                            >
+                                                <video
+                                                    controls
+                                                    className="w-full h-full"
+                                                >
+                                                    <source
+                                                        src={video.mediaUrl}
+                                                        type="video/mp4"
+                                                    />
+                                                </video>
+                                                <a
+                                                    href={video.mediaUrl}
+                                                    download
+                                                    className="flex items-center justify-center mt-2 py-1 w-full text-white bg-primary-500 rounded-md "
+                                                >
+                                                    <div>
+                                                        <FiDownload />
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    {feedback &&
+                        feedback.images &&
+                        feedback.images.length > 0 && (
+                            <>
+                                <div className="flex flex-row justify-between items-center pb-3">
+                                    <div className="font-bold mb-2">
+                                        사진 ({feedback.images.length})
+                                    </div>
+                                    <div className="flex bg-primary-500 w-24 h-6 text-sm text-center rounded-lg items-center justify-center">
+                                        <div className="text-white">
+                                            전체 다운로드
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="flex flex-row justify-between items-center pb-3">
-                        <div className="font-bold mb-2">
-                            사진 ({feedback.images.length})
-                        </div>
-                        <div className="flex bg-primary-500 w-24 h-6 text-sm text-center rounded-lg items-center justify-center">
-                            <div className="text-white"> 전체 다운로드</div>
-                        </div>
-                    </div>
-                    <div className="bg-primary-50 p-5 rounded-lg shadow-md mb-6">
-                        <div className="grid sm:grid-cols-4 grid-cols-2 gap-4">
-                            {feedback.images.map((image) => (
-                                <div
-                                    key={image.mediaId}
-                                    className="w-full bg-white relative rounded-lg"
-                                >
-                                    <img
-                                        src={image.mediaUrl}
-                                        alt="feedback"
-                                        className="w-full h-32 object-cover"
-                                    />
-                                    <a
-                                        href={image.mediaUrl}
-                                        download
-                                        className="absolute top-1 right-1 w-5 h-5 text-blue-500"
-                                    >
-                                        <FiDownload />
-                                    </a>
+                                <div className="bg-primary-50 p-5 rounded-lg shadow-md mb-6">
+                                    <div className="grid sm:grid-cols-4 grid-cols-2 gap-4">
+                                        {feedback.images.map((image) => (
+                                            <div
+                                                key={image.mediaId}
+                                                className="flex w-40 h-40 bg-gray-100 relative items-center justify-center rounded-lg"
+                                            >
+                                                <img
+                                                    src={image.mediaUrl}
+                                                    alt="feedback"
+                                                    className="w-32 h-32 object-cover bg-white rounded-lg"
+                                                />
+                                                <a
+                                                    href={image.mediaUrl}
+                                                    download
+                                                    className="absolute top-1.5 right-1.5 w-5 h-5 text-lg font-extrabold text-blue-500"
+                                                >
+                                                    <FiDownload />
+                                                </a>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            </>
+                        )}
                 </div>
             </div>
         </div>
