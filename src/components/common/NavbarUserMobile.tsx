@@ -18,6 +18,8 @@ const NavbarUserMobile = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [animateMenu, setAnimateMenu] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const navigate = useNavigate();
 
@@ -97,7 +99,11 @@ const NavbarUserMobile = () => {
         </div>
       ) : (
         <>
-          <UserNotification />
+          <UserNotification
+            showNotification={showNotification}
+            setShowNotification={setShowNotification}
+            setShowSettings={setShowSettings}
+          />
           <div className="flex items-center text-white">
             <div onClick={() => handleShowMenu()} className="cursor-pointer">
               <svg
