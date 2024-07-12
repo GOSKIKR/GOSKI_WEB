@@ -25,4 +25,26 @@ export class FeedbackService {
             console.error(error)
         }
     }
+
+    async updateFeedback(feedbackId : number | undefined, formData: FormData): Promise<void> {
+        try {
+            const accessToken = localStorage.getItem("accesstoken");
+            const response = await apiClient(true).patch(
+                `${url}/update/${feedbackId}`, 
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            if (response && response.status === httpStatusCode.OK) {
+                alert("피드백이 수정되었습니다")
+            }
+        } catch (error) {
+            alert("피드백 수정이 실패하였습니다.")
+            console.error(error)
+        }
+    }
 }

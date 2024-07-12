@@ -1,7 +1,7 @@
 import React from "react";
 
 interface FeedbackVideoPreviewProps {
-    video: File;
+    video: string;
     onDelete: () => void;
 }
 
@@ -9,7 +9,7 @@ const FeedbackVideoPreview: React.FC<FeedbackVideoPreviewProps> = ({ video, onDe
     return (
         <div className="relative">
             <video
-                src={URL.createObjectURL(video)}
+                src={video}
                 controls
                 className="w-full h-40 object-cover rounded"
             />

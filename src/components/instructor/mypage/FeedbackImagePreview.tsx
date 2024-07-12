@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaTimes } from 'react-icons/fa';
 
 interface FeedbackImagePreviewProps {
-    image: File;
+    image: string;
     onDelete: () => void;
 }
 
@@ -20,7 +20,7 @@ const FeedbackImagePreview: React.FC<FeedbackImagePreviewProps> = ({ image, onDe
                     <FaTimes className="text-red-500 text-xl" />
                 </div>
                 <div className="w-full h-32 bg-blue-100 rounded flex items-center justify-center cursor-pointer" onClick={toggleModal}>
-                    <img src={URL.createObjectURL(image)} alt="Preview" className="object-cover h-full w-full rounded"/>
+                    <img src={image} alt="Preview" className="object-cover h-full w-full rounded"/>
                 </div>
             </div>
             {isModalOpen && (
@@ -29,7 +29,7 @@ const FeedbackImagePreview: React.FC<FeedbackImagePreviewProps> = ({ image, onDe
                         <div className="absolute top-2 right-2 cursor-pointer" onClick={toggleModal}>
                             <FaTimes className="text-red-500 text-2xl" />
                         </div>
-                        <img src={URL.createObjectURL(image)} alt="Preview" className="max-h-[80vh] max-w-[80vw] object-contain"/>
+                        <img src={image} alt="Preview" className="max-h-[80vh] max-w-[80vw] object-contain"/>
                     </div>
                 </div>
             )}

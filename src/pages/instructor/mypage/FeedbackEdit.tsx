@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import LessonReserveInfo from "../../../components/instructor/mypage/LessonReserveInfo";
 import LessonFeedbackForm from "../../../components/instructor/mypage/LessonFeedbackForm";
-import FeedbackVideoRegist from "../../../components/instructor/mypage/FeedbackVideoRegist";
-import FeedbackImageRegist from "../../../components/instructor/mypage/FeedbackImageRegist";
+import FeedbackImageEdit from "../../../components/instructor/mypage/FeedbackImageEdit";
+import FeedbackVideoEdit from "../../../components/instructor/mypage/FeedbackVideoEdit";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 import { UserFeedbackService } from "../../../api/UserFeedbackService";
-import { FeedbackDataDTO } from "../../../dto/FeedbackDTO";
+import { FeedbackDataDTO, MediaDTO } from "../../../dto/FeedbackDTO";
 
 const feedbackService = new UserFeedbackService();
 
@@ -17,6 +17,12 @@ const FeedbackEdit : React.FC = () => {
     const {state} = useLocation();
     const[innerWidth,setInnerWidth] = useState(window.innerWidth);
     const[content, setContent] = useState("");
+    const [currentVideoFiles, setCurrentVideoFiles] = useState<MediaDTO[]>([]);
+    const [currentImageFiles, setCurrentImageFiles] = useState<MediaDTO[]>([]);
+    const [newVideoFiles, setNewVideoFiles] = useState<File[]>([]);
+    const [newImageFiles, setNewImageFiles] = useState<File[]>([]);
+    const [deleteVideoFiles, setDeleteVideoFiles] = useState<number[]>([]);
+    const [deleteImageFiles, setDeleteImageFiles] = useState<number[]>([]);
 
     const handleResize = () => {
         setInnerWidth(window.innerWidth);
@@ -28,6 +34,8 @@ const FeedbackEdit : React.FC = () => {
             if(feedback){
                 setFeedback(feedback);
                 setContent(feedback?.content)
+                setCurrentVideoFiles(feedback?.videos)
+                setCurrentImageFiles(feedback?.images)
             }
         }
 
@@ -46,8 +54,14 @@ const FeedbackEdit : React.FC = () => {
             </div>
             <LessonReserveInfo lesson={state}/>
             <LessonFeedbackForm content={content} setContent={setContent}/>
-            <FeedbackVideoRegist/>
-            <FeedbackImageRegist/>
+            <FeedbackVideoEdit 
+                currentVideoFiles = {currentVideoFiles} 
+                setNewVideoFiles = {setNewVideoFiles}
+                setDeleteVideoFiles = {setDeleteVideoFiles}/>
+            <FeedbackImageEdit
+                currentImageFiles = {currentImageFiles} 
+                setNewImageFiles = {setNewImageFiles}
+                setDeleteImageFiles = {setDeleteImageFiles}/>
             <div className="flex justify-center my-10">
                 <button 
                     className="bg-primary-700 text-white m-2 px-4 py-2 rounded"

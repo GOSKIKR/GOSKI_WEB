@@ -67,7 +67,7 @@ const FeedbackImageRegist: React.FC<FeedbackImageRegistProps> = ({ imageFiles, s
                     ) : (
                         <div className="bg-primary-100 rounded p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {imageFiles.map((image, index) => (
-                                <FeedbackImagePreview key={index} image={image} onDelete={() => handleDelete(index)} />
+                                <FeedbackImagePreview key={index} image={URL.createObjectURL(image)} onDelete={() => handleDelete(index)} />
                             ))}
                         </div>
                     )}

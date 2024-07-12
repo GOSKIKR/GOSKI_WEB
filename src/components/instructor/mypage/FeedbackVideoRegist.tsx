@@ -67,7 +67,7 @@ const FeedbackVideoRegist: React.FC<FeedbackVideoRegistProps> = ({ videoFiles, s
                     ) : (
                         <div className="bg-primary-100 rounded p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {videoFiles.map((video, index) => (
-                                <FeedbackVideoPreview key={index} video={video} onDelete={() => handleDelete(index)} />
+                                <FeedbackVideoPreview key={index} video={URL.createObjectURL(video)} onDelete={() => handleDelete(index)} />
                             ))}
                         </div>
                     )}
