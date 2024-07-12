@@ -3,96 +3,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 import FilterComponent from "./FilterComponent";
-import dummyData from "./FilterDummyData";
 import ResultComponent from "./ResultComponent";
 
+import apiClient from "../../../utils/config/axiosConfig";
+
+import {
+  TeamsFilterResult,
+  InstructorsFilterResult,
+} from "../../../interface/ReservationTypes";
+
 import userReserveStore from "../../../store/userReserveStore";
-
-interface Resort {
-  resortId: number;
-  resortName: string;
-  lessonType: string; //'SKI' | 'BOARD';
-  studentCount: number;
-  lessonDate: string; // 'YYYY-MM-DD';
-  startTime: string; // 'hhmm';
-  duration: number;
-  level: string; //'beginner' | 'intermediate' | 'advanced'
-}
-
-type reserveData = {
-  resortName: string;
-  lessonType: string; //'SKI' | 'BOARD';
-  studentCount: number;
-  lessonDate: string; // 'YYYY-MM-DD';
-  startTime: string; // 'hhmm';
-  duration: number;
-  level: string; //'beginner' | 'intermediate' | 'advanced'
-};
-
-type TeamsFilterResult = {
-  teamId: number;
-  teamName: string;
-  description: string;
-  cost: number;
-  teamProfileUrl: string;
-  rating: number;
-  instructors: number[];
-  teamImages: {
-    teamImageId: number;
-    imageUrl: string;
-  }[];
-  basicFee: number;
-  peopleOptionFee: number;
-  designatedFee: number;
-  levelOptionFee: number;
-  lessonType: string;
-  reviewCount: number;
-  reviews: {
-    reviewId: number;
-    rating: number;
-    content: string;
-    createdAt: string;
-    instructorTags: {
-      tagReviewId: number;
-      tagName: string;
-    }[];
-  }[];
-};
-
-type InstructorsFilterResult = {
-  instructorId: number;
-  userName: string;
-  teamId: number;
-  teamName: string;
-  position: string;
-  description: string;
-  instructorUrl: string;
-  gender: string;
-  certificateInfo: {
-    certificateId: number;
-    certificateName: string;
-    certificateType: string;
-    certificateImageUrl: string;
-  }[];
-  rating: number;
-  reviewCount: number;
-  cost: number;
-  basicFee: number;
-  peopleOptionFee: number;
-  designatedFee: number;
-  levelOptionFee: number;
-  lessonType: string;
-  reviews: {
-    reviewId: number;
-    rating: number;
-    content: string;
-    createdAt: string;
-    instructorTags: {
-      tagReviewId: number;
-      tagName: string;
-    }[];
-  }[];
-};
 
 const FilterResult: React.FC = () => {
   const navigate = useNavigate();
@@ -114,6 +34,7 @@ const FilterResult: React.FC = () => {
 
   const {
     resortName,
+    resortId,
     lessonType,
     studentCount,
     lessonDate,
@@ -121,6 +42,50 @@ const FilterResult: React.FC = () => {
     duration,
     level,
   } = userReserveStore();
+
+  useEffect(() => {
+    const fetchTeamData = async () => {
+      try {
+        const response = await apiClient().post("/lesson/reserve/novice", {
+          resortId: resortId,
+          studentCount: studentCount,
+          lessonType: lessonType,
+          lessonDate: lessonDate,
+          startTime: startTime,
+          duration: duration,
+          level: level,
+        });
+        console.log(response.data.data);
+        setBeginnerFilteredData(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const fetchInstructorData = async () => {
+      try {
+        const response = await apiClient().post("/lesson/reserve/advanced", {
+          resortId: resortId,
+          studentCount: studentCount,
+          lessonType: lessonType,
+          lessonDate: lessonDate,
+          startTime: startTime,
+          duration: duration,
+          level: level,
+        });
+        console.log(response.data.data);
+        setIntermediateFilteredData(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (level === "BEGINNER") {
+      fetchTeamData();
+    } else {
+      fetchInstructorData();
+    }
+  }, []);
 
   useEffect(() => {
     setSelectedResortName(resortName);
@@ -133,10 +98,10 @@ const FilterResult: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedLevel === "beginner") {
-      setBeginnerFilteredData(dummyData.teamsData);
+    if (selectedLevel === "BEGINNER") {
+      setBeginnerFilteredData(beginnerFilteredData);
     } else {
-      setIntermediateFilteredData(dummyData.intermediateInstructorsData);
+      setIntermediateFilteredData(intermediateFilteredData);
     }
   }, [selectedLevel]); // selectedLevel을 의존성 배열에 추가
 
@@ -182,33 +147,41 @@ const FilterResult: React.FC = () => {
 
   //검색 버튼 클릭 시 함수
   const handleSearch = () => {
-    //api 연결 부분
-    // 대신 dummyData 사용
-    if (selectedLevel === "beginner") {
-      setBeginnerFilteredData(dummyData.teamsData);
+    if (selectedLevel === "BEGINNER") {
+      setBeginnerFilteredData(beginnerFilteredData);
     } else {
-      setIntermediateFilteredData(dummyData.intermediateInstructorsData);
+      setIntermediateFilteredData(intermediateFilteredData);
     }
   };
 
   return (
-    <div>
-      <div className="flex flex-col w-full">
+    <div className="flex flex-col h-screen">
+      {" "}
+      {/* 전체 높이를 화면 크기로 설정 */}
+      <div className="flex-none">
+        {" "}
+        {/* NavBar는 고정 크기 */}
         {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
       </div>
-      <div className="flex flex-col w-full h-full items-center">
+      <div className="flex-none">
+        {" "}
+        {/* FilterComponent도 고정 크기 */}
         <FilterComponent
           selectedLessonType={selectedLessonType}
           filteredData={
-            selectedLevel === "beginner"
+            selectedLevel === "BEGINNER"
               ? beginnerFilteredData
               : intermediateFilteredData
           }
           handleSearchClick={handleSearch}
         />
+      </div>
+      <div className="flex-grow overflow-hidden">
+        {" "}
+        {/* ResultComponent가 남은 공간을 차지하고 overflow 처리 */}
         <ResultComponent
           filteredData={
-            selectedLevel === "beginner"
+            selectedLevel === "BEGINNER"
               ? beginnerFilteredData
               : intermediateFilteredData
           }
