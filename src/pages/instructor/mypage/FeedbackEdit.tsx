@@ -6,22 +6,36 @@ import LessonFeedbackForm from "../../../components/instructor/mypage/LessonFeed
 import FeedbackVideoRegist from "../../../components/instructor/mypage/FeedbackVideoRegist";
 import FeedbackImageRegist from "../../../components/instructor/mypage/FeedbackImageRegist";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
+import { UserFeedbackService } from "../../../api/UserFeedbackService";
+import { FeedbackDataDTO } from "../../../dto/FeedbackDTO";
 
+const feedbackService = new UserFeedbackService();
 
 const FeedbackEdit : React.FC = () => {
+    const [feedback, setFeedback] = useState<FeedbackDataDTO | null>(null);
     const navigate = useNavigate();
     const {state} = useLocation();
-    
     const[innerWidth,setInnerWidth] = useState(window.innerWidth);
+    const[content, setContent] = useState("");
 
     const handleResize = () => {
         setInnerWidth(window.innerWidth);
     }
 
     useEffect(() => {
+        const fetchFeedback = async () => {
+            const feedback = await feedbackService.getUserFeedback(state.lessonId)
+            if(feedback){
+                setFeedback(feedback);
+                setContent(feedback?.content)
+            }
+        }
+
+        fetchFeedback();
+
         window.addEventListener("resize",handleResize);
         return(() => window.removeEventListener("resize",handleResize))
-    })
+    },[setFeedback,state.lessonId])
 
 
     return (
@@ -31,7 +45,7 @@ const FeedbackEdit : React.FC = () => {
                 피드백 수정
             </div>
             <LessonReserveInfo lesson={state}/>
-            <LessonFeedbackForm/>
+            <LessonFeedbackForm content={content} setContent={setContent}/>
             <FeedbackVideoRegist/>
             <FeedbackImageRegist/>
             <div className="flex justify-center my-10">

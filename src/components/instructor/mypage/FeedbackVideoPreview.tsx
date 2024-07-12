@@ -1,27 +1,26 @@
 import React from "react";
-import { FaPlay, FaTrash } from 'react-icons/fa';
 
-interface VideoPreviewProps {
-    video: number;
+interface FeedbackVideoPreviewProps {
+    video: File;
     onDelete: () => void;
 }
 
-
-const FeedbackVideoPreview : React.FC<VideoPreviewProps>= ({ video, onDelete }) => {
-
+const FeedbackVideoPreview: React.FC<FeedbackVideoPreviewProps> = ({ video, onDelete }) => {
     return (
-        <div className="bg-white rounded shadow p-4 m-2 flex flex-col items-center">
-            <div className="relative w-full h-32 bg-blue-100 rounded flex items-center justify-center">
-                <FaPlay className="text-black text-2xl" />
-            </div>
-            <button 
-                className="mt-2 bg-primary-500 text-white py-1 px-2 rounded flex items-center justify-center w-full"
+        <div className="relative">
+            <video
+                src={URL.createObjectURL(video)}
+                controls
+                className="w-full h-40 object-cover rounded"
+            />
+            <button
+                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
                 onClick={onDelete}
             >
-                <FaTrash className="mr-1" /> 삭제
+                X
             </button>
         </div>
     );
-}
+};
 
 export default FeedbackVideoPreview;
