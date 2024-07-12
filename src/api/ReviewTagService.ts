@@ -1,23 +1,23 @@
-import { UserLessonDTO } from "../dto/UserLessonDTO";
+import { Tag } from "../dto/ReviewDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
-export class UserLessonService {
-    async getUserLessonlist(): Promise<UserLessonDTO[] | null> {
+export class ReviewTagService {
+    async getTags(): Promise<Tag[]> {
         try {
             const accessToken = localStorage.getItem("accesstoken");
-            const response = await apiClient().get(`lesson/list/user`, {
+            const response = await apiClient().get(`/lesson/review/tags`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
             });
 
             if (response && response.status === httpStatusCode.OK) {
-                return response.data.data as UserLessonDTO[];
+                return response.data.data as Tag[];
             }
         } catch (error) {
-            console.log("유저 레슨 리스트 데이터 조회");
+            console.log("태그 조회 실패");
         }
-        return null;
+        return [];
     }
 }
