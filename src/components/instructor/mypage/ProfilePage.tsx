@@ -18,6 +18,7 @@ const ProfilePage: React.FC = () => {
         const fetchProfile = async () => {
             const profile = await userService.getInstructorProfile();
             if (profile) {
+                console.log(profile)
                 setProfile(profile);
                 setProfilePreview(profile.profileUrl);
                 setSelectedGender(profile.gender);
@@ -54,6 +55,10 @@ const ProfilePage: React.FC = () => {
 
     const instProfileUpdate = async () => {
         await userService.updateInstructorProfile(description, profileImage);
+        const updatedProfile = await userService.getInstructorProfile();
+        if(updatedProfile){
+            setProfile(updatedProfile);
+        }
     };
 
     return (
