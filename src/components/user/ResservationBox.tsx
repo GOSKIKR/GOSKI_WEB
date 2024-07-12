@@ -3,6 +3,8 @@ import { IoMdSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import userReserveStore from "../../store/userReserveStore";
 
+import apiClient from "../../utils/config/axiosConfig";
+
 import TimePicker from "../common/TimePicker";
 
 interface Resort {
@@ -71,7 +73,16 @@ const ReservationBox = () => {
 
   // 초기 리조트 정보 설정
   useEffect(() => {
-    setLocationsInfo(locationsData);
+    const fetchData = async () => {
+      try {
+        const response = await apiClient().get("/common/resort");
+        console.log(response.data.data);
+        setLocationsInfo(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
   }, []);
 
   // 장소 변경 핸들러
@@ -252,11 +263,11 @@ const ReservationBox = () => {
           <div className="flex flex-1 shadow-md rounded-lg ">
             <button
               className={`h-14 ${
-                level === "beginner"
+                level === "BEGINNER"
                   ? "bg-primary-500 text-white"
                   : "bg-gray-100"
               } w-1/3 flex flex-col items-center justify-center rounded-l-lg border-r-2 hover:scale-98`}
-              onClick={() => setLevel("beginner")}
+              onClick={() => setLevel("BEGINNER")}
             >
               <div className="sm:text-md text-sm">초급</div>
               <div className="sm:text-[10px] text-[8px]">
@@ -265,11 +276,11 @@ const ReservationBox = () => {
             </button>
             <button
               className={`h-14 ${
-                level === "intermediate"
+                level === "INTERMEDIATE"
                   ? "bg-primary-500 text-white"
                   : "bg-gray-100"
               } w-1/3 flex flex-col items-center justify-center border-r-2 hover:scale-98`}
-              onClick={() => setLevel("intermediate")}
+              onClick={() => setLevel("INTERMEDIATE")}
             >
               <div className="sm:text-md text-sm">중급</div>
               <div className="sm:text-[10px] text-[8px]">
@@ -278,11 +289,11 @@ const ReservationBox = () => {
             </button>
             <button
               className={`h-14 ${
-                level === "advanced"
+                level === "ADVANCED"
                   ? "bg-primary-500 text-white"
                   : "bg-gray-100"
               } w-1/3 flex flex-col items-center justify-center rounded-r-lg hover:scale-98`}
-              onClick={() => setLevel("advanced")}
+              onClick={() => setLevel("ADVANCED")}
             >
               <div className="sm:text-md text-sm">고급</div>
               <div className="sm:text-[10px] text-[8px]">

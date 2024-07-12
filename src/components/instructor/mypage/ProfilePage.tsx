@@ -5,13 +5,14 @@ import { UserService } from '../../../api/UserService';
 const userService = new UserService();
 
 const ProfilePage: React.FC = () => {
-    const [profileImage, setProfileImage] = useState<File | null>(null);
-    const [profilePreview, setProfilePreview] = useState<string | null>(null);
-    const [selectedGender, setSelectedGender] = useState<string | null>('남자');
-    const [isTeamLeader, setIsTeamLeader] = useState<boolean>(false);
-    const [description, setDescription] = useState<string>('');
+    const { userName, profileUrl, gender, role, description, phoneNumber, birthDate, setProfile } = useInstructorStore();
 
-    const { userName, phoneNumber, birthDate, profileUrl, setProfile } = useInstructorStore();
+    const [profileImage, setProfileImage] = useState<File | null>(null);
+    const [profilePreview, setProfilePreview] = useState<string | null>(profileUrl);
+    const [selectedGender, setSelectedGender] = useState<string | null>(gender);
+    const [isTeamLeader, setIsTeamLeader] = useState<boolean>(role === 'OWNER');
+    const [newDescription, setNewDescription] = useState<string>(description);
+
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -21,7 +22,7 @@ const ProfilePage: React.FC = () => {
                 setProfilePreview(profile.profileUrl);
                 setSelectedGender(profile.gender);
                 setIsTeamLeader(profile.role === 'OWNER');
-                setDescription(profile.description);
+                setNewDescription(profile.description);
             }
         };
 
@@ -132,8 +133,8 @@ const ProfilePage: React.FC = () => {
                     <div className="mb-4">
                         <label className="block text-lg font-bold mb-1">자기소개</label>
                         <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            value={newDescription}
+                            onChange={(e) => setNewDescription(e.target.value)}
                             className="w-full p-2 border rounded h-24 resize-none"
                         />
                     </div>

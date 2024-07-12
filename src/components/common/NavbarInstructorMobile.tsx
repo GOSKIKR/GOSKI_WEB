@@ -8,6 +8,10 @@ const NavbarInstructorMobile = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [animateMenu, setAnimateMenu] = useState(false);
 
+  const [showSetting, setShowSetting] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -39,7 +43,11 @@ const NavbarInstructorMobile = () => {
         GOSKI
       </div>
       <div className="flex flex-1"></div>
-      <UserNotification />
+      <UserNotification
+        showNotification={showNotification}
+        setShowNotification={setShowNotification}
+        setShowSettings={setShowSettings}
+      />
       <div className="flex">
         <div
           onClick={() => handleShowMenu()}
@@ -68,7 +76,9 @@ const NavbarInstructorMobile = () => {
           >
             <button
               className="px-4 py-2 text-left hover:bg-gray-100"
-              onClick={() => {navigate("/instructor/edit-info")}}
+              onClick={() => {
+                navigate("/instructor/edit-info");
+              }}
             >
               프로필
             </button>
@@ -87,30 +97,38 @@ const NavbarInstructorMobile = () => {
             >
               로그아웃
             </button>
-            <br/>
-            <hr/>
-            <br/>
+            <br />
+            <hr />
+            <br />
             <button
               className="px-4 py-2 text-left hover:bg-gray-100"
-              onClick={() => {navigate("/instructor/edit-info")}}
+              onClick={() => {
+                navigate("/instructor/edit-info");
+              }}
             >
               스케줄
             </button>
             <button
               className="px-4 py-2 text-left hover:bg-gray-100"
-              onClick={() => {navigate("/instructor/team/regist")}}
+              onClick={() => {
+                navigate("/instructor/team/regist");
+              }}
             >
               팀관리
             </button>
             <button
               className="px-4 py-2 text-left hover:bg-gray-100"
-              onClick={() => {navigate("/instructor/my-lesson")}}
+              onClick={() => {
+                navigate("/instructor/my-lesson");
+              }}
             >
               강습내역
             </button>
             <button
               className="px-4 py-2 text-left hover:bg-gray-100"
-              onClick={() => {navigate("/instructor/settlement")}}
+              onClick={() => {
+                navigate("/instructor/settlement");
+              }}
             >
               정산
             </button>

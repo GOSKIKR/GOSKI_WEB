@@ -9,6 +9,7 @@ import apiClient from "../../utils/config/axiosConfig";
 
 const NavbarUser = () => {
   const [showNotification, setShowNotification] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [isLogin, setIsLogin] = useState(
     localStorage.getItem("accesstoken") ? true : false
   );
@@ -16,10 +17,6 @@ const NavbarUser = () => {
 
   const handleLoginBtn = () => {
     navigate("/login");
-  };
-
-  const handleNotificationBtn = () => {
-    setShowNotification(!showNotification);
   };
 
   // const logout = async () => {
@@ -138,8 +135,16 @@ const NavbarUser = () => {
       </div>
       {isLogin ? (
         <div className="flex items-center space-x-6">
-          <UserNotification />
-          <UserSettings />
+          <UserNotification
+            showNotification={showNotification}
+            setShowNotification={setShowNotification}
+            setShowSettings={setShowSettings}
+          />
+          <UserSettings
+            setShowNotification={setShowNotification}
+            showSettings={showSettings}
+            setShowSettings={setShowSettings}
+          />
           <div
             className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer"
             onClick={() => handleLogout()}

@@ -2,14 +2,38 @@ import React from "react";
 
 interface InstructorResultComponentProps {
   data: {
-    id: string;
-    name: string;
-    location: string;
-    type: string;
-    participant: number;
-    date: string;
-    time: string;
-    level: number;
+    instructorId: number;
+    userName: string;
+    teamId: number;
+    teamName: string;
+    position: string;
+    description: string;
+    instructorUrl: string;
+    gender: string;
+    certificateInfo: {
+      certificateId: number;
+      certificateName: string;
+      certificateType: string;
+      certificateImageUrl: string;
+    }[];
+    rating: number;
+    reviewCount: number;
+    cost: number;
+    basicFee: number;
+    peopleOptionFee: number;
+    designatedFee: number;
+    levelOptionFee: number;
+    lessonType: string;
+    reviews: {
+      reviewId: number;
+      rating: number;
+      content: string;
+      createdAt: string;
+      instructorTags: {
+        tagReviewId: number;
+        tagName: string;
+      }[];
+    }[];
   };
   goToInstructorDetail: () => void;
 }
@@ -20,22 +44,39 @@ const InstructorResultComponent: React.FC<InstructorResultComponentProps> = ({
 }) => {
   return (
     <div
-      key={data.id}
-      className="bg-white shadow-md rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors duration-300"
+      key={data.instructorId}
+      className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300 ease-in-out transform  w-64 h-full flex flex-col justify-center m-4"
       onClick={goToInstructorDetail}
     >
-      <div className="flex items-center">
-        <div className="flex-1">
-          <h3 className="text-lg font-medium">{data.name}</h3>
-          <p className="text-gray-500">{data.location}</p>
+      {/* 강사 사진 (1/3 영역) */}
+      <div className="h-40 overflow-hidden">
+        <img
+          src={data.instructorUrl}
+          alt="instructor"
+          className="w-full h-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
+        />
+      </div>
+
+      {/* 정보 영역 (2/3) */}
+      <div className="h-2/3 p-4 flex flex-col justify-between">
+        <div>
+          <h3 className="text-xl font-semibold mb-2">{data.userName}</h3>
+          <div>
+            <div className="font-medium">자격증</div>
+            <p className="text-sm text-gray-600 mb-4">
+              {data.certificateInfo
+                .map((certificate) => certificate.certificateName)
+                .join(", ")}
+            </p>
+          </div>
+          <p className="text-lg font-medium">
+            평점: {data.rating} | 리뷰: {data.reviewCount}개
+          </p>
         </div>
-        <div className="flex flex-col items-end">
-          <span className="text-gray-500">{data.type}</span>
-          <span className="text-gray-500">{data.participant} participants</span>
-          <span className="text-gray-500">
-            {data.date} at {data.time}
-          </span>
-          <span className="text-gray-500">Level {data.level}</span>
+        <div>
+          <p className="text-lg font-bold">
+            가격: {data.basicFee.toLocaleString()}원 ~
+          </p>
         </div>
       </div>
     </div>

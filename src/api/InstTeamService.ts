@@ -1,23 +1,23 @@
-import { UserLessonDTO } from "../dto/UserLessonDTO";
+import { Team } from "../dto/TeamDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
-export class UserLessonService {
-    async getUserLessonlist(): Promise<UserLessonDTO[] | null> {
+export class InstructorTeamService {
+    async getTeamList(): Promise<Team[]> {
         try {
             const accessToken = localStorage.getItem("accesstoken");
-            const response = await apiClient().get(`lesson/list/user`, {
+            const response = await apiClient().get(`/team/list/inst`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
             });
 
             if (response && response.status === httpStatusCode.OK) {
-                return response.data.data as UserLessonDTO[];
+                return response.data.data as Team[];
             }
         } catch (error) {
-            console.log("유저 레슨 리스트 데이터 조회");
+            console.log("팀 리스트 조회 실패");
         }
-        return null;
+        return [];
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 
 // 알림 데이터
@@ -47,11 +47,20 @@ const NotificationItem = ({
   </div>
 );
 
-const UserNotification = () => {
-  const [showNotification, setShowNotification] = useState(false);
+interface UserNotificationProps {
+  showNotification: boolean;
+  setShowNotification: Dispatch<SetStateAction<boolean>>;
+  setShowSettings: Dispatch<SetStateAction<boolean>>;
+}
 
+const UserNotification = ({
+  showNotification,
+  setShowNotification,
+  setShowSettings,
+}: UserNotificationProps): JSX.Element => {
   const handleNotificationBtn = () => {
     setShowNotification(!showNotification);
+    setShowSettings(false);
   };
 
   return (
