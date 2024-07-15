@@ -1,8 +1,13 @@
 import React from "react";
+import { InstructorLessonInfoDTO } from "../../../dto/InstructorLessonInfoDTO";
+import { formatTime } from "../../../utils/formatTime";
 
-const LessonReserveInfo : React.FC = () => {
+interface LessonInfoProp {
+    lesson : InstructorLessonInfoDTO
+}
 
 
+const LessonReserveInfo : React.FC<LessonInfoProp> = ({lesson}) => {
     return(
         <div className="flex flex-col items-center">
                 <div className="sm:text-left sm:text-2xl sm:w-[1000px] sm:my-3 text-center text-xl w-[400px] my-2 font-bold">
@@ -15,7 +20,7 @@ const LessonReserveInfo : React.FC = () => {
                                 장소
                             </div>
                             <div className="sm:ml-20">
-                                곤지암 리조트
+                                {lesson.resortName}
                             </div>
                         </div>
                         <div className="flex justify-start my-3">
@@ -23,7 +28,7 @@ const LessonReserveInfo : React.FC = () => {
                                 팀 정보
                             </div>
                             <div className="sm:ml-20">
-                                고승민의 스키교실
+                                {lesson.teamName}
                             </div>
                         </div>
                         <div className="flex justify-start my-3">
@@ -31,7 +36,7 @@ const LessonReserveInfo : React.FC = () => {
                                 일시
                             </div>
                             <div className="sm:ml-20">
-                                2024.11.30(토) 15:00 ~ 17:00
+                                {lesson.lessonDate} {formatTime(Number(lesson.startTime), lesson.duration)}
                             </div>
                         </div>
                         <div className="flex justify-start my-3">
@@ -39,7 +44,7 @@ const LessonReserveInfo : React.FC = () => {
                                 강습
                             </div>
                             <div className="sm:ml-20">
-                                1:2 스키
+                                1:{lesson.studentCount + 1} 강습
                             </div>
                         </div>
                     </div>

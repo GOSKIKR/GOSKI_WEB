@@ -4,9 +4,10 @@ import Slider from "react-slick";
 import ReviewModal from "./ReviewModal";
 import { InstructorLessonInfoDTO } from "../../../dto/InstructorLessonInfoDTO";
 import { ReviewDTO } from "../../../dto/ReviewDTO";
+import { formatTime } from "../../../utils/formatTime";
 
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import "../../../../public/assets/css/slick-theme-custom.css";
 
 interface LessonSectionProps {
     title: string;
@@ -41,23 +42,6 @@ const settings = (lessonsLength: number) => ({
     ]
 });
 
-const formatTime = (startTime: number, duration: number) => {
-    const startHour = Math.floor(startTime / 100);
-    const startMinutes = startTime % 100;
-
-    let endHour = startHour + duration;
-    const endMinutes = startMinutes;
-
-    if (endHour >= 24){
-        endHour -= 24;
-    }
-
-    const format = (hour: number, minutes: number) => {
-        return `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    };
-
-    return `${format(startHour, startMinutes)} ~ ${format(endHour, endMinutes)}`;
-};
 
 const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -91,14 +75,14 @@ const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
                                     <div className="flex justify-center">
                                         <button 
                                             className="mt-2 bg-primary-500 text-white py-1 px-2 rounded w-[120px]"
-                                            onClick={() => navigate("/instructor/regist-feedback")}>피드백 작성하기</button>
+                                            onClick={() => navigate("/instructor/regist-feedback", {state : lesson})}>피드백 작성하기</button>
                                     </div>
                                 )}
                                 {lesson.lessonStatus === "yesFeedback" && (
                                     <div className="flex justify-center">
                                         <button 
                                             className="mt-2 mr-2 bg-primary-500 text-white py-1 px-2 rounded w-[120px]"
-                                            onClick={() => navigate("/instructor/edit-feedback")}>피드백 수정하기</button>
+                                            onClick={() => navigate("/instructor/edit-feedback", {state : lesson})}>피드백 수정하기</button>
                                         <button 
                                             className="mt-2 bg-primary-700 text-white py-1 px-2 rounded w-[120px]" 
                                             onClick={openReviewModal}>리뷰 확인하기</button>
