@@ -65,7 +65,7 @@ const App: React.FC = () => {
           path="/instructor/team"
           element={<Navigate to="/instructor/team/regist" />}
         />
-        <Route path="/instructor/detail" element={<LessonDetail />} />
+        <Route path="/instructor/detail/:lessonId" element={<LessonDetail />} />
 
         <Route path="/instructor/team/regist" element={<TeamRegist />} />
         <Route path="/instructor/team/edit" element={<TeamInfoEdit />} />
