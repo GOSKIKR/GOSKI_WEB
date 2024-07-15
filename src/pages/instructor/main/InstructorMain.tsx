@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -12,6 +12,7 @@ import { TeamEventService } from "../../../api/TeamEventService";
 import { TeamMemberListService } from "../../../api/TeamMemberListService";
 import CreateEventModal from "../../../components/instructor/CreateEventModal";
 import EventDetailModal from "../../../components/instructor/EventDetailModal";
+import "../../../../public/assets/css/fullcalendar.css";
 
 const InstructorMain = () => {
     const [view, setView] = useState("weekly");
@@ -24,7 +25,12 @@ const InstructorMain = () => {
     const [teamEventData, setTeamEventData] = useState<Event[]>([]);
     const [weekOffset, setWeekOffset] = useState<number>(-1);
     const [teamMembers, setTeamMembers] = useState<Member[]>([]);
+    const [draggedEvent, setDraggedEvent] = useState<
+        Partial<CreateEvent> | undefined
+    >(undefined);
     const navigate = useNavigate();
+    const calendarRef = useRef<FullCalendar>(null);
+    const [userId, setUserId] = useState<number | undefined>(undefined);
 
     const colors = [
         "#FFB3BA",
@@ -50,6 +56,9 @@ const InstructorMain = () => {
             const instEventService = new InstEventService();
             const myEvents = await instEventService.getInstEventService();
             setMyEvents(myEvents);
+            if (myEvents.length > 0) {
+                setUserId(myEvents[0].instructorId); // 첫 이벤트의 instructorId를 userId로 설정
+            }
         };
 
         fetchTeams();
@@ -130,7 +139,7 @@ const InstructorMain = () => {
                             <div>1:{studentCount}</div>
                             <div>{lessonType}</div>
                             <div className="py-2 flex flex-row space-x-2 items-center">
-                                <div className="text-xs">예약자</div>
+                                <div>예약자</div>
                                 <div className="font-extrabold">
                                     {eventInfo.event.extendedProps.reserver}
                                 </div>
@@ -166,6 +175,7 @@ const InstructorMain = () => {
                 location: event.resortName,
                 reserver: event.representativeName,
                 studentCount: event.studentCount,
+                lessonId: event.lessonId,
             },
             borderColor: backgroundColor,
         };
@@ -177,16 +187,62 @@ const InstructorMain = () => {
         setSelectedEvent(clickInfo.event);
     };
 
-    const handlePrevWeek = () => {
+    const handleDateSelect = (selectInfo: any) => {
+        const start = selectInfo.start;
+        const end = selectInfo.end;
+        const now = new Date();
+
+        if (selectedTeam && start < now) {
+            alert("과거의 시간은 선택할 수 없습니다.");
+            return; // 과거 시간 선택 시 함수 종료
+        }
+
+        if (selectedTeam) {
+            const duration = (end - start) / (1000 * 60 * 60);
+            const startTime = `${start
+                .getHours()
+                .toString()
+                .padStart(2, "0")}:${start
+                .getMinutes()
+                .toString()
+                .padStart(2, "0")}`;
+
+            setDraggedEvent({
+                lessonDate: start.toISOString().split("T")[0],
+                startTime,
+                duration,
+            });
+
+            setModalOpen(true);
+        }
+    };
+
+    const handlePrevWeek = async () => {
         setWeekOffset((prevOffset) => prevOffset - 1);
+        if (selectedTeam) {
+            const teamEventService = new TeamEventService();
+            const teamEvents = await teamEventService.getTeamEventService(
+                selectedTeam,
+                weekOffset - 1
+            );
+            setTeamEventData(teamEvents);
+        }
     };
 
-    const handleNextWeek = () => {
+    const handleNextWeek = async () => {
         setWeekOffset((prevOffset) => prevOffset + 1);
+        if (selectedTeam) {
+            const teamEventService = new TeamEventService();
+            const teamEvents = await teamEventService.getTeamEventService(
+                selectedTeam,
+                weekOffset + 1
+            );
+            setTeamEventData(teamEvents);
+        }
     };
 
-    const goToLessonDetail = () => {
-        navigate(`/instructor/detail`);
+    const goToLessonDetail = (lessonId: number) => {
+        navigate(`/instructor/detail/${lessonId}`); // 이벤트 아이디를 URL로 전달
     };
 
     const handleEventAdded = async () => {
@@ -209,7 +265,6 @@ const InstructorMain = () => {
             <NavbarInstructor />
             <div className="flex flex-col py-10 space-y-12 sm:space-x-10">
                 <div className="bg-primary-50 flex flex-col sm:mx-12 mx-8 rounded-lg py-8 px-4">
-                    {/* 팀 선택 버튼 */}
                     <div className="flex sm:space-x-4 justify-between sm:px-20 mb-4 sm:mb-8">
                         <button
                             onClick={() => setSelectedTeam(null)}
@@ -236,43 +291,22 @@ const InstructorMain = () => {
                         ))}
                     </div>
 
-                    {/* 구분선 */}
-                    <hr className="border-black sm:mb-8 mb-4 px-50" />
+                    <hr className="border-black sm:mb-8 mb-4 px-50 calendar-container" />
 
-                    {/* 캘린더 선택 버튼 및 일정 등록 버튼 */}
-                    <div className="flex justify-between mb-4 sm:mb-8 sm:px-20">
-                        <div className="flex flex-row space-x-4">
-                            <button
-                                onClick={() => setView("weekly")}
-                                className={`sm:w-16 w-10 h-10 ${
-                                    view === "weekly"
-                                        ? "bg-primary-600"
-                                        : "bg-primary-500"
-                                } text-white text-lg rounded-lg flex items-center justify-center`}
-                            >
-                                주
-                            </button>
-                            <button
-                                onClick={() => setView("daily")}
-                                className={`sm:w-16 w-10 h-10 ${
-                                    view === "daily"
-                                        ? "bg-primary-600"
-                                        : "bg-primary-500"
-                                } text-white text-lg rounded-lg flex items-center justify-center`}
-                            >
-                                일
-                            </button>
-                        </div>
-                    </div>
                     <div className="sm:text-base text-[10px]">
-                        {/* 캘린더 */}
                         {view === "weekly" && (
-                            <div className="relative flex flex-col w-full h-auto sm:px-24">
+                            <div className="relative flex flex-col w-full h-auto sm:px-24 calendar-bg">
                                 <FullCalendar
+                                    ref={calendarRef} // FullCalendar ref 설정
                                     plugins={[
                                         timeGridPlugin,
                                         interactionPlugin,
                                     ]}
+                                    headerToolbar={{
+                                        left: "timeGridWeek,timeGridDay",
+                                        center: "customPrev title customNext",
+                                        right: "today",
+                                    }}
                                     initialView="timeGridWeek"
                                     events={events}
                                     navLinks={true}
@@ -280,7 +314,7 @@ const InstructorMain = () => {
                                     locale="ko"
                                     editable={true}
                                     selectable={true}
-                                    // select={handleDateSelect}
+                                    select={handleDateSelect}
                                     eventContent={renderEventContent}
                                     eventBackgroundColor="#343B7B"
                                     defaultAllDay={false}
@@ -290,6 +324,30 @@ const InstructorMain = () => {
                                         "클릭시 해당 날짜로 이동합니다."
                                     }
                                     slotEventOverlap={false}
+                                    customButtons={{
+                                        customPrev: {
+                                            text: "<",
+                                            click: () => {
+                                                if (calendarRef.current) {
+                                                    const calendarApi =
+                                                        calendarRef.current.getApi();
+                                                    calendarApi.prev();
+                                                    handlePrevWeek();
+                                                }
+                                            },
+                                        },
+                                        customNext: {
+                                            text: ">",
+                                            click: () => {
+                                                if (calendarRef.current) {
+                                                    const calendarApi =
+                                                        calendarRef.current.getApi();
+                                                    calendarApi.next();
+                                                    handleNextWeek();
+                                                }
+                                            },
+                                        },
+                                    }}
                                 />
                                 {selectedTeam && (
                                     <button
@@ -305,10 +363,16 @@ const InstructorMain = () => {
                         {view === "daily" && (
                             <div className="relative flex flex-col w-full h-auto sm:px-24">
                                 <FullCalendar
+                                    ref={calendarRef} // FullCalendar ref 설정
                                     plugins={[
                                         timeGridPlugin,
                                         interactionPlugin,
                                     ]}
+                                    headerToolbar={{
+                                        left: "timeGridWeek,timeGridDay",
+                                        center: "customPrev title customNext",
+                                        right: "today",
+                                    }}
                                     initialView="timeGridDay"
                                     events={events}
                                     navLinks={true}
@@ -317,7 +381,7 @@ const InstructorMain = () => {
                                     locale="ko"
                                     editable={true}
                                     selectable={true}
-                                    // select={handleDateSelect}
+                                    select={handleDateSelect}
                                     eventBackgroundColor="#343B7B"
                                     slotMinTime="08:00"
                                     slotMaxTime="22:00"
@@ -325,6 +389,30 @@ const InstructorMain = () => {
                                         "클릭시 해당 날짜로 이동합니다."
                                     }
                                     slotEventOverlap={false}
+                                    customButtons={{
+                                        customPrev: {
+                                            text: "<",
+                                            click: () => {
+                                                if (calendarRef.current) {
+                                                    const calendarApi =
+                                                        calendarRef.current.getApi();
+                                                    calendarApi.prev();
+                                                    handlePrevWeek();
+                                                }
+                                            },
+                                        },
+                                        customNext: {
+                                            text: ">",
+                                            click: () => {
+                                                if (calendarRef.current) {
+                                                    const calendarApi =
+                                                        calendarRef.current.getApi();
+                                                    calendarApi.next();
+                                                    handleNextWeek();
+                                                }
+                                            },
+                                        },
+                                    }}
                                 />
                                 {selectedTeam && (
                                     <button
@@ -344,11 +432,16 @@ const InstructorMain = () => {
                         <EventDetailModal
                             event={selectedEvent}
                             onClose={() => setSelectedEvent(null)}
-                            goToLessonDetail={goToLessonDetail}
+                            goToLessonDetail={() =>
+                                goToLessonDetail(
+                                    selectedEvent.extendedProps.lessonId
+                                )
+                            }
                             modalPosition={modalPosition}
                             instructorName={getInstructorName(
                                 selectedEvent.extendedProps.instructorId
                             )}
+                            userId={userId}
                         />
                     )}
                 </div>
@@ -356,11 +449,12 @@ const InstructorMain = () => {
 
             {modalOpen && (
                 <CreateEventModal
-                    teamId={selectedTeam}
+                    teamId={selectedTeam || undefined}
                     teamMembers={teamMembers}
                     weekOffset={weekOffset}
                     onClose={() => setModalOpen(false)}
                     onEventAdded={handleEventAdded}
+                    initialEvent={draggedEvent}
                 />
             )}
         </div>
