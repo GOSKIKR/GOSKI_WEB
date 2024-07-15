@@ -1,5 +1,5 @@
 import React from "react";
-import { TeamInviteDTO } from "../../../dto/TeamInviteDTO";
+import { TeamInviteDTO } from "../../../dto/TeamDTO";
 
 interface TeamInviteListProps {
     inviteMembers: TeamInviteDTO[];
