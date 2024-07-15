@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Dispatch, SetStateAction } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 
 const notificationSettings = [
@@ -42,12 +42,22 @@ const NotificationSettingItem = ({
   </div>
 );
 
-const UserSettings = () => {
+interface UserSettingsProps {
+  setShowNotification: Dispatch<SetStateAction<boolean>>;
+  showSettings: boolean;
+  setShowSettings: Dispatch<SetStateAction<boolean>>;
+}
+
+const UserSettings = ({
+  setShowNotification,
+  showSettings,
+  setShowSettings,
+}: UserSettingsProps): JSX.Element => {
   const [settings, setSettings] = useState(notificationSettings);
-  const [showSetting, setShowSetting] = useState(false);
 
   const handleSettingBtn = () => {
-    setShowSetting(!showSetting);
+    setShowSettings(!showSettings);
+    setShowNotification(false);
   };
 
   const handleToggle = (index: number) => {
@@ -67,7 +77,7 @@ const UserSettings = () => {
       >
         <IoSettingsOutline />
       </button>
-      {showSetting && (
+      {showSettings && (
         <div className="absolute top-12 right-0 z-50 w-64 p-2 bg-white rounded-lg shadow-lg">
           <div className="w-full bg-primary-400 text-white text-center py-2 rounded-t-lg">
             알림 설정
