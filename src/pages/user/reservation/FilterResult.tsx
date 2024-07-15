@@ -13,6 +13,8 @@ import {
 } from "../../../interface/ReservationTypes";
 
 import userReserveStore from "../../../store/userReserveStore";
+import teamInfoStore from "../../../store/teamInfoStore";
+import instructorInfoStore from "../../../store/instructorInfoStore";
 
 const FilterResult: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +33,10 @@ const FilterResult: React.FC = () => {
   const [intermediateFilteredData, setIntermediateFilteredData] = useState<
     InstructorsFilterResult[]
   >([]);
+
+  const { setTeamInfo } = teamInfoStore();
+
+  const { setInstructorInfo } = instructorInfoStore();
 
   const {
     resortName,
@@ -55,7 +61,6 @@ const FilterResult: React.FC = () => {
           duration: duration,
           level: level,
         });
-        console.log(response.data.data);
         setBeginnerFilteredData(response.data.data);
       } catch (error) {
         console.error(error);
@@ -73,7 +78,6 @@ const FilterResult: React.FC = () => {
           duration: duration,
           level: level,
         });
-        console.log(response.data.data);
         setIntermediateFilteredData(response.data.data);
       } catch (error) {
         console.error(error);
@@ -85,7 +89,7 @@ const FilterResult: React.FC = () => {
     } else {
       fetchInstructorData();
     }
-  }, []);
+  }, [level]);
 
   useEffect(() => {
     setSelectedResortName(resortName);
@@ -156,15 +160,12 @@ const FilterResult: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      {" "}
       {/* 전체 높이를 화면 크기로 설정 */}
       <div className="flex-none">
-        {" "}
         {/* NavBar는 고정 크기 */}
         {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
       </div>
       <div className="flex-none">
-        {" "}
         {/* FilterComponent도 고정 크기 */}
         <FilterComponent
           selectedLessonType={selectedLessonType}
@@ -177,7 +178,6 @@ const FilterResult: React.FC = () => {
         />
       </div>
       <div className="flex-grow overflow-hidden">
-        {" "}
         {/* ResultComponent가 남은 공간을 차지하고 overflow 처리 */}
         <ResultComponent
           filteredData={
