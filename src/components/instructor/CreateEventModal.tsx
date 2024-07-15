@@ -1,14 +1,15 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import { CreateEvent } from "../../dto/EventDTO";
 import { Member } from "../../dto/TeamDTO";
 import { CreateEventService } from "../../api/CreateEventService";
 
 interface EventModalProps {
-    teamId: number | null;
+    teamId?: number;
     teamMembers: Member[];
     weekOffset: number;
     onClose: () => void;
     onEventAdded: () => void;
+    initialEvent?: Partial<CreateEvent>;
 }
 
 const CreateEventModal: React.FC<EventModalProps> = ({
@@ -17,6 +18,7 @@ const CreateEventModal: React.FC<EventModalProps> = ({
     weekOffset,
     onClose,
     onEventAdded,
+    initialEvent,
 }) => {
     const [newEvent, setNewEvent] = useState<CreateEvent>({
         teamId: teamId || 0,
@@ -30,6 +32,16 @@ const CreateEventModal: React.FC<EventModalProps> = ({
         userName: "",
         content: "",
     });
+
+    useEffect(() => {
+        if (initialEvent) {
+            setNewEvent((prevEvent) => ({
+                ...prevEvent,
+                ...initialEvent,
+                teamId: teamId || 0,
+            }));
+        }
+    }, [initialEvent, teamId]);
 
     const handleInputChange = (
         e: ChangeEvent<
@@ -80,6 +92,13 @@ const CreateEventModal: React.FC<EventModalProps> = ({
             return;
         }
 
+        // Check if selected date and time is in the past
+        const selectedDateTime = new Date(`${lessonDate}T${startTime}`);
+        if (selectedDateTime < new Date()) {
+            alert("과거의 시간은 선택할 수 없습니다.");
+            return;
+        }
+
         const formattedEvent = {
             ...newEvent,
             startTime: startTime.replace(":", ""),
@@ -91,6 +110,11 @@ const CreateEventModal: React.FC<EventModalProps> = ({
         onEventAdded();
         onClose();
     };
+
+    // Get current date and time for min attribute
+    const now = new Date();
+    const currentDateString = now.toISOString().split("T")[0];
+    const currentTimeString = now.toTimeString().slice(0, 5);
 
     return (
         <div
@@ -178,6 +202,7 @@ const CreateEventModal: React.FC<EventModalProps> = ({
                         value={newEvent.lessonDate}
                         onChange={handleInputChange}
                         className="w-full p-2 border rounded-lg mb-2"
+                        min={currentDateString} // 현재 날짜 이전은 선택 불가
                     />
                     <input
                         type="time"
@@ -185,6 +210,11 @@ const CreateEventModal: React.FC<EventModalProps> = ({
                         value={newEvent.startTime}
                         onChange={handleTimeChange}
                         className="w-full p-2 border rounded-lg"
+                        min={
+                            newEvent.lessonDate === currentDateString
+                                ? currentTimeString
+                                : undefined
+                        } // 현재 시간 이전은 선택 불가
                     />
                 </div>
                 <div className="mb-4">
