@@ -1,16 +1,28 @@
 import React, {useState, useEffect} from "react"
 import { useLocation } from "react-router-dom";
+import { Team } from "../../../dto/TeamDTO";
+import { TeamService } from "../../../api/TeamService";
 
+const teamService = new TeamService();
 
 const DropdownMenu: React.FC = () => {
+    const [teamList, setTeamList] = useState<Team[]>();
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const location = useLocation();
+
+    const fetchTeamList = async() => {
+        const response = await teamService.getTeamList();
+        if(response) {
+            setTeamList(response)
+        }
+    }
 
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
     }
 
     useEffect(() => {
+        fetchTeamList();
         setDropdownVisible(false);
     },[location.pathname])
 
@@ -21,9 +33,11 @@ const DropdownMenu: React.FC = () => {
             </div>
             {dropdownVisible && (
                 <div className="absolute left-0 top-full text-center bg-primary-50 rounded-lg shadow-lg w-full z-1">
-                    <div className="border-t px-4 py-2">고승민의 스키 교실</div>
-                    <div className="border-t px-4 py-2">김태훈의 스키 교실</div>
-                    <div className="border-t px-4 py-2">송준석의 스키 교실</div>
+                    {teamList?.map((team) => (
+                        <div key={team.teamId} className="border-t px-4 py-2">
+                            {team.teamName}
+                        </div>
+                    ))}
                 </div>
             )}
         </div>
