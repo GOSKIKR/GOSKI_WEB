@@ -4,7 +4,7 @@ export interface Team {
     profileUrl: string;
     description: string;
     resortName: string;
-    permissions: string;
+    permissions?: string;
 }
 
 export interface Member {
@@ -18,4 +18,17 @@ export interface Member {
 export interface TeamMemberList {
     permission: string;
     instList: Member[];
+}
+
+export interface TeamInviteDTO {
+    name: string;
+    phoneNumber: string;
+    enrollDate: string;
+}
+
+export interface TeamMemberDTO {
+    role: string;
+    name: string;
+    price: string;
+    phoneNumber: string;
 }

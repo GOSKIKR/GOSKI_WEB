@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TeamMemberDTO } from "../../../dto/TeamMemberDTO";
+import { TeamMemberDTO } from "../../../dto/TeamDTO";
 import { FiMoreHorizontal } from 'react-icons/fi';
 import TeamMemberDeleteConfirmModal from "./TeamMemberDeleteConfirmModal";
 

@@ -1,8 +1,8 @@
 import React from "react";
-import { ReviewDTO } from "../../../dto/ReviewDTO";
+import { InstructorReviewDTO } from "../../../dto/ReviewDTO";
 
 interface ReviewModalProps {
-    review: ReviewDTO;
+    review: InstructorReviewDTO | null;
     onClose: () => void;
 }
 
@@ -12,17 +12,24 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ review, onClose }) => {
             <div className="bg-primary-100 rounded-lg p-6 sm:w-[400px] w-[350px] text-center" onClick={(e) => e.stopPropagation()}>
                 <div className="text-lg font-bold mb-4">리뷰</div>
                 <div className="mb-4">
-                    <div className="text-black">{review.content}</div>
-                    <div className="flex justify-center flex-wrap mt-2">
-                        {review.instructorTags.map((tag) => (
-                            <span
-                                key={tag.tagReviewId}
-                                className="bg-black text-white rounded-full px-3 py-1 text-sm m-1"
-                            >
-                                {tag.tagName}
-                            </span>
-                        ))}
-                    </div>
+                    {review ? (
+                        <>
+                        <div className="text-black">{review.content}</div>
+                        <div className="flex justify-center flex-wrap mt-2">
+                            {review.instructorTags.map((tag) => (
+                                <span
+                                    key={tag.tagReviewId}
+                                    className="bg-black text-white rounded-full px-3 py-1 text-sm m-1"
+                                >
+                                    {tag.tagName}
+                                </span>
+                            ))}
+                        </div>
+                        </>
+                    ) : (
+                        <div className="text-gray-500">아직 리뷰가 작성되지 않았습니다.</div>
+                    )}
+                    
                 </div>
                 <button className="mt-4 bg-primary-700 text-white px-4 py-2 rounded" onClick={onClose}>닫기</button>
             </div>

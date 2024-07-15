@@ -47,10 +47,16 @@ const FeedbackImageEdit: React.FC<FeedbackImageEditProps> = ({ currentImageFiles
         setDeleteImageFiles(currentImageFiles.map((image) => image.mediaId));
     };
 
+    const isDeleted = (imageId : number) => localDeleteImageFiles.includes(imageId)
+
+    const imageLength = () => {
+        return currentImageFiles.filter((image) => !isDeleted(image.mediaId)).length + localNewImageFiles.length;
+    }
+
     return (
         <div className="flex flex-col items-center">
             <div className="sm:w-[1000px] w-[350px] my-3 flex justify-between items-center">
-                <div className="text-left sm:text-2xl text-xl font-bold">사진 ({currentImageFiles.length + localNewImageFiles.length})</div>
+                <div className="text-left sm:text-2xl text-xl font-bold">사진 ({imageLength()})</div>
                 <div>
                     <button className="bg-red-500 text-white py-1 px-4 rounded mr-2" onClick={handleDeleteAll}>
                         모두 삭제
@@ -63,13 +69,14 @@ const FeedbackImageEdit: React.FC<FeedbackImageEditProps> = ({ currentImageFiles
             <input type="file" ref={imageInputRef} className="hidden" accept="image/*" multiple onChange={handleImageUpload} />
             <div className="flex justify-center bg-primary-100 sm:w-[1000px] w-[350px] rounded p-6">
                 <div className="w-full">
-                    {currentImageFiles.length + localNewImageFiles.length === 0 ? (
+                    {imageLength() === 0 ? (
                         <div className="h-[300px] flex items-center justify-center">
                             <span className="text-gray-500">사진을 업로드하세요.</span>
                         </div>
                     ) : (
                         <div className="bg-primary-100 rounded p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {currentImageFiles.map((image, index) => (
+                                !isDeleted(image.mediaId) &&
                                 <FeedbackImagePreview key={image.mediaId} image={image.mediaUrl} onDelete={() => handleDelete(index, false)} />
                             ))}
                             {localNewImageFiles.map((image, index) => (

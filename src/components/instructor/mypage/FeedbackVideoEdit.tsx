@@ -47,10 +47,16 @@ const FeedbackVideoEdit: React.FC<FeedbackVideoEditProps> = ({ currentVideoFiles
         setDeleteVideoFiles(currentVideoFiles.map((video) => video.mediaId));
     };
 
+    const isDeleted = (videoId : number) => localDeleteVideoFiles.includes(videoId)
+
+    const videoLength = () => {
+        return currentVideoFiles.filter((video) => !isDeleted(video.mediaId)).length + localNewVideoFiles.length;
+    }
+
     return (
         <div className="flex flex-col items-center">
             <div className="sm:w-[1000px] w-[350px] my-3 flex justify-between items-center">
-                <div className="sm:text-2xl text-xl font-bold">동영상 ({currentVideoFiles.length + localNewVideoFiles.length})</div>
+                <div className="sm:text-2xl text-xl font-bold">동영상 ({videoLength()})</div>
                 <div>
                     <button className="bg-red-500 text-white py-1 px-4 rounded mr-2" onClick={handleDeleteAll}>
                         모두 삭제
@@ -61,15 +67,16 @@ const FeedbackVideoEdit: React.FC<FeedbackVideoEditProps> = ({ currentVideoFiles
                 </div>
             </div>
             <input type="file" ref={videoInputRef} className="hidden" accept="video/*" multiple onChange={handleVideoUpload} />
-            <div className={`flex justify-center bg-primary-100 sm:w-[1000px] w-[350px] rounded p-6 ${currentVideoFiles.length + localNewVideoFiles.length === 0 ? "h-[300px]" : ""}`}>
+            <div className={`flex justify-center bg-primary-100 sm:w-[1000px] w-[350px] rounded p-6 ${videoLength() === 0 ? "h-[300px]" : ""}`}>
                 <div className="w-full">
-                    {currentVideoFiles.length + localNewVideoFiles.length === 0 ? (
+                    {videoLength() === 0 ? (
                         <div className="h-[300px] flex items-center justify-center">
                             <span className="text-gray-500">비디오를 업로드하세요.</span>
                         </div>
                     ) : (
                         <div className="bg-primary-100 rounded p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {currentVideoFiles.map((video, index) => (
+                                !isDeleted(video.mediaId) && 
                                 <FeedbackVideoPreview key={video.mediaId} video={video.mediaUrl} onDelete={() => handleDelete(index, false)} />
                             ))}
                             {localNewVideoFiles.map((video, index) => (
