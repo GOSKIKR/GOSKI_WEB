@@ -1,4 +1,5 @@
 import React from "react";
+import teamInfoStore from "../../../store/teamInfoStore";
 
 interface TeamResultComponentProps {
   data: {
@@ -37,11 +38,37 @@ const TeamResultComponent: React.FC<TeamResultComponentProps> = ({
   data,
   goToTeamDetail,
 }) => {
+  const { setTeamInfo } = teamInfoStore();
+
+  const handleTeamClicked = (id: number) => {
+    goToTeamDetail();
+
+    if (data.teamId === id) {
+      setTeamInfo({
+        teamId: data.teamId,
+        teamName: data.teamName,
+        description: data.description,
+        cost: data.cost,
+        teamProfileUrl: data.teamProfileUrl,
+        rating: data.rating,
+        instructors: data.instructors,
+        teamImages: data.teamImages,
+        basicFee: data.basicFee,
+        peopleOptionFee: data.peopleOptionFee,
+        designatedFee: data.designatedFee,
+        levelOptionFee: data.levelOptionFee,
+        lessonType: data.lessonType,
+        reviewCount: data.reviewCount,
+        reviews: data.reviews,
+      });
+    }
+  };
+
   return (
     <div
       key={data.teamId}
       className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer mb-4 w-full"
-      onClick={goToTeamDetail}
+      onClick={() => handleTeamClicked(data.teamId)}
     >
       <div className="flex">
         {/* Image 박스 */}

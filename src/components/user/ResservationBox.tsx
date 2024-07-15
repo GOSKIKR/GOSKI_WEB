@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import userReserveStore from "../../store/userReserveStore";
+import userResortsStore from "../../store/userResortsStore";
 
 import apiClient from "../../utils/config/axiosConfig";
 
@@ -68,6 +69,7 @@ const ReservationBox = () => {
   const [lessonStartTime, setLessonStartTime] = useState("");
 
   const { setReservationInfo } = userReserveStore();
+  const { setResortInfo } = userResortsStore();
 
   const navigate = useNavigate();
 
@@ -78,6 +80,7 @@ const ReservationBox = () => {
         const response = await apiClient().get("/common/resort");
         console.log(response.data.data);
         setLocationsInfo(response.data.data);
+        setResortInfo(response.data.data);
       } catch (error) {
         console.error(error);
       }
@@ -245,7 +248,10 @@ const ReservationBox = () => {
             강습 시간
           </label>
           <select
-            onChange={(e) => setDurationTime(parseInt(e.target.value))}
+            onChange={(e) => {
+              setDurationTime(parseInt(e.target.value));
+              console.log(e.target.value);
+            }}
             className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
           >
             <option value="">강습 시간을 선택하세요</option>
