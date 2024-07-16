@@ -12,6 +12,12 @@ import NavbarInstructorMobile from "../../../components/common/NavbarInstructorM
 const TeamLessonFeeSetting: React.FC = () => {
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
     const [oneOnOneFee, setOneOnOneFee] = useState(10000); // 초기값 설정 -> api불러와야함
+    const [oneOnTwoFee, setOneOnTwoFee] = useState(10000);
+    const [oneOnThreeFee, setOneOnThreeFee] = useState(10000);
+    const [oneOnNFee, setOneOnNFee] = useState(10000);
+    const [basicFee, setBasicFee] = useState(10000);
+    const [intermediateFee, setIntermediateFee] = useState(10000);
+    const [advancedFee, setAdvancedFee] = useState(15000);
     const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
 
     const handleResize = () => {
@@ -30,22 +36,41 @@ const TeamLessonFeeSetting: React.FC = () => {
             <div className="flex justify-center">
                 <div className="p-6">
                     <div className="flex justify-center sm:justify-start">
-                        <DropdownMenu />
+                        <DropdownMenu 
+                            setOneOnOneFee={setOneOnOneFee}
+                            setOneOnTwoFee={setOneOnTwoFee}
+                            setOneOnThreeFee={setOneOnThreeFee}
+                            setOneonNFee={setOneOnNFee}
+                            setBasicFee={setOneOnOneFee}
+                            setIntermediateFee={setIntermediateFee}
+                            setAdvancedFee={setAdvancedFee}
+                        />
                     </div>
                     <TeamLessonFeeInfo />
                     <div className="sm:flex sm:justify-between">
                         <div className="flex justify-center">
                             <LessonFeeByGroup 
-                                oneOnOneFee={oneOnOneFee} 
-                                setOneOnOneFee={setOneOnOneFee} 
+                                oneOnOneFee={oneOnOneFee}
+                                oneOnTwoFee={oneOnTwoFee}
+                                oneOnThreeFee={oneOnThreeFee}
+                                oneOnNFee={oneOnNFee}
+                                setOneOnOneFee={setOneOnOneFee}
+                                setOneOnTwoFee={setOneOnTwoFee}
+                                setOneOnThreeFee={setOneOnThreeFee}
+                                setOneonNFee={setOneOnNFee}
                                 isEditing={isEditing}
                             />
                         </div>
                         <div className="flex justify-center">
-                            <LessonFeeByLevel 
-                                oneOnOneFee={oneOnOneFee} 
-                                isEditing={isEditing} 
-                            />
+                        <LessonFeeByLevel 
+                            basicFee={basicFee}
+                            intermediateFee={intermediateFee}
+                            advancedFee={advancedFee}
+                            setBasicFee={setBasicFee}
+                            setIntermediateFee={setIntermediateFee}
+                            setAdvancedFee={setAdvancedFee}
+                            isEditing={isEditing} 
+                        />
                         </div>
                     </div>
                     <div className="text-customRed my-6 sm:text-left text-center">

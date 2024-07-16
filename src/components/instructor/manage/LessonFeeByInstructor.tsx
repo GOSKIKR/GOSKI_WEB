@@ -10,6 +10,7 @@ const LessonFeeByInstructor : React.FC<LessonFeeByInstructorProps> = ({isEditing
         const value = e.target.value;
         if (/^\d*$/.test(value)) {
             // 추후 api 연결
+            return;
         }
     };
 

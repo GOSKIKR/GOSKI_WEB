@@ -1,18 +1,29 @@
 import React from "react";
 
 interface LessonFeeByLevelProps {
-    oneOnOneFee: number;
+    basicFee: number;
+    intermediateFee: number;
+    advancedFee: number;
+    setBasicFee: React.Dispatch<React.SetStateAction<number>>;
+    setIntermediateFee: React.Dispatch<React.SetStateAction<number>>;
+    setAdvancedFee: React.Dispatch<React.SetStateAction<number>>;
     isEditing: boolean;
 }
 
-const LessonFeeByLevel: React.FC<LessonFeeByLevelProps> = ({ oneOnOneFee, isEditing }) => {
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const LessonFeeByLevel: React.FC<LessonFeeByLevelProps> = ({
+    basicFee, intermediateFee, advancedFee,
+    setBasicFee, setIntermediateFee, setAdvancedFee,
+    isEditing
+}) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        setFee: React.Dispatch<React.SetStateAction<number>>
+    ) => {
         const value = e.target.value;
         if (/^\d*$/.test(value)) {
-            // 추후 api연결
+            setFee(Number(value));
         }
     };
-
 
     return (
         <div className="bg-primary-50 shadow-sm sm:w-[500px] w-[300px] rounded mt-6">
@@ -28,7 +39,7 @@ const LessonFeeByLevel: React.FC<LessonFeeByLevelProps> = ({ oneOnOneFee, isEdit
                     <input
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
-                        value={oneOnOneFee}
+                        value={basicFee}
                         readOnly
                     />
                 </div>
@@ -41,9 +52,9 @@ const LessonFeeByLevel: React.FC<LessonFeeByLevelProps> = ({ oneOnOneFee, isEdit
                     <input
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
-                        defaultValue={100000}
-                        readOnly={!isEditing} 
-                        onChange={handleInputChange}
+                        value={intermediateFee}
+                        readOnly={!isEditing}
+                        onChange={(e) => handleInputChange(e, setIntermediateFee)}
                     />
                 </div>
             </div>
@@ -55,9 +66,9 @@ const LessonFeeByLevel: React.FC<LessonFeeByLevelProps> = ({ oneOnOneFee, isEdit
                     <input
                         type="text"
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
-                        defaultValue={150000}
-                        readOnly={!isEditing} 
-                        onChange={handleInputChange}
+                        value={advancedFee}
+                        readOnly={!isEditing}
+                        onChange={(e) => handleInputChange(e, setAdvancedFee)}
                     />
                 </div>
             </div>
