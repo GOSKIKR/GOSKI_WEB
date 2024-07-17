@@ -10,3 +10,14 @@ export interface ReviewDTO {
     createdAt: string;
     instructorTags: Tag[];
 }
+
+export interface InstructorReviewDTO {
+    reviewId : number;
+    lessonId : number;
+    lessonDate : Date;
+    lessonTimeInfo : string;
+    rating : number;
+    content : string;
+    createdAt : Date;
+    instructorTags: Tag[];
+}

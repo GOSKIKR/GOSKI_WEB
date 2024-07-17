@@ -1,9 +1,8 @@
 import React,{useState, useEffect} from "react";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import DropdownMenu from "../../../components/instructor/manage/TeamListDropdown";
-import { TeamMemberDTO } from "../../../dto/TeamMemberDTO";
-import { TeamInviteDTO } from "../../../dto/TeamInviteDTO";
-
+import { TeamMemberDTO } from "../../../dto/TeamDTO";
+import { TeamInviteDTO } from "../../../dto/TeamDTO";
 import TeamMemberList from "../../../components/instructor/manage/TeamMemberList";
 import TeamInviteList from "../../../components/instructor/manage/TeamInviteList";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
@@ -19,7 +18,7 @@ const TeamMember: React.FC = () => {
     useEffect(() => {
         window.addEventListener("resize",handleResize);
         return(() => window.removeEventListener("resize",handleResize))
-    })
+    },[])
 
     const members: TeamMemberDTO[] = [
         { role: "교육팀장", name: "고승민", price: "+100,000원", phoneNumber: "010-9995-5107" },

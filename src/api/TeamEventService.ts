@@ -17,8 +17,6 @@ export class TeamEventService {
                     },
                 }
             );
-            console.log(response);
-
             if (response && response.status === httpStatusCode.OK) {
                 return response.data.data as Event[];
             }

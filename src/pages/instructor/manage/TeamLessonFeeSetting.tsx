@@ -8,6 +8,7 @@ import LessonFeeByLevel from "../../../components/instructor/manage/LessonFeeByL
 import LessonFeeByInstructor from "../../../components/instructor/manage/LessonFeeByInstructor";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 
+
 const TeamLessonFeeSetting: React.FC = () => {
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
     const [oneOnOneFee, setOneOnOneFee] = useState(10000); // 초기값 설정 -> api불러와야함

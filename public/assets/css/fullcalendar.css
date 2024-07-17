@@ -1,0 +1,44 @@
+:root {
+    --fc-button-text-color: #000000;
+    --fc-button-bg-color: #ffffff;
+    --fc-button-border-color: #ffffff;
+    --fc-button-active-bg-color: #e1e5fa;
+    --fc-button-active-border-color: #e1e5fa;
+    --fc-button-hover-bg-color: #e1e5fa;
+    --fc-button-hover-border-color: #e1e5fa;
+}
+
+.calendar-container {
+    background-color: white;
+}
+
+.fc-button {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.fc-view-harness {
+    background-color: white !important;
+}
+
+.fc-highlight {
+    background-color: #eff5fe !important;
+}
+
+.fc-day-today {
+    background-color: #e1e5fa !important;
+}
+
+.fc-timegrid-divider {
+    display: none;
+}
+
+.fc-scrollgrid-section-header {
+    background-color: #e1e5fa !important;
+}
+
+.fc .fc-toolbar-chunk {
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
