@@ -121,7 +121,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
         <div className="team-member mb-6 bg-primary-50 rounded-lg shadow-lg sm:w-[1200px] w-[350px] sm:h-[500px] mx-auto">
             <div className="flex justify-between items-center p-6">
                 <div className="text-lg font-bold"> <span className="text-black">({members.length}명)</span></div>
-                <div className="space-x-2 hidden sm:flex">
+                <div className="space-x-2 sm:flex">
                     <button
                         className={`rounded px-4 py-2 ${isEditMode ? 'bg-primary-500' : 'bg-primary-600'} text-white hover:bg-primary-400`}
                         onClick={() => setIsEditMode(!isEditMode)}
@@ -200,10 +200,13 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                                 <td className="py-2 px-4 cursor-pointer" onClick={(e) => handleIconClick(e, member)}><FiMoreHorizontal /></td>
                                 {modalVisible && selectedMember === member && (
                                     <div
-                                        className="absolute bg-white border rounded shadow-lg p-4"
+                                        className="absolute bg-white border rounded shadow-lg p-3"
                                         style={{ top: modalPosition.top, left: modalPosition.left }}
                                         onClick={(e) => e.stopPropagation()}
                                     >
+                                        <div className="flex flex-col space-y-2 border-b">
+                                            <button className="text-left text-primary-800" onClick={handleDeleteClick}>수정하기</button>
+                                        </div>
                                         <div className="flex flex-col space-y-2">
                                             <button className="text-left text-customRed" onClick={handleDeleteClick}>팀원삭제</button>
                                         </div>
