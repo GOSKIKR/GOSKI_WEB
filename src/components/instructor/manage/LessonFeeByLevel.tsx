@@ -4,7 +4,6 @@ interface LessonFeeByLevelProps {
     basicFee: number;
     intermediateFee: number;
     advancedFee: number;
-    setBasicFee: React.Dispatch<React.SetStateAction<number>>;
     setIntermediateFee: React.Dispatch<React.SetStateAction<number>>;
     setAdvancedFee: React.Dispatch<React.SetStateAction<number>>;
     isEditing: boolean;
@@ -12,7 +11,7 @@ interface LessonFeeByLevelProps {
 
 const LessonFeeByLevel: React.FC<LessonFeeByLevelProps> = ({
     basicFee, intermediateFee, advancedFee,
-    setBasicFee, setIntermediateFee, setAdvancedFee,
+    setIntermediateFee, setAdvancedFee,
     isEditing
 }) => {
     const handleInputChange = (

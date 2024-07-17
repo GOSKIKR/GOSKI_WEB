@@ -16,7 +16,6 @@ const TeamLessonFeeSetting: React.FC = () => {
     const [oneOnTwoFee, setOneOnTwoFee] = useState(0);
     const [oneOnThreeFee, setOneOnThreeFee] = useState(0);
     const [oneOnNFee, setOneOnNFee] = useState(0);
-    const [basicFee, setBasicFee] = useState(0);
     const [intermediateFee, setIntermediateFee] = useState(0);
     const [advancedFee, setAdvancedFee] = useState(0);
     const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
@@ -66,10 +65,9 @@ const TeamLessonFeeSetting: React.FC = () => {
                         </div>
                         <div className="flex justify-center">
                         <LessonFeeByLevel 
-                            basicFee={basicFee}
+                            basicFee={oneOnOneFee}
                             intermediateFee={intermediateFee}
                             advancedFee={advancedFee}
-                            setBasicFee={setBasicFee}
                             setIntermediateFee={setIntermediateFee}
                             setAdvancedFee={setAdvancedFee}
                             isEditing={isEditing} 

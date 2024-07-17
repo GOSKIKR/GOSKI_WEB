@@ -64,7 +64,7 @@ const LessonFeeByInstructor: React.FC<LessonFeeByInstructorProps> = ({ isEditing
                                         type="text"
                                         className="border px-3 py-2 border-black rounded text-center w-full"
                                         value={feeInfo.designatedFee}
-                                        readOnly={!isEditing}
+                                        readOnly={isEditing}
                                         onChange={(e) => handleInputChange(e, feeInfo.userId)}
                                     />
                                 </td>
