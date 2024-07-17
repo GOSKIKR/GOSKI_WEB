@@ -99,7 +99,15 @@ const FilterResult: React.FC = () => {
     setSelectedStartTime(startTime);
     setSelectedDuration(duration);
     setSelectedLevel(level);
-  }, []);
+  }, [
+    resortName,
+    lessonType,
+    studentCount,
+    lessonDate,
+    startTime,
+    duration,
+    level,
+  ]);
 
   useEffect(() => {
     if (selectedLevel === "BEGINNER") {

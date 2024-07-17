@@ -73,6 +73,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     setReservationInfo,
   } = userReserveStore();
 
+  const { setResortInfo } = userResortsStore();
+
   // 초기 리조트 정보 설정
   useEffect(() => {
     const fetchData = async () => {
@@ -104,7 +106,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     level,
   ]);
 
-  // 초기 리조트 정보 설정
+  // 초기 리조트 강습시간 정보 설정
   useEffect(() => {
     const selectedResort = locationsInfo.find(
       (location) => location.resortName === resortName
@@ -141,6 +143,29 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
       startTime: filterLessonTime,
       duration: filterLessonDuration,
       level: filterLessonLevel,
+    });
+    setResortInfo({
+      resortId:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.resortId || 0,
+      resortName: filterLessonLocation,
+      resortLocation:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.resortLocation || "",
+      longitude:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.longitude || 0,
+      latitude:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.latitude || 0,
+      lessonTime:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.lessonTime || [],
     });
     handleSearchClick();
   };
