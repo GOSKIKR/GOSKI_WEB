@@ -151,6 +151,20 @@ const InstructorInfo = () => {
     console.log(reviews);
   }, [reviews]);
 
+  //새로고침시 경고창
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen h-auto bg-gray-50">
       <div className="w-full">
