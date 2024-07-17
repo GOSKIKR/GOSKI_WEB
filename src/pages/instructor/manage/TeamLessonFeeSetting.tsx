@@ -7,18 +7,20 @@ import LessonFeeByGroup from "../../../components/instructor/manage/LessonFeeByG
 import LessonFeeByLevel from "../../../components/instructor/manage/LessonFeeByLevel";
 import LessonFeeByInstructor from "../../../components/instructor/manage/LessonFeeByInstructor";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
+import { TeamInstDesignatedFeeDTO } from "../../../dto/TeamDTO";
 
 
 const TeamLessonFeeSetting: React.FC = () => {
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-    const [oneOnOneFee, setOneOnOneFee] = useState(10000); // 초기값 설정 -> api불러와야함
-    const [oneOnTwoFee, setOneOnTwoFee] = useState(10000);
-    const [oneOnThreeFee, setOneOnThreeFee] = useState(10000);
-    const [oneOnNFee, setOneOnNFee] = useState(10000);
-    const [basicFee, setBasicFee] = useState(10000);
-    const [intermediateFee, setIntermediateFee] = useState(10000);
-    const [advancedFee, setAdvancedFee] = useState(15000);
+    const [oneOnOneFee, setOneOnOneFee] = useState(0); // 초기값 설정 -> api불러와야함
+    const [oneOnTwoFee, setOneOnTwoFee] = useState(0);
+    const [oneOnThreeFee, setOneOnThreeFee] = useState(0);
+    const [oneOnNFee, setOneOnNFee] = useState(0);
+    const [basicFee, setBasicFee] = useState(0);
+    const [intermediateFee, setIntermediateFee] = useState(0);
+    const [advancedFee, setAdvancedFee] = useState(0);
     const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
+    const [designatedFee, setDesignatedFee] = useState<TeamInstDesignatedFeeDTO[] | null>(null);
 
     const handleResize = () => {
         setInnerWidth(window.innerWidth);
@@ -44,6 +46,7 @@ const TeamLessonFeeSetting: React.FC = () => {
                             setBasicFee={setOneOnOneFee}
                             setIntermediateFee={setIntermediateFee}
                             setAdvancedFee={setAdvancedFee}
+                            setDesignatedFee={setDesignatedFee}
                         />
                     </div>
                     <TeamLessonFeeInfo />
@@ -76,7 +79,11 @@ const TeamLessonFeeSetting: React.FC = () => {
                     <div className="text-customRed my-6 sm:text-left text-center">
                         *지정강습비 추가금액은 강습 1건 기준입니다.
                     </div>
-                    <LessonFeeByInstructor isEditing={!isEditing} />
+                    <LessonFeeByInstructor 
+                        isEditing={!isEditing}
+                        designatedFee={designatedFee}
+                        setDesignatedFee={setDesignatedFee}
+                        />
                 </div>
             </div>
             <div className="flex justify-center">

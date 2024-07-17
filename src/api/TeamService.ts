@@ -41,7 +41,7 @@ export class TeamService {
         return null;
     }
 
-    async getDesignatedFeeList(teamId : number) : Promise<TeamInstDesignatedFeeDTO | null> {
+    async getDesignatedFeeList(teamId : number) : Promise<TeamInstDesignatedFeeDTO[] | null> {
         try{
             const response = await apiClient().get(`${url}/list/designfee/${teamId}`,{
                 headers : {
@@ -50,7 +50,7 @@ export class TeamService {
             });
             if (response && response.status === httpStatusCode.OK) {
                 console.log(response.data.data)
-                return response.data.data as TeamInstDesignatedFeeDTO;
+                return response.data.data as TeamInstDesignatedFeeDTO[];
             }
         } catch (error) {
             console.log("지정 강습비 조회 실패");
