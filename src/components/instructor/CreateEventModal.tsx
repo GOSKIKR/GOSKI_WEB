@@ -76,19 +76,40 @@ const CreateEventModal: React.FC<EventModalProps> = ({
             level,
         } = newEvent;
 
-        if (
-            !teamId ||
-            !instructorId ||
-            !lessonType ||
-            !lessonDate ||
-            !startTime ||
-            !level ||
-            !duration ||
-            !studentCount ||
-            !userName ||
-            !content
-        ) {
-            alert("모든 필드를 입력해주세요.");
+        if (!teamId) {
+            alert("팀을 선택해주세요.");
+            return;
+        }
+        if (!instructorId) {
+            alert("담당 강사를 선택해주세요.");
+            return;
+        }
+        if (!lessonType) {
+            alert("종류를 선택해주세요.");
+            return;
+        }
+        if (!lessonDate) {
+            alert("일정을 선택해주세요.");
+            return;
+        }
+        if (!startTime) {
+            alert("시작 시간을 입력해주세요.");
+            return;
+        }
+        if (!level) {
+            alert("레벨을 선택해주세요.");
+            return;
+        }
+        if (!duration) {
+            alert("강습 시간을 선택해주세요.");
+            return;
+        }
+        if (!userName) {
+            alert("예약자를 입력해주세요.");
+            return;
+        }
+        if (!content) {
+            alert("특이사항을 입력해주세요.");
             return;
         }
 
@@ -99,13 +120,15 @@ const CreateEventModal: React.FC<EventModalProps> = ({
             return;
         }
 
-        const formattedEvent = {
+        const eventToSave = {
             ...newEvent,
+            duration: duration || 1,
+            studentCount: studentCount || 1,
             startTime: startTime.replace(":", ""),
         };
 
         const createEventService = new CreateEventService();
-        await createEventService.createEvent(formattedEvent);
+        await createEventService.createEvent(eventToSave);
 
         onEventAdded();
         onClose();

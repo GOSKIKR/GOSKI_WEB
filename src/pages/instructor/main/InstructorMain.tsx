@@ -13,6 +13,8 @@ import { TeamMemberListService } from "../../../api/TeamMemberListService";
 import CreateEventModal from "../../../components/instructor/CreateEventModal";
 import EventDetailModal from "../../../components/instructor/EventDetailModal";
 import "../../../../public/assets/css/fullcalendar.css";
+import TeamSelect from "../../../components/instructor/TeamSelect";
+import CalendarView from "../../../components/instructor/CalendarView";
 
 const InstructorMain = () => {
     const [view, setView] = useState("weekly");
@@ -123,7 +125,7 @@ const InstructorMain = () => {
             return (
                 <div className="flex items-center justify-center">
                     <div className="w-12 h-full flex flex-col items-center">
-                        <b className="flex flex-col space-y-0 pt-2 items-center">
+                        <b className="flex flex-col space-y-0 pt-2 items-center text-black">
                             <div>1:{studentCount}</div>
                             <div>{lessonType}</div>
                             <div className="py-2">{instructorName}</div>
@@ -265,7 +267,7 @@ const InstructorMain = () => {
             <NavbarInstructor />
             <div className="flex flex-col py-10 space-y-12 sm:space-x-10">
                 <div className="bg-primary-50 flex flex-col sm:mx-12 mx-8 rounded-lg py-8 px-4">
-                    <div className="flex sm:space-x-4 justify-between sm:px-20 mb-4 sm:mb-8">
+                    <div className="flex sm:space-x-4 sm:px-20 mb-4 sm:mb-8">
                         <button
                             onClick={() => setSelectedTeam(null)}
                             className={`sm:w-52 w-16 h-10 ${
@@ -276,153 +278,42 @@ const InstructorMain = () => {
                         >
                             내 스케줄
                         </button>
-                        {teams.map((team) => (
-                            <button
-                                key={team.teamId}
-                                onClick={() => setSelectedTeam(team.teamId)}
-                                className={`sm:w-52 w-16 h-10 ${
-                                    selectedTeam === team.teamId
-                                        ? "bg-primary-700 text-white"
-                                        : "bg-white text-black"
-                                } text-sm sm:text-lg rounded-lg flex items-center justify-center`}
-                            >
-                                {team.teamName}
-                            </button>
-                        ))}
+                        <TeamSelect
+                            teams={teams}
+                            selectedTeam={selectedTeam}
+                            onSelectTeam={setSelectedTeam}
+                        />
                     </div>
 
                     <hr className="border-black sm:mb-8 mb-4 px-50 calendar-container" />
 
                     <div className="sm:text-base text-[10px]">
                         {view === "weekly" && (
-                            <div className="relative flex flex-col w-full h-auto sm:px-24 calendar-bg">
-                                <FullCalendar
-                                    ref={calendarRef} // FullCalendar ref 설정
-                                    plugins={[
-                                        timeGridPlugin,
-                                        interactionPlugin,
-                                    ]}
-                                    headerToolbar={{
-                                        left: "timeGridWeek,timeGridDay",
-                                        center: "customPrev title customNext",
-                                        right: "today",
-                                    }}
-                                    initialView="timeGridWeek"
-                                    events={events}
-                                    navLinks={true}
-                                    eventClick={handleEventClick}
-                                    locale="ko"
-                                    editable={true}
-                                    selectable={true}
-                                    select={handleDateSelect}
-                                    eventContent={renderEventContent}
-                                    eventBackgroundColor="#343B7B"
-                                    defaultAllDay={false}
-                                    slotMinTime="08:00"
-                                    slotMaxTime="22:00"
-                                    navLinkHint={
-                                        "클릭시 해당 날짜로 이동합니다."
-                                    }
-                                    slotEventOverlap={false}
-                                    customButtons={{
-                                        customPrev: {
-                                            text: "<",
-                                            click: () => {
-                                                if (calendarRef.current) {
-                                                    const calendarApi =
-                                                        calendarRef.current.getApi();
-                                                    calendarApi.prev();
-                                                    handlePrevWeek();
-                                                }
-                                            },
-                                        },
-                                        customNext: {
-                                            text: ">",
-                                            click: () => {
-                                                if (calendarRef.current) {
-                                                    const calendarApi =
-                                                        calendarRef.current.getApi();
-                                                    calendarApi.next();
-                                                    handleNextWeek();
-                                                }
-                                            },
-                                        },
-                                    }}
-                                />
-                                {selectedTeam && (
-                                    <button
-                                        className="absolute sm:bottom-10 sm:right-16 right-5 bottom-5 bg-primary-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 z-50"
-                                        onClick={() => setModalOpen(true)}
-                                    >
-                                        팀 일정 등록
-                                    </button>
-                                )}
-                            </div>
+                            <CalendarView
+                                calendarRef={calendarRef}
+                                events={events}
+                                selectedTeam={selectedTeam}
+                                handleEventClick={handleEventClick}
+                                handleDateSelect={handleDateSelect}
+                                handlePrevWeek={handlePrevWeek}
+                                handleNextWeek={handleNextWeek}
+                                renderEventContent={renderEventContent}
+                                setModalOpen={setModalOpen}
+                            />
                         )}
 
                         {view === "daily" && (
-                            <div className="relative flex flex-col w-full h-auto sm:px-24">
-                                <FullCalendar
-                                    ref={calendarRef} // FullCalendar ref 설정
-                                    plugins={[
-                                        timeGridPlugin,
-                                        interactionPlugin,
-                                    ]}
-                                    headerToolbar={{
-                                        left: "timeGridWeek,timeGridDay",
-                                        center: "customPrev title customNext",
-                                        right: "today",
-                                    }}
-                                    initialView="timeGridDay"
-                                    events={events}
-                                    navLinks={true}
-                                    eventClick={handleEventClick}
-                                    eventContent={renderEventContent}
-                                    locale="ko"
-                                    editable={true}
-                                    selectable={true}
-                                    select={handleDateSelect}
-                                    eventBackgroundColor="#343B7B"
-                                    slotMinTime="08:00"
-                                    slotMaxTime="22:00"
-                                    navLinkHint={
-                                        "클릭시 해당 날짜로 이동합니다."
-                                    }
-                                    slotEventOverlap={false}
-                                    customButtons={{
-                                        customPrev: {
-                                            text: "<",
-                                            click: () => {
-                                                if (calendarRef.current) {
-                                                    const calendarApi =
-                                                        calendarRef.current.getApi();
-                                                    calendarApi.prev();
-                                                    handlePrevWeek();
-                                                }
-                                            },
-                                        },
-                                        customNext: {
-                                            text: ">",
-                                            click: () => {
-                                                if (calendarRef.current) {
-                                                    const calendarApi =
-                                                        calendarRef.current.getApi();
-                                                    calendarApi.next();
-                                                    handleNextWeek();
-                                                }
-                                            },
-                                        },
-                                    }}
-                                />
-                                {selectedTeam && (
-                                    <button
-                                        className="absolute sm:bottom-10 sm:right-16 right-5 bottom-5 bg-primary-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 z-50"
-                                        onClick={() => setModalOpen(true)}
-                                    >
-                                        팀 일정 등록
-                                    </button>
-                                )}
-                            </div>
+                            <CalendarView
+                                calendarRef={calendarRef}
+                                events={events}
+                                selectedTeam={selectedTeam}
+                                handleEventClick={handleEventClick}
+                                handleDateSelect={handleDateSelect}
+                                handlePrevWeek={handlePrevWeek}
+                                handleNextWeek={handleNextWeek}
+                                renderEventContent={renderEventContent}
+                                setModalOpen={setModalOpen}
+                            />
                         )}
                     </div>
                 </div>
