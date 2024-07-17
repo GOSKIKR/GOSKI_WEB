@@ -28,34 +28,6 @@ type ResortLocations = {
   lessonTime: number[];
 };
 
-// 임시 장소 데이터
-const locationsData: ResortLocations[] = [
-  {
-    resortId: 1,
-    resortName: "용평",
-    resortLocation: "강원도 평창군",
-    longitude: 128.668,
-    latitude: 37.65,
-    lessonTime: [1, 2, 3],
-  },
-  {
-    resortId: 2,
-    resortName: "평창",
-    resortLocation: "강원도 평창군",
-    longitude: 128.668,
-    latitude: 37.65,
-    lessonTime: [3, 5, 6],
-  },
-  {
-    resortId: 3,
-    resortName: "강촌",
-    resortLocation: "강원도 춘천시",
-    longitude: 128.668,
-    latitude: 37.65,
-    lessonTime: [2, 3, 7],
-  },
-];
-
 const ReservationBox = () => {
   const [lessonType, setLessonType] = useState<string>("");
   const [locationsInfo, setLocationsInfo] = useState<ResortLocations[]>([]);
@@ -139,6 +111,24 @@ const ReservationBox = () => {
       duration: selectedDurationTime,
       level: level,
     } as Resort);
+    setResortInfo({
+      resortId: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.resortId as number,
+      resortName: selectedLocation,
+      resortLocation: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.resortLocation as string,
+      longitude: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.longitude as number,
+      latitude: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.latitude as number,
+      lessonTime: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.lessonTime as number[],
+    });
 
     navigate("/reserve/result");
   };

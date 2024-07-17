@@ -52,95 +52,6 @@ interface Instructor {
   reviews: Review[];
 }
 
-// const dummyInstructorData: Instructor = {
-//   instructorId: 1,
-//   userName: "Instructor A",
-//   teamId: 1,
-//   teamName: "Team A",
-//   position: 1,
-//   description: "강사 레벨",
-//   instructorUrl: "https://example.com/instructorA-profile.jpg",
-//   gender: "Male",
-//   certificateInfo: [
-//     {
-//       certificateId: 1,
-//       certificateName: "Ski Instructor Level 1",
-//       certificateType: "Ski",
-//       certificateImageUrl: "https://example.com/certificate1.jpg",
-//     },
-//     {
-//       certificateId: 2,
-//       certificateName: "Ski Instructor Level 2",
-//       certificateType: "Ski",
-//       certificateImageUrl: "https://example.com/certificate2.jpg",
-//     },
-//     {
-//       certificateId: 3,
-//       certificateName: "Ski Instructor Level 3",
-//       certificateType: "Ski",
-//       certificateImageUrl: "https://example.com/certificate2.jpg",
-//     },
-//   ],
-//   rating: 3.5,
-//   reviewCount: 30,
-//   cost: 100000,
-//   basicFee: 30000,
-//   peopleOptionFee: 10000,
-//   designatedFee: 5000,
-//   levelOptionFee: 5000,
-//   lessonType: "Ski",
-//   reviews: [
-//     {
-//       reviewId: 1,
-//       rating: 4,
-//       content: "Great instructor with a lot of patience.",
-//       createdAt: "2024-06-15T14:30:00",
-//       instructorTags: [
-//         {
-//           tagReviewId: 101,
-//           tagName: "Patient",
-//         },
-//         {
-//           tagReviewId: 102,
-//           tagName: "Friendly",
-//         },
-//       ],
-//     },
-//     {
-//       reviewId: 2,
-//       rating: 3,
-//       content: "Great instructor with a lot of patience.",
-//       createdAt: "2024-06-15T14:30:00",
-//       instructorTags: [
-//         {
-//           tagReviewId: 101,
-//           tagName: "Patient",
-//         },
-//         {
-//           tagReviewId: 102,
-//           tagName: "Friendly",
-//         },
-//       ],
-//     },
-//     {
-//       reviewId: 3,
-//       rating: 1,
-//       content: "Great instructor with a lot of patience.",
-//       createdAt: "2024-06-15T14:30:00",
-//       instructorTags: [
-//         {
-//           tagReviewId: 101,
-//           tagName: "Patient",
-//         },
-//         {
-//           tagReviewId: 102,
-//           tagName: "Friendly",
-//         },
-//       ],
-//     },
-//   ],
-// };
-
 const renderStars = (score: number) => {
   const filledStars = Math.floor(score);
   const emptyStars = Math.floor(5 - score);
@@ -197,6 +108,11 @@ const InstructorInfo = () => {
   const navigate = useNavigate();
 
   const goToPay = () => {
+    if (!localStorage.getItem("accesstoken")) {
+      alert("로그인이 필요한 서비스입니다.");
+      navigate("/login");
+      return;
+    }
     navigate("/user/payment");
   };
 
@@ -236,7 +152,7 @@ const InstructorInfo = () => {
   }, [reviews]);
 
   return (
-    <div>
+    <div className="min-h-screen h-auto bg-gray-50">
       <div className="w-full">
         {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
       </div>
@@ -246,126 +162,144 @@ const InstructorInfo = () => {
           alt="App Logo"
           className="w-16 h-auto"
         />
-        <div className="text-xl font-extrabold">GOSKI 강습 예약</div>
+        <div className="text-2xl font-extrabold text-gray-800">
+          GOSKI 강습 예약
+        </div>
       </div>
-      <div className="flex flex-col sm:flex-row px-6 sm:px-12 sm:space-x-6 space-y-6 h-screen w-screen">
-        <div className="flex flex-col w-full sm:w-7/12 bg-primary-50 rounded-lg shadow-md items-center px-8 ">
-          <div className="w-full pt-5 sm:pt-10 sm:pb-6 pb-3 text-lg font-extrabold">
+      <div className="flex flex-col sm:flex-row px-6 sm:px-12 sm:space-x-6 space-y-6 w-full">
+        <div className="flex flex-col w-full sm:w-7/12 bg-white rounded-lg shadow-lg p-8">
+          <div className="w-full pt-5 sm:pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
             강사 소개
           </div>
-          <div className="flex flex-row w-full h-40 bg-primary-100 rounded-lg items-center px-6 sm:py-6 justify-between space-x-6">
-            <div className="w-28 h-28 bg-gray-200"></div>
+          <div className="flex flex-row w-full h-40 bg-gray-100 rounded-lg items-center px-6 sm:py-6 justify-between space-x-6">
+            <div className="w-28 h-28 bg-gray-200 rounded-full">
+              <img
+                src={instructorUrl}
+                alt="Instructor"
+                className="w-28 h-28 rounded-full object-cover"
+              />
+            </div>
             <div className="w-4/5 flex flex-col sm:px-8 space-y-1">
-              <div className="flex flex-row">
-                <div className="font-bold w-1/3">직책</div>
-                <div className="bg-primary-400 text-white px-1 rounded-md">
-                  {description}
+              <div className="flex flex-row items-center">
+                <div className="font-bold w-1/3 text-gray-600">직책</div>
+                <div className="bg-primary-400 text-white px-2 py-1 rounded-md text-sm">
+                  {position === "HEAD" ? <div>팀장</div> : <div>강사</div>}
                 </div>
               </div>
-              <div className="flex flex-row ">
-                <div className="font-bold w-1/3">이름</div>
-                <div className="font-bold w-30">{userName}</div>
+              <div className="flex flex-row items-center">
+                <div className="font-bold w-1/3 text-gray-600">이름</div>
+                <div className="font-bold text-gray-800">{userName}</div>
               </div>
-              <div className="flex flex-row n">
-                <div className="font-bold w-1/3">성별</div>
+              <div className="flex flex-row items-center">
+                <div className="font-bold w-1/3 text-gray-600">성별</div>
                 {gender === "MALE" ? <div>남성</div> : <div>여성</div>}
               </div>
             </div>
           </div>
 
           {/* 자기소개 */}
-          <div className="w-full sm:h-full pt-10 sm:pb-6 pb-3 text-lg font-extrabold">
+          <div className="w-full pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
             자기 소개
           </div>
-          <div className="flex flex-row w-full h-80 sm:h-60 bg-white rounded-lg items-center px-6">
-            자기소개
+          <div className="flex flex-row w-full h-80 sm:h-60 bg-white rounded-lg items-center px-6 py-4 text-gray-700">
+            {description}
           </div>
 
           {/* 자격증 */}
-          <div className="w-full pt-10 sm:pb-6 pb-3 text-lg font-extrabold">
+          <div className="w-full pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
             자격증
           </div>
-          <div className="w-full h-48 sm:h-60 bg-white rounded-lg px-6">
+          <div className="w-full h-48 sm:h-60 bg-white rounded-lg px-6 py-4">
             <Slider {...settings}>
               {certificateInfo.map((data, index) => (
                 <div
                   key={index}
                   className="flex flex-col items-center px-3 py-5"
                 >
-                  <div className="w-full sm:h-24 object-cover bg-gray-200">
-                    자격증 이미지
+                  <div className="w-full sm:h-24 object-cover bg-gray-200 rounded-md mb-2">
+                    <img
+                      src={data.certificateImageUrl}
+                      alt={data.certificateName}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <div>{data.certificateName}</div>
+                  <div className="text-gray-700">{data.certificateName}</div>
                 </div>
               ))}
             </Slider>
           </div>
 
           {/* 리뷰 */}
-          <div className="flex flex-row w-full justify-between items-center pt-10 pb-6 text-lg font-extrabold">
+          <div className="w-full flex flex-row pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
             <div>리뷰 ({reviewCount}개)</div>
-            <div className="flex flex-row">
-              <FaStar color="#FEFD48" />
-              <div className="ml-2 text-sm text-gray-600 font-extrabold">
-                {rating}
-              </div>
+
+            <FaStar color="#FEFD48" />
+            {Math.round(rating * 10) / 10}
+          </div>
+          <div className="flex flex-col w-full h-120 justify-between items-center text-lg font-extrabold text-gray-700 overflow-hidden">
+            <div className="w-full overflow-y-auto snap-proximity">
+              {reviews?.length > 0 ? (
+                reviews.map((data, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col w-full snap-start bg-white space-y-2 p-4 my-2 rounded-md shadow-sm"
+                  >
+                    <div className="flex flex-row justify-between items-center">
+                      <div className="flex flex-row">
+                        {renderStars(data.rating)}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {formatDate(data.createdAt)}
+                      </div>
+                    </div>
+                    <div className="text-gray-700">{data.content}</div>
+                    <div className="flex flex-row space-x-2">
+                      {data.instructorTags?.length > 0 &&
+                        data.instructorTags.map((tag, tagIndex) => (
+                          <div
+                            key={tagIndex}
+                            className="bg-primary-300 rounded-lg px-2 py-1 text-sm text-white"
+                          >
+                            {tag.tagName}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col w-full bg-white space-y-2 p-4 my-2 rounded-md shadow-sm">
+                  <div className="text-gray-700">리뷰가 없습니다.</div>
+                </div>
+              )}
             </div>
           </div>
-          {reviews?.length > 0 ? (
-            reviews.map((data, index) => (
-              <div
-                key={index}
-                className="flex flex-col w-full h-32 bg-white space-y-2 px-3 py-2 my-2 rounded-md"
-              >
-                <div className="flex flex-row justify-between pr-3">
-                  <div className="flex flex-row">
-                    {renderStars(data.rating)}
-                  </div>
-                  <div className="text-sm">{formatDate(data.createdAt)}</div>
-                </div>
-                <div>{data.content}</div>
-                <div className="flex flex-row space-x-2">
-                  {data.instructorTags?.length > 0 &&
-                    data.instructorTags.map((tag, tagIndex) => (
-                      <div
-                        key={tagIndex}
-                        className="bg-primary-300 rounded-lg px-1"
-                      >
-                        {tag.tagName}
-                      </div>
-                    ))}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="flex flex-col w-full h-32 bg-white space-y-2 px-3 py-2 my-2 rounded-md">
-              <div>리뷰가 없습니다.</div>
-            </div>
-          )}
         </div>
+
         <div className="flex flex-col sm:w-4/12">
-          <div className="flex flex-col px-8 py-6 space-y-3 w-full h-60 bg-primary-50 rounded-lg shadow-md items-center justify-center mb-4">
-            <div className="font-extrabold pb-2 w-full">최종 결제금액</div>
-            <div className="w-full flex flex-row justify-between">
+          <div className="flex flex-col p-8 space-y-4 w-full bg-white rounded-lg shadow-lg sticky top-5">
+            <div className="font-extrabold text-xl text-gray-700">
+              최종 결제금액
+            </div>
+            <div className="w-full flex flex-row justify-between text-gray-600">
               <div>기존 강습비</div>
               <div>{basicFee}</div>
             </div>
-            <div className="w-full flex flex-row justify-between">
+            <div className="w-full flex flex-row justify-between text-gray-600">
               <div>레벨 옵션비</div>
               <div>{levelOptionFee}</div>
             </div>
-            <div className="w-full my-[1%] border-[1px] border-black"></div>
-            <div className="w-full flex flex-row justify-between pb-3">
-              <div className="font-extrabold">총 결제금액</div>
-              <div className="text-blue-500 font-extrabold">{cost}</div>
+            <div className="w-full border-t border-gray-300 my-2"></div>
+            <div className="w-full flex flex-row justify-between text-gray-700 font-extrabold">
+              <div>총 결제금액</div>
+              <div className="text-blue-500">{cost}</div>
             </div>
 
-            <div
+            <button
               onClick={goToPay}
-              className="h-20 w-1/2 bg-white rounded-lg shadow-md text-black text-center flex items-center justify-center cursor-pointer"
+              className="h-12 w-full bg-blue-500 text-white rounded-lg shadow-md text-center flex items-center justify-center cursor-pointer hover:bg-blue-600 transition duration-200"
             >
               예약하기
-            </div>
+            </button>
           </div>
         </div>
       </div>
