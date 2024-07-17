@@ -67,6 +67,7 @@ export interface TeamInstInfoDTO {
     userId : number;
     userName : string;
     phoneNumber : string;
+    profileUrl : string;
     invitePermission : boolean;
     addPermission : boolean;
     modifyPermission : boolean;

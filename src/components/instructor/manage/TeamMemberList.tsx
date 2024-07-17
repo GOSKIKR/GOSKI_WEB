@@ -15,6 +15,8 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
     const [selectedMember, setSelectedMember] = useState<TeamInstInfoDTO | null>(null);
     const [expandedMemberIndex, setExpandedMemberIndex] = useState<number | null>(null);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage = 5;
 
     const handleIconClick = (event: React.MouseEvent, member: TeamInstInfoDTO) => {
         event.stopPropagation();
@@ -76,6 +78,31 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
         }
     }
 
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentMembers = members.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(members.length / itemsPerPage);
+
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const renderPageNumbers = () => {
+        const pageNumbers = [];
+        for (let i = 1; i <= totalPages; i++) {
+            pageNumbers.push(
+                <button
+                    key={i}
+                    onClick={() => handlePageChange(i)}
+                    className={`mb-2 px-3 py-1 mx-1 rounded ${currentPage === i ? 'bg-primary-500 text-white' : 'bg-white text-primary-500'}`}
+                >
+                    {i}
+                </button>
+            );
+        }
+        return pageNumbers;
+    };
+
     useEffect(() => {
         const handleClickOutside = () => {
             setModalVisible(false);
@@ -91,7 +118,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
     }, [modalVisible]);
 
     return (
-        <div className="team-member mb-6 bg-primary-50 rounded-lg shadow-lg sm:w-[1200px] w-[350px] mx-auto ">
+        <div className="team-member mb-6 bg-primary-50 rounded-lg shadow-lg sm:w-[1200px] w-[350px] sm:h-[500px] mx-auto">
             <div className="flex justify-between items-center p-6">
                 <div className="text-lg font-bold"> <span className="text-black">({members.length}명)</span></div>
                 <div className="space-x-2 hidden sm:flex">
@@ -116,7 +143,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                         </tr>
                     </thead>
                     <tbody className="text-center items-center">
-                        {members.map((member, index) => (
+                        {currentMembers.map((member, index) => (
                             <tr key={index} className="border-t bg-primary-50">
                                 <td className="py-2 px-4">
                                     <button className="bg-gray-50 text-gray-800 w-[80px] rounded px-2 py-1">
@@ -124,13 +151,14 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                                     </button>
                                 </td>
                                 <td className="py-2 px-4 flex justify-center items-center">
-                                    <div className="w-8 h-8 bg-gray-50 rounded-full mr-2"></div>
+                                    <img src={member.profileUrl} className="w-8 h-8 bg-gray-50 rounded-full mr-2" alt="Profile">
+                                    </img>
                                     {member.userName}
                                 </td>
                                 <td className="py-2 px-4">
                                     <input
                                         type="text"
-                                        className="border px-3 py-2 border-black rounded text-center w-full"
+                                        className="px-3 py-2 bg-gray-200 rounded text-center w-full"
                                         value={member.designatedFee}
                                         readOnly={!isEditMode}
                                         onChange={(e) => handleInputChange(e, member.userId)}
@@ -138,28 +166,34 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                                 </td>
                                 <td className="py-2 px-4">
                                     <span
-                                        className={`${member.invitePermission ? 'text-primary-900' : 'text-black'} cursor-pointer ml-1`}
+                                        className={`${member.invitePermission ? 'text-primary-900 font-bold' : 'text-black'} cursor-pointer ml-1`}
                                         onClick={() => togglePermission(member.userId, 'invitePermission')}
                                     >
-                                        팀 초대
+                                        강사 초대
                                     </span> |
                                     <span
-                                        className={`${member.addPermission ? 'text-primary-900' : 'text-black'} cursor-pointer ml-1`}
+                                        className={`${member.addPermission ? 'text-primary-900 font-bold' : 'text-black'} cursor-pointer ml-1`}
                                         onClick={() => togglePermission(member.userId, 'addPermission')}
                                     >
-                                        팀 스케줄 추가
+                                        스케줄 추가
                                     </span> |
                                     <span
-                                        className={`${member.modifyPermission ? 'text-primary-900' : 'text-black'} cursor-pointer ml-1`}
+                                        className={`${member.modifyPermission ? 'text-primary-900 font-bold' : 'text-black'} cursor-pointer ml-1`}
                                         onClick={() => togglePermission(member.userId, 'modifyPermission')}
                                     >
-                                        팀 스케줄 조정
+                                        스케줄 조정
                                     </span> |
                                     <span
-                                        className={`${member.deletePermission ? 'text-primary-900' : 'text-black'} cursor-pointer ml-1`}
+                                        className={`${member.deletePermission ? 'text-primary-900 font-bold' : 'text-black'} cursor-pointer ml-1`}
                                         onClick={() => togglePermission(member.userId, 'deletePermission')}
                                     >
-                                        팀 스케줄 삭제
+                                        스케줄 삭제
+                                    </span> |
+                                    <span
+                                        className={`${member.costPermission ? 'text-primary-900 font-bold' : 'text-black'} cursor-pointer ml-1`}
+                                        onClick={() => togglePermission(member.userId, 'costPermission')}
+                                    >
+                                        강습 단가 지정
                                     </span>
                                 </td>
                                 <td className="py-2 px-4">{member.phoneNumber}</td>
@@ -179,15 +213,18 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                         ))}
                     </tbody>
                 </table>
+                <div className="flex justify-center mt-4">
+                    {renderPageNumbers()}
+                </div>
             </div>
             <div className="block sm:hidden w-[300px] mx-auto p-2">
-                {members.map((member, index) => (
+                {currentMembers.map((member, index) => (
                     <div key={index} className="bg-white rounded shadow p-4 mb-4">
                         <div className="flex items-center justify-between" onClick={() => toggleExpand(index)}>
                             <div className="flex items-center">
                                 <div className="w-10 h-10 bg-gray-50 rounded-full mr-4"></div>
                                 <div>
-                                    <div className="text-sm font-bold border-b">{member.position}</div>
+                                    <div className="text-sm font-bold border-b">{getRole(member.position)}</div>
                                     <div className="text-sm">{member.userName}</div>
                                     <div className="text-sm">{member.phoneNumber}</div>
                                 </div>
@@ -206,20 +243,24 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                                     />
                                 </div>
                                 <div className="flex items-center justify-between mb-4">
-                                    <span>팀 초대 권한</span>
+                                    <span>강사 초대</span>
                                     <input type="checkbox" className="form-checkbox" checked={member.invitePermission} onChange={() => togglePermission(member.userId, 'invitePermission')} />
                                 </div>
                                 <div className="flex items-center justify-between mb-4">
-                                    <span>팀 추가 권한</span>
+                                    <span>스케줄 추가</span>
                                     <input type="checkbox" className="form-checkbox" checked={member.addPermission} onChange={() => togglePermission(member.userId, 'addPermission')} />
                                 </div>
                                 <div className="flex items-center justify-between mb-4">
-                                    <span>팀 조정 권한</span>
+                                    <span>스케줄 조정</span>
                                     <input type="checkbox" className="form-checkbox" checked={member.modifyPermission} onChange={() => togglePermission(member.userId, 'modifyPermission')} />
                                 </div>
                                 <div className="flex items-center justify-between mb-4">
-                                    <span>팀 삭제 권한</span>
+                                    <span>스케줄 삭제</span>
                                     <input type="checkbox" className="form-checkbox" checked={member.deletePermission} onChange={() => togglePermission(member.userId, 'deletePermission')} />
+                                </div>
+                                <div className="flex items-center justify-between mb-4">
+                                    <span>강습 단가 지정</span>
+                                    <input type="checkbox" className="form-checkbox" checked={member.costPermission} onChange={() => togglePermission(member.userId, 'costPermission')} />
                                 </div>
                                 <button className="bg-primary-500 text-white rounded px-4 py-2 w-full my-2">수정하기</button>
                                 <button className="bg-red-500 text-white rounded px-4 py-2 w-full" onClick={() => {
@@ -230,13 +271,18 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                         )}
                     </div>
                 ))}
+                <div className="flex justify-center mt-4">
+                    {renderPageNumbers()}
+                </div>
             </div>
             {confirmationModalVisible && selectedMember && (
                 <TeamMemberDeleteConfirmModal
                     onClose={closeModal}
                     onConfirm={confirmDelete}
                     memberName={selectedMember.userName}
-                    memberRole={selectedMember.position.toString()}
+                    memberRole={selectedMember.position}
+                    profileUrl={selectedMember.profileUrl}
+                    getRole={getRole}
                 />
             )}
         </div>

@@ -39,7 +39,7 @@ const LessonFeeByInstructor: React.FC<LessonFeeByInstructorProps> = ({ isEditing
     }
 
     return (
-        <div className="bg-primary-50 shadow-sm sm:w-[1200px] w-[350px] rounded mt-6 p-6 mx-auto">
+        <div className="bg-primary-50 shadow-sm sm:w-[1200px] w-[350px] sm:h-[500px] rounded mt-6 p-6 mx-auto">
             <div className="text-lg font-bold sm:text-left text-center mb-4">
                 강사 별 강습 지정비
             </div>
