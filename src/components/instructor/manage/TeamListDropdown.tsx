@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Team, TeamInstDesignatedFeeDTO } from "../../../dto/TeamDTO";
+import { Team, TeamInstInfoDTO } from "../../../dto/TeamDTO";
 import { TeamService } from "../../../api/TeamService";
 
 interface DropdownMenuProps {
@@ -13,7 +13,7 @@ interface DropdownMenuProps {
     setBasicFee?: (fee: number) => void;
     setIntermediateFee?: (fee: number) => void;
     setAdvancedFee?: (fee: number) => void;
-    setDesignatedFee? : (feeInfo : TeamInstDesignatedFeeDTO[]) => void;
+    setTeamInstInfo? : (feeInfo : TeamInstInfoDTO[]) => void;
 }
 
 const teamService = new TeamService();
@@ -21,7 +21,7 @@ const teamService = new TeamService();
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
     setProfileUrl, setDescription,
     setOneOnOneFee, setOneOnTwoFee, setOneOnThreeFee, setOneonNFee,
-    setBasicFee, setIntermediateFee, setAdvancedFee,setDesignatedFee
+    setBasicFee, setIntermediateFee, setAdvancedFee,setTeamInstInfo, 
 }) => {
     const [teamList, setTeamList] = useState<Team[]>([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -53,9 +53,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             if (setIntermediateFee) setIntermediateFee(teamInfo.intermediateFee);
             if (setAdvancedFee) setAdvancedFee(teamInfo.advancedFee);
         }
-        const designatedFees = await teamService.getDesignatedFeeList(teamId);
-        if(designatedFees && setDesignatedFee){
-            setDesignatedFee(designatedFees)
+        const TeamInfoList = await teamService.getTeamInstInfoList(teamId);
+        if(TeamInfoList && setTeamInstInfo){
+            setTeamInstInfo(TeamInfoList)
         }
     };
 

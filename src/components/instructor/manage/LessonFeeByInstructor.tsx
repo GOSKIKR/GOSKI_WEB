@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { TeamInstDesignatedFeeDTO } from "../../../dto/TeamDTO";
+import { TeamInstInfoDTO } from "../../../dto/TeamDTO";
 
 interface LessonFeeByInstructorProps {
     isEditing: boolean;
-    designatedFee: TeamInstDesignatedFeeDTO[] | null;
-    setDesignatedFee: (feeInfo: TeamInstDesignatedFeeDTO[]) => void;
+    teamInstInfo: TeamInstInfoDTO[] | null;
+    setTeamInstInfo: (feeInfo: TeamInstInfoDTO[]) => void;
 }
 
-const LessonFeeByInstructor: React.FC<LessonFeeByInstructorProps> = ({ isEditing, designatedFee, setDesignatedFee }) => {
+const LessonFeeByInstructor: React.FC<LessonFeeByInstructorProps> = ({ isEditing, teamInstInfo, setTeamInstInfo }) => {
     const [expandedInstructorIndex, setExpandedInstructorIndex] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 5;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, userId: number) => {
         const value = e.target.value;
-        if (/^\d*$/.test(value) && designatedFee) {
-            setDesignatedFee(designatedFee.map(feeInfo =>
+        if (/^\d*$/.test(value) && teamInstInfo) {
+            setTeamInstInfo(teamInstInfo.map(feeInfo =>
                 feeInfo.userId === userId ? { ...feeInfo, designatedFee: Number(value) } : feeInfo
             ));
         }
@@ -31,10 +31,10 @@ const LessonFeeByInstructor: React.FC<LessonFeeByInstructorProps> = ({ isEditing
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = designatedFee?.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = teamInstInfo?.slice(indexOfFirstItem, indexOfLastItem);
 
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil((designatedFee?.length || 0) / itemsPerPage); i++) {
+    for (let i = 1; i <= Math.ceil((teamInstInfo?.length || 0) / itemsPerPage); i++) {
         pageNumbers.push(i);
     }
 

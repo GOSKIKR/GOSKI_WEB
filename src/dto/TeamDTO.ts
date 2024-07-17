@@ -63,9 +63,15 @@ export interface CertificateInfoVO {
     certificateImageUrl : number;
 }
 
-export interface TeamInstDesignatedFeeDTO {
+export interface TeamInstInfoDTO {
     userId : number;
     userName : string;
+    phoneNumber : string;
+    invitePermission : boolean;
+    addPermission : boolean;
+    modifyPermission : boolean;
+    deletePermission : boolean;
+    costPermission : boolean;
     position : number;
     designatedFee : number;
     certificateInfoList : CertificateInfoVO[];

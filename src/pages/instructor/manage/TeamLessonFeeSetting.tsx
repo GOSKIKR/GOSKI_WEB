@@ -7,7 +7,7 @@ import LessonFeeByGroup from "../../../components/instructor/manage/LessonFeeByG
 import LessonFeeByLevel from "../../../components/instructor/manage/LessonFeeByLevel";
 import LessonFeeByInstructor from "../../../components/instructor/manage/LessonFeeByInstructor";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
-import { TeamInstDesignatedFeeDTO } from "../../../dto/TeamDTO";
+import { TeamInstInfoDTO } from "../../../dto/TeamDTO";
 
 
 const TeamLessonFeeSetting: React.FC = () => {
@@ -19,7 +19,7 @@ const TeamLessonFeeSetting: React.FC = () => {
     const [intermediateFee, setIntermediateFee] = useState(0);
     const [advancedFee, setAdvancedFee] = useState(0);
     const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
-    const [designatedFee, setDesignatedFee] = useState<TeamInstDesignatedFeeDTO[] | null>(null);
+    const [teamInstInfo, setTeamInstInfo] = useState<TeamInstInfoDTO[] | null>(null);
 
     const handleResize = () => {
         setInnerWidth(window.innerWidth);
@@ -45,7 +45,7 @@ const TeamLessonFeeSetting: React.FC = () => {
                             setBasicFee={setOneOnOneFee}
                             setIntermediateFee={setIntermediateFee}
                             setAdvancedFee={setAdvancedFee}
-                            setDesignatedFee={setDesignatedFee}
+                            setTeamInstInfo={setTeamInstInfo}
                         />
                     </div>
                     <TeamLessonFeeInfo />
@@ -79,8 +79,8 @@ const TeamLessonFeeSetting: React.FC = () => {
                     </div>
                     <LessonFeeByInstructor 
                         isEditing={!isEditing}
-                        designatedFee={designatedFee}
-                        setDesignatedFee={setDesignatedFee}
+                        teamInstInfo={teamInstInfo}
+                        setTeamInstInfo={setTeamInstInfo}
                         />
                 </div>
             </div>

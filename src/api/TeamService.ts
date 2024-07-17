@@ -1,4 +1,4 @@
-import { Team, TeamInfoDTO, TeamInstDesignatedFeeDTO } from "../dto/TeamDTO";
+import { Team, TeamInfoDTO, TeamInstInfoDTO } from "../dto/TeamDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
@@ -41,21 +41,22 @@ export class TeamService {
         return null;
     }
 
-    async getDesignatedFeeList(teamId : number) : Promise<TeamInstDesignatedFeeDTO[] | null> {
+    async getTeamInstInfoList(teamId : number) : Promise<TeamInstInfoDTO[] | null> {
         try{
-            const response = await apiClient().get(`${url}/list/designfee/${teamId}`,{
+            const response = await apiClient().get(`${url}/list/team-inst/${teamId}`,{
                 headers : {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             if (response && response.status === httpStatusCode.OK) {
                 console.log(response.data.data)
-                return response.data.data as TeamInstDesignatedFeeDTO[];
+                return response.data.data as TeamInstInfoDTO[];
             }
         } catch (error) {
-            console.log("지정 강습비 조회 실패");
+            console.log("팀 강사 정보 조회 실패");
         }
         return null;
     }
+
 
 }
