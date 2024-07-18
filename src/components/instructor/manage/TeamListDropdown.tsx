@@ -9,6 +9,7 @@ interface DropdownMenuProps {
     setOneOnOneFee?: (fee: number) => void;
     setOneOnTwoFee?: (fee: number) => void;
     setOneOnThreeFee?: (fee: number) => void;
+    setOneOnFourFee?: (fee: number) => void;
     setOneonNFee?: (fee: number) => void;
     setBasicFee?: (fee: number) => void;
     setIntermediateFee?: (fee: number) => void;
@@ -20,7 +21,7 @@ const teamService = new TeamService();
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
     setProfileUrl, setDescription,
-    setOneOnOneFee, setOneOnTwoFee, setOneOnThreeFee, setOneonNFee,
+    setOneOnOneFee, setOneOnTwoFee, setOneOnThreeFee, setOneOnFourFee, setOneonNFee,
     setBasicFee, setIntermediateFee, setAdvancedFee,setTeamInstInfo, 
 }) => {
     const [teamList, setTeamList] = useState<Team[]>([]);
@@ -48,6 +49,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             if (setOneOnOneFee) setOneOnOneFee(teamInfo.teamCost);
             if (setOneOnTwoFee) setOneOnTwoFee(teamInfo.oneTwoFee);
             if (setOneOnThreeFee) setOneOnThreeFee(teamInfo.oneThreeFee);
+            if (setOneOnFourFee) setOneOnFourFee(teamInfo.oneThreeFee);
             if (setOneonNFee) setOneonNFee(teamInfo.oneNFee);
             if (setBasicFee) setBasicFee(teamInfo.teamCost);
             if (setIntermediateFee) setIntermediateFee(teamInfo.intermediateFee);

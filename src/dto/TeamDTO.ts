@@ -54,7 +54,20 @@ export interface TeamInfoDTO {
     oneThreeFee : number;
     oneFourFee : number;
     oneNFee : number;
+    designatedFees: Map<number, number>;
 }
+
+export interface TeamLessonFeeRequestDTO {
+    teamCost: number;
+    intermediateFee: number;
+    advancedFee: number;
+    oneTwoFee: number;
+    oneThreeFee: number;
+    oneFourFee: number;
+    oneNFee: number;
+    designatedFees: { [key: number]: number };
+}
+
 
 export interface CertificateInfoVO {
     certificateId : number;

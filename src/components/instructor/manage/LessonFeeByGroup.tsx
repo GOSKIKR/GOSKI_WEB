@@ -5,16 +5,18 @@ interface LessonFeeByGroupProps {
     oneOnTwoFee: number;
     oneOnThreeFee: number;
     oneOnNFee: number;
+    oneOnFourFee : number;
     setOneOnOneFee: React.Dispatch<React.SetStateAction<number>>;
     setOneOnTwoFee: React.Dispatch<React.SetStateAction<number>>;
     setOneOnThreeFee: React.Dispatch<React.SetStateAction<number>>;
     setOneonNFee: React.Dispatch<React.SetStateAction<number>>;
+    setOneOnFourFee: React.Dispatch<React.SetStateAction<number>>
     isEditing: boolean;
 }
 
 const LessonFeeByGroup: React.FC<LessonFeeByGroupProps> = ({
-    oneOnOneFee, oneOnTwoFee, oneOnThreeFee, oneOnNFee,
-    setOneOnOneFee, setOneOnTwoFee, setOneOnThreeFee, setOneonNFee,
+    oneOnOneFee, oneOnTwoFee, oneOnThreeFee, oneOnFourFee, oneOnNFee, 
+    setOneOnOneFee, setOneOnTwoFee, setOneOnThreeFee, setOneOnFourFee, setOneonNFee,
     isEditing
 }) => {
     const handleFeeChange = (e: React.ChangeEvent<HTMLInputElement>, setFee: React.Dispatch<React.SetStateAction<number>>) => {
@@ -68,6 +70,20 @@ const LessonFeeByGroup: React.FC<LessonFeeByGroupProps> = ({
                         className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
                         value={oneOnThreeFee}
                         onChange={(e) => handleFeeChange(e, setOneOnThreeFee)}
+                        readOnly={!isEditing}
+                    />
+                </div>
+            </div>
+            <div className="p-3 flex flex-col sm:flex-row sm:justify-between items-center">
+                <div className="text-center sm:text-left mb-2 sm:mb-0">
+                    <div>1:4강습비</div>
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        className="border px-3 py-2 border-black rounded text-center w-[200px] h-8"
+                        value={oneOnFourFee}
+                        onChange={(e) => handleFeeChange(e, setOneOnFourFee)}
                         readOnly={!isEditing}
                     />
                 </div>
