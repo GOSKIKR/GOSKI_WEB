@@ -1,75 +1,110 @@
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
+import userReserveStore from "../../../store/userReserveStore";
+import teamInfoStore from "../../../store/teamInfoStore";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
+import { StudentInfo } from "../../../dto/UserReserveDTO";
+import StudentInfoForm from "../../../components/user/StudentInfoForm";
+import AgreementForm from "../../../components/user/AgreementForm";
+import PaymentMethodForm from "../../../components/user/PaymentMethodForm";
+import apiClient from "../../../utils/config/axiosConfig";
+import { UserMyService } from "../../../api/UserMyService";
+import { UserMyDTO } from "../../../dto/UserMyDTO";
 
-interface StudentInfo {
-    height: string;
-    weight: string;
-    footSize: number;
-    age: string;
-    gender: string;
-    name: string;
-}
-
-interface LessonData {
-    teamId: number;
-    instId: number;
-    lessonDate: string;
-    startTime: string;
-    duration: number;
-    peopleNumber: number;
-    lessonType: string;
-    basicFee: number;
-    designatedFee: number;
-    peopleOptionFee: number;
-    levelOptionFee: number;
-    requestComplain: string;
-    coupon_id?: number;
-    studentInfo: StudentInfo[];
-}
-
-const initialData: LessonData = {
-    teamId: 1,
-    instId: 1,
-    lessonDate: "2024-05-01",
-    startTime: "1400",
-    duration: 2,
-    peopleNumber: 3,
-    lessonType: "1010000",
-    basicFee: 100000,
-    designatedFee: 50000,
-    peopleOptionFee: 30000,
-    levelOptionFee: 20000,
-    requestComplain: "",
-    studentInfo: [
-        {
-            height: "",
-            weight: "",
-            footSize: 260,
-            age: "",
-            gender: "",
-            name: "",
-        },
-        {
-            height: "",
-            weight: "",
-            footSize: 260,
-            age: "",
-            gender: "",
-            name: "",
-        },
-        {
-            height: "",
-            weight: "",
-            footSize: 260,
-            age: "",
-            gender: "",
-            name: "",
-        },
-    ],
+const convertLessonType = (lessonTypeString: string): number => {
+    if (lessonTypeString === "SKI") {
+        return 1010000; // 예: SKI 레벨 1
+    } else if (lessonTypeString === "BOARD") {
+        return 1100000; // 예: BOARD 레벨 1
+    } else {
+        throw new Error("Invalid lesson type string");
+    }
 };
 
+interface Option {
+    value: string;
+    label: string;
+}
+
+const ageOptions: Option[] = [
+    { value: "1", label: "PRESCHOOL_CHILD" },
+    { value: "2", label: "ELEMENTARY" },
+    { value: "3", label: "MIDDLE_HIGH" },
+    { value: "4", label: "TWENTIES" },
+    { value: "5", label: "THIRTIES" },
+    { value: "6", label: "FORTIES" },
+    { value: "7", label: "FIFTIES" },
+    { value: "8", label: "SIXTIES_OVER" },
+];
+
+const heightOptions: Option[] = [
+    { value: "1", label: "HEIGHT_UNDER_140CM" },
+    { value: "2", label: "HEIGHT_140CM_TO_149CM" },
+    { value: "3", label: "HEIGHT_150CM_TO_159CM" },
+    { value: "4", label: "HEIGHT_160CM_TO_169CM" },
+    { value: "5", label: "HEIGHT_170CM_TO_179CM" },
+    { value: "6", label: "HEIGHT_ABOVE_180CM" },
+];
+
+const weightOptions: Option[] = [
+    { value: "1", label: "WEIGHT_UNDER_40KG" },
+    { value: "2", label: "WEIGHT_40KG_TO_49KG" },
+    { value: "3", label: "WEIGHT_50KG_TO_59KG" },
+    { value: "4", label: "WEIGHT_60KG_TO_69KG" },
+    { value: "5", label: "WEIGHT_70KG_TO_79KG" },
+    { value: "6", label: "WEIGHT_80KG_TO_89KG" },
+    { value: "7", label: "WEIGHT_90KG_TO_99KG" },
+    { value: "8", label: "WEIGHT_ABOVE_100KG" },
+];
+
 const Payment = () => {
+    const [profile, setProfile] = useState<UserMyDTO | null>(null);
+
+    useEffect(() => {
+        const fetchMyProfile = async () => {
+            const profileService = new UserMyService();
+            const profile = await profileService.getUserProfile();
+            setProfile(profile);
+        };
+        fetchMyProfile();
+        console.log(selectedInstructor);
+    }, []);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const passedState = location.state || {};
+    const selectedInstructor = passedState.selectedInstructor || {};
+
+    const {
+        resortName: reserveResortName,
+        lessonType: reserveLessonType,
+        studentCount,
+        lessonDate,
+        startTime,
+        duration,
+    } = userReserveStore();
+
+    const { basicFee, levelOptionFee, designatedFee, peopleOptionFee } =
+        teamInfoStore();
+
+    const initialStudentInfo = Array.from({ length: studentCount }, () => ({
+        name: "",
+        age: "",
+        gender: "",
+        height: "",
+        weight: "",
+        footSize: 260,
+    }));
+
+    const initialData = {
+        ...passedState,
+        instId: selectedInstructor.instructorId,
+        designatedFees: selectedInstructor.designatedFee,
+        studentInfo: passedState.studentInfo || initialStudentInfo,
+        requestComplain: "",
+    };
+
     const [data, setData] = useState(initialData);
     const [agreements, setAgreements] = useState({
         personalInfo: false,
@@ -86,8 +121,9 @@ const Payment = () => {
         field: keyof StudentInfo,
         value: string | number
     ) => {
-        const updatedStudentInfo = data.studentInfo.map((student, i) =>
-            i === index ? { ...student, [field]: value } : student
+        const updatedStudentInfo = data.studentInfo.map(
+            (student: StudentInfo, i: number) =>
+                i === index ? { ...student, [field]: value } : student
         );
         setData({ ...data, studentInfo: updatedStudentInfo });
     };
@@ -116,16 +152,102 @@ const Payment = () => {
     };
 
     const handleFootSizeChange = (index: number, change: number) => {
-        const updatedStudentInfo = data.studentInfo.map((student, i) => {
-            const newSize = student.footSize + change;
-            if (i === index) {
-                if (newSize >= 150 && newSize <= 320) {
-                    return { ...student, footSize: newSize };
+        const updatedStudentInfo = data.studentInfo.map(
+            (student: StudentInfo, i: number) => {
+                const newSize = student.footSize + change;
+                if (i === index) {
+                    if (newSize >= 150 && newSize <= 320) {
+                        return { ...student, footSize: newSize };
+                    }
                 }
+                return student;
             }
-            return student;
-        });
+        );
         setData({ ...data, studentInfo: updatedStudentInfo });
+    };
+
+    const handleRequestChange = (
+        event: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        setData({
+            ...data,
+            requestComplain: event.target.value,
+        });
+    };
+
+    const handleReservation = async () => {
+        // 필수 약관 동의 체크
+        if (!agreements.personalInfo || !agreements.thirdParty) {
+            alert("필수 약관에 동의해주세요.");
+            return;
+        }
+
+        // 수강생 정보 입력 확인
+        for (const student of data.studentInfo) {
+            if (
+                !student.name ||
+                !student.age ||
+                !student.gender ||
+                !student.height ||
+                !student.weight
+            ) {
+                alert("모든 수강생 정보를 입력해주세요.");
+                return;
+            }
+        }
+
+        try {
+            const lessonType = convertLessonType(reserveLessonType);
+            const reservationData = {
+                teamId: passedState.teamId,
+                instId: selectedInstructor.instructorId ?? 0,
+                lessonDate,
+                startTime,
+                duration,
+                peopleNumber: studentCount,
+                lessonType,
+                basicFee: data.basicFee,
+                designatedFee: data.designatedFee,
+                peopleOptionFee: data.peopleOptionFee,
+                levelOptionFee: data.levelOptionFee ?? 0,
+                requestComplain: data.requestComplain || "",
+                studentInfo: data.studentInfo.map((student: StudentInfo) => ({
+                    ...student,
+                    height:
+                        heightOptions.find(
+                            (option) => option.value === student.height
+                        )?.label || student.height,
+                    weight:
+                        weightOptions.find(
+                            (option) => option.value === student.weight
+                        )?.label || student.weight,
+                    age:
+                        ageOptions.find(
+                            (option) => option.value === student.age
+                        )?.label || student.age,
+                    gender: student.gender === "male" ? "MALE" : "FEMALE",
+                })),
+            };
+
+            const accessToken = localStorage.getItem("accesstoken");
+            const response = await apiClient().post(
+                "/payment/reserve/prepare",
+                reservationData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            console.log(response.data);
+            if (response.data.data.next_redirect_pc_url) {
+                localStorage.setItem("tid", response.data.tid);
+                window.location.href = response.data.data.next_redirect_pc_url;
+            }
+        } catch (error) {
+            console.error("Error making reservation:", error);
+            // Handle error
+        }
     };
 
     return (
@@ -141,205 +263,63 @@ const Payment = () => {
                             <div className="font-extrabold text-lg mb-2">
                                 강습 예약 정보
                             </div>
-                            <div className="font-bold text-lg">스키장 이름</div>
+                            <div className="flex flex-row space-x-12">
+                                <div className="flex flex-col w-36">
+                                    <div className="text-xs text-gray-500">
+                                        스키장 이름
+                                    </div>
+                                    <div>{reserveResortName}</div>
+                                </div>
+                                {selectedInstructor &&
+                                    Object.keys(selectedInstructor).length >
+                                        0 && (
+                                        <div className="flex flex-col w-1/3">
+                                            <div className="text-xs text-gray-500">
+                                                지정 강사
+                                            </div>
+                                            <div>
+                                                {selectedInstructor.userName}
+                                            </div>
+                                        </div>
+                                    )}
+                            </div>
+
                             <div className="flex flex-row space-x-12 pt-3">
-                                <div className="flex flex-col">
+                                <div className="flex flex-col w-1/3">
                                     <div className="text-xs text-gray-500">
                                         일시
                                     </div>
-                                    <div>{data.lessonDate}</div>
+                                    <div>{lessonDate}</div>
                                 </div>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col w-1/5">
                                     <div className="text-xs text-gray-500">
                                         인원
                                     </div>
-                                    <div>{data.peopleNumber}명</div>
+                                    <div>{studentCount}명</div>
                                 </div>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col w-2/5">
                                     <div className="text-xs text-gray-500">
                                         요청사항
                                     </div>
-                                    <div>{data.requestComplain || "없음"}</div>
+                                    <textarea
+                                        className="w-full p-2 border rounded"
+                                        value={data.requestComplain}
+                                        onChange={handleRequestChange}
+                                        placeholder="요청사항을 입력해주세요"
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div className="bg-primary-50 p-5 rounded-lg shadow-md">
                             <div className="font-bold mb-2">예약자 정보</div>
-                            <div>예약자: 김현지</div>
-                            <div>연락처: 010.0000.0000</div>
-                            <div>이메일: 김현지@gmail.com</div>
+                            <div>예약자: {profile?.userName}</div>
+                            <div>연락처: {profile?.phoneNumber}</div>
                         </div>
-                        <div className="bg-primary-50 p-5 rounded-lg shadow-md">
-                            <div className="font-bold mb-2">강습 인원 정보</div>
-                            <div className="sm:grid sm:grid-cols-3 flex flex-col gap-4">
-                                {data.studentInfo.map((student, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-white p-4 space-y-2"
-                                    >
-                                        <div className="flex flex-col space-y-2">
-                                            <input
-                                                type="text"
-                                                value={student.name}
-                                                onChange={(e) =>
-                                                    handleInputChange(
-                                                        index,
-                                                        "name",
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className="border p-1 h-8 rounded bg-primary-100 placeholder:text-black"
-                                                placeholder="이름"
-                                            />
-                                            <select
-                                                value={student.age}
-                                                onChange={(e) =>
-                                                    handleInputChange(
-                                                        index,
-                                                        "age",
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className="border p-1 rounded bg-primary-100 h-8"
-                                                name="연령대"
-                                            >
-                                                <option value="select">
-                                                    연령대
-                                                </option>
-                                                <option value="1">
-                                                    미취학 아동
-                                                </option>
-                                                <option value="2">
-                                                    초등학생
-                                                </option>
-                                                <option value="3">
-                                                    중고등학생
-                                                </option>
-                                                <option value="4">20대</option>
-                                                <option value="5">30대</option>
-                                                <option value="6">40대</option>
-                                                <option value="7">50대</option>
-                                                <option value="8">
-                                                    60대 이상
-                                                </option>
-                                            </select>
-                                            <div className="flex flex-row flex-1 items-center justify-center text-center">
-                                                <div className="grow h-8 rounded-l-lg bg-primary-200 border-gray-300 border-y-2 border-l-2">
-                                                    남성
-                                                </div>
-                                                <div className="grow h-8 rounded-r-lg border-gray-300 border-r-2 border-y-2">
-                                                    여성
-                                                </div>
-                                            </div>
-                                            <select
-                                                value={student.height}
-                                                onChange={(e) =>
-                                                    handleInputChange(
-                                                        index,
-                                                        "height",
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className="border p-1 rounded bg-primary-100 h-8"
-                                                name="신장"
-                                            >
-                                                <option value="select">
-                                                    신장
-                                                </option>
-                                                <option value="1">
-                                                    140cm 미만
-                                                </option>
-                                                <option value="2">
-                                                    140cm ~ 149cm
-                                                </option>
-                                                <option value="3">
-                                                    150cm ~ 159cm
-                                                </option>
-                                                <option value="4">
-                                                    160cm ~ 169cm
-                                                </option>
-                                                <option value="5">
-                                                    170cm ~ 179cm
-                                                </option>
-                                                <option value="6">
-                                                    180cm 이상
-                                                </option>
-                                            </select>
-                                            <select
-                                                value={student.weight}
-                                                onChange={(e) =>
-                                                    handleInputChange(
-                                                        index,
-                                                        "weight",
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className="border p-1 rounded bg-primary-100 h-8"
-                                                name="체중"
-                                            >
-                                                <option value="select">
-                                                    체중
-                                                </option>
-                                                <option value="1">
-                                                    40kg 미만
-                                                </option>
-                                                <option value="2">
-                                                    40kg ~ 49kg
-                                                </option>
-                                                <option value="3">
-                                                    50kg ~ 59kg
-                                                </option>
-                                                <option value="4">
-                                                    60kg ~ 69kg
-                                                </option>
-                                                <option value="5">
-                                                    70kg ~ 79kg
-                                                </option>
-                                                <option value="6">
-                                                    80kg ~ 89kg
-                                                </option>
-                                                <option value="5">
-                                                    90kg ~ 99kg
-                                                </option>
-                                                <option value="6">
-                                                    100kg 이상
-                                                </option>
-                                            </select>
-                                            <div className="flex items-center justify-center">
-                                                <button
-                                                    className="border p-1 w-1/5 h-8 rounded bg-primary-200"
-                                                    onClick={() =>
-                                                        handleFootSizeChange(
-                                                            index,
-                                                            -10
-                                                        )
-                                                    }
-                                                >
-                                                    -
-                                                </button>
-                                                <input
-                                                    type="number"
-                                                    value={student.footSize}
-                                                    readOnly
-                                                    className="border p-1 w-3/5 h-8 rounded bg-primary-100 placeholder:text-black text-center"
-                                                />
-                                                <button
-                                                    className="border p-1 w-1/5 h-8 rounded bg-primary-200"
-                                                    onClick={() =>
-                                                        handleFootSizeChange(
-                                                            index,
-                                                            10
-                                                        )
-                                                    }
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        <StudentInfoForm
+                            studentInfo={data.studentInfo}
+                            handleInputChange={handleInputChange}
+                            handleFootSizeChange={handleFootSizeChange}
+                        />
                     </div>
                     <div className="sm:w-2/5 space-y-5 mt-5 sm:mt-0">
                         <div className="bg-primary-50 p-5 rounded-lg shadow-md">
@@ -348,11 +328,21 @@ const Payment = () => {
                             </div>
                             <div className="w-full flex flex-row justify-between">
                                 <div>기존 강습비</div>
-                                <div>10000원</div>
+                                <div>{basicFee}원</div>
                             </div>
                             <div className="w-full flex flex-row justify-between">
                                 <div>레벨 옵션비</div>
-                                <div>10000원</div>
+                                <div>{levelOptionFee ?? 0}원</div>
+                            </div>
+                            <div className="w-full flex flex-row justify-between">
+                                <div>지정 옵션비</div>
+                                <div>
+                                    {selectedInstructor.designatedFee ?? 0}원
+                                </div>
+                            </div>
+                            <div className="w-full flex flex-row justify-between">
+                                <div>인원 옵션비</div>
+                                <div>{peopleOptionFee}원</div>
                             </div>
                             <div className="w-full my-[1%] border-[1px] border-black"></div>
                             <div className="w-full flex flex-row justify-between pb-3">
@@ -360,104 +350,28 @@ const Payment = () => {
                                     총 결제금액
                                 </div>
                                 <div className="text-blue-500 font-extrabold">
-                                    20000원
+                                    {basicFee +
+                                        (levelOptionFee ?? 0) +
+                                        (selectedInstructor.designatedFee ??
+                                            0) +
+                                        peopleOptionFee}
+                                    원
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-primary-50 p-5 rounded-lg shadow-md">
-                            <div className="font-bold mb-2">약관 동의</div>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    checked={agreements.personalInfo}
-                                    onChange={(e) =>
-                                        handleAgreementChange(
-                                            "personalInfo",
-                                            e.target.checked
-                                        )
-                                    }
-                                />{" "}
-                                [필수] 개인정보 수집 및 이용
-                            </div>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    checked={agreements.thirdParty}
-                                    onChange={(e) =>
-                                        handleAgreementChange(
-                                            "thirdParty",
-                                            e.target.checked
-                                        )
-                                    }
-                                />{" "}
-                                [필수] 개인정보 제 3자 제공
-                            </div>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    checked={agreements.marketing}
-                                    onChange={(e) =>
-                                        handleAgreementChange(
-                                            "marketing",
-                                            e.target.checked
-                                        )
-                                    }
-                                />{" "}
-                                [선택] 마케팅 수신 동의
-                            </div>
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    checked={
-                                        agreements.personalInfo &&
-                                        agreements.thirdParty &&
-                                        agreements.marketing
-                                    }
-                                    onChange={handleAgreeAll}
-                                />{" "}
-                                전체 동의하기
-                            </div>
-                        </div>
-                        <div className="bg-primary-50 p-5 rounded-lg shadow-md">
-                            <div className="font-bold mb-2">결제 방법</div>
-                            <div className="flex flex-row">
-                                <div className="flex flex-row items-center">
-                                    <input
-                                        type="radio"
-                                        name="payment"
-                                        checked={paymentMethod.kakao}
-                                        onChange={(e) =>
-                                            handlePaymentChange(
-                                                "kakao",
-                                                e.target.checked
-                                            )
-                                        }
-                                    />{" "}
-                                    <img
-                                        src="/assets/images/kakaoPay.png"
-                                        className="py-2 ml-4 h-2/3 w-auto"
-                                    />
-                                </div>
-                                <div className="flex flex-row items-center">
-                                    <input
-                                        type="radio"
-                                        name="payment"
-                                        checked={paymentMethod.naver}
-                                        onChange={(e) =>
-                                            handlePaymentChange(
-                                                "naver",
-                                                e.target.checked
-                                            )
-                                        }
-                                    />{" "}
-                                    <img
-                                        src="/assets/images/naverPay.png"
-                                        className="py-2 ml-4 h-2/3 w-auto"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="bg-primary-500 p-5 rounded-lg shadow-md text-white text-center cursor-pointer">
+                        <AgreementForm
+                            agreements={agreements}
+                            handleAgreementChange={handleAgreementChange}
+                            handleAgreeAll={handleAgreeAll}
+                        />
+                        <PaymentMethodForm
+                            paymentMethod={paymentMethod}
+                            handlePaymentChange={handlePaymentChange}
+                        />
+                        <div
+                            className="bg-primary-500 p-5 rounded-lg shadow-md text-white text-center cursor-pointer"
+                            onClick={handleReservation}
+                        >
                             예약하기
                         </div>
                     </div>
