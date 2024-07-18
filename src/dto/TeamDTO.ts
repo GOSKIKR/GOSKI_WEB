@@ -64,6 +64,7 @@ export interface CertificateInfoVO {
 }
 
 export interface TeamInstInfoDTO {
+    teamId : number;
     userId : number;
     userName : string;
     phoneNumber : string;
@@ -76,4 +77,16 @@ export interface TeamInstInfoDTO {
     position : number;
     designatedFee : number;
     certificateInfoList : CertificateInfoVO[];
+}
+
+export interface TeamInstUpdateRequestDTO {
+    teamId : number;
+    instructorId : number;
+    invitePermission : boolean;
+    addPermission : boolean;
+    modifyPermission : boolean;
+    deletePermission : boolean;
+    costPermission : boolean;
+    position : number;
+    designatedCost : number;
 }

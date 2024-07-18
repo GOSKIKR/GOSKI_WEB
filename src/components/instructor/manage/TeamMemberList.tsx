@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { TeamInstInfoDTO } from "../../../dto/TeamDTO";
+import { TeamInstInfoDTO, TeamInstUpdateRequestDTO } from "../../../dto/TeamDTO";
 import { FiMoreHorizontal } from 'react-icons/fi';
 import TeamMemberDeleteConfirmModal from "./TeamMemberDeleteConfirmModal";
+import { TeamService } from "../../../api/TeamService";
 
 interface TeamMemberListProps {
     members: TeamInstInfoDTO[];
     setMembers: (members: TeamInstInfoDTO[]) => void;
 }
+
+const teamService = new TeamService();
 
 const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -62,6 +65,24 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
             setMembers(members.map(member =>
                 member.userId === userId ? { ...member, designatedFee: Number(value) } : member
             ));
+        }
+    };
+
+    const fetchUpdate = async () => {
+        if (selectedMember && !isEditMode) {
+            const updatedInfo: TeamInstUpdateRequestDTO = {
+                teamId: selectedMember.teamId,
+                instructorId: selectedMember.userId,
+                invitePermission: selectedMember.invitePermission,
+                addPermission: selectedMember.addPermission,
+                modifyPermission: selectedMember.modifyPermission,
+                deletePermission: selectedMember.deletePermission,
+                costPermission: selectedMember.costPermission,
+                position: selectedMember.position,
+                designatedCost: selectedMember.designatedFee
+            };
+            console.log(updatedInfo);
+            await teamService.updateTeamInstructorInfo(updatedInfo);
         }
     };
 
@@ -205,7 +226,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         <div className="flex flex-col space-y-2 border-b">
-                                            <button className="text-left text-primary-800" onClick={handleDeleteClick}>수정하기</button>
+                                            <button className="text-left text-primary-800" onClick={fetchUpdate}>수정하기</button>
                                         </div>
                                         <div className="flex flex-col space-y-2">
                                             <button className="text-left text-customRed" onClick={handleDeleteClick}>팀원삭제</button>
