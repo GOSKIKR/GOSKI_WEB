@@ -8,18 +8,42 @@ import LessonFeeByLevel from "../../../components/instructor/manage/LessonFeeByL
 import LessonFeeByInstructor from "../../../components/instructor/manage/LessonFeeByInstructor";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
 import { TeamInstInfoDTO } from "../../../dto/TeamDTO";
+import { TeamService } from "../../../api/TeamService";
 
+const teamService = new TeamService();
 
 const TeamLessonFeeSetting: React.FC = () => {
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
     const [oneOnOneFee, setOneOnOneFee] = useState(0); // 초기값 설정 -> api불러와야함
     const [oneOnTwoFee, setOneOnTwoFee] = useState(0);
     const [oneOnThreeFee, setOneOnThreeFee] = useState(0);
+    const [oneOnFourFee, setOneOnFourFee] = useState(0);
     const [oneOnNFee, setOneOnNFee] = useState(0);
     const [intermediateFee, setIntermediateFee] = useState(0);
     const [advancedFee, setAdvancedFee] = useState(0);
     const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
     const [teamInstInfo, setTeamInstInfo] = useState<TeamInstInfoDTO[] | null>(null);
+
+    const submitUpdate = async() => {
+        const map: { [key: number]: number } = {};
+        if(teamInstInfo) {
+            for(const dto of teamInstInfo) {
+                map[dto.userId] = dto.designatedFee;
+            }
+            const data = {
+                teamCost: oneOnOneFee,
+                oneTwoFee: oneOnTwoFee,
+                oneThreeFee: oneOnThreeFee,
+                oneFourFee: oneOnFourFee,
+                oneNFee: oneOnOneFee,
+                intermediateFee: intermediateFee,
+                advancedFee: advancedFee,
+                designatedFees: map, // Object 형태로 변환
+            };
+            console.log(data);
+            await teamService.updateTeamLessonFee(teamInstInfo[0].teamId, data);
+        }
+    };
 
     const handleResize = () => {
         setInnerWidth(window.innerWidth);
@@ -41,6 +65,7 @@ const TeamLessonFeeSetting: React.FC = () => {
                             setOneOnOneFee={setOneOnOneFee}
                             setOneOnTwoFee={setOneOnTwoFee}
                             setOneOnThreeFee={setOneOnThreeFee}
+                            setOneOnFourFee={setOneOnFourFee}
                             setOneonNFee={setOneOnNFee}
                             setBasicFee={setOneOnOneFee}
                             setIntermediateFee={setIntermediateFee}
@@ -55,10 +80,12 @@ const TeamLessonFeeSetting: React.FC = () => {
                                 oneOnOneFee={oneOnOneFee}
                                 oneOnTwoFee={oneOnTwoFee}
                                 oneOnThreeFee={oneOnThreeFee}
+                                oneOnFourFee={oneOnFourFee}
                                 oneOnNFee={oneOnNFee}
                                 setOneOnOneFee={setOneOnOneFee}
                                 setOneOnTwoFee={setOneOnTwoFee}
                                 setOneOnThreeFee={setOneOnThreeFee}
+                                setOneOnFourFee={setOneOnFourFee}
                                 setOneonNFee={setOneOnNFee}
                                 isEditing={isEditing}
                             />
@@ -91,7 +118,10 @@ const TeamLessonFeeSetting: React.FC = () => {
                 >
                     {isEditing ? '수정완료' : '수정하기'}
                 </button>
-                <button className="bg-primary-900 text-white m-2 px-4 py-2 rounded sm:w-[200px] hover:bg-primary-600">
+                <button 
+                    className="bg-primary-900 text-white m-2 px-4 py-2 rounded sm:w-[200px] hover:bg-primary-600"
+                    onClick={submitUpdate}
+                >
                     저장하기
                 </button>
             </div>
