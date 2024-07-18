@@ -137,7 +137,7 @@ const ReservationBox = () => {
   const today = new Date().toISOString().split("T")[0]; // Format today as 'YYYY-MM-DD'
 
   return (
-    <div className="flex flex-col lg:flex-row lg:space-x-4 w-full justify-start items-center lg:items-stretch sm:bg-[url('/assets/images/bgski.jpg')] bg-cover bg-center p-4 lg:p-8 rounded-lg shadow-lg">
+    <div className="flex flex-col lg:flex-row lg:space-x-4 w-full justify-start items-center lg:items-stretch sm:bg-[url('/assets/images/bgski.jpg')] bg-cover bg-center sm:p-4 lg:p-8 rounded-lg shadow-lg">
       <div className="flex flex-col space-y-6 w-full lg:w-120 bg-white p-6 rounded-lg shadow-md">
         <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
