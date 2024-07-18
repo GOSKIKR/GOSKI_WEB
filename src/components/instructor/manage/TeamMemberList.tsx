@@ -81,8 +81,26 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                 position: selectedMember.position,
                 designatedCost: selectedMember.designatedFee
             };
-            console.log(updatedInfo);
             await teamService.updateTeamInstructorInfo(updatedInfo);
+            closeModal();
+        }
+    };
+
+    const fetchUpdateAll = async () => {
+        if(currentMembers && !isEditMode) {
+            const updateData: TeamInstUpdateRequestDTO[] = currentMembers.map(member => ({
+                teamId: member.teamId,
+                instructorId: member.userId,
+                invitePermission: member.invitePermission,
+                addPermission: member.addPermission,
+                modifyPermission: member.modifyPermission,
+                deletePermission: member.deletePermission,
+                costPermission: member.costPermission,
+                position: member.position,
+                designatedCost: member.designatedFee
+            }));
+    
+            await teamService.updateAllTeamInstructorInfo(updateData);
         }
     };
 
@@ -149,7 +167,11 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                     >
                         {isEditMode ? "수정완료" : "수정하기"}
                     </button>
-                    <button className="bg-primary-700 text-white rounded px-4 py-2 hover:bg-primary-500">저장하기</button>
+                    <button 
+                        className="bg-primary-700 text-white rounded px-4 py-2 hover:bg-primary-500"
+                        onClick={fetchUpdateAll}
+                        >일괄수정
+                    </button>
                 </div>
             </div>
             <div className="hidden sm:block">

@@ -80,5 +80,27 @@ export class TeamService {
         }
     }
 
+    async updateAllTeamInstructorInfo(data : TeamInstUpdateRequestDTO[]): Promise<void> {
+        try {
+            const accessToken = localStorage.getItem("accesstoken");
+            const response = await apiClient().patch(
+                `${url}/update/member/all`, 
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            if (response && response.status === httpStatusCode.OK) {
+                alert("강사 정보가 일괄 수정되었습니다")
+            }
+        } catch (error) {
+            alert("강사 정보 일괄 수정에 실패하였습니다.")
+            console.error(error)
+        }
+    }
+
 
 }
