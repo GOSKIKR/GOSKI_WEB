@@ -7,12 +7,19 @@ import LessonFeeByGroup from "../../../components/instructor/manage/LessonFeeByG
 import LessonFeeByLevel from "../../../components/instructor/manage/LessonFeeByLevel";
 import LessonFeeByInstructor from "../../../components/instructor/manage/LessonFeeByInstructor";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
+import { TeamInstInfoDTO } from "../../../dto/TeamDTO";
 
 
 const TeamLessonFeeSetting: React.FC = () => {
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-    const [oneOnOneFee, setOneOnOneFee] = useState(10000); // 초기값 설정 -> api불러와야함
+    const [oneOnOneFee, setOneOnOneFee] = useState(0); // 초기값 설정 -> api불러와야함
+    const [oneOnTwoFee, setOneOnTwoFee] = useState(0);
+    const [oneOnThreeFee, setOneOnThreeFee] = useState(0);
+    const [oneOnNFee, setOneOnNFee] = useState(0);
+    const [intermediateFee, setIntermediateFee] = useState(0);
+    const [advancedFee, setAdvancedFee] = useState(0);
     const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
+    const [teamInstInfo, setTeamInstInfo] = useState<TeamInstInfoDTO[] | null>(null);
 
     const handleResize = () => {
         setInnerWidth(window.innerWidth);
@@ -30,28 +37,51 @@ const TeamLessonFeeSetting: React.FC = () => {
             <div className="flex justify-center">
                 <div className="p-6">
                     <div className="flex justify-center sm:justify-start">
-                        <DropdownMenu />
+                        <DropdownMenu 
+                            setOneOnOneFee={setOneOnOneFee}
+                            setOneOnTwoFee={setOneOnTwoFee}
+                            setOneOnThreeFee={setOneOnThreeFee}
+                            setOneonNFee={setOneOnNFee}
+                            setBasicFee={setOneOnOneFee}
+                            setIntermediateFee={setIntermediateFee}
+                            setAdvancedFee={setAdvancedFee}
+                            setTeamInstInfo={setTeamInstInfo}
+                        />
                     </div>
                     <TeamLessonFeeInfo />
                     <div className="sm:flex sm:justify-between">
                         <div className="flex justify-center">
                             <LessonFeeByGroup 
-                                oneOnOneFee={oneOnOneFee} 
-                                setOneOnOneFee={setOneOnOneFee} 
+                                oneOnOneFee={oneOnOneFee}
+                                oneOnTwoFee={oneOnTwoFee}
+                                oneOnThreeFee={oneOnThreeFee}
+                                oneOnNFee={oneOnNFee}
+                                setOneOnOneFee={setOneOnOneFee}
+                                setOneOnTwoFee={setOneOnTwoFee}
+                                setOneOnThreeFee={setOneOnThreeFee}
+                                setOneonNFee={setOneOnNFee}
                                 isEditing={isEditing}
                             />
                         </div>
                         <div className="flex justify-center">
-                            <LessonFeeByLevel 
-                                oneOnOneFee={oneOnOneFee} 
-                                isEditing={isEditing} 
-                            />
+                        <LessonFeeByLevel 
+                            basicFee={oneOnOneFee}
+                            intermediateFee={intermediateFee}
+                            advancedFee={advancedFee}
+                            setIntermediateFee={setIntermediateFee}
+                            setAdvancedFee={setAdvancedFee}
+                            isEditing={isEditing} 
+                        />
                         </div>
                     </div>
                     <div className="text-customRed my-6 sm:text-left text-center">
                         *지정강습비 추가금액은 강습 1건 기준입니다.
                     </div>
-                    <LessonFeeByInstructor isEditing={!isEditing} />
+                    <LessonFeeByInstructor 
+                        isEditing={!isEditing}
+                        teamInstInfo={teamInstInfo}
+                        setTeamInstInfo={setTeamInstInfo}
+                        />
                 </div>
             </div>
             <div className="flex justify-center">

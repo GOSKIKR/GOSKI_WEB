@@ -7,6 +7,8 @@ import NavbarInstructorMobile from "../../../components/common/NavbarInstructorM
 
 const TeamInfoEdit : React.FC = () => {
     const [profileImage, setProfileImage] = useState<string | ArrayBuffer | null>(null);
+    const [profileUrl, setProfileUrl] = useState("");
+    const [description, setDescription] = useState("");
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +45,9 @@ const TeamInfoEdit : React.FC = () => {
             <div className="flex justify-center">
                 <div className="p-6">
                     <div className="flex justify-center sm:justify-start">
-                        <DropdownMenu/>
+                        <DropdownMenu 
+                            setProfileUrl = {setProfileUrl}
+                            setDescription = {setDescription}/>
                     </div>
                     <div className="team-profile-image mb-6 bg-primary-50 rounded-lg shadow-lg sm:w-[700px] h-[350px]">
                         <div className="text-lg sm:text-left text-center font-bold p-6">
@@ -54,6 +58,8 @@ const TeamInfoEdit : React.FC = () => {
                                 <div className="w-40 h-40 bg-primary-50 mx-auto flex items-center justify-center text-gray-500 rounded mb-4">
                                     {profileImage ? (
                                         <img src={profileImage as string} alt="Profile" className="w-full h-full object-cover rounded" />
+                                    ) : profileUrl ? (
+                                        <img src={profileUrl} alt="Profile" className="w-full h-full object-cover rounded" />
                                     ) : (
                                         "팀 프로필 사진"
                                     )}
