@@ -28,7 +28,7 @@ const UserMain: React.FC = () => {
       <div className="w-full mt-4">
         <ADCarousel />
       </div>
-      <div className="w-full mt-8 p-8 bg-white rounded-lg shadow-md">
+      <div className="w-full mt-8 bg-white rounded-lg shadow-md">
         <ReservationBox />
       </div>
       <div className="w-full mt-8">
