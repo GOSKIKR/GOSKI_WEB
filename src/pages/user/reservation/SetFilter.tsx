@@ -7,24 +7,26 @@ import "../../../../public/assets/css/calendar.css";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 import { ResortService } from "../../../api/ResortService";
 import { ResortDTO } from "../../../dto/ResortDTO";
-import { LessonReserveService } from "../../../api/LessonReserveService";
 import { ReserveDTO } from "../../../dto/ReserveDTO";
+import userReserveStore from "../../../store/userReserveStore";
+import userResortsStore from "../../../store/userResortsStore";
 
 const SetFilter: React.FC = () => {
     const navigate = useNavigate();
     const [type, setType] = useState("SKI");
-    const types = ["SKI", "BOARD"];
     const [location, setLocation] = useState("");
-    const [locations, setLocations] = useState<ResortDTO[]>([]);
+    const [locations, setLocations] = useState<any[]>([]);
     const [participant, setParticipant] = useState(0);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [startTime, setStartTime] = useState("");
     const [formattedStartTime, setFormattedStartTime] = useState("");
-    const [level, setLevel] = useState(1);
+    const [level, setLevel] = useState<string>("");
     const [lessonTime, setLessonTime] = useState(0);
     const [lessonTimes, setLessonTimes] = useState<number[]>([]);
 
-    // 페이지 처음 들어올 때 스키장 목록 가져오기
+    const { setReservationInfo } = userReserveStore();
+    const { setResortInfo } = userResortsStore();
+
     useEffect(() => {
         const fetchResorts = async () => {
             const resortService = new ResortService();
@@ -45,35 +47,20 @@ const SetFilter: React.FC = () => {
         setLessonTimes(selectedResort ? selectedResort.lessonTime : []);
     };
 
-    const goToResult = async () => {
-        if (!type) {
-            alert("종류를 선택해주세요.");
+    const handleSaveReservation = () => {
+        if (
+            !type ||
+            !location ||
+            participant === 0 ||
+            !selectedDate ||
+            !startTime ||
+            lessonTime === 0 ||
+            !level
+        ) {
+            alert("모든 필드를 선택해주세요.");
             return;
         }
-        if (!location) {
-            alert("장소를 선택해주세요.");
-            return;
-        }
-        if (participant === 0) {
-            alert("강습인원을 선택해주세요.");
-            return;
-        }
-        if (!selectedDate) {
-            alert("일정을 선택해주세요.");
-            return;
-        }
-        if (!startTime) {
-            alert("시작 시간을 입력해주세요.");
-            return;
-        }
-        if (lessonTime === 0) {
-            alert("강습 시간을 선택해주세요.");
-            return;
-        }
-        if (level === 0) {
-            alert("레벨을 선택해주세요.");
-            return;
-        }
+
         const selectedResort = locations.find(
             (resort) => resort.resortName === location
         );
@@ -82,35 +69,27 @@ const SetFilter: React.FC = () => {
             return;
         }
 
-        const ReserveDTO: ReserveDTO = {
+        setReservationInfo({
             resortId: selectedResort.resortId,
-            studentCount: participant,
+            resortName: location,
             lessonType: type,
-            lessonDate: selectedDate.toISOString().split("T")[0], // YYYY-MM-DD 형식
+            studentCount: participant,
+            lessonDate: selectedDate.toISOString().split("T")[0],
             startTime: formattedStartTime,
             duration: lessonTime,
-        };
+            level,
+        });
 
-        const reserveService = new LessonReserveService();
+        setResortInfo({
+            resortId: selectedResort.resortId,
+            resortName: location,
+            resortLocation: selectedResort.resortLocation,
+            longitude: selectedResort.longitude,
+            latitude: selectedResort.latitude,
+            lessonTime: selectedResort.lessonTime,
+        });
 
-        try {
-            console.log(ReserveDTO);
-            const response = await reserveService.reserveLesson(ReserveDTO);
-            console.log("Reservation successful:", response);
-            navigate("/reserve/result", {
-                state: {
-                    type,
-                    location,
-                    participant,
-                    selectedDate,
-                    startTime: formattedStartTime,
-                    lessonTime,
-                    level,
-                },
-            });
-        } catch (error) {
-            alert("강습 예약에 실패했습니다.");
-        }
+        navigate("/reserve/result");
     };
 
     const handleParticipantIncrement = () => {
@@ -299,11 +278,11 @@ const SetFilter: React.FC = () => {
                         <div className="flex flex-1 shadow-md rounded-lg">
                             <button
                                 className={`h-14 ${
-                                    level === 1
+                                    level === "BEGINNER"
                                         ? "bg-primary-500 text-white"
                                         : "bg-gray-100"
                                 } w-1/3 flex flex-col items-center justify-center rounded-l-lg border-r-2`}
-                                onClick={() => setLevel(1)}
+                                onClick={() => setLevel("BEGINNER")}
                             >
                                 <div className="sm:text-md text-sm">초급</div>
                                 <div className="sm:text-[10px] text-[8px]">
@@ -312,11 +291,11 @@ const SetFilter: React.FC = () => {
                             </button>
                             <button
                                 className={`h-14 ${
-                                    level === 2
+                                    level === "INTERMEDIATE"
                                         ? "bg-primary-500 text-white"
                                         : "bg-gray-100"
                                 } w-1/3 flex flex-col items-center justify-center border-r-2`}
-                                onClick={() => setLevel(2)}
+                                onClick={() => setLevel("INTERMEDIATE")}
                             >
                                 <div className="sm:text-md text-sm">중급</div>
                                 <div className="sm:text-[10px] text-[8px]">
@@ -325,11 +304,11 @@ const SetFilter: React.FC = () => {
                             </button>
                             <button
                                 className={`h-14 ${
-                                    level === 3
+                                    level === "ADVANCED"
                                         ? "bg-primary-500 text-white"
                                         : "bg-gray-100"
                                 } w-1/3 flex flex-col items-center justify-center rounded-r-lg px-1`}
-                                onClick={() => setLevel(3)}
+                                onClick={() => setLevel("ADVANCED")}
                             >
                                 <div className="sm:text-md text-sm">고급</div>
                                 <div className="sm:text-[10px] text-[8px]">
@@ -340,7 +319,7 @@ const SetFilter: React.FC = () => {
                     </div>
                     <div className="flex justify-center mt-4">
                         <div
-                            onClick={goToResult}
+                            onClick={handleSaveReservation}
                             className="mt-3 w-32 h-8 sm:w-20 sm:h-12 bg-primary-500 text-white flex justify-center items-center cursor-pointer rounded-lg shadow-md"
                         >
                             강습 조회
