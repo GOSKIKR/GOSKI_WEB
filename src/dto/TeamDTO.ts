@@ -21,6 +21,7 @@ export interface TeamMemberList {
 }
 
 export interface TeamInviteDTO {
+    userId : number;
     name: string;
     phoneNumber: string;
     enrollmentDate: string;
@@ -103,4 +104,9 @@ export interface TeamInstUpdateRequestDTO {
     costPermission : boolean;
     position : number;
     designatedCost : number;
+}
+
+export interface InviteCancelRequestDTO {
+    teamId : number;
+    receiverId : number;
 }

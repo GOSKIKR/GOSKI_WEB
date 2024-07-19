@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Team, TeamInstInfoDTO, TeamInviteDTO } from "../../../dto/TeamDTO";
 import { TeamService } from "../../../api/TeamService";
 
+
 interface DropdownMenuProps {
     setProfileUrl?: (profileUrl: string) => void;
     setDescription?: (desc: string) => void;
@@ -16,6 +17,7 @@ interface DropdownMenuProps {
     setAdvancedFee?: (fee: number) => void;
     setTeamInstInfo? : (feeInfo : TeamInstInfoDTO[]) => void;
     setInviteMembers? : (inviteInfo : TeamInviteDTO[]) => void;
+    setTeamId? : (teamId : number) => void;
 }
 
 const teamService = new TeamService();
@@ -23,7 +25,7 @@ const teamService = new TeamService();
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
     setProfileUrl, setDescription,
     setOneOnOneFee, setOneOnTwoFee, setOneOnThreeFee, setOneOnFourFee, setOneonNFee,
-    setBasicFee, setIntermediateFee, setAdvancedFee,setTeamInstInfo, setInviteMembers,
+    setBasicFee, setIntermediateFee, setAdvancedFee,setTeamInstInfo, setInviteMembers, setTeamId
 }) => {
     const [teamList, setTeamList] = useState<Team[]>([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -37,6 +39,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             if (response.length > 0) {
                 const defaultTeam = response[0];
                 setSelectedTeam(defaultTeam);
+                if(setTeamId) {
+                    setTeamId(defaultTeam.teamId);
+                }
                 fetchTeamInfos(defaultTeam.teamId);
                 fetchPendingApprovals(defaultTeam.teamId)
             }

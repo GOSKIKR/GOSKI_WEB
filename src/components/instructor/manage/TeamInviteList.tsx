@@ -1,11 +1,30 @@
 import React from "react";
-import { TeamInviteDTO } from "../../../dto/TeamDTO";
+import { InviteCancelRequestDTO, TeamInviteDTO } from "../../../dto/TeamDTO";
+import { TeamService } from "../../../api/TeamService";
 
 interface TeamInviteListProps {
     inviteMembers: TeamInviteDTO[] | null;
+    teamId : number;
+    setInviteMembers : (inviteInfo : TeamInviteDTO[]) => void;
 }
 
-const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers }) => {
+const teamService = new TeamService();
+
+const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers, teamId, setInviteMembers }) => {
+
+    const deleteInvite = async(teamId : number, receiverId : number) => {
+        const request : InviteCancelRequestDTO = {
+            teamId : teamId,
+            receiverId : receiverId
+        }
+        await teamService.cancelTeamInvite(request);
+        const fetchedData = await teamService.getPendingApprovalList(teamId);
+        if(fetchedData){
+            setInviteMembers(fetchedData)
+        }
+    }
+
+
     const hasInviteMembers = inviteMembers && inviteMembers.length > 0;
 
     return (
@@ -43,7 +62,9 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers }) => {
                                         <td className="py-2 px-4">{member.phoneNumber}</td>
                                         <td className="py-2 px-4">{member.enrollmentDate}</td>
                                         <td className="py-2 px-4">
-                                            <button className="bg-primary-700 text-white rounded px-2 py-1 hover:bg-primary-500">
+                                            <button 
+                                                className="bg-primary-700 text-white rounded px-2 py-1 hover:bg-primary-500"
+                                                onClick={()=>deleteInvite(teamId, member.userId)}>
                                                 신청취소
                                             </button>
                                         </td>
@@ -68,7 +89,9 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers }) => {
                                     <span className="font-bold">신청일: </span>{member.enrollmentDate}
                                 </div>
                                 <div className="text-right">
-                                    <button className="bg-primary-700 text-white rounded w-full px-2 py-1">
+                                    <button 
+                                        className="bg-primary-700 text-white rounded w-full px-2 py-1"
+                                        onClick={()=>deleteInvite(teamId, member.userId)}>
                                         신청취소
                                     </button>
                                 </div>

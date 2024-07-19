@@ -1,4 +1,5 @@
-import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, TeamInstUpdateRequestDTO, TeamInviteDTO } from "../dto/TeamDTO";
+import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, 
+    TeamInstUpdateRequestDTO, TeamInviteDTO, InviteCancelRequestDTO } from "../dto/TeamDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
@@ -138,6 +139,28 @@ export class TeamService {
         } catch (error) {
             alert("강사 정보 일괄 수정에 실패하였습니다.")
             console.error(error)
+        }
+    }
+
+    async cancelTeamInvite(data : InviteCancelRequestDTO): Promise<void> {
+        try {
+            const accessToken = localStorage.getItem("accesstoken");
+            const response = await apiClient().post(
+                "/notification/cancel",
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            if (response && response.status === httpStatusCode.OK) {
+                alert("초대 요청이 취소되었습니다.")
+                console.log(response);
+            }
+        } catch (error) {
+            console.error("초대 요청 취소에 실패하였습니다.");
+            // throw error;
         }
     }
 
