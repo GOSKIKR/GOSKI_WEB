@@ -3,26 +3,18 @@ import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import ReviewModal from "./ReviewModal";
 import { InstructorLessonInfoDTO } from "../../../dto/InstructorLessonInfoDTO";
-import { ReviewDTO } from "../../../dto/ReviewDTO";
+import { InstructorReviewDTO } from "../../../dto/ReviewDTO";
+import { formatTime } from "../../../utils/formatTime";
 
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import "../../../../public/assets/css/slick-theme-custom.css";
 
 interface LessonSectionProps {
     title: string;
     lessons: InstructorLessonInfoDTO[];
+    reviews? : InstructorReviewDTO[];
 }
 
-const review: ReviewDTO | null = {
-    reviewId: 18,
-    rating: 3,
-    content: "리뷰 예시 1",
-    createdAt: "2024-05-09T13:40:18.9398742",
-    instructorTags: [
-        { tagReviewId: 4, tagName: "잘생겼어요" },
-        { tagReviewId: 5, tagName: "친절해요" },
-    ],
-};
 
 const settings = (lessonsLength: number) => ({
     dots: true,
@@ -41,35 +33,28 @@ const settings = (lessonsLength: number) => ({
     ]
 });
 
-const formatTime = (startTime: number, duration: number) => {
-    const startHour = Math.floor(startTime / 100);
-    const startMinutes = startTime % 100;
 
-    let endHour = startHour + duration;
-    const endMinutes = startMinutes;
-
-    if (endHour >= 24){
-        endHour -= 24;
-    }
-
-    const format = (hour: number, minutes: number) => {
-        return `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    };
-
-    return `${format(startHour, startMinutes)} ~ ${format(endHour, endMinutes)}`;
-};
-
-const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
+const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons, reviews }) => {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [lessonId, setLessonId] = useState<number | undefined>(undefined);
     const navigate = useNavigate();
 
-    const openReviewModal = () => {
+    const openReviewModal = (lessonId : number) => {
         setIsReviewModalOpen(true);
+        setLessonId(lessonId);
     };
 
     const closeReviewModal = () => {
         setIsReviewModalOpen(false);
+        setLessonId(undefined);
     };
+
+    const getReview = (lessonId? : number) => {
+        if(reviews) {
+            return reviews.filter((review) => review.lessonId === lessonId)[0]
+        }
+        return null;
+    }
 
     return (
         <div className="mb-6">
@@ -91,17 +76,17 @@ const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
                                     <div className="flex justify-center">
                                         <button 
                                             className="mt-2 bg-primary-500 text-white py-1 px-2 rounded w-[120px]"
-                                            onClick={() => navigate("/instructor/regist-feedback")}>피드백 작성하기</button>
+                                            onClick={() => navigate("/instructor/regist-feedback", {state : lesson})}>피드백 작성하기</button>
                                     </div>
                                 )}
                                 {lesson.lessonStatus === "yesFeedback" && (
                                     <div className="flex justify-center">
                                         <button 
                                             className="mt-2 mr-2 bg-primary-500 text-white py-1 px-2 rounded w-[120px]"
-                                            onClick={() => navigate("/instructor/edit-feedback")}>피드백 수정하기</button>
+                                            onClick={() => navigate("/instructor/edit-feedback", {state : lesson})}>피드백 수정하기</button>
                                         <button 
                                             className="mt-2 bg-primary-700 text-white py-1 px-2 rounded w-[120px]" 
-                                            onClick={openReviewModal}>리뷰 확인하기</button>
+                                            onClick={() => openReviewModal(lesson.lessonId)}>리뷰 확인하기</button>
                                     </div>
                                 )}
                             </div>
@@ -114,7 +99,9 @@ const LessonSection: React.FC<LessonSectionProps> = ({ title, lessons }) => {
                     ))}
                 </Slider>
             )}
-            {isReviewModalOpen && <ReviewModal review={review} onClose={closeReviewModal} />}
+            {isReviewModalOpen 
+                && 
+            <ReviewModal review={getReview(lessonId)} onClose={closeReviewModal} />}
         </div>
     );
 };

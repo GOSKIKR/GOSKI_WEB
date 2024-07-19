@@ -8,7 +8,7 @@ import { CertificateUrlVO, NewCertificate } from '../../../dto/InstructorDTO';
 const userService = new UserService();
 
 const CertificatePage: React.FC = () => {
-    const { certificates, setCertificates } = useInstructorStore();
+    const { certificates, setCertificates, setProfile } = useInstructorStore();
     const [deleteCertificateUrls, setDeleteCertificateUrls] = useState<CertificateUrlVO[]>([]);
     const [newCertificates, setNewCertificates] = useState<NewCertificate[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -65,10 +65,6 @@ const CertificatePage: React.FC = () => {
     const instProfileUpdate = async () => {
         const formData = new FormData();
 
-        // formData.append('deleteCertificateUrls', new Blob([JSON.stringify(deleteCertificateUrls)],{type : "application/json"}));
-
-        // console.log(deleteCertificateUrls)
-
         deleteCertificateUrls.forEach((cert) => {
             formData.append("deletedCertificateIds",cert.certificateId.toString());
             formData.append("deleteCertificateUrls",cert.certificateImageUrl)
@@ -82,6 +78,10 @@ const CertificatePage: React.FC = () => {
         });
 
         await userService.updateInstructorCerts(formData);
+        const updatedProfile = await userService.getInstructorProfile();
+        if(updatedProfile){
+            setProfile(updatedProfile);
+        }
     };
 
     return (

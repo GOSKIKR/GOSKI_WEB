@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import userReserveStore from "../../store/userReserveStore";
+import userResortsStore from "../../store/userResortsStore";
 
 import apiClient from "../../utils/config/axiosConfig";
 
@@ -27,34 +28,6 @@ type ResortLocations = {
   lessonTime: number[];
 };
 
-// 임시 장소 데이터
-const locationsData: ResortLocations[] = [
-  {
-    resortId: 1,
-    resortName: "용평",
-    resortLocation: "강원도 평창군",
-    longitude: 128.668,
-    latitude: 37.65,
-    lessonTime: [1, 2, 3],
-  },
-  {
-    resortId: 2,
-    resortName: "평창",
-    resortLocation: "강원도 평창군",
-    longitude: 128.668,
-    latitude: 37.65,
-    lessonTime: [3, 5, 6],
-  },
-  {
-    resortId: 3,
-    resortName: "강촌",
-    resortLocation: "강원도 춘천시",
-    longitude: 128.668,
-    latitude: 37.65,
-    lessonTime: [2, 3, 7],
-  },
-];
-
 const ReservationBox = () => {
   const [lessonType, setLessonType] = useState<string>("");
   const [locationsInfo, setLocationsInfo] = useState<ResortLocations[]>([]);
@@ -68,6 +41,7 @@ const ReservationBox = () => {
   const [lessonStartTime, setLessonStartTime] = useState("");
 
   const { setReservationInfo } = userReserveStore();
+  const { setResortInfo } = userResortsStore();
 
   const navigate = useNavigate();
 
@@ -78,6 +52,7 @@ const ReservationBox = () => {
         const response = await apiClient().get("/common/resort");
         console.log(response.data.data);
         setLocationsInfo(response.data.data);
+        setResortInfo(response.data.data);
       } catch (error) {
         console.error(error);
       }
@@ -136,6 +111,24 @@ const ReservationBox = () => {
       duration: selectedDurationTime,
       level: level,
     } as Resort);
+    setResortInfo({
+      resortId: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.resortId as number,
+      resortName: selectedLocation,
+      resortLocation: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.resortLocation as string,
+      longitude: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.longitude as number,
+      latitude: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.latitude as number,
+      lessonTime: locationsInfo.find(
+        (location) => location.resortName === selectedLocation
+      )?.lessonTime as number[],
+    });
 
     navigate("/reserve/result");
   };
@@ -144,7 +137,7 @@ const ReservationBox = () => {
   const today = new Date().toISOString().split("T")[0]; // Format today as 'YYYY-MM-DD'
 
   return (
-    <div className="flex flex-col lg:flex-row lg:space-x-4 w-full justify-start items-center lg:items-stretch sm:bg-[url('/assets/images/bgski.jpg')] bg-cover bg-center p-4 lg:p-8 rounded-lg shadow-lg">
+    <div className="flex flex-col lg:flex-row lg:space-x-4 w-full justify-start items-center lg:items-stretch sm:bg-[url('/assets/images/bgski.jpg')] bg-cover bg-center sm:p-4 lg:p-8 rounded-lg shadow-lg">
       <div className="flex flex-col space-y-6 w-full lg:w-120 bg-white p-6 rounded-lg shadow-md">
         <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
@@ -245,7 +238,10 @@ const ReservationBox = () => {
             강습 시간
           </label>
           <select
-            onChange={(e) => setDurationTime(parseInt(e.target.value))}
+            onChange={(e) => {
+              setDurationTime(parseInt(e.target.value));
+              console.log(e.target.value);
+            }}
             className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
           >
             <option value="">강습 시간을 선택하세요</option>

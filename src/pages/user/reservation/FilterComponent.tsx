@@ -3,6 +3,7 @@ import { FaSkiing } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import TimePicker from "../../../components/common/TimePicker";
 import userReserveStore from "../../../store/userReserveStore";
+import userResortsStore from "../../../store/userResortsStore";
 
 import {
   TeamsFilterResult,
@@ -59,6 +60,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
   const [locationsInfo, setLocationsInfo] = useState<ResortLocations[]>([]);
 
+  console.log(filteredData);
+
   const {
     resortName,
     lessonType,
@@ -70,12 +73,13 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     setReservationInfo,
   } = userReserveStore();
 
+  const { setResortInfo } = userResortsStore();
+
   // 초기 리조트 정보 설정
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await apiClient().get("/common/resort");
-        console.log(response.data.data);
         setLocationsInfo(response.data.data);
       } catch (error) {
         console.error(error);
@@ -92,9 +96,17 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     setFilterLessonTime(startTime);
     setFilterLessonDuration(duration);
     setFilterLessonLevel(level);
-  }, []);
+  }, [
+    lessonType,
+    resortName,
+    studentCount,
+    lessonDate,
+    startTime,
+    duration,
+    level,
+  ]);
 
-  // 초기 리조트 정보 설정
+  // 초기 리조트 강습시간 정보 설정
   useEffect(() => {
     const selectedResort = locationsInfo.find(
       (location) => location.resortName === resortName
@@ -102,7 +114,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     if (selectedResort) {
       setFilterLessonDurationTimes(selectedResort.lessonTime);
     }
-  }, []);
+  }, [locationsInfo, resortName]);
 
   // 장소 변경 핸들러
   const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -118,12 +130,52 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     }
   };
 
+  const handleLessoonSearch = () => {
+    setReservationInfo({
+      resortId:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.resortId || 0,
+      resortName: filterLessonLocation,
+      lessonType: filterLessonType,
+      studentCount: filterLessonParticipant,
+      lessonDate: filterDate,
+      startTime: filterLessonTime,
+      duration: filterLessonDuration,
+      level: filterLessonLevel,
+    });
+    setResortInfo({
+      resortId:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.resortId || 0,
+      resortName: filterLessonLocation,
+      resortLocation:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.resortLocation || "",
+      longitude:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.longitude || 0,
+      latitude:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.latitude || 0,
+      lessonTime:
+        locationsInfo.find(
+          (location) => location.resortName === filterLessonLocation
+        )?.lessonTime || [],
+    });
+    handleSearchClick();
+  };
+
   return (
     <div className="w-full flex flex-col items-center space-y-5 py-10">
       <div className="flex flex-row w-full justify-center space-x-5">
         <div
           className={`flex items-center justify-center w-1/3 sm:h-14 h-12 rounded-lg cursor-pointer transition-all ${
-            selectedLessonType === "SKI"
+            filterLessonType === "SKI"
               ? "bg-primary-600 text-white"
               : "bg-gray-200 text-gray-700"
           }`}
@@ -134,7 +186,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         </div>
         <div
           className={`flex items-center justify-center w-1/3 sm:h-14 h-12 rounded-lg cursor-pointer transition-all ${
-            selectedLessonType === "BOARD"
+            filterLessonType === "BOARD"
               ? "bg-primary-600 text-white"
               : "bg-gray-200 text-gray-700"
           }`}
@@ -214,7 +266,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             <div className="flex flex-col items-center w-full sm:w-1/6">
               <label className="mb-1 text-sm">강습 시간</label>
               <select
-                value={filterLessonDuration}
+                // value={duration}
+                value={filterLessonDuration.toString()}
                 onChange={(e) =>
                   setFilterLessonDuration(parseInt(e.target.value))
                 }
@@ -232,7 +285,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
         <div className="flex justify-center w-full pt-5">
           <button
-            onClick={handleSearchClick}
+            onClick={handleLessoonSearch}
             className="flex items-center justify-center bg-primary-600 text-white px-4 py-2 rounded-lg shadow-md"
           >
             <IoIosSearch size="24" />

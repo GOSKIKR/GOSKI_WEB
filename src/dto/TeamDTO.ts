@@ -4,7 +4,7 @@ export interface Team {
     profileUrl: string;
     description: string;
     resortName: string;
-    permissions: string;
+    permissions?: string;
 }
 
 export interface Member {
@@ -18,4 +18,88 @@ export interface Member {
 export interface TeamMemberList {
     permission: string;
     instList: Member[];
+}
+
+export interface TeamInviteDTO {
+    name: string;
+    phoneNumber: string;
+    enrollDate: string;
+}
+
+export interface TeamMemberDTO {
+    role: string;
+    name: string;
+    price: string;
+    phoneNumber: string;
+}
+
+export interface TeamImageVO {
+    teamImageId : number;
+    imageUrl : string;
+}
+
+export interface TeamInfoDTO {
+    teamId : number;
+    teamName : string;
+    resortId : number;
+    teamProfileImageUrl : string;
+    description : string;
+    teamCost : number;
+    dayoff : number;
+    dayoffList : number[];
+    teamImages : TeamImageVO[];
+    intermediateFee : number;
+    advancedFee : number;
+    oneTwoFee : number;
+    oneThreeFee : number;
+    oneFourFee : number;
+    oneNFee : number;
+    designatedFees: Map<number, number>;
+}
+
+export interface TeamLessonFeeRequestDTO {
+    teamCost: number;
+    intermediateFee: number;
+    advancedFee: number;
+    oneTwoFee: number;
+    oneThreeFee: number;
+    oneFourFee: number;
+    oneNFee: number;
+    designatedFees: { [key: number]: number };
+}
+
+
+export interface CertificateInfoVO {
+    certificateId : number;
+    certificateName : number;
+    certificateType : number;
+    certificateImageUrl : number;
+}
+
+export interface TeamInstInfoDTO {
+    teamId : number;
+    userId : number;
+    userName : string;
+    phoneNumber : string;
+    profileUrl : string;
+    invitePermission : boolean;
+    addPermission : boolean;
+    modifyPermission : boolean;
+    deletePermission : boolean;
+    costPermission : boolean;
+    position : number;
+    designatedFee : number;
+    certificateInfoList : CertificateInfoVO[];
+}
+
+export interface TeamInstUpdateRequestDTO {
+    teamId : number;
+    instructorId : number;
+    invitePermission : boolean;
+    addPermission : boolean;
+    modifyPermission : boolean;
+    deletePermission : boolean;
+    costPermission : boolean;
+    position : number;
+    designatedCost : number;
 }

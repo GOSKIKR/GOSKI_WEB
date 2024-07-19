@@ -21,7 +21,7 @@ export interface StudentInfoDTO {
     age: string;
     gender: string;
     name: string;
-    foot_size: number;
+    footSize: number;
 }
 
 export interface CreateEvent {

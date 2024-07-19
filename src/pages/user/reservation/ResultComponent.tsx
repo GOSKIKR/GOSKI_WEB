@@ -21,9 +21,10 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
   goToTeamDetail,
   goToInstructorDetail,
 }) => {
+  console.log(filteredData);
   return (
     <div className="h-full overflow-y-auto p-4">
-      {filteredData.length === 0 && filteredData ? (
+      {filteredData.length !== 0 && filteredData ? (
         selectedLevel === "BEGINNER" ? (
           <div className="flex flex-col w-full items-center p-2 overflow-auto">
             {filteredData.map((data: any) => (

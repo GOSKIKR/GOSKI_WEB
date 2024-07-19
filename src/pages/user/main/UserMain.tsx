@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import apiClient from "../../../utils/config/axiosConfig";
-
 import NavbarUser from "../../../components/common/NavbarUser";
 import ADCarousel from "../../../components/user/ADCarousel";
 import Footer from "../../../components/common/Footer";
@@ -21,36 +20,23 @@ const UserMain: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await apiClient.get("/user/main");
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  // {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>Loading...</p>}
-
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full">
         {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
       </div>
-      <div className="w-full">
+      <div className="w-full mt-4">
         <ADCarousel />
       </div>
-      <div className=" w-full bg-primary-50 rounded-lg shadow-lg p-8">
+      <div className="w-full mt-8 bg-white rounded-lg shadow-md">
         <ReservationBox />
       </div>
-      <div className="w-full">
+      <div className="w-full mt-8">
         <TeamAD />
       </div>
-      <Footer />
+      <div className="w-full mt-8">
+        <Footer />
+      </div>
     </div>
   );
 };

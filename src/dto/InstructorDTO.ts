@@ -12,7 +12,7 @@ export interface InstructorProfileDTO {
     phoneNumber : string,
     description : string,
     dayoff : number,
-    permission : string,				
+    permission : number,				
     certificates : CertificateUrlVO[]
 }
 
@@ -21,4 +21,17 @@ export interface NewCertificate {
     newCertImage?: File;
 }
 
+export interface InstPermissionDTO {
+
+    userId : number;
+    userName : string;
+    phoneNumber : string;
+    invitePermission : boolean;
+    addPermission : boolean;
+    modifyPermission : boolean;
+    deletePermission : boolean;
+    costPermission : boolean;
+    position : number;
+    designatedFee : number;
+}
 

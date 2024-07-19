@@ -7,73 +7,89 @@ import UserSettings from "../user/UserSettings";
 
 import apiClient from "../../utils/config/axiosConfig";
 
+import { CgProfile } from "react-icons/cg";
+
+// data
+// :
+// birthDate
+// :
+// "1995-11-02"
+// gender
+// :
+// "MALE"
+// phoneNumber
+// :
+// "010-9995-5107"
+// profileUrl
+// :
+// ""
+// role
+// :
+// "STUDENT"
+// userName
+// :
+// "승민이"
+
+type ProfileData = {
+  birthDate: string;
+  email: string;
+  gender: string;
+  phoneNumber: string;
+  profileUrl: string;
+  role: string;
+  userName: string;
+};
+
 const NavbarUser = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isLogin, setIsLogin] = useState(
     localStorage.getItem("accesstoken") ? true : false
   );
+
+  const [profileData, setProfileData] = useState<ProfileData>({
+    birthDate: "",
+    email: "",
+    gender: "",
+    phoneNumber: "",
+    profileUrl: "",
+    role: "",
+    userName: "",
+  });
+
   const navigate = useNavigate();
 
   const handleLoginBtn = () => {
     navigate("/login");
   };
 
-  // const logout = async () => {
-  //   try {
-  //     const encryptedRefreshToken = localStorage.getItem("refreshtoken");
-  //     const accessToken = localStorage.getItem("accesstoken");
+  // 로그인시 사용자 정보 불러오기
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const accessToken = localStorage.getItem("accesstoken");
 
-  //     let refreshToken = null;
-  //     if (encryptedRefreshToken) {
-  //       try {
-  //         refreshToken = await decryptToken(encryptedRefreshToken);
-  //       } catch (decryptError) {
-  //         console.error("리프레시 토큰 복호화 오류:", decryptError);
-  //       }
-  //     }
+        const response = await apiClient().get("/user/profile/user", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
-  //     // // 암호화된 리프레시 토큰 복호화
-  //     // const refreshToken = encryptedRefreshToken
-  //     //   ? await decryptToken(encryptedRefreshToken)
-  //     //   : null;
+        console.log("response:", response);
+        setProfileData(response.data);
 
-  //     if (!refreshToken) {
-  //       console.error("리프레시 토큰이 없거나 복호화할 수 없습니다.");
-  //       return false;
-  //     }
+        if (response.status === 200) {
+          console.log("사용자 정보 불러오기 성공:", response.data);
+        }
+      } catch (error) {
+        console.error("사용자 정보 불러오기 중 오류 발생:", error);
+      }
+    };
 
-  //     const response = await apiClient.post("/user/signout", null, {
-  //       headers: {
-  //         Authorization: `Bearer ${refreshToken}`,
-  //         AccessToken: `Bearer ${accessToken}`,
-  //       },
-  //     });
-  //     console.log("로그아웃 응답:", response);
-
-  //     await apiClient.post("/user/signout", null, {
-  //       headers: {
-  //         Authorization: `Bearer ${refreshToken}`,
-  //         AccessToken: `Bearer ${accessToken}`,
-  //       },
-  //     });
-
-  //     // 로그아웃 성공 후 처리
-  //     removeRefreshToken(); // 암호화된 리프레시 토큰 삭제 함수 사용
-  //     localStorage.removeItem("accesstoken");
-  //     setIsLogin(false);
-  //     // 필요한 경우 추가 상태 초기화 로직
-
-  //     return true; // 로그아웃 성공
-  //   } catch (error) {
-  //     console.error("로그아웃 중 오류 발생:", error);
-  //     if (error instanceof Error) {
-  //       console.error("에러 메시지:", error.message);
-  //       console.error("에러 스택:", error.stack);
-  //     }
-  //     return false; // 로그아웃 실패
-  //   }
-  // };
+    if (isLogin) {
+      fetchUser();
+    }
+  }, [isLogin]);
 
   const logout = async () => {
     try {
@@ -152,11 +168,17 @@ const NavbarUser = () => {
             <IoMdLogOut className="text-primary-600 text-2xl" />
           </div>
           <div className="cursor-pointer" onClick={() => navigate("/user/my")}>
-            <img
-              src="https://randomuser.me/api/portraits/men/75.jpg"
-              alt="Profile"
-              className="w-10 h-10 rounded-full border-2 border-white"
-            />
+            {profileData.profileUrl ? (
+              <img
+                src={profileData.profileUrl}
+                alt="Profile"
+                className="w-10 h-10 rounded-full border-2 border-white"
+              />
+            ) : (
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                <CgProfile className="text-2xl" />
+              </div>
+            )}
           </div>
         </div>
       ) : (
