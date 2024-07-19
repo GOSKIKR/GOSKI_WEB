@@ -1,4 +1,4 @@
-import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, 
+import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, AllInstDTO,
     TeamInstUpdateRequestDTO, TeamInviteDTO, InviteCancelRequestDTO } from "../dto/TeamDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
@@ -8,6 +8,23 @@ const url = "/team"
 const accessToken = localStorage.getItem("accesstoken");
 
 export class TeamService {
+    async getAllInstList(teamId : number): Promise<AllInstDTO[] | null> {
+        try {
+            const response = await apiClient().get(`${url}/inst/all/${teamId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            if (response && response.status === httpStatusCode.OK) {
+                console.log(response.data.data)
+                return response.data.data as AllInstDTO[];
+            }
+        } catch (error) {
+            console.log("모든 강사 리스트 조회 실패");
+        }
+        return null;
+    }
+
     async getTeamList(): Promise<Team[] | null> {
         try {
             const response = await apiClient().get(`${url}/list/owner`, {

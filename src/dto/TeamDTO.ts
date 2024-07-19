@@ -20,6 +20,15 @@ export interface TeamMemberList {
     instList: Member[];
 }
 
+export interface AllInstDTO {
+    userId : number;
+    userName : string;
+    phoneNumber : string;
+    profileUrl : string;
+    gender : string;
+    description : string;
+}
+
 export interface TeamInviteDTO {
     userId : number;
     name: string;

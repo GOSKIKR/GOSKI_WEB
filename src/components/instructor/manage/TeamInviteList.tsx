@@ -1,29 +1,48 @@
-import React from "react";
-import { InviteCancelRequestDTO, TeamInviteDTO } from "../../../dto/TeamDTO";
+import React, { useState } from "react";
+import { InviteCancelRequestDTO, TeamInviteDTO, AllInstDTO } from "../../../dto/TeamDTO";
 import { TeamService } from "../../../api/TeamService";
+import TeamInviteModal from "./TeamInviteModal";
 
 interface TeamInviteListProps {
     inviteMembers: TeamInviteDTO[] | null;
-    teamId : number;
-    setInviteMembers : (inviteInfo : TeamInviteDTO[]) => void;
+    teamId: number;
+    setInviteMembers: (inviteInfo: TeamInviteDTO[]) => void;
 }
 
 const teamService = new TeamService();
 
 const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers, teamId, setInviteMembers }) => {
+    const [allInstList, setAllInstList] = useState<AllInstDTO[] | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const deleteInvite = async(teamId : number, receiverId : number) => {
-        const request : InviteCancelRequestDTO = {
-            teamId : teamId,
-            receiverId : receiverId
+    const deleteInvite = async (teamId: number, receiverId: number) => {
+        const request: InviteCancelRequestDTO = {
+            teamId: teamId,
+            receiverId: receiverId
         }
         await teamService.cancelTeamInvite(request);
         const fetchedData = await teamService.getPendingApprovalList(teamId);
-        if(fetchedData){
+        if (fetchedData) {
             setInviteMembers(fetchedData)
         }
     }
 
+    const fetchAllInstList = async (teamId: number) => {
+        const fetchedData = await teamService.getAllInstList(teamId);
+        if (fetchedData) {
+            setAllInstList(fetchedData);
+        }
+    }
+
+    const handleInviteClick = async () => {
+        await fetchAllInstList(teamId);
+        setIsModalOpen(true);
+    }
+
+    const handleInvite = async (userId: number) => {
+        
+        setIsModalOpen(false);
+    }
 
     const hasInviteMembers = inviteMembers && inviteMembers.length > 0;
 
@@ -35,7 +54,11 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers, teamId, 
                     수락 대기 중 <span className="text-black">({hasInviteMembers ? inviteMembers.length : 0}명)</span>
                 </div>
                 <div className="space-x-2">
-                    <button className="bg-primary-600 text-white rounded px-2 py-2 hover:bg-primary-500">+팀원초대</button>
+                    <button 
+                        className="bg-primary-600 text-white rounded px-2 py-2 hover:bg-primary-500"
+                        onClick={handleInviteClick}>
+                        +팀원초대
+                    </button>
                 </div>
             </div>
             {hasInviteMembers ? (
@@ -64,7 +87,7 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers, teamId, 
                                         <td className="py-2 px-4">
                                             <button 
                                                 className="bg-primary-700 text-white rounded px-2 py-1 hover:bg-primary-500"
-                                                onClick={()=>deleteInvite(teamId, member.userId)}>
+                                                onClick={() => deleteInvite(teamId, member.userId)}>
                                                 신청취소
                                             </button>
                                         </td>
@@ -91,7 +114,7 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers, teamId, 
                                 <div className="text-right">
                                     <button 
                                         className="bg-primary-700 text-white rounded w-full px-2 py-1"
-                                        onClick={()=>deleteInvite(teamId, member.userId)}>
+                                        onClick={() => deleteInvite(teamId, member.userId)}>
                                         신청취소
                                     </button>
                                 </div>
@@ -104,6 +127,12 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers, teamId, 
                     팀 초대 수락 대기 인원이 없습니다
                 </div>
             )}
+            <TeamInviteModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                allInstList={allInstList} 
+                onInvite={handleInvite} 
+            />
         </div>
     );
 };
