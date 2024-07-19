@@ -1,4 +1,4 @@
-import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, TeamInstUpdateRequestDTO } from "../dto/TeamDTO";
+import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, TeamInstUpdateRequestDTO, TeamInviteDTO } from "../dto/TeamDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
@@ -54,6 +54,23 @@ export class TeamService {
             }
         } catch (error) {
             console.log("팀 강사 정보 조회 실패");
+        }
+        return null;
+    }
+
+    async getPendingApprovalList(teamId : number) : Promise<TeamInviteDTO[] | null> {
+        try{
+            const response = await apiClient().get(`${url}/pending-approval/${teamId}`,{
+                headers : {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            if (response && response.status === httpStatusCode.OK) {
+                console.log(response.data.data)
+                return response.data.data as TeamInviteDTO[];
+            }
+        } catch (error) {
+            console.log("팀 초대 수락 대기 리스트 실패");
         }
         return null;
     }

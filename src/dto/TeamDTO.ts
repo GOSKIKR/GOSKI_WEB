@@ -23,7 +23,8 @@ export interface TeamMemberList {
 export interface TeamInviteDTO {
     name: string;
     phoneNumber: string;
-    enrollDate: string;
+    enrollmentDate: string;
+    profileUrl : string;
 }
 
 export interface TeamMemberDTO {
