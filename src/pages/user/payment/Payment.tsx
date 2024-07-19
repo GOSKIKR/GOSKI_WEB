@@ -60,21 +60,7 @@ const weightOptions: Option[] = [
 
 const Payment = () => {
     const [profile, setProfile] = useState<UserMyDTO | null>(null);
-
-    useEffect(() => {
-        const fetchMyProfile = async () => {
-            const profileService = new UserMyService();
-            const profile = await profileService.getUserProfile();
-            setProfile(profile);
-        };
-        fetchMyProfile();
-        console.log(selectedInstructor);
-    }, []);
-
-    const location = useLocation();
-    const navigate = useNavigate();
-    const passedState = location.state || {};
-    const selectedInstructor = passedState.selectedInstructor || {};
+    const [loading, setLoading] = useState(true);
 
     const {
         resortName: reserveResortName,
@@ -85,8 +71,28 @@ const Payment = () => {
         duration,
     } = userReserveStore();
 
-    const { basicFee, levelOptionFee, designatedFee, peopleOptionFee } =
+    const { teamId, basicFee, levelOptionFee, designatedFee, peopleOptionFee } =
         teamInfoStore();
+
+    useEffect(() => {
+        const fetchMyProfile = async () => {
+            try {
+                const profileService = new UserMyService();
+                const profile = await profileService.getUserProfile();
+                setProfile(profile);
+            } catch (error) {
+                console.error("Failed to fetch profile:", error);
+            }
+        };
+
+        fetchMyProfile();
+        setLoading(false);
+    }, []);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const passedState = location.state || {};
+    const selectedInstructor = passedState.selectedInstructor || {};
 
     const initialStudentInfo = Array.from({ length: studentCount }, () => ({
         name: "",
@@ -199,17 +205,17 @@ const Payment = () => {
         try {
             const lessonType = convertLessonType(reserveLessonType);
             const reservationData = {
-                teamId: passedState.teamId,
-                instId: selectedInstructor.instructorId ?? 0,
+                teamId,
+                instId: selectedInstructor.instructorId ?? null,
                 lessonDate,
                 startTime,
                 duration,
                 peopleNumber: studentCount,
                 lessonType,
-                basicFee: data.basicFee,
-                designatedFee: data.designatedFee,
-                peopleOptionFee: data.peopleOptionFee,
-                levelOptionFee: data.levelOptionFee ?? 0,
+                basicFee,
+                designatedFee: selectedInstructor.designatedFee ?? 0,
+                peopleOptionFee,
+                levelOptionFee: levelOptionFee ?? 0,
                 requestComplain: data.requestComplain || "",
                 studentInfo: data.studentInfo.map((student: StudentInfo) => ({
                     ...student,
@@ -239,9 +245,9 @@ const Payment = () => {
                     },
                 }
             );
-            console.log(response.data);
+            console.log(response.data.data);
             if (response.data.data.next_redirect_pc_url) {
-                localStorage.setItem("tid", response.data.tid);
+                localStorage.setItem("tid", response.data.data.tid);
                 window.location.href = response.data.data.next_redirect_pc_url;
             }
         } catch (error) {

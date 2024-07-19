@@ -14,6 +14,21 @@ const UserLessonlist = () => {
         setSelectedStatus(status);
     };
 
+    const getStatusName = (status: string) => {
+        switch (status) {
+            case "notStart":
+                return "강습 예정";
+            case "onGoing":
+                return "진행 중";
+            case "lessonFinished":
+                return "강습 완료";
+            case "cancelLesson":
+                return "취소된 강습";
+            default:
+                return "";
+        }
+    };
+
     useEffect(() => {
         const fetchLessonAndPaymentData = async () => {
             const userLessonService = new UserLessonService();
@@ -30,6 +45,7 @@ const UserLessonlist = () => {
             }
         };
         fetchLessonAndPaymentData();
+        console.log(lessons);
     }, []);
 
     const getPaymentDetailByLessonId = (lessonId: number) => {
@@ -40,13 +56,14 @@ const UserLessonlist = () => {
         selectedStatus === "전체"
             ? lessons
             : lessons.filter(
-                  (lesson) => lesson.lessonStatus === selectedStatus
+                  (lesson) =>
+                      getStatusName(lesson.lessonStatus) === selectedStatus
               );
 
     return (
         <div className="flex flex-col space-y-10 w-full mb-4">
             <div className="w-full sm:h-16 h-12 sm:text-md text-sm bg-primary-50 rounded-3xl shadow-md flex flex-row items-center text-center divide-x divide-black">
-                {["전체", "진행 예정", "진행 중", "강습 완료"].map((status) => (
+                {["전체", "강습 예정", "진행 중", "강습 완료"].map((status) => (
                     <div
                         key={status}
                         className={`w-1/3 cursor-pointer ${

@@ -18,10 +18,11 @@ const PayApprove = () => {
 
     const approvePayment = async (pgToken: string) => {
         try {
+            const cid = "TC0ONETIME";
             const tid = localStorage.getItem("tid");
             const partnerOrderId = "partnerOrderId";
             const partnerUserId = "partnerUserId";
-
+            const accessToken = localStorage.getItem("accesstoken");
             const response = await apiClient().post(
                 "/payment/reserve/approve",
                 {
@@ -29,11 +30,18 @@ const PayApprove = () => {
                     partnerOrderId,
                     partnerUserId,
                     pgToken,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
                 }
             );
-
-            console.log("Payment approved:", response.data);
-            navigate("/user/payment/success");
+            const { approved_at, item_name } = response.data.data;
+            console.log("Payment approved:", response.data.data);
+            navigate("/user/payment/success", {
+                state: { approved_at, item_name },
+            });
         } catch (error) {
             console.error("Error approving payment:", error);
             navigate("/user/payment/failure");
