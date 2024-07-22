@@ -31,6 +31,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Create .env
+      run: echo "${APP_PROPERTIES}" > ./.env
+
     - name: Install dependencies
       run: npm install
 
