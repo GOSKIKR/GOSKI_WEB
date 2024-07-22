@@ -116,7 +116,11 @@ const TeamInviteModal: React.FC<ModalProps> = ({ isOpen, onClose, allInstList, s
                 <div className="bg-white rounded-lg p-6 w-[300px] h-[350px] flex flex-col relative">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold text-center">팀원 초대</h2>
-                        <button onClick={onClose} className="text-red-500">닫기</button>
+                        <button 
+                            className="text-red-500"
+                            onClick={() => {
+                                setCurrentPage(1);
+                                onClose();}}>닫기</button>
                     </div>
                     <div className="flex-grow overflow-y-auto">
                         {currentItems && currentItems.length > 0 ? (
