@@ -1,34 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoMdNotificationsOutline, IoMdLogOut } from "react-icons/io";
-import { IoSettingsOutline } from "react-icons/io5";
+
+import { messaging } from "../../utils/config/firebase";
+import { getToken, onMessage } from "firebase/messaging";
+
 import UserNotification from "../user/UserNotification";
 import UserSettings from "../user/UserSettings";
 
 import apiClient from "../../utils/config/axiosConfig";
 
 import { CgProfile } from "react-icons/cg";
+import { IoMdNotificationsOutline, IoMdLogOut } from "react-icons/io";
+import { IoSettingsOutline } from "react-icons/io5";
 
-// data
-// :
-// birthDate
-// :
-// "1995-11-02"
-// gender
-// :
-// "MALE"
-// phoneNumber
-// :
-// "010-9995-5107"
-// profileUrl
-// :
-// ""
-// role
-// :
-// "STUDENT"
-// userName
-// :
-// "승민이"
+// request 승인
+const requestPermission = async () => {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      console.log("Notification permission granted.");
+
+      // get FCM token
+      const currentToken = await getToken(messaging, {
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+      });
+      if (currentToken) {
+        console.log("FCM token:", currentToken);
+      } else {
+        console.log(
+          "No registration token available. Request permission to generate one."
+        );
+      }
+    } else {
+      console.log("Unable to get permission to notify.");
+    }
+  } catch (error) {
+    console.error("Error requesting permission:", error);
+  }
+};
 
 type ProfileData = {
   birthDate: string;
@@ -63,6 +72,28 @@ const NavbarUser = () => {
     navigate("/login");
   };
 
+  // useEffect(() => {
+  //   requestPermission(); // 수정된 부분: 함수 호출
+  //   onMessage(messaging, (payload) => {
+  //     console.log("Message received. ", payload);
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    // 요청이 승인되었는지 확인
+    if (navigator.serviceWorker.controller) {
+      requestPermission();
+    } else {
+      navigator.serviceWorker.ready.then(() => {
+        requestPermission();
+      });
+    }
+
+    onMessage(messaging, (payload) => {
+      console.log("Message received. ", payload);
+    });
+  }, []);
+
   // 로그인시 사용자 정보 불러오기
   useEffect(() => {
     const fetchUser = async () => {
@@ -76,7 +107,7 @@ const NavbarUser = () => {
         });
 
         console.log("response:", response);
-        setProfileData(response.data);
+        setProfileData(response.data.data);
 
         if (response.status === 200) {
           console.log("사용자 정보 불러오기 성공:", response.data);
