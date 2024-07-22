@@ -17,3 +17,10 @@ export interface UserPaylistDTO {
 export interface PayCancelDTO {
     lessonId: number;
 }
+
+export interface VerifyAccountDTO {
+    name : string;
+    bank : string;
+    account : string;
+    identity : string;
+}

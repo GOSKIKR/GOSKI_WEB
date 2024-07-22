@@ -7,6 +7,7 @@ const apiClient = (isFormData?: boolean): AxiosInstance => {
     timeout: 10000,
     headers: {
       "Content-Type": !isFormData ? "application/json;charset=utf-8" : "multipart/form-data",
+      "DeviceType" : "WEB"
     },
   });
 

@@ -8,6 +8,8 @@ import NavbarInstructorMobile from "../../../components/common/NavbarInstructorM
 import { TeamInstInfoDTO,  TeamInviteDTO } from "../../../dto/TeamDTO";
 
 const TeamMember: React.FC = () => {
+    const [teamId, setTeamId] = useState<number>(0);
+    const [inviteMembers, setInviteMembers] = useState<TeamInviteDTO[] | null>(null);
     const [teamInstInfo, setTeamInstInfo] = useState<TeamInstInfoDTO[] | null>(null);
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
@@ -20,11 +22,6 @@ const TeamMember: React.FC = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const inviteMembers: TeamInviteDTO[] = [
-        { name: "장승호", phoneNumber: "010-9995-5107", enrollDate: "2024-06-18" },
-        { name: "김승호", phoneNumber: "010-9995-5107", enrollDate: "2024-06-18" },
-    ]
-
     return (
         <div>
             {innerWidth > 640 ? <NavbarInstructor /> : <NavbarInstructorMobile />}
@@ -32,7 +29,11 @@ const TeamMember: React.FC = () => {
             <div className="flex justify-center">
                 <div className="p-6">
                     <div className="flex justify-center sm:justify-start">
-                        <DropdownMenu setTeamInstInfo={setTeamInstInfo}/>
+                        <DropdownMenu 
+                            setTeamInstInfo={setTeamInstInfo}
+                            setInviteMembers={setInviteMembers}
+                            setTeamId={setTeamId}
+                            />
                     </div>
                     {teamInstInfo 
                         && 
@@ -41,7 +42,10 @@ const TeamMember: React.FC = () => {
                         setMembers={setTeamInstInfo} 
                     />
                     }
-                    <TeamInviteList inviteMembers={inviteMembers} />
+                    <TeamInviteList 
+                        inviteMembers={inviteMembers} 
+                        teamId={teamId}
+                        setInviteMembers={setInviteMembers}/>
                 </div>
             </div>
         </div>

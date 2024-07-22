@@ -1,4 +1,6 @@
-import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, TeamInstUpdateRequestDTO } from "../dto/TeamDTO";
+import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, AllInstDTO,
+    TeamInstUpdateRequestDTO, TeamInviteDTO, InviteCancelRequestDTO, 
+    InviteRequestDTO} from "../dto/TeamDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
@@ -7,6 +9,23 @@ const url = "/team"
 const accessToken = localStorage.getItem("accesstoken");
 
 export class TeamService {
+    async getAllInstList(teamId : number): Promise<AllInstDTO[] | null> {
+        try {
+            const response = await apiClient().get(`${url}/inst/all/${teamId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            if (response && response.status === httpStatusCode.OK) {
+                console.log(response.data.data)
+                return response.data.data as AllInstDTO[];
+            }
+        } catch (error) {
+            console.log("모든 강사 리스트 조회 실패");
+        }
+        return null;
+    }
+
     async getTeamList(): Promise<Team[] | null> {
         try {
             const response = await apiClient().get(`${url}/list/owner`, {
@@ -54,6 +73,23 @@ export class TeamService {
             }
         } catch (error) {
             console.log("팀 강사 정보 조회 실패");
+        }
+        return null;
+    }
+
+    async getPendingApprovalList(teamId : number) : Promise<TeamInviteDTO[] | null> {
+        try{
+            const response = await apiClient().get(`${url}/pending-approval/${teamId}`,{
+                headers : {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            if (response && response.status === httpStatusCode.OK) {
+                console.log(response.data.data)
+                return response.data.data as TeamInviteDTO[];
+            }
+        } catch (error) {
+            console.log("팀 초대 수락 대기 리스트 실패");
         }
         return null;
     }
@@ -123,6 +159,53 @@ export class TeamService {
             console.error(error)
         }
     }
+
+    async InviteInstructor(data : InviteRequestDTO): Promise<void> {
+        try {
+            const accessToken = localStorage.getItem("accesstoken");
+            const response = await apiClient().post(
+                "/notification/invite",
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            if (response && response.status === httpStatusCode.OK) {
+                alert("초대 요청이 전송되었습니다.")
+                console.log(response);
+            }
+        } catch (error) {
+            console.error("초대 요청 취소에 실패하였습니다.");
+            // throw error;
+        }
+    }
+
+
+    async cancelTeamInvite(data : InviteCancelRequestDTO): Promise<void> {
+        try {
+            const accessToken = localStorage.getItem("accesstoken");
+            const response = await apiClient().post(
+                "/notification/cancel",
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            if (response && response.status === httpStatusCode.OK) {
+                alert("초대 요청이 취소되었습니다.")
+                console.log(response);
+            }
+        } catch (error) {
+            console.error("초대 요청 취소에 실패하였습니다.");
+            // throw error;
+        }
+    }
+
+
 
 
 }
