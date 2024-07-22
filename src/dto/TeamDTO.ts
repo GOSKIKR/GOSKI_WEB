@@ -115,7 +115,10 @@ export interface TeamInstUpdateRequestDTO {
     designatedCost : number;
 }
 
-export interface InviteCancelRequestDTO {
-    teamId : number;
+export interface InviteRequestDTO{
+    teamId : number
     receiverId : number;
+}
+
+export interface InviteCancelRequestDTO extends InviteRequestDTO{
 }

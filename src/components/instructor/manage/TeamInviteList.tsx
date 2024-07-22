@@ -39,11 +39,6 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers, teamId, 
         setIsModalOpen(true);
     }
 
-    const handleInvite = async (userId: number) => {
-        
-        setIsModalOpen(false);
-    }
-
     const hasInviteMembers = inviteMembers && inviteMembers.length > 0;
 
     return (
@@ -131,7 +126,8 @@ const TeamInviteList: React.FC<TeamInviteListProps> = ({ inviteMembers, teamId, 
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
                 allInstList={allInstList} 
-                onInvite={handleInvite} 
+                setInviteMembers={setInviteMembers}
+                teamId={teamId}
             />
         </div>
     );

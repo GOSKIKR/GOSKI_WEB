@@ -1,5 +1,6 @@
 import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, AllInstDTO,
-    TeamInstUpdateRequestDTO, TeamInviteDTO, InviteCancelRequestDTO } from "../dto/TeamDTO";
+    TeamInstUpdateRequestDTO, TeamInviteDTO, InviteCancelRequestDTO, 
+    InviteRequestDTO} from "../dto/TeamDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
@@ -159,6 +160,29 @@ export class TeamService {
         }
     }
 
+    async InviteInstructor(data : InviteRequestDTO): Promise<void> {
+        try {
+            const accessToken = localStorage.getItem("accesstoken");
+            const response = await apiClient().post(
+                "/notification/invite",
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            if (response && response.status === httpStatusCode.OK) {
+                alert("초대 요청이 전송되었습니다.")
+                console.log(response);
+            }
+        } catch (error) {
+            console.error("초대 요청 취소에 실패하였습니다.");
+            // throw error;
+        }
+    }
+
+
     async cancelTeamInvite(data : InviteCancelRequestDTO): Promise<void> {
         try {
             const accessToken = localStorage.getItem("accesstoken");
@@ -180,6 +204,8 @@ export class TeamService {
             // throw error;
         }
     }
+
+
 
 
 }
