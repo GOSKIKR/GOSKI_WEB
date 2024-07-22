@@ -18,7 +18,7 @@ export class UserMyService {
                 return response.data.data as UserMyDTO;
             }
         } catch (error) {
-            alert("강사 프로필 조회 실패");
+            alert("유저 프로필 조회 실패");
         }
         return null;
     }

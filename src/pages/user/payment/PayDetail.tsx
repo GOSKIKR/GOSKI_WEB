@@ -22,8 +22,8 @@ const PayDetail = () => {
                 <div className="pt-12 pb-12 font-extrabold text-black text-2xl">
                     결제 상세
                 </div>
-                <div className="flex flex-col bg-primary-50 w-4/5 h-4/6 rounded-lg shadow-md items-center py-12 space-y-10">
-                    <div className="flex sm:flex-row flex-col bg-white w-4/5 sm:h-2/6 h-4/6 rounded-lg items-center justify-center">
+                <div className="flex flex-col bg-primary-50 w-4/5 h-5/6 rounded-lg shadow-md items-center py-12 space-y-10">
+                    <div className="flex sm:flex-row flex-col bg-white w-4/5 sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
                         <img
                             src={lesson.profileUrl}
                             alt="Profile"
@@ -93,7 +93,7 @@ const PayDetail = () => {
                                 )}
                                 <div className="border-t border-gray-300 pt-2 flex justify-between">
                                     <div className="font-bold">
-                                        최종결제 금액
+                                        최종 결제 금액
                                     </div>
                                     <div className="font-bold text-primary-500">
                                         {paymentDetail.totalAmount}원
