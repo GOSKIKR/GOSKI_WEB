@@ -15,14 +15,25 @@ const SelectInstructor: React.FC<SelectInstructorProps> = ({
     const [expandedDescription, setExpandedDescription] = useState<
         number | null
     >(null);
+    const [expandedProfileDescription, setExpandedProfileDescription] =
+        useState<boolean>(false);
 
     const toggleDescription = (id: number) => {
         setExpandedDescription(expandedDescription === id ? null : id);
     };
 
+    const toggleProfileDescription = () => {
+        setExpandedProfileDescription(!expandedProfileDescription);
+    };
+
     const handleInstructorClick = (instructor: Instructor) => {
         setSelectedInstructor(instructor);
-        onSelect(instructor);
+    };
+
+    const handleSelectButtonClick = () => {
+        if (selectedInstructor) {
+            onSelect(selectedInstructor);
+        }
     };
 
     return (
@@ -38,7 +49,13 @@ const SelectInstructor: React.FC<SelectInstructorProps> = ({
                     {instructors.map((instructor) => (
                         <div
                             key={instructor.instructorId}
-                            className="cursor-pointer p-3 flex flex-row space-x-3 w-11/12 shadow-md justify-between items-center bg-primary-100 rounded-md"
+                            className={`cursor-pointer p-3 flex flex-row space-x-3 w-11/12 shadow-md justify-between items-center bg-primary-100 rounded-md ${
+                                selectedInstructor &&
+                                selectedInstructor.instructorId ===
+                                    instructor.instructorId
+                                    ? "border-2 border-primary-500"
+                                    : ""
+                            }`}
                             onClick={() => handleInstructorClick(instructor)}
                         >
                             <div className="w-1/4 flex justify-center">
@@ -176,15 +193,46 @@ const SelectInstructor: React.FC<SelectInstructorProps> = ({
                                     자기소개
                                 </div>
                                 <div className="text-xs text-black px-2 rounded-sm flex-1">
-                                    {selectedInstructor.description}
+                                    {expandedProfileDescription ? (
+                                        <>
+                                            {selectedInstructor.description}{" "}
+                                            <span
+                                                className="text-primary-500 cursor-pointer"
+                                                onClick={
+                                                    toggleProfileDescription
+                                                }
+                                            >
+                                                (접기)
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {selectedInstructor.description
+                                                .length > 100
+                                                ? selectedInstructor.description.substring(
+                                                      0,
+                                                      100
+                                                  ) + "..."
+                                                : selectedInstructor.description}{" "}
+                                            {selectedInstructor.description
+                                                .length > 100 && (
+                                                <span
+                                                    className="text-primary-500 cursor-pointer"
+                                                    onClick={
+                                                        toggleProfileDescription
+                                                    }
+                                                >
+                                                    (더보기)
+                                                </span>
+                                            )}
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
                         <div className="flex justify-center absolute bottom-0.5 items-center w-full">
                             <div
-                                onClick={() =>
-                                    handleInstructorClick(selectedInstructor)
-                                }
+                                onClick={handleSelectButtonClick}
                                 className="bg-primary-500 text-white font-extrabold text-lg w-20 py-1 text-center items-center justify-center rounded-lg cursor-pointer"
                             >
                                 선택
