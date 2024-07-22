@@ -8,9 +8,10 @@ import { StudentInfo } from "../../../dto/UserReserveDTO";
 import StudentInfoForm from "../../../components/user/StudentInfoForm";
 import AgreementForm from "../../../components/user/AgreementForm";
 import PaymentMethodForm from "../../../components/user/PaymentMethodForm";
+import SelectInstructor from "../../../components/user/SelectInstructor";
 import apiClient from "../../../utils/config/axiosConfig";
-import { UserMyService } from "../../../api/UserMyService";
 import { UserMyDTO } from "../../../dto/UserMyDTO";
+import { Instructor } from "../../../dto/UserInstructorDTO";
 
 const convertLessonType = (lessonTypeString: string): number => {
     if (lessonTypeString === "SKI") {
@@ -58,9 +59,17 @@ const weightOptions: Option[] = [
     { value: "8", label: "WEIGHT_ABOVE_100KG" },
 ];
 
-const Payment = () => {
+interface PassedState {
+    instructorList?: Instructor[];
+    studentInfo?: StudentInfo[];
+    [key: string]: any;
+}
+
+const Payment: React.FC = () => {
     const [profile, setProfile] = useState<UserMyDTO | null>(null);
     const [loading, setLoading] = useState(true);
+    const [selectedInstructor, setSelectedInstructor] =
+        useState<Instructor | null>(null);
 
     const {
         resortName: reserveResortName,
@@ -77,11 +86,20 @@ const Payment = () => {
     useEffect(() => {
         const fetchMyProfile = async () => {
             try {
-                const profileService = new UserMyService();
-                const profile = await profileService.getUserProfile();
-                setProfile(profile);
+                const accessToken = localStorage.getItem("accesstoken");
+
+                const response = await apiClient().get("/user/profile/user", {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                setProfile(response.data.data);
+
+                if (response.status === 200) {
+                    console.log("사용자 정보 불러오기 성공:", response.data);
+                }
             } catch (error) {
-                console.error("Failed to fetch profile:", error);
+                console.error("사용자 정보 불러오기 중 오류 발생:", error);
             }
         };
 
@@ -91,8 +109,7 @@ const Payment = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const passedState = location.state || {};
-    const selectedInstructor = passedState.selectedInstructor || {};
+    const passedState: PassedState = location.state || {};
 
     const initialStudentInfo = Array.from({ length: studentCount }, () => ({
         name: "",
@@ -105,8 +122,8 @@ const Payment = () => {
 
     const initialData = {
         ...passedState,
-        instId: selectedInstructor.instructorId,
-        designatedFees: selectedInstructor.designatedFee,
+        instId: selectedInstructor?.instructorId,
+        designatedFees: selectedInstructor?.designatedFee,
         studentInfo: passedState.studentInfo || initialStudentInfo,
         requestComplain: "",
     };
@@ -181,6 +198,10 @@ const Payment = () => {
         });
     };
 
+    const handleInstructorSelect = (instructor: Instructor) => {
+        setSelectedInstructor(instructor);
+    };
+
     const handleReservation = async () => {
         // 필수 약관 동의 체크
         if (!agreements.personalInfo || !agreements.thirdParty) {
@@ -206,14 +227,14 @@ const Payment = () => {
             const lessonType = convertLessonType(reserveLessonType);
             const reservationData = {
                 teamId,
-                instId: selectedInstructor.instructorId ?? null,
+                instId: selectedInstructor?.instructorId ?? null,
                 lessonDate,
                 startTime,
                 duration,
                 peopleNumber: studentCount,
                 lessonType,
                 basicFee,
-                designatedFee: selectedInstructor.designatedFee ?? 0,
+                designatedFee: selectedInstructor?.designatedFee ?? 0,
                 peopleOptionFee,
                 levelOptionFee: levelOptionFee ?? 0,
                 requestComplain: data.requestComplain || "",
@@ -256,10 +277,18 @@ const Payment = () => {
         }
     };
 
+    if (loading) {
+        return <div>Loading...</div>; // 로딩 스피너 또는 로딩 상태 표시
+    }
+
     return (
         <div>
             <div className="w-full">
-                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+                {window.innerWidth > 640 ? (
+                    <NavbarUser />
+                ) : (
+                    <NavbarUserMobile />
+                )}
             </div>
             <div className="p-10">
                 <div className="text-2xl font-bold mb-8">결제하기</div>
@@ -321,6 +350,10 @@ const Payment = () => {
                             <div>예약자: {profile?.userName}</div>
                             <div>연락처: {profile?.phoneNumber}</div>
                         </div>
+                        <SelectInstructor
+                            instructors={passedState.instructorList || []}
+                            onSelect={handleInstructorSelect}
+                        />
                         <StudentInfoForm
                             studentInfo={data.studentInfo}
                             handleInputChange={handleInputChange}
@@ -343,7 +376,7 @@ const Payment = () => {
                             <div className="w-full flex flex-row justify-between">
                                 <div>지정 옵션비</div>
                                 <div>
-                                    {selectedInstructor.designatedFee ?? 0}원
+                                    {selectedInstructor?.designatedFee ?? 0}원
                                 </div>
                             </div>
                             <div className="w-full flex flex-row justify-between">
@@ -358,7 +391,7 @@ const Payment = () => {
                                 <div className="text-blue-500 font-extrabold">
                                     {basicFee +
                                         (levelOptionFee ?? 0) +
-                                        (selectedInstructor.designatedFee ??
+                                        (selectedInstructor?.designatedFee ??
                                             0) +
                                         peopleOptionFee}
                                     원

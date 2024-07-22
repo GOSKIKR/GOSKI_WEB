@@ -5,4 +5,5 @@ export interface UserMyDTO {
     birthDate: string;
     role: string;
     phoneNumber: string;
+    email: string;
 }
