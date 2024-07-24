@@ -8,9 +8,14 @@ import { StudentInfo } from "../../../dto/UserReserveDTO";
 import StudentInfoForm from "../../../components/user/StudentInfoForm";
 import AgreementForm from "../../../components/user/AgreementForm";
 import PaymentMethodForm from "../../../components/user/PaymentMethodForm";
+import SelectInstructor from "../../../components/user/SelectInstructor";
 import apiClient from "../../../utils/config/axiosConfig";
-import { UserMyService } from "../../../api/UserMyService";
 import { UserMyDTO } from "../../../dto/UserMyDTO";
+import { Instructor } from "../../../dto/UserInstructorDTO";
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
+import "../../../../public/assets/css/tooltip.css";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 
 const convertLessonType = (lessonTypeString: string): number => {
     if (lessonTypeString === "SKI") {
@@ -58,23 +63,36 @@ const weightOptions: Option[] = [
     { value: "8", label: "WEIGHT_ABOVE_100KG" },
 ];
 
-const Payment = () => {
-    const [profile, setProfile] = useState<UserMyDTO | null>(null);
+interface PassedState {
+    instructorList?: Instructor[];
+    studentInfo?: StudentInfo[];
+    selectedInstructor?: Instructor | null;
+    basicFee?: number;
+    levelOptionFee?: number;
+    designatedFee?: number;
+    peopleOptionFee?: number;
+    reserveResortName?: string;
+    reserveLessonType?: string;
+    studentCount?: number;
+    lessonDate?: string;
+    startTime?: string;
+    duration?: number;
+    [key: string]: any;
+}
 
-    useEffect(() => {
-        const fetchMyProfile = async () => {
-            const profileService = new UserMyService();
-            const profile = await profileService.getUserProfile();
-            setProfile(profile);
-        };
-        fetchMyProfile();
-        console.log(selectedInstructor);
-    }, []);
+const formatTime = (time: string) => {
+    return time.slice(0, 2) + ":" + time.slice(2);
+};
+
+const Payment: React.FC = () => {
+    const [profile, setProfile] = useState<UserMyDTO | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [selectedInstructor, setSelectedInstructor] =
+        useState<Instructor | null>(null);
 
     const location = useLocation();
     const navigate = useNavigate();
-    const passedState = location.state || {};
-    const selectedInstructor = passedState.selectedInstructor || {};
+    const passedState: PassedState = location.state || {};
 
     const {
         resortName: reserveResortName,
@@ -85,8 +103,65 @@ const Payment = () => {
         duration,
     } = userReserveStore();
 
-    const { basicFee, levelOptionFee, designatedFee, peopleOptionFee } =
+    const { teamId, basicFee, levelOptionFee, peopleOptionFee } =
         teamInfoStore();
+
+    useEffect(() => {
+        const fetchMyProfile = async () => {
+            try {
+                const accessToken = localStorage.getItem("accesstoken");
+
+                const response = await apiClient().get("/user/profile/user", {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                setProfile(response.data.data);
+
+                if (response.status === 200) {
+                    console.log("사용자 정보 불러오기 성공:", response.data);
+                }
+            } catch (error) {
+                console.error("사용자 정보 불러오기 중 오류 발생:", error);
+            }
+        };
+
+        fetchMyProfile();
+        setLoading(false);
+
+        if (passedState.selectedInstructor) {
+            setSelectedInstructor(passedState.selectedInstructor);
+        }
+    }, []);
+
+    const calculateFee = (fee: number | undefined, duration: number) => {
+        return fee && fee > 0
+            ? {
+                  text: `${fee * duration}원`,
+                  calculation: `${fee}원 x ${duration} = ${fee * duration}원`,
+              }
+            : { text: "0원", calculation: "" };
+    };
+
+    const basicFeeResult = calculateFee(passedState.basicFee, duration);
+    const levelOptionFeeResult = calculateFee(
+        passedState.levelOptionFee,
+        duration
+    );
+    const peopleOptionFeeResult = calculateFee(
+        passedState.peopleOptionFee,
+        duration
+    );
+    const designatedFeeResult = passedState.designatedFee
+        ? `${passedState.designatedFee}원`
+        : "0원";
+
+    const totalFee =
+        ((passedState.basicFee ?? 0) +
+            (passedState.peopleOptionFee ?? 0) +
+            (passedState.levelOptionFee ?? 0)) *
+            duration +
+        (passedState.designatedFee ?? 0);
 
     const initialStudentInfo = Array.from({ length: studentCount }, () => ({
         name: "",
@@ -99,8 +174,8 @@ const Payment = () => {
 
     const initialData = {
         ...passedState,
-        instId: selectedInstructor.instructorId,
-        designatedFees: selectedInstructor.designatedFee,
+        instId: selectedInstructor?.instructorId,
+        designatedFees: selectedInstructor?.designatedFee,
         studentInfo: passedState.studentInfo || initialStudentInfo,
         requestComplain: "",
     };
@@ -199,17 +274,17 @@ const Payment = () => {
         try {
             const lessonType = convertLessonType(reserveLessonType);
             const reservationData = {
-                teamId: passedState.teamId,
-                instId: selectedInstructor.instructorId ?? 0,
+                teamId,
+                instId: selectedInstructor?.instructorId ?? null,
                 lessonDate,
                 startTime,
                 duration,
                 peopleNumber: studentCount,
                 lessonType,
-                basicFee: data.basicFee,
-                designatedFee: data.designatedFee,
-                peopleOptionFee: data.peopleOptionFee,
-                levelOptionFee: data.levelOptionFee ?? 0,
+                basicFee,
+                designatedFee: selectedInstructor?.designatedFee ?? 0,
+                peopleOptionFee,
+                levelOptionFee: levelOptionFee ?? 0,
                 requestComplain: data.requestComplain || "",
                 studentInfo: data.studentInfo.map((student: StudentInfo) => ({
                     ...student,
@@ -239,9 +314,9 @@ const Payment = () => {
                     },
                 }
             );
-            console.log(response.data);
+            console.log(response.data.data);
             if (response.data.data.next_redirect_pc_url) {
-                localStorage.setItem("tid", response.data.tid);
+                localStorage.setItem("tid", response.data.data.tid);
                 window.location.href = response.data.data.next_redirect_pc_url;
             }
         } catch (error) {
@@ -250,10 +325,18 @@ const Payment = () => {
         }
     };
 
+    if (loading) {
+        return <div>Loading...</div>; // 로딩 스피너 또는 로딩 상태 표시
+    }
+
     return (
         <div>
             <div className="w-full">
-                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+                {window.innerWidth > 640 ? (
+                    <NavbarUser />
+                ) : (
+                    <NavbarUserMobile />
+                )}
             </div>
             <div className="p-10">
                 <div className="text-2xl font-bold mb-8">결제하기</div>
@@ -289,7 +372,21 @@ const Payment = () => {
                                     <div className="text-xs text-gray-500">
                                         일시
                                     </div>
-                                    <div>{lessonDate}</div>
+                                    <div className="text-sm">{lessonDate}</div>
+                                    <div className="text-sm">{`${formatTime(
+                                        startTime
+                                    )} ~ ${new Date(
+                                        new Date(
+                                            `${lessonDate}T${formatTime(
+                                                startTime
+                                            )}`
+                                        ).getTime() +
+                                            duration * 60 * 60 * 1000
+                                    ).toLocaleTimeString("en-GB", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        hourCycle: "h23",
+                                    })}`}</div>
                                 </div>
                                 <div className="flex flex-col w-1/5">
                                     <div className="text-xs text-gray-500">
@@ -312,8 +409,18 @@ const Payment = () => {
                         </div>
                         <div className="bg-primary-50 p-5 rounded-lg shadow-md">
                             <div className="font-bold mb-2">예약자 정보</div>
-                            <div>예약자: {profile?.userName}</div>
-                            <div>연락처: {profile?.phoneNumber}</div>
+                            <div className="flex flex-row space-x-4 items-center">
+                                <div className="text-xs text-gray-500">
+                                    예약자
+                                </div>
+                                <div>{profile?.userName}</div>
+                            </div>
+                            <div className="flex flex-row space-x-4 items-center">
+                                <div className="text-xs text-gray-500">
+                                    연락처
+                                </div>
+                                <div>{profile?.phoneNumber}</div>
+                            </div>
                         </div>
                         <StudentInfoForm
                             studentInfo={data.studentInfo}
@@ -323,26 +430,65 @@ const Payment = () => {
                     </div>
                     <div className="sm:w-2/5 space-y-5 mt-5 sm:mt-0">
                         <div className="bg-primary-50 p-5 rounded-lg shadow-md">
-                            <div className="font-extrabold pb-2 w-full">
-                                최종 결제금액
+                            <div className="flex flex-row items-center pb-2">
+                                <div className="font-extrabold">
+                                    최종 결제금액
+                                </div>
+                                <div
+                                    className="ml-3 w-4 text-black cursor-pointer"
+                                    data-tooltip-id="explain-fee"
+                                    data-tooltip-place="top"
+                                    data-tip="최종 결제 금액 산출 = (기본 강습비 + 인원 옵션비 + 레벨 옵션비) x 강습 시간 + 지정 옵션비"
+                                >
+                                    <IoIosInformationCircleOutline />
+                                </div>
+                                <Tooltip place="top" id="explain-fee">
+                                    기본 강습비, 인원 옵션비, 레벨 옵션비에 강습
+                                    시간을 곱하고 지정 옵션비를 더한 금액입니다.
+                                </Tooltip>
                             </div>
-                            <div className="w-full flex flex-row justify-between">
-                                <div>기존 강습비</div>
-                                <div>{basicFee}원</div>
-                            </div>
-                            <div className="w-full flex flex-row justify-between">
-                                <div>레벨 옵션비</div>
-                                <div>{levelOptionFee ?? 0}원</div>
-                            </div>
-                            <div className="w-full flex flex-row justify-between">
-                                <div>지정 옵션비</div>
-                                <div>
-                                    {selectedInstructor.designatedFee ?? 0}원
+
+                            <div className="w-full flex flex-row justify-between items-center">
+                                <div className="text-sm text-gray-500">
+                                    기존 강습비
+                                </div>
+                                <div className="flex flex-col items-end">
+                                    <div className="text-gray-400 text-xs">
+                                        {basicFeeResult.calculation}
+                                    </div>
+                                    <div>{basicFeeResult.text}</div>
                                 </div>
                             </div>
+                            <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
+                            <div className="w-full flex flex-row justify-between items-center">
+                                <div className="text-sm text-gray-500">
+                                    레벨 옵션비
+                                </div>
+                                <div className="flex flex-col items-end">
+                                    <div className="text-gray-400 text-xs">
+                                        {levelOptionFeeResult.calculation}
+                                    </div>
+                                    <div>{levelOptionFeeResult.text}</div>
+                                </div>
+                            </div>
+                            <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
+                            <div className="w-full flex flex-row justify-between items-center">
+                                <div className="text-sm text-gray-500">
+                                    인원 옵션비
+                                </div>
+                                <div className="flex flex-col items-end">
+                                    <div className="text-gray-400 text-xs">
+                                        {peopleOptionFeeResult.calculation}
+                                    </div>
+                                    <div>{peopleOptionFeeResult.text}</div>
+                                </div>
+                            </div>
+                            <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
                             <div className="w-full flex flex-row justify-between">
-                                <div>인원 옵션비</div>
-                                <div>{peopleOptionFee}원</div>
+                                <div className="text-sm text-gray-500">
+                                    지정 옵션비
+                                </div>
+                                <div>{designatedFeeResult ?? 0}</div>
                             </div>
                             <div className="w-full my-[1%] border-[1px] border-black"></div>
                             <div className="w-full flex flex-row justify-between pb-3">
@@ -350,12 +496,7 @@ const Payment = () => {
                                     총 결제금액
                                 </div>
                                 <div className="text-blue-500 font-extrabold">
-                                    {basicFee +
-                                        (levelOptionFee ?? 0) +
-                                        (selectedInstructor.designatedFee ??
-                                            0) +
-                                        peopleOptionFee}
-                                    원
+                                    {totalFee}원
                                 </div>
                             </div>
                         </div>

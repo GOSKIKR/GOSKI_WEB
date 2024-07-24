@@ -20,10 +20,21 @@ export interface TeamMemberList {
     instList: Member[];
 }
 
+export interface AllInstDTO {
+    userId : number;
+    userName : string;
+    phoneNumber : string;
+    profileUrl : string;
+    gender : string;
+    description : string;
+}
+
 export interface TeamInviteDTO {
+    userId : number;
     name: string;
     phoneNumber: string;
-    enrollDate: string;
+    enrollmentDate: string;
+    profileUrl : string;
 }
 
 export interface TeamMemberDTO {
@@ -102,4 +113,12 @@ export interface TeamInstUpdateRequestDTO {
     costPermission : boolean;
     position : number;
     designatedCost : number;
+}
+
+export interface InviteRequestDTO{
+    teamId : number
+    receiverId : number;
+}
+
+export interface InviteCancelRequestDTO extends InviteRequestDTO{
 }

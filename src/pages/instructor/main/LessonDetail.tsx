@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import { LessonService } from "../../../api/LessonService";
-import {
-    InstructorLessonInfoDTO,
-    StudentInfo,
-} from "../../../dto/InstructorLessonInfoDTO";
+import { InstructorLessonInfoDTO } from "../../../dto/InstructorLessonInfoDTO";
 
 const LessonDetail = () => {
     const navigate = useNavigate();
@@ -31,6 +28,36 @@ const LessonDetail = () => {
 
     const formatTime = (time: string) => {
         return time.slice(0, 2) + ":" + time.slice(2);
+    };
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case "notStart":
+                return "bg-yellow-100";
+            case "onGoing":
+                return "bg-green-100";
+            case "lessonFinished":
+                return "bg-blue-100";
+            case "cancelLesson":
+                return "bg-red-100";
+            default:
+                return "bg-transparent";
+        }
+    };
+
+    const getStatusName = (status: string) => {
+        switch (status) {
+            case "notStart":
+                return "강습 예정";
+            case "onGoing":
+                return "진행 중";
+            case "lessonFinished":
+                return "강습 완료";
+            case "cancelLesson":
+                return "취소된 강습";
+            default:
+                return "";
+        }
     };
 
     const formatHeight = (height: string) => {
@@ -103,77 +130,100 @@ const LessonDetail = () => {
     } = lesson;
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen pb-12">
             <NavbarInstructor />
-            <div className="flex flex-col w-full h-screen pl-12 items-start">
+            <div className="flex flex-col w-full min-h-screen pl-12 items-start">
                 <div className="pt-12 pb-12 font-extrabold text-black text-2xl">
                     강습 정보 상세
                 </div>
-                <div className="flex flex-col bg-primary-50 w-4/5 h-4/6 rounded-lg shadow-md items-center py-12 space-y-10">
-                    <div className="flex sm:flex-row flex-col bg-white w-4/5 sm:h-1/2 h-2/3 rounded-lg items-center justify-center py-6">
+                <div className="flex flex-col bg-primary-50 w-4/5 h-full rounded-lg shadow-md items-center py-12 space-y-10">
+                    <div className="flex sm:flex-row flex-col bg-white w-4/5 sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
                         <img
-                            src={profileUrl}
-                            alt="Team Logo"
-                            className="w-24 h-24 rounded-full"
+                            src={lesson.profileUrl}
+                            alt="Profile"
+                            className="w-32 h-32 rounded-full"
                         />
-                        <div className="flex flex-col ml-4 justify-center items-center space-y-2">
-                            <div className="font-bold text-xl">
-                                {resortName}
+                        <div className="flex flex-col ml-8 items-start space-y-2">
+                            <div
+                                className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(
+                                    lesson.lessonStatus
+                                )}`}
+                            >
+                                {getStatusName(lesson.lessonStatus)}
                             </div>
-                            <div>{teamName}</div>
-                            <div className="text-gray-500 text-base text-[8px]">{`${lessonDate} (${new Date(
-                                lessonDate
-                            ).toLocaleString("ko-KR", {
-                                weekday: "short",
-                            })}) - ${formatTime(startTime)} ~ ${new Date(
-                                new Date(
-                                    `${lessonDate}T${formatTime(startTime)}`
-                                ).getTime() +
-                                    duration * 60 * 60 * 1000
-                            ).toLocaleTimeString("en-US", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                            })}`}</div>
-                            <div className="font-bold sm:text-lg text-sm">
-                                예약자:
-                                {studentCount > 1 &&
-                                    `${representativeName} 외 ${
-                                        studentCount - 1
-                                    }명`}
-                                {studentCount == 1 && ` ${studentCount}명 `}
+                            <div className="font-bold text-xl">
+                                {lesson.resortName}
+                            </div>
+
+                            <p className="text-gray-500 sm:text-sm text-xs">
+                                {`${lesson.lessonDate} (${new Date(
+                                    lesson.lessonDate
+                                ).toLocaleString("ko-KR", {
+                                    weekday: "short",
+                                })}) `}
+                                {`${formatTime(lesson.startTime)} ~ ${new Date(
+                                    new Date(
+                                        `${lesson.lessonDate}T${formatTime(
+                                            lesson.startTime
+                                        )}`
+                                    ).getTime() +
+                                        lesson.duration * 60 * 60 * 1000
+                                ).toLocaleTimeString("en-US", {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })}`}
+                            </p>
+
+                            <div className="flex flex-row space-x-3">
+                                <div className="flex flex-row">
+                                    <div className="text-primary-600">
+                                        {lesson.teamName}
+                                    </div>
+                                    <div>팀</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="mt-6 space-y-4 bg-white p-3 rounded-lg w-4/5 sm:h-1/ h-4/6">
                         {studentInfoResponseDTOs &&
-                            studentInfoResponseDTOs !== null &&
-                            studentInfoResponseDTOs.map((student, index) => (
-                                <details
-                                    key={student.studentInfoId}
-                                    className="p-4 bg-gray-100 rounded-lg"
-                                >
-                                    <summary className="cursor-pointer font-bold">
-                                        {index + 1}. {student.name}
-                                    </summary>
-                                    <div className="mt-2 text-sm">
-                                        <div>
-                                            나이: {formatAge(student.age)}
-                                        </div>
-                                        <div>
-                                            키: {formatHeight(student.height)}
-                                        </div>
-                                        <div>
-                                            몸무게:{" "}
-                                            {formatWeight(student.weight)}
-                                        </div>
-                                        <div>
-                                            발 사이즈: {student.footSize}mm
-                                        </div>
-                                    </div>
-                                </details>
-                            ))}
+                            studentInfoResponseDTOs.length > 0 && (
+                                <div className="mt-6 space-y-4 bg-white p-3 rounded-lg w-4/5">
+                                    {studentInfoResponseDTOs.map(
+                                        (student, index) => (
+                                            <details
+                                                key={student.studentInfoId}
+                                                className="p-4 bg-gray-100 rounded-lg"
+                                            >
+                                                <summary className="cursor-pointer font-bold">
+                                                    {index + 1}. {student.name}
+                                                </summary>
+                                                <div className="mt-2 text-sm">
+                                                    <div>
+                                                        나이:{" "}
+                                                        {formatAge(student.age)}
+                                                    </div>
+                                                    <div>
+                                                        키:{" "}
+                                                        {formatHeight(
+                                                            student.height
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        몸무게:{" "}
+                                                        {formatWeight(
+                                                            student.weight
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        발 사이즈:{" "}
+                                                        {student.footSize}mm
+                                                    </div>
+                                                </div>
+                                            </details>
+                                        )
+                                    )}
+                                </div>
+                            )}
                     </div>
-                    <div className="mt-6 text-right">
+                    <div className="mt-6 text-right w-full flex justify-center pr-6">
                         <button
                             onClick={goToBack}
                             className="px-4 py-2 bg-blue-500 text-white rounded-lg"
