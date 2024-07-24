@@ -49,7 +49,7 @@ const AccountList: React.FC = () => {
                     <div className="text-center text-lg font-bold">정산 가능 금액</div>
                     <div className="text-center text-3xl font-bold">{balance}원</div>
                 </div>
-                <div className="bg-primary-100 rounded shadow w-[350px] my-5 p-6 sm:w-[450px] sm:p-4 sm:ml-[50px]">
+                <div className="bg-primary-100 rounded shadow w-[350px] my-3 p-6 sm:w-[450px] sm:p-4 sm:ml-[50px]">
                     <div className="mb-4">
                         <div className="text-lg font-bold mb-2">은행 선택</div>
                         <select
