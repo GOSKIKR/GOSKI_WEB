@@ -179,11 +179,11 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members, setMembers }) 
                     <table className="min-w-full rounded">
                         <thead className="bg-primary-50">
                             <tr>
-                                <th className="w-1/8 py-2 text-center">직책</th>
-                                <th className="w-1/8 py-2 text-center">강사 프로필</th>
-                                <th className="w-1/8 py-2 text-center">지정 단가</th>
-                                <th className="w-2/8 py-2 text-center">권한</th>
-                                <th className="w-3/8 py-2 text-center">전화번호</th>
+                                <th className="w-1/12 py-2 text-center">직책</th>
+                                <th className="w-2/12 py-2 text-center">강사 프로필</th>
+                                <th className="w-2/12 py-2 text-center">지정 단가</th>
+                                <th className="w-5/12 py-2 text-center">권한</th>
+                                <th className="w-2/12 py-2 text-center">전화번호</th>
                             </tr>
                         </thead>
                         <tbody className="text-center items-center">
