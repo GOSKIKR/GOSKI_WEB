@@ -56,32 +56,38 @@ const Coupon: React.FC = () => {
     );
 
     const renderCardContent = () => (
-        <div className="block mt-4">
+        <div className="block mt-6">
             {currentData.map((coupon, index) => (
                 <div
                     key={index}
-                    className="border border-gray-300 p-4 mb-4 rounded-lg"
+                    className="border border-gray-300 p-4 px-8 mb-4 rounded-lg"
                 >
                     <div className="flex justify-between">
-                        <div className="font-bold">{coupon.name}</div>
+                        <div className="flex flex-row items-center space-x-5 justify-center mb-3">
+                            <div className="font-bold">{coupon.name}</div>
+                            <div className="text-sm text-gray-500">
+                                10,000원
+                            </div>
+                        </div>
+
                         <input type="checkbox" />
                     </div>
-                    <div className="text-sm text-gray-500 mb-2">10,000원</div>
-                    <div className="mb-1">
-                        <span className="font-semibold">사용처:</span>{" "}
-                        {coupon.place}
+
+                    <div className="mb-1 flex flex-row ">
+                        <span className="font-semibold w-24">사용처</span>
+                        <div className="w-20">{coupon.place}</div>
                     </div>
-                    <div className="mb-1">
-                        <span className="font-semibold">상태:</span>{" "}
-                        {coupon.status}
+                    <div className="mb-1 flex flex-row">
+                        <span className="font-semibold w-24">상태</span>
+                        <div className="w-20">{coupon.status}</div>
                     </div>
-                    <div className="mb-1">
-                        <span className="font-semibold">사용 기간:</span>{" "}
-                        {coupon.period}
+                    <div className="mb-1 flex flex-row">
+                        <span className="font-semibold w-24">사용 기간</span>
+                        <div className="w-60">{coupon.period}</div>
                     </div>
-                    <div className="mb-1">
-                        <span className="font-semibold">등록일:</span>{" "}
-                        {coupon.registrationDate}
+                    <div className="mb-1 flex flex-row">
+                        <span className="font-semibold w-24">등록일</span>
+                        <div className="w-60">{coupon.registrationDate}</div>
                     </div>
                 </div>
             ))}
