@@ -11,6 +11,11 @@ import {
 import NavbarUser from "../../../components/common/NavbarUser";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 import instructorInfoStore from "../../../store/instructorInfoStore";
+import userReserveStore from "../../../store/userReserveStore";
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
+import "../../../../public/assets/css/tooltip.css";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 
 const renderStars = (score: number) => {
     const filledStars = Math.floor(score);
@@ -24,7 +29,7 @@ const renderStars = (score: number) => {
                 xmlns="https://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="#FFFF00"
-                className="w-6 h-6"
+                className="w-4 h-4"
             >
                 <path
                     fillRule="evenodd"
@@ -43,7 +48,7 @@ const renderStars = (score: number) => {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-4 h-4"
             >
                 <path
                     strokeLinecap="round"
@@ -64,6 +69,15 @@ const formatDate = (dateString: string) => {
     return `${year}.${month}.${day}`;
 };
 
+const calculateFee = (fee: number | undefined, duration: number) => {
+    return fee && fee > 0
+        ? {
+              text: `${fee * duration}원`,
+              calculation: `${fee}원 x ${duration} = ${fee * duration}원`,
+          }
+        : { text: "0원", calculation: "" };
+};
+
 const InstructorInfo = () => {
     const navigate = useNavigate();
 
@@ -75,11 +89,13 @@ const InstructorInfo = () => {
         }
         navigate("/user/payment", {
             state: {
-                selectedInstructor: {
-                    instructorId,
-                    userName,
-                    designatedFee,
-                },
+                instructorId,
+                userName,
+                designatedFee,
+                levelOptionFee,
+                basicFee,
+                peopleOptionFee,
+                duration,
             },
         });
     };
@@ -115,9 +131,29 @@ const InstructorInfo = () => {
         reviews,
     } = instructorInfoStore();
 
+    const {
+        resortId: reserveResortId,
+        resortName: reserveResortName,
+        lessonType: reserveLessonType,
+        studentCount,
+        lessonDate,
+        startTime,
+        duration,
+        level,
+    } = userReserveStore();
+
     useEffect(() => {
         console.log(reviews);
     }, [reviews]);
+
+    const basicFeeResult = calculateFee(basicFee, duration);
+    const levelOptionFeeResult = calculateFee(levelOptionFee, duration);
+    const peopleOptionFeeResult = calculateFee(peopleOptionFee, duration);
+    const designatedFeeResult = designatedFee ? `${designatedFee}원` : "0원";
+
+    const totalFee =
+        (basicFee + peopleOptionFee + (levelOptionFee ?? 0)) * duration +
+        (designatedFee ?? 0);
 
     //새로고침시 경고창
     useEffect(() => {
@@ -150,19 +186,17 @@ const InstructorInfo = () => {
             </div>
             <div className="flex flex-col sm:flex-row px-6 sm:px-12 sm:space-x-6 space-y-6 w-full">
                 <div className="flex flex-col w-full sm:w-7/12 bg-white rounded-lg shadow-lg p-8">
-                    <div className="w-full pt-5 sm:pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
+                    <div className="w-full sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
                         강사 소개
                     </div>
-                    <div className="flex flex-row w-full h-40 bg-gray-100 rounded-lg items-center px-6 sm:py-6 justify-between space-x-6">
-                        <div className="w-28 h-28 bg-gray-200 rounded-full">
-                            <img
-                                src={instructorUrl}
-                                alt="Instructor"
-                                className="w-28 h-28 rounded-full object-cover"
-                            />
-                        </div>
-                        <div className="w-4/5 flex flex-col sm:px-8 space-y-1">
-                            <div className="flex flex-row items-center">
+                    <div className="flex flex-row w-full h-40 bg-gray-100 rounded-lg items-center px-10 sm:py-6 justify-center space-x-6">
+                        <img
+                            src={instructorUrl}
+                            alt="Instructor"
+                            className="w-28 h-28 rounded-full object-cover"
+                        />
+                        <div className="w-3/5 flex flex-col space-y-1 items-center justify-center">
+                            <div className="w-40 flex flex-row items-center">
                                 <div className="font-bold w-1/3 text-gray-600">
                                     직책
                                 </div>
@@ -174,7 +208,7 @@ const InstructorInfo = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="flex flex-row items-center">
+                            <div className="w-40 flex flex-row items-center">
                                 <div className="font-bold w-1/3 text-gray-600">
                                     이름
                                 </div>
@@ -182,7 +216,7 @@ const InstructorInfo = () => {
                                     {userName}
                                 </div>
                             </div>
-                            <div className="flex flex-row items-center">
+                            <div className="w-40 flex flex-row items-center">
                                 <div className="font-bold w-1/3 text-gray-600">
                                     성별
                                 </div>
@@ -199,7 +233,7 @@ const InstructorInfo = () => {
                     <div className="w-full pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
                         자기 소개
                     </div>
-                    <div className="flex flex-row w-full h-80 sm:h-60 bg-white rounded-lg items-center px-6 py-4 text-gray-700">
+                    <div className="flex flex-row w-full h-32 bg-gray-100 rounded-lg items-center px-6 py-4 text-gray-700">
                         {description}
                     </div>
 
@@ -207,7 +241,7 @@ const InstructorInfo = () => {
                     <div className="w-full pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
                         자격증
                     </div>
-                    <div className="w-full h-48 sm:h-60 bg-white rounded-lg px-6 py-4">
+                    <div className="w-full h-48 bg-gray-100 rounded-lg px-6 py-4">
                         <Slider {...settings}>
                             {certificateInfo.map((data, index) => (
                                 <div
@@ -230,11 +264,14 @@ const InstructorInfo = () => {
                     </div>
 
                     {/* 리뷰 */}
-                    <div className="w-full flex flex-row pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
-                        <div>리뷰 ({reviewCount}개)</div>
-
-                        <FaStar color="#FEFD48" />
-                        {Math.round(rating * 10) / 10}
+                    <div className="w-full flex flex-row pt-10 sm:pb-6 pb-3 text-lg font-extrabold  items-center space-x-4">
+                        <div>리뷰 ({reviewCount})</div>
+                        <div className="flex flex-row items-center space-x-1">
+                            <FaStar color="#FEFD48" />
+                            <div className="text-base text-gray-500">
+                                {Math.round(rating * 10) / 10}
+                            </div>
+                        </div>
                     </div>
                     <div className="flex flex-col w-full h-120 justify-between items-center text-lg font-extrabold text-gray-700 overflow-hidden">
                         <div className="w-full overflow-y-auto snap-proximity">
@@ -242,7 +279,7 @@ const InstructorInfo = () => {
                                 reviews.map((data, index) => (
                                     <div
                                         key={index}
-                                        className="flex flex-col w-full snap-start bg-white space-y-2 p-4 my-2 rounded-md shadow-sm"
+                                        className="flex flex-col w-full snap-start bg-gray-100 space-y-2 p-4 my-2 rounded-md shadow-sm"
                                     >
                                         <div className="flex flex-row justify-between items-center">
                                             <div className="flex flex-row">
@@ -252,7 +289,7 @@ const InstructorInfo = () => {
                                                 {formatDate(data.createdAt)}
                                             </div>
                                         </div>
-                                        <div className="text-gray-700">
+                                        <div className="text-gray-700 text-xs">
                                             {data.content}
                                         </div>
                                         <div className="flex flex-row space-x-2">
@@ -282,35 +319,70 @@ const InstructorInfo = () => {
                 </div>
 
                 <div className="flex flex-col sm:w-4/12">
-                    <div className="flex flex-col p-8 space-y-4 w-full bg-white rounded-lg shadow-lg sticky top-5">
-                        <div className="font-extrabold text-xl text-gray-700">
-                            최종 결제금액
-                        </div>
-                        <div className="w-full flex flex-row justify-between text-gray-600">
-                            <div>기존 강습비</div>
-                            <div>{basicFee}</div>
-                        </div>
-                        <div className="w-full flex flex-row justify-between text-gray-600">
-                            <div>지정 옵션비</div>
-                            <div>{designatedFee}</div>
-                        </div>
-                        <div className="w-full flex flex-row justify-between text-gray-600">
-                            <div>레벨 옵션비</div>
-                            <div>{levelOptionFee}</div>
-                        </div>
-                        <div className="w-full border-t border-gray-300 my-2"></div>
-                        <div className="w-full flex flex-row justify-between text-gray-700 font-extrabold">
-                            <div>총 결제금액</div>
-                            <div className="text-blue-500">{cost}</div>
-                        </div>
-
-                        <button
-                            onClick={goToPay}
-                            className="h-12 w-full bg-blue-500 text-white rounded-lg shadow-md text-center flex items-center justify-center cursor-pointer hover:bg-blue-600 transition duration-200"
+                    <div className="flex flex-row items-center pb-2">
+                        <div className="font-extrabold">최종 결제금액</div>
+                        <div
+                            className="ml-3 w-4 text-black cursor-pointer"
+                            data-tooltip-id="explain-fee"
+                            data-tooltip-place="top"
+                            data-tip="최종 결제 금액 산출 = (기본 강습비 + 인원 옵션비 + 레벨 옵션비) x 강습 시간 + 지정 옵션비"
                         >
-                            예약하기
-                        </button>
+                            <IoIosInformationCircleOutline />
+                        </div>
+                        <Tooltip place="top" id="explain-fee">
+                            기본 강습비, 인원 옵션비, 레벨 옵션비에 강습 시간을
+                            곱하고 지정 옵션비를 더한 금액입니다.
+                        </Tooltip>
                     </div>
+
+                    <div className="w-full flex flex-row justify-between items-center">
+                        <div className="text-sm text-gray-500">기존 강습비</div>
+                        <div className="flex flex-col items-end">
+                            <div className="text-gray-400 text-xs">
+                                {basicFeeResult.calculation}
+                            </div>
+                            <div>{basicFeeResult.text}</div>
+                        </div>
+                    </div>
+                    <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
+                    <div className="w-full flex flex-row justify-between items-center">
+                        <div className="text-sm text-gray-500">레벨 옵션비</div>
+                        <div className="flex flex-col items-end">
+                            <div className="text-gray-400 text-xs">
+                                {levelOptionFeeResult.calculation}
+                            </div>
+                            <div>{levelOptionFeeResult.text}</div>
+                        </div>
+                    </div>
+                    <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
+                    <div className="w-full flex flex-row justify-between items-center">
+                        <div className="text-sm text-gray-500">인원 옵션비</div>
+                        <div className="flex flex-col items-end">
+                            <div className="text-gray-400 text-xs">
+                                {peopleOptionFeeResult.calculation}
+                            </div>
+                            <div>{peopleOptionFeeResult.text}</div>
+                        </div>
+                    </div>
+                    <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
+                    <div className="w-full flex flex-row justify-between">
+                        <div className="text-sm text-gray-500">지정 옵션비</div>
+                        <div>{designatedFeeResult ?? 0}</div>
+                    </div>
+                    <div className="w-full my-[1%] border-[1px] border-black"></div>
+                    <div className="w-full flex flex-row justify-between pb-3">
+                        <div className="font-extrabold">총 결제금액</div>
+                        <div className="text-blue-500 font-extrabold">
+                            {totalFee}원
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={goToPay}
+                        className="h-12 w-full bg-blue-500 text-white rounded-lg shadow-md text-center flex items-center justify-center cursor-pointer hover:bg-blue-600 transition duration-200"
+                    >
+                        예약하기
+                    </button>
                 </div>
             </div>
         </div>

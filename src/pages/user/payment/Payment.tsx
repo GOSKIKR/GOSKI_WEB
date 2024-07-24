@@ -143,16 +143,25 @@ const Payment: React.FC = () => {
             : { text: "0원", calculation: "" };
     };
 
-    const basicFeeResult = calculateFee(basicFee, duration);
-    const levelOptionFeeResult = calculateFee(levelOptionFee, duration);
-    const peopleOptionFeeResult = calculateFee(peopleOptionFee, duration);
-    const designatedFeeResult = selectedInstructor?.designatedFee
-        ? `${selectedInstructor.designatedFee}원`
+    const basicFeeResult = calculateFee(passedState.basicFee, duration);
+    const levelOptionFeeResult = calculateFee(
+        passedState.levelOptionFee,
+        duration
+    );
+    const peopleOptionFeeResult = calculateFee(
+        passedState.peopleOptionFee,
+        duration
+    );
+    const designatedFeeResult = passedState.designatedFee
+        ? `${passedState.designatedFee}원`
         : "0원";
 
     const totalFee =
-        (basicFee + peopleOptionFee + (levelOptionFee ?? 0)) * duration +
-        (selectedInstructor?.designatedFee ?? 0);
+        ((passedState.basicFee ?? 0) +
+            (passedState.peopleOptionFee ?? 0) +
+            (passedState.levelOptionFee ?? 0)) *
+            duration +
+        (passedState.designatedFee ?? 0);
 
     const initialStudentInfo = Array.from({ length: studentCount }, () => ({
         name: "",
@@ -479,9 +488,7 @@ const Payment: React.FC = () => {
                                 <div className="text-sm text-gray-500">
                                     지정 옵션비
                                 </div>
-                                <div>
-                                    {selectedInstructor?.designatedFee ?? 0}원
-                                </div>
+                                <div>{designatedFeeResult ?? 0}</div>
                             </div>
                             <div className="w-full my-[1%] border-[1px] border-black"></div>
                             <div className="w-full flex flex-row justify-between pb-3">
