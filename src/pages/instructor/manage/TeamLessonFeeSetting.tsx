@@ -113,10 +113,10 @@ const TeamLessonFeeSetting: React.FC = () => {
             </div>
             <div className="flex justify-center">
                 <button 
-                    className={`m-2 px-4 py-2 rounded sm:w-[200px] ${isEditing ? 'bg-primary-500' : 'bg-primary-600'} text-white hover:bg-primary-500`} 
+                    className={`m-2 px-4 py-2 rounded sm:w-[200px] ${isEditing ? 'bg-primary-600' : 'bg-primary-500'} text-white hover:bg-primary-500`} 
                     onClick={() => setIsEditing(!isEditing)}
                 >
-                    {isEditing ? '수정완료' : '수정하기'}
+                    {!isEditing ? '수정완료' : '수정하기'}
                 </button>
                 <button 
                     className="bg-primary-900 text-white m-2 px-4 py-2 rounded sm:w-[200px] hover:bg-primary-600"
