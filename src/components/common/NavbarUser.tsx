@@ -237,7 +237,6 @@ const NavbarUser = () => {
       {isLogin ? (
         <div className="flex items-center space-x-6">
           <UserNotification
-            notifications={notifications}
             showNotification={showNotification}
             setShowNotification={setShowNotification}
             setShowSettings={setShowSettings}

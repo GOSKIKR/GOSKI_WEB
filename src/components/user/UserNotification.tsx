@@ -53,18 +53,33 @@ const NotificationItem = ({
 );
 
 interface UserNotificationProps {
-  notifications: any;
   showNotification: boolean;
   setShowNotification: Dispatch<SetStateAction<boolean>>;
   setShowSettings: Dispatch<SetStateAction<boolean>>;
 }
 
 const UserNotification = ({
-  notifications,
   showNotification,
   setShowNotification,
   setShowSettings,
 }: UserNotificationProps): JSX.Element => {
+  //쪽지 불러오기
+  const [notifications, setNotifications] = useState([]);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await apiClient().get("/notification");
+        if (response.status === 200) {
+          console.log("전체 알림 조회 성공:", response.data);
+          setNotifications(response.data.data);
+        }
+      } catch (error) {
+        console.error("전체 알림 조회 중 오류 발생:", error);
+      }
+    };
+    fetchNotifications();
+  }, []);
+
   const [notificationContent, setNotificationContent] = useState<
     NotificationContentProps[]
   >(
