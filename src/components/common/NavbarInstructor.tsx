@@ -1,20 +1,87 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import UserNotification from "../user/UserNotification";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
+import { CgProfile } from "react-icons/cg";
+import apiClient from "../../utils/config/axiosConfig";
+import { UserService } from "../../api/UserService";
+import { UserMyService } from "../../api/UserMyService";
+import { UserMyDTO } from "../../dto/UserMyDTO";
+import useLoginStore from "../../store/loginStore";
+
+const userService = new UserService();
+const userMyService = new UserMyService();
+
 
 const NavbarInstructor = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const {role} = useLoginStore();
 
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [isLogin, setIsLogin] = useState(
+    localStorage.getItem("accesstoken") ? true : false
+  );
+  const [profileData, setProfileData] = useState<UserMyDTO>({
+    birthDate: "",
+    email: "",
+    gender: "",
+    phoneNumber: "",
+    profileUrl: "",
+    role: "",
+    userName: "",
+  });
 
   const navigate = useNavigate();
 
   const handleLoginBtn = () => {
     navigate("/login");
+  };
+
+  useEffect( () =>  {
+    const fetchProfile = async() => {
+      const response =  role === 'INSTRUCTOR' ? 
+            await userService.getInstructorProfile() : 
+            await userMyService.getUserProfile() ;
+
+        if(response) {
+          console.log(response);
+          setProfileData(response)
+        }
+    }
+      
+    if (isLogin) {
+      fetchProfile();
+    }
+  }, [role, isLogin,setProfileData]);
+
+  const logout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshtoken");
+      const accessToken = localStorage.getItem("accesstoken");
+
+      await apiClient().get("/user/signout", {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+          AccessToken: `Bearer ${accessToken}`,
+        },
+      });
+
+      // 로그아웃 성공 후 처리
+      localStorage.removeItem("refreshtoken");
+      localStorage.removeItem("accesstoken");
+      setIsLogin(false);
+      localStorage.removeItem("instructor-store")
+      localStorage.removeItem("login-store")
+
+      return true; // 로그아웃 성공
+    } catch (error) {
+      console.error("로그아웃 중 오류 발생:", error);
+      localStorage.removeItem("accesstoken");
+      localStorage.removeItem("refreshtoken");
+      return false; // 로그아웃 실패
+    }
   };
 
   return (
@@ -59,19 +126,25 @@ const NavbarInstructor = () => {
             </button>
           </div>
           <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer p-5  box-border">
-            <button onClick={() => setIsLogin(false)} className="text-2xl">
+            <button onClick={logout} className="text-2xl">
               <IoMdLogOut />
             </button>
           </div>
           <div className="navbar-user__profile">
-            <img
-              src="https://randomuser.me/api/portraits/men/75.jpg"
-              alt="Profile"
-              className="w-10 h-10 rounded-full cursor-pointer"
-              onClick={() => {
-                navigate("/instructor/edit-info");
-              }}
-            />
+          {profileData.profileUrl ? (
+              <img
+                src={profileData.profileUrl}
+                alt="Profile"
+                className="w-10 h-10 rounded-full cursor-pointer"
+                onClick={() => {
+                  navigate("/instructor/edit-info");
+                }}
+              />
+            ) : (
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                <CgProfile className="text-2xl" />
+              </div>
+            )}
           </div>
         </div>
       ) : (

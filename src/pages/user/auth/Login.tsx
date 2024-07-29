@@ -68,7 +68,7 @@ const Login = () => {
           localStorage.setItem("accesstoken", response.headers.accesstoken);
           // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
           localStorage.setItem("refreshtoken", response.headers.refreshtoken);
-          setRole(response.data.data.role);
+          setRole(response.data.data);
           console.log(role)
           role === 'STUDENT' ? navigate("/") : navigate("/instructor/main")
           

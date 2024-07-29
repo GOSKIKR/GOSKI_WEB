@@ -10,8 +10,7 @@ import UserSettings from "../user/UserSettings";
 import apiClient from "../../utils/config/axiosConfig";
 
 import { CgProfile } from "react-icons/cg";
-import { IoMdNotificationsOutline, IoMdLogOut } from "react-icons/io";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoMdLogOut } from "react-icons/io";
 
 // request 승인
 const requestPermission = async () => {
@@ -138,6 +137,7 @@ const NavbarUser = () => {
       localStorage.removeItem("refreshtoken");
       localStorage.removeItem("accesstoken");
       setIsLogin(false);
+      localStorage.removeItem("login-store")
 
       return true; // 로그아웃 성공
     } catch (error) {
