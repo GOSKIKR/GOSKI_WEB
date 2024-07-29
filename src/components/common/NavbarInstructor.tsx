@@ -8,7 +8,6 @@ import { IoMdLogOut } from "react-icons/io";
 const NavbarInstructor = () => {
   const [isLogin, setIsLogin] = useState(true);
 
-  const [showSetting, setShowSetting] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 

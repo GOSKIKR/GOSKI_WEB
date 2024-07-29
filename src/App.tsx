@@ -25,7 +25,6 @@ import BossMain from "./pages/instructor/main/BossMain";
 import MyLessonList from "./pages/instructor/mypage/MyLessonList";
 import FeedbackRegist from "./pages/instructor/mypage/FeedbackRegist";
 import Notice from "./pages/user/main/Notice";
-import PayEnd from "./pages/user/payment/PayApprove";
 
 import ChatComponent from "./pages/user/dm/ChatComponent";
 import Settlement from "./pages/instructor/calculate/Settlement";
@@ -38,7 +37,11 @@ import PayApprove from "./pages/user/payment/PayApprove";
 import PaySuccess from "./pages/user/payment/PaySuccess";
 import PayFail from "./pages/user/payment/PayFail";
 
+import useLoginStore from "./store/loginStore";
+
 const App: React.FC = () => {
+    const {role} = useLoginStore();
+
     return (
         <div>
             <Routes>
