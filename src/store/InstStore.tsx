@@ -11,7 +11,7 @@ interface InstructorState {
     description: string;
     birthDate: string;
     dayoff: number;
-    permission: string;
+    permission: number;
     certificates: { certificateId: number, certificateImageUrl: string }[];
     setProfile: (profile: InstructorProfileDTO) => void;
     setDescription: (newDesc: string) => void;
@@ -34,7 +34,7 @@ const useInstructorStore = create<InstructorState>(
             description: '',
             birthDate: '',
             dayoff: 0,
-            permission: '',
+            permission: 0,
             certificates: [],
             setProfile: (profile: InstructorProfileDTO) => set(() => ({
                 userName: profile.userName,

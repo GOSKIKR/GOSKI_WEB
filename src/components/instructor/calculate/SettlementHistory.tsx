@@ -42,7 +42,7 @@ const SettlementHistory: React.FC = () => {
     });
 
     return (
-        <div className="flex flex-col items-center mt-10">
+        <div className="flex flex-col items-center mt-2">
             <div className="bg-primary-100 rounded-lg w-[350px] sm:w-[1000px] p-6 shadow-lg">
                 <div className="text-2xl font-bold mb-6">
                     입출금 내역
@@ -89,7 +89,6 @@ const SettlementHistory: React.FC = () => {
                                     <td className="py-2 text-center">{item.type}</td>
                                     <td className="py-2 text-center">
                                         <div className="flex justify-center items-center">
-                                            <img src="/path/to/bank-logo.png" alt="bank-logo" className="w-6 h-6 mr-2" />
                                             {item.bankName}
                                         </div>
                                     </td>

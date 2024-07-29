@@ -9,7 +9,8 @@ const apiClient = (isFormData?: boolean): AxiosInstance => {
     headers: {
       "Content-Type": !isFormData
         ? "application/json;charset=utf-8"
-        : "multipart/form-data", //헤더 설정
+        : "multipart/form-data",
+      DeviceType: "WEB",
     },
   });
 
