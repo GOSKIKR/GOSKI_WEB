@@ -1,46 +1,11 @@
-import React, { useState, Dispatch, SetStateAction } from "react";
+import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
+import apiClient from "../../utils/config/axiosConfig";
 
-const notificationSettings = [
-  {
-    title: "강습 예약 알림",
-    description: "강습 예약 알림을 설정합니다.",
-    checked: true,
-  },
-  {
-    title: "피드백 수신 알림",
-    description: "피드백 수신 알림을 설정합니다.",
-    checked: true,
-  },
-  {
-    title: "쪽지 수신 알림",
-    description: "쪽지 수신 알림을 설정합니다.",
-    checked: false,
-  },
-];
-
-type NotificationSettingItemProps = {
-  title: string;
-  checked: boolean;
-  onToggle: () => void;
-};
-
-const NotificationSettingItem = ({
-  title,
-  checked,
-  onToggle,
-}: NotificationSettingItemProps) => (
-  <div className="flex flex-row items-center justify-between mb-2">
-    <div className="text-sm">{title}</div>
-    <input
-      type="checkbox"
-      checked={checked}
-      onChange={onToggle}
-      className="form-checkbox h-5 w-5 text-primary-600 transition duration-150 ease-in-out"
-      aria-label={title}
-    />
-  </div>
-);
+interface NotificationSetting {
+  notificationType: number;
+  status: boolean;
+}
 
 interface UserSettingsProps {
   setShowNotification: Dispatch<SetStateAction<boolean>>;
@@ -53,7 +18,42 @@ const UserSettings = ({
   showSettings,
   setShowSettings,
 }: UserSettingsProps): JSX.Element => {
-  const [settings, setSettings] = useState(notificationSettings);
+  const [settings, setSettings] = useState<NotificationSetting[]>([]);
+
+  // 초기 알림 설정 가져오기
+  useEffect(() => {
+    const fetchSetting = async () => {
+      try {
+        const response = await apiClient().get("/notification/setting");
+        if (response.status === 200) {
+          console.log("알림 설정 가져오기 성공:", response.data);
+          setSettings(response.data.data);
+        }
+      } catch (error) {
+        console.error("알림 설정 가져오기 중 오류 발생:", error);
+      }
+    };
+    fetchSetting();
+  }, []);
+
+  // 알림 설정 변경
+  useEffect(() => {
+    if (settings.length > 0) {
+      const updateSetting = async () => {
+        try {
+          const response = await apiClient().patch("/notification/setting", {
+            notificationTypes: settings,
+          });
+          if (response.status === 200) {
+            console.log("알림 설정 변경 성공:", response.data);
+          }
+        } catch (error) {
+          console.error("알림 설정 변경 중 오류 발생:", error);
+        }
+      };
+      updateSetting();
+    }
+  }, [settings]);
 
   const handleSettingBtn = () => {
     setShowSettings(!showSettings);
@@ -63,7 +63,7 @@ const UserSettings = ({
   const handleToggle = (index: number) => {
     setSettings((prevSettings) =>
       prevSettings.map((setting, i) =>
-        i === index ? { ...setting, checked: !setting.checked } : setting
+        i === index ? { ...setting, status: !setting.status } : setting
       )
     );
   };
@@ -83,14 +83,37 @@ const UserSettings = ({
             알림 설정
           </div>
           <div className="flex flex-col gap-2 p-4">
-            {settings.map((setting, index) => (
-              <NotificationSettingItem
-                key={index}
-                title={setting.title}
-                checked={setting.checked}
-                onToggle={() => handleToggle(index)}
-              />
-            ))}
+            {settings.length > 0 && (
+              <>
+                <div>
+                  <label>강습 예약 알림</label>
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={settings[0].status}
+                    onChange={() => handleToggle(0)}
+                  />
+                </div>
+                <div>
+                  <label>피드백 수신 알림</label>
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={settings[1].status}
+                    onChange={() => handleToggle(1)}
+                  />
+                </div>
+                <div>
+                  <label>쪽지 수신 알림</label>
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={settings[2].status}
+                    onChange={() => handleToggle(2)}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

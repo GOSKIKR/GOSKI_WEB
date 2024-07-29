@@ -1,6 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import {
+  getMessaging,
+  getToken,
+  Messaging,
+  onMessage,
+} from "firebase/messaging";
 
 //https://firebase.google.com/docs/cloud-messaging/js/receive?hl=ko&_gl=1*1aedc3f*_up*MQ..*_ga*MTg3NjA4MTgxNi4xNzIxMzU1NDkz*_ga_CW55HF8NVT*MTcyMTM1NTQ5My4xLjAuMTcyMTM1NTQ5My4wLjAuMA..
 
