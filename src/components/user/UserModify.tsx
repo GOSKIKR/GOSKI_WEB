@@ -181,7 +181,7 @@ const UserModify = () => {
             <div className="shadow appearance-none border rounded w-full lg:w-2/3 py-2 pl-3 pr-10 text-gray-700 text-xs leading-tight focus:outline-none focus:shadow-outline">
               {profileData.email}
             </div>
-            <div className="absolute top-8 lg:top-1 right-3 z-50">
+            <div className="absolute top-8 lg:top-1 right-3 z-49">
               <button
                 onClick={() => {
                   alert("이메일 변경하기");
@@ -203,7 +203,7 @@ const UserModify = () => {
             <div className="shadow appearance-none border rounded w-full lg:w-2/3 py-2 pl-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               {profileData.phoneNumber}
             </div>
-            <div className="absolute top-8 lg:top-1 right-3 z-50">
+            <div className="absolute top-8 lg:top-1 right-3 z-49">
               <button
                 onClick={() => {
                   alert("전화번호 변경하기");

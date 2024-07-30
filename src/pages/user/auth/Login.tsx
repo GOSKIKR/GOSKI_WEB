@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useLoginStore from "../../../store/loginStore";
 
 import { CiMail } from "react-icons/ci";
 import { IoKeyOutline } from "react-icons/io5";
@@ -8,9 +9,12 @@ import NavbarUser from "../../../components/common/NavbarUser";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 import apiClient from "../../../utils/config/axiosConfig";
+import { httpStatusCode } from "../../../utils/config/httpStatus";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const {role, setRole} = useLoginStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -60,12 +64,18 @@ const Login = () => {
           email,
           password,
         });
-        localStorage.setItem("accesstoken", response.headers.accesstoken);
-        // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
-        localStorage.setItem("refreshtoken", response.headers.refreshtoken);
-        navigate("/");
+        if(response && response.status === httpStatusCode.OK) {
+          localStorage.setItem("accesstoken", response.headers.accesstoken);
+          // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
+          localStorage.setItem("refreshtoken", response.headers.refreshtoken);
+          setRole(response.data.data);
+          console.log(role)
+          role === 'STUDENT' ? navigate("/") : navigate("/instructor/main")
+          
+        }
       } catch (error) {
         localStorage.removeItem("accesstoken");
+        alert("로그인 실패!")
         console.error("Login error:", error);
       }
       console.log("Form Submitted", { email });

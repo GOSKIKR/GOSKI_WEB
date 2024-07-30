@@ -8,7 +8,6 @@ import { StudentInfo } from "../../../dto/UserReserveDTO";
 import StudentInfoForm from "../../../components/user/StudentInfoForm";
 import AgreementForm from "../../../components/user/AgreementForm";
 import PaymentMethodForm from "../../../components/user/PaymentMethodForm";
-import SelectInstructor from "../../../components/user/SelectInstructor";
 import apiClient from "../../../utils/config/axiosConfig";
 import { UserMyDTO } from "../../../dto/UserMyDTO";
 import { Instructor } from "../../../dto/UserInstructorDTO";
@@ -64,8 +63,6 @@ const weightOptions: Option[] = [
 ];
 
 interface PassedState {
-    instructorList?: Instructor[];
-    studentInfo?: StudentInfo[];
     selectedInstructor?: Instructor | null;
     basicFee?: number;
     levelOptionFee?: number;
@@ -77,6 +74,7 @@ interface PassedState {
     lessonDate?: string;
     startTime?: string;
     duration?: number;
+    studentInfo?: StudentInfo[];
     [key: string]: any;
 }
 
@@ -103,8 +101,12 @@ const Payment: React.FC = () => {
         duration,
     } = userReserveStore();
 
-    const { teamId, basicFee, levelOptionFee, peopleOptionFee } =
-        teamInfoStore();
+    const {
+        teamId,
+        basicFee: teamBasicFee,
+        levelOptionFee: teamLevelOptionFee,
+        peopleOptionFee: teamPeopleOptionFee,
+    } = teamInfoStore();
 
     useEffect(() => {
         const fetchMyProfile = async () => {
@@ -143,25 +145,22 @@ const Payment: React.FC = () => {
             : { text: "0원", calculation: "" };
     };
 
-    const basicFeeResult = calculateFee(passedState.basicFee, duration);
-    const levelOptionFeeResult = calculateFee(
-        passedState.levelOptionFee,
-        duration
-    );
-    const peopleOptionFeeResult = calculateFee(
-        passedState.peopleOptionFee,
-        duration
-    );
-    const designatedFeeResult = passedState.designatedFee
-        ? `${passedState.designatedFee}원`
-        : "0원";
+    const basicFee = passedState.selectedInstructor?.basicFee || teamBasicFee;
+    const levelOptionFee =
+        passedState.selectedInstructor?.levelOptionFee || teamLevelOptionFee;
+    const peopleOptionFee =
+        passedState.selectedInstructor?.peopleOptionFee || teamPeopleOptionFee;
+    const designatedFee =
+        selectedInstructor?.designatedFee || passedState.designatedFee;
+
+    const basicFeeResult = calculateFee(basicFee, duration);
+    const levelOptionFeeResult = calculateFee(levelOptionFee, duration);
+    const peopleOptionFeeResult = calculateFee(peopleOptionFee, duration);
+    const designatedFeeResult = designatedFee ? `${designatedFee}원` : "0원";
 
     const totalFee =
-        ((passedState.basicFee ?? 0) +
-            (passedState.peopleOptionFee ?? 0) +
-            (passedState.levelOptionFee ?? 0)) *
-            duration +
-        (passedState.designatedFee ?? 0);
+        (basicFee + peopleOptionFee + (levelOptionFee ?? 0)) * duration +
+        (designatedFee ?? 0);
 
     const initialStudentInfo = Array.from({ length: studentCount }, () => ({
         name: "",
@@ -175,21 +174,12 @@ const Payment: React.FC = () => {
     const initialData = {
         ...passedState,
         instId: selectedInstructor?.instructorId,
-        designatedFees: selectedInstructor?.designatedFee,
+        designatedFees: designatedFee,
         studentInfo: passedState.studentInfo || initialStudentInfo,
         requestComplain: "",
     };
 
     const [data, setData] = useState(initialData);
-    const [agreements, setAgreements] = useState({
-        personalInfo: false,
-        thirdParty: false,
-        marketing: false,
-    });
-    const [paymentMethod, setPaymentMethod] = useState({
-        kakao: false,
-        naver: false,
-    });
 
     const handleInputChange = (
         index: number,
@@ -202,6 +192,16 @@ const Payment: React.FC = () => {
         );
         setData({ ...data, studentInfo: updatedStudentInfo });
     };
+
+    const [agreements, setAgreements] = useState({
+        personalInfo: false,
+        thirdParty: false,
+        marketing: false,
+    });
+    const [paymentMethod, setPaymentMethod] = useState({
+        kakao: false,
+        naver: false,
+    });
 
     const handleAgreeAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = e.target.checked;
@@ -488,7 +488,7 @@ const Payment: React.FC = () => {
                                 <div className="text-sm text-gray-500">
                                     지정 옵션비
                                 </div>
-                                <div>{designatedFeeResult ?? 0}</div>
+                                <div>{designatedFeeResult}</div>
                             </div>
                             <div className="w-full my-[1%] border-[1px] border-black"></div>
                             <div className="w-full flex flex-row justify-between pb-3">

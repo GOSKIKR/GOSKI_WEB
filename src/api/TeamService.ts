@@ -1,23 +1,33 @@
-import { Team, TeamInfoDTO, TeamLessonFeeRequestDTO, TeamInstInfoDTO, AllInstDTO,
-    TeamInstUpdateRequestDTO, TeamInviteDTO, InviteCancelRequestDTO, 
-    InviteRequestDTO} from "../dto/TeamDTO";
+import {
+    Team,
+    TeamInfoDTO,
+    TeamLessonFeeRequestDTO,
+    TeamInstInfoDTO,
+    AllInstDTO,
+    TeamInstUpdateRequestDTO,
+    TeamInviteDTO,
+    InviteCancelRequestDTO,
+    InviteRequestDTO,
+} from "../dto/TeamDTO";
 import apiClient from "../utils/config/axiosConfig";
 import { httpStatusCode } from "../utils/config/httpStatus";
 
-const url = "/team"
+const url = "/team";
 
 const accessToken = localStorage.getItem("accesstoken");
 
 export class TeamService {
-    async getAllInstList(teamId : number): Promise<AllInstDTO[] | null> {
+    async getAllInstList(teamId: number): Promise<AllInstDTO[] | null> {
         try {
-            const response = await apiClient().get(`${url}/inst/all/${teamId}`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
+            const response = await apiClient().get(
+                `${url}/inst/all/${teamId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
             if (response && response.status === httpStatusCode.OK) {
-                console.log(response.data.data)
                 return response.data.data as AllInstDTO[];
             }
         } catch (error) {
@@ -34,7 +44,6 @@ export class TeamService {
                 },
             });
             if (response && response.status === httpStatusCode.OK) {
-                console.log(response.data.data)
                 return response.data.data as Team[];
             }
         } catch (error) {
@@ -43,15 +52,14 @@ export class TeamService {
         return null;
     }
 
-    async getTeamInfo(teamId : number) : Promise<TeamInfoDTO | null> {
-        try{
-            const response = await apiClient().get(`${url}/${teamId}`,{
-                headers : {
-                    Authorization: `Bearer ${accessToken}`
-                }
+    async getTeamInfo(teamId: number): Promise<TeamInfoDTO | null> {
+        try {
+            const response = await apiClient().get(`${url}/${teamId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
             });
             if (response && response.status === httpStatusCode.OK) {
-                console.log(response.data.data)
                 return response.data.data as TeamInfoDTO;
             }
         } catch (error) {
@@ -60,15 +68,19 @@ export class TeamService {
         return null;
     }
 
-    async getTeamInstInfoList(teamId : number) : Promise<TeamInstInfoDTO[] | null> {
-        try{
-            const response = await apiClient().get(`${url}/list/team-inst/${teamId}`,{
-                headers : {
-                    Authorization: `Bearer ${accessToken}`
+    async getTeamInstInfoList(
+        teamId: number
+    ): Promise<TeamInstInfoDTO[] | null> {
+        try {
+            const response = await apiClient().get(
+                `${url}/list/team-inst/${teamId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
                 }
-            });
+            );
             if (response && response.status === httpStatusCode.OK) {
-                console.log(response.data.data)
                 return response.data.data as TeamInstInfoDTO[];
             }
         } catch (error) {
@@ -77,15 +89,19 @@ export class TeamService {
         return null;
     }
 
-    async getPendingApprovalList(teamId : number) : Promise<TeamInviteDTO[] | null> {
-        try{
-            const response = await apiClient().get(`${url}/pending-approval/${teamId}`,{
-                headers : {
-                    Authorization: `Bearer ${accessToken}`
+    async getPendingApprovalList(
+        teamId: number
+    ): Promise<TeamInviteDTO[] | null> {
+        try {
+            const response = await apiClient().get(
+                `${url}/pending-approval/${teamId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
                 }
-            });
+            );
             if (response && response.status === httpStatusCode.OK) {
-                console.log(response.data.data)
                 return response.data.data as TeamInviteDTO[];
             }
         } catch (error) {
@@ -94,11 +110,14 @@ export class TeamService {
         return null;
     }
 
-    async updateTeamLessonFee(teamId : number, data : TeamLessonFeeRequestDTO): Promise<void> {
+    async updateTeamLessonFee(
+        teamId: number,
+        data: TeamLessonFeeRequestDTO
+    ): Promise<void> {
         try {
             const accessToken = localStorage.getItem("accesstoken");
             const response = await apiClient().patch(
-                `${url}/update/${teamId}`, 
+                `${url}/update/${teamId}`,
                 data,
                 {
                     headers: {
@@ -108,19 +127,21 @@ export class TeamService {
             );
 
             if (response && response.status === httpStatusCode.OK) {
-                alert("팀 강습비 정보가 수정되었습니다")
+                alert("팀 강습비 정보가 수정되었습니다");
             }
         } catch (error) {
-            alert("팀 강습비 정보 수정에 실패하였습니다.")
-            console.error(error)
+            alert("팀 강습비 정보 수정에 실패하였습니다.");
+            console.error(error);
         }
     }
 
-    async updateTeamInstructorInfo(data : TeamInstUpdateRequestDTO): Promise<void> {
+    async updateTeamInstructorInfo(
+        data: TeamInstUpdateRequestDTO
+    ): Promise<void> {
         try {
             const accessToken = localStorage.getItem("accesstoken");
             const response = await apiClient().patch(
-                `${url}/update/member`, 
+                `${url}/update/member`,
                 data,
                 {
                     headers: {
@@ -130,19 +151,21 @@ export class TeamService {
             );
 
             if (response && response.status === httpStatusCode.OK) {
-                alert("강사 정보가 수정되었습니다")
+                alert("강사 정보가 수정되었습니다");
             }
         } catch (error) {
-            alert("강사 정보 수정에 실패하였습니다.")
-            console.error(error)
+            alert("강사 정보 수정에 실패하였습니다.");
+            console.error(error);
         }
     }
 
-    async updateAllTeamInstructorInfo(data : TeamInstUpdateRequestDTO[]): Promise<void> {
+    async updateAllTeamInstructorInfo(
+        data: TeamInstUpdateRequestDTO[]
+    ): Promise<void> {
         try {
             const accessToken = localStorage.getItem("accesstoken");
             const response = await apiClient().patch(
-                `${url}/update/member/all`, 
+                `${url}/update/member/all`,
                 data,
                 {
                     headers: {
@@ -152,15 +175,15 @@ export class TeamService {
             );
 
             if (response && response.status === httpStatusCode.OK) {
-                alert("강사 정보가 일괄 수정되었습니다")
+                alert("강사 정보가 일괄 수정되었습니다");
             }
         } catch (error) {
-            alert("강사 정보 일괄 수정에 실패하였습니다.")
-            console.error(error)
+            alert("강사 정보 일괄 수정에 실패하였습니다.");
+            console.error(error);
         }
     }
 
-    async InviteInstructor(data : InviteRequestDTO): Promise<void> {
+    async InviteInstructor(data: InviteRequestDTO): Promise<void> {
         try {
             const accessToken = localStorage.getItem("accesstoken");
             const response = await apiClient().post(
@@ -173,8 +196,7 @@ export class TeamService {
                 }
             );
             if (response && response.status === httpStatusCode.OK) {
-                alert("초대 요청이 전송되었습니다.")
-                console.log(response);
+                alert("초대 요청이 전송되었습니다.");
             }
         } catch (error) {
             console.error("초대 요청 취소에 실패하였습니다.");
@@ -182,8 +204,7 @@ export class TeamService {
         }
     }
 
-
-    async cancelTeamInvite(data : InviteCancelRequestDTO): Promise<void> {
+    async cancelTeamInvite(data: InviteCancelRequestDTO): Promise<void> {
         try {
             const accessToken = localStorage.getItem("accesstoken");
             const response = await apiClient().post(
@@ -196,16 +217,11 @@ export class TeamService {
                 }
             );
             if (response && response.status === httpStatusCode.OK) {
-                alert("초대 요청이 취소되었습니다.")
-                console.log(response);
+                alert("초대 요청이 취소되었습니다.");
             }
         } catch (error) {
             console.error("초대 요청 취소에 실패하였습니다.");
             // throw error;
         }
     }
-
-
-
-
 }

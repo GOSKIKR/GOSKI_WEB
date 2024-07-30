@@ -40,7 +40,7 @@ const TeamAD = () => {
         onMouseLeave={handleMouseLeave}
         style={{
           width: `${sliderWidth}px`,
-          animationDuration: `${logoList.length * 2}s`,
+          animationDuration: `${logoList.length * 4}s`,
         }}
       >
         {[...logoList, ...logoList, ...logoList, ...logoList].map(
