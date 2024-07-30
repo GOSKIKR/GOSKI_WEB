@@ -64,7 +64,6 @@ const weightOptions: Option[] = [
 ];
 
 interface PassedState {
-    instructorList?: Instructor[];
     studentInfo?: StudentInfo[];
     selectedInstructor?: Instructor | null;
     basicFee?: number;
@@ -92,8 +91,10 @@ const Payment: React.FC = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
+    //전달 받은 데이터
     const passedState: PassedState = location.state || {};
 
+    //store에서 꺼내올 정보들
     const {
         resortName: reserveResortName,
         lessonType: reserveLessonType,
@@ -163,6 +164,7 @@ const Payment: React.FC = () => {
             duration +
         (passedState.designatedFee ?? 0);
 
+    //학생 정보 초기화
     const initialStudentInfo = Array.from({ length: studentCount }, () => ({
         name: "",
         age: "",
@@ -172,6 +174,7 @@ const Payment: React.FC = () => {
         footSize: 260,
     }));
 
+    //전체 데이터 초기화
     const initialData = {
         ...passedState,
         instId: selectedInstructor?.instructorId,
@@ -181,16 +184,8 @@ const Payment: React.FC = () => {
     };
 
     const [data, setData] = useState(initialData);
-    const [agreements, setAgreements] = useState({
-        personalInfo: false,
-        thirdParty: false,
-        marketing: false,
-    });
-    const [paymentMethod, setPaymentMethod] = useState({
-        kakao: false,
-        naver: false,
-    });
 
+    //학생 정보 입력
     const handleInputChange = (
         index: number,
         field: keyof StudentInfo,
@@ -203,6 +198,17 @@ const Payment: React.FC = () => {
         setData({ ...data, studentInfo: updatedStudentInfo });
     };
 
+    const [agreements, setAgreements] = useState({
+        personalInfo: false,
+        thirdParty: false,
+        marketing: false,
+    });
+    const [paymentMethod, setPaymentMethod] = useState({
+        kakao: false,
+        naver: false,
+    });
+
+    //약관 전체 동의
     const handleAgreeAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = e.target.checked;
         setAgreements({
@@ -212,6 +218,7 @@ const Payment: React.FC = () => {
         });
     };
 
+    //약관 동의 입력
     const handleAgreementChange = (
         field: keyof typeof agreements,
         value: boolean
@@ -219,6 +226,7 @@ const Payment: React.FC = () => {
         setAgreements({ ...agreements, [field]: value });
     };
 
+    //결제 방법 입력
     const handlePaymentChange = (
         field: keyof typeof paymentMethod,
         value: boolean
@@ -226,6 +234,7 @@ const Payment: React.FC = () => {
         setPaymentMethod({ ...paymentMethod, [field]: value });
     };
 
+    //발사이즈 입력
     const handleFootSizeChange = (index: number, change: number) => {
         const updatedStudentInfo = data.studentInfo.map(
             (student: StudentInfo, i: number) => {
@@ -241,15 +250,10 @@ const Payment: React.FC = () => {
         setData({ ...data, studentInfo: updatedStudentInfo });
     };
 
-    const handleRequestChange = (
-        event: React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
-        setData({
-            ...data,
-            requestComplain: event.target.value,
-        });
-    };
+    //컴플레인 입력
+    const [requestComplain, handleRequestChange] = useState<string>("");
 
+    //예약 제출
     const handleReservation = async () => {
         // 필수 약관 동의 체크
         if (!agreements.personalInfo || !agreements.thirdParty) {
@@ -285,7 +289,7 @@ const Payment: React.FC = () => {
                 designatedFee: selectedInstructor?.designatedFee ?? 0,
                 peopleOptionFee,
                 levelOptionFee: levelOptionFee ?? 0,
-                requestComplain: data.requestComplain || "",
+                requestComplain: requestComplain || "",
                 studentInfo: data.studentInfo.map((student: StudentInfo) => ({
                     ...student,
                     height:
@@ -398,10 +402,13 @@ const Payment: React.FC = () => {
                                     <div className="text-xs text-gray-500">
                                         요청사항
                                     </div>
-                                    <textarea
+                                    <input
                                         className="w-full p-2 border rounded"
-                                        value={data.requestComplain}
-                                        onChange={handleRequestChange}
+                                        type="text"
+                                        value={requestComplain}
+                                        onChange={(e) =>
+                                            handleRequestChange(e.target.value)
+                                        }
                                         placeholder="요청사항을 입력해주세요"
                                     />
                                 </div>

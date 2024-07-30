@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -16,6 +16,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import "../../../../public/assets/css/tooltip.css";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import { Instructor } from "../../../dto/UserInstructorDTO";
 
 const renderStars = (score: number) => {
     const filledStars = Math.floor(score);
@@ -80,6 +81,8 @@ const calculateFee = (fee: number | undefined, duration: number) => {
 
 const InstructorInfo = () => {
     const navigate = useNavigate();
+    const [selectedInstructor, setSelectedInstructor] =
+        useState<Instructor | null>(null);
 
     const goToPay = () => {
         if (!localStorage.getItem("accesstoken")) {
@@ -89,7 +92,7 @@ const InstructorInfo = () => {
         }
         navigate("/user/payment", {
             state: {
-                instructorId,
+                selectedInstructor,
                 userName,
                 designatedFee,
                 levelOptionFee,
@@ -168,6 +171,48 @@ const InstructorInfo = () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
         };
     }, []);
+
+    useEffect(() => {
+        setSelectedInstructor({
+            instructorId,
+            userName,
+            basicFee,
+            peopleOptionFee,
+            designatedFee,
+            levelOptionFee,
+            teamId,
+            teamName,
+            position,
+            description,
+            instructorUrl,
+            gender,
+            certificateInfo,
+            rating,
+            reviewCount,
+            cost,
+            lessonType,
+            reviews,
+        });
+    }, [
+        instructorId,
+        userName,
+        basicFee,
+        peopleOptionFee,
+        designatedFee,
+        levelOptionFee,
+        teamId,
+        teamName,
+        position,
+        description,
+        instructorUrl,
+        gender,
+        certificateInfo,
+        rating,
+        reviewCount,
+        cost,
+        lessonType,
+        reviews,
+    ]);
 
     return (
         <div className="min-h-screen h-auto bg-gray-50">
