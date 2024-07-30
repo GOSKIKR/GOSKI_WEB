@@ -45,7 +45,6 @@ const UserLessonlist = () => {
             }
         };
         fetchLessonAndPaymentData();
-        console.log(lessons);
     }, []);
 
     const getPaymentDetailByLessonId = (lessonId: number) => {

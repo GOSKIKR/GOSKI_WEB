@@ -93,12 +93,6 @@ const InstructorInfo = () => {
         navigate("/user/payment", {
             state: {
                 selectedInstructor,
-                userName,
-                designatedFee,
-                levelOptionFee,
-                basicFee,
-                peopleOptionFee,
-                duration,
             },
         });
     };
