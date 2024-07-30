@@ -1,42 +1,66 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { messaging } from "../../utils/config/firebase";
-import { getToken, onMessage } from "firebase/messaging";
+// import { messaging } from "../../utils/config/firebase";
+// import { getToken, onMessage } from "firebase/messaging";
 
 import UserNotification from "../user/UserNotification";
 import UserSettings from "../user/UserSettings";
+
+// import useNotifications from "../../utils/hooks/useNotifications";
 
 import apiClient from "../../utils/config/axiosConfig";
 
 import { CgProfile } from "react-icons/cg";
 import { IoMdLogOut } from "react-icons/io";
 
-// request 승인
-const requestPermission = async () => {
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      console.log("Notification permission granted.");
 
-      // get FCM token
-      const currentToken = await getToken(messaging, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-      });
-      if (currentToken) {
-        console.log("FCM token:", currentToken);
-      } else {
-        console.log(
-          "No registration token available. Request permission to generate one."
-        );
-      }
-    } else {
-      console.log("Unable to get permission to notify.");
-    }
-  } catch (error) {
-    console.error("Error requesting permission:", error);
-  }
-};
+// request 승인
+// const requestPermission = async () => {
+//   try {
+//     const permission = await Notification.requestPermission();
+//     if (permission === "granted") {
+//       console.log("Notification permission granted.");
+
+//       // get FCM token
+//       const currentToken = await getToken(messaging, {
+//         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+//       });
+//       if (currentToken) {
+//         console.log("FCM token:", currentToken);
+//       } else {
+//         console.log(
+//           "No registration token available. Request permission to generate one."
+//         );
+//       }
+//     } else {
+//       console.log("Unable to get permission to notify.");
+//     }
+//   } catch (error) {
+//     console.error("Error requesting permission:", error);
+//   }
+// };
+
+// 알림 가져오기
+// const getNotification = async () => {
+//   try {
+//     const currentToken = await getToken(messaging, {
+//       vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+//     });
+
+//     const response = await apiClient().get("/notification", {
+//       headers: {
+//         Authorization: `Bearer ${currentToken}`,
+//       },
+//     });
+
+//     if (response.status === 200) {
+//       console.log("알림 가져오기 성공:", response.data);
+//     }
+//   } catch (error) {
+//     console.error("알림 가져오기 중 오류 발생:", error);
+//   }
+// };
 
 type ProfileData = {
   birthDate: string;
@@ -78,19 +102,51 @@ const NavbarUser = () => {
   //   });
   // }, []);
 
-  useEffect(() => {
-    // 요청이 승인되었는지 확인
-    if (navigator.serviceWorker.controller) {
-      requestPermission();
-    } else {
-      navigator.serviceWorker.ready.then(() => {
-        requestPermission();
-      });
-    }
+  // useEffect(() => {
+  //   // 요청이 승인되었는지 확인
+  //   if (navigator.serviceWorker.controller) {
+  //     requestPermission();
+  //   } else {
+  //     navigator.serviceWorker.ready.then(() => {
+  //       //
+  //       requestPermission();
+  //     });
+  //   }
 
-    onMessage(messaging, (payload) => {
-      console.log("Message received. ", payload);
-    });
+  //   onMessage(messaging, (payload) => {
+  //     console.log("Message received. ", payload);
+  //   });
+  // }, []);
+
+  //http 이슈로 firebase 부분 주석 처리
+  // const notifications = useNotifications(messaging);
+  //알림 수신 동의 시 알림 받기
+  // useEffect(() => {
+  //   if (Notification.permission === "granted" && Array.isArray(notifications)) {
+  //     notifications.forEach((notification) => {
+  //       new Notification(notification.title, {
+  //         body: notification.body,
+  //         icon: notification.icon,
+  //       });
+  //     });
+  //   }
+  // }, [notifications]);
+
+  //쪽지 불러오기
+  const [notifications, setNotifications] = useState([]);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await apiClient().get("/notification");
+        if (response.status === 200) {
+          console.log("전체 알림 조회 성공:", response.data);
+          setNotifications(response.data.data);
+        }
+      } catch (error) {
+        console.error("전체 알림 조회 중 오류 발생:", error);
+      }
+    };
+    fetchNotifications();
   }, []);
 
   // 로그인시 사용자 정보 불러오기

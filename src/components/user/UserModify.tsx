@@ -160,9 +160,10 @@ const UserModify = () => {
               이름
             </label>
             <input
-              className="shadow appearance-none border rounded w-full lg:w-2/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow cursor-default appearance-none border rounded w-full lg:w-2/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               id="name"
+              readOnly
               placeholder={
                 profileData.userName
                   ? profileData.userName
@@ -277,6 +278,7 @@ const UserModify = () => {
               className="shadow appearance-none border rounded w-full lg:w-2/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="date"
               id="birthdate"
+              readOnly
               value={profileData.birthDate}
               onChange={(e) =>
                 setProfileData({ ...profileData, birthDate: e.target.value })
@@ -292,28 +294,28 @@ const UserModify = () => {
             </label>
             <div className="flex space-x-4 w-full lg:w-2/3">
               <button
-                className={`shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                className={`shadow cursor-default appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                   profileData.gender === "MALE" ? "bg-blue-500 text-white" : ""
                 }`}
                 value="MALE"
                 type="button"
-                onClick={() =>
-                  setProfileData({ ...profileData, gender: "MALE" })
-                }
+                // onClick={() =>
+                //   setProfileData({ ...profileData, gender: "MALE" })
+                // }
               >
                 남성
               </button>
               <button
-                className={`shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                className={`shadow cursor-default appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                   profileData.gender === "FEMALE"
                     ? "bg-blue-500 text-white"
                     : ""
                 }`}
                 value="FEMALE"
                 type="button"
-                onClick={() =>
-                  setProfileData({ ...profileData, gender: "FEMALE" })
-                }
+                // onClick={() =>
+                //   setProfileData({ ...profileData, gender: "FEMALE" })
+                // }
               >
                 여성
               </button>
