@@ -11,6 +11,13 @@ const dummyImages = [
   "https://via.placeholder.com/800x300?text=Slide+4",
 ];
 
+// const dummyImages = [
+//   "https://images.unsplash.com/photo-1549237519-bd4c85f1e618?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fHNraSUyMHJlc29ydHxlbnwwfHx8fDE2Mzc5NzcyMTk&ixlib=rb-1.2.1&q=80&w=800",
+//   "https://images.unsplash.com/photo-1516214104703-52d1e6d29ae9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDZ8fHNraSUyMHJlc29ydHxlbnwwfHx8fDE2Mzc5NzcyMjI&ixlib=rb-1.2.1&q=80&w=800",
+//   "https://images.unsplash.com/photo-1515876301351-0b6397a1dbe7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDl8fHNraSUyMHJlc29ydHxlbnwwfHx8fDE2Mzc5NzcyMjU&ixlib=rb-1.2.1&q=80&w=800",
+//   "https://images.unsplash.com/photo-1486887396153-fa416526c108?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDN8fHNraSUyMHJlc29ydHxlbnwwfHx8fDE2Mzc5NzcyMjg&ixlib=rb-1.2.1&q=80&w=800",
+// ];
+
 const ADCarousel = () => {
   const [currCarousel, setCurrCarousel] = useState(1);
   const [carouselTransition, setCarouselTransition] = useState(
@@ -75,12 +82,7 @@ const ADCarousel = () => {
             key={index}
             src={src}
             alt={`Slide ${index + 1}`}
-            className="w-full inline-block"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
+            className="w-full inline-block h-full sm:h-[500px] object-cover"
           />
         ))}
       </div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
+
 // import { messaging } from "../../utils/config/firebase";
 // import { getToken, onMessage } from "firebase/messaging";
 
@@ -145,8 +147,10 @@ const NavbarUser = () => {
         console.error("전체 알림 조회 중 오류 발생:", error);
       }
     };
-    fetchNotifications();
-  }, []);
+    if (isLogin) {
+      fetchNotifications();
+    }
+  }, [isLogin]);
 
   // 로그인시 사용자 정보 불러오기
   useEffect(() => {
@@ -181,8 +185,10 @@ const NavbarUser = () => {
       const refreshToken = localStorage.getItem("refreshtoken");
       const accessToken = localStorage.getItem("accesstoken");
 
-      await apiClient().get("/user/signout", {
+      await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/signout`, {
         headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${refreshToken}`,
           AccessToken: `Bearer ${accessToken}`,
         },
@@ -192,7 +198,8 @@ const NavbarUser = () => {
       localStorage.removeItem("refreshtoken");
       localStorage.removeItem("accesstoken");
       setIsLogin(false);
-      localStorage.removeItem("login-store")
+      localStorage.removeItem("login-store");
+      navigate("/login");
 
       return true; // 로그아웃 성공
     } catch (error) {
