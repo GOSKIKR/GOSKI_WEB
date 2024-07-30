@@ -74,7 +74,7 @@ const NavbarInstructor = () => {
       setIsLogin(false);
       localStorage.removeItem("instructor-store")
       localStorage.removeItem("login-store")
-
+      navigate("/login");
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);

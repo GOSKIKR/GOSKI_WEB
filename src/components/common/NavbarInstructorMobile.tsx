@@ -1,23 +1,48 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../../utils/config/axiosConfig";
 
 import UserNotification from "../user/UserNotification";
 
 const NavbarInstructorMobile = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const [animateMenu, setAnimateMenu] = useState(false);
+  const [isLogin, setIsLogin] = useState(
+    localStorage.getItem("accesstoken") ? true : false
+  );
 
-  const [showSetting, setShowSetting] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () =>  {
     // 로그아웃 로직 추가
-    setIsLogin(false);
-    navigate("/login");
+    try {
+      const refreshToken = localStorage.getItem("refreshtoken")
+      const accessToken = localStorage.getItem("accesstoken");
+
+      await apiClient().get("/user/signout", {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+          AccessToken: `Bearer ${accessToken}`,
+        },
+      });
+
+      // 로그아웃 성공 후 처리
+      localStorage.removeItem("refreshtoken");
+      localStorage.removeItem("accesstoken");
+      setIsLogin(false);
+      localStorage.removeItem("instructor-store")
+      localStorage.removeItem("login-store")
+      navigate("/login");
+      return true; // 로그아웃 성공
+    } catch (error) {
+      console.error("로그아웃 중 오류 발생:", error);
+      localStorage.removeItem("accesstoken");
+      localStorage.removeItem("refreshtoken");
+      return false; // 로그아웃 실패
+    }
   };
 
   const handleShowMenu = () => {
