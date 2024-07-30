@@ -43,12 +43,12 @@ module.exports = {
         },
         teamLogoSlide: {
           "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(-100%)" },
         },
         infiniteAnimation1: {
           "0%": { transform: "translateX(0%)" },
-          "50%": { transform: "translateX(-100%)" },
-          "50.1%": { transform: "translateX(100%)" },
+          "50%": { transform: "translateX(-50%)" },
+          "50.1%": { transform: "translateX(50%)" },
           "100%": { transform: "translateX(0%)" },
         },
         infiniteAnimation2: {
@@ -59,8 +59,8 @@ module.exports = {
       animation: {
         slideIn: "slideIn 0.3s forwards",
         slideOut: "slideOut 0.3s forwards",
-        teamLogoSlide: "teamLogoSlide  linear infinite",
-        slide1: "infiniteAnimation1 30s linear infinite",
+        teamLogoSlide: "teamLogoSlide linear infinite",
+        slide1: "infiniteAnimation1 linear infinite",
         slide2: "infiniteAnimation2 30s linear infinite",
       },
     },
