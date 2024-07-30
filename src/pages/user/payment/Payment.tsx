@@ -8,7 +8,6 @@ import { StudentInfo } from "../../../dto/UserReserveDTO";
 import StudentInfoForm from "../../../components/user/StudentInfoForm";
 import AgreementForm from "../../../components/user/AgreementForm";
 import PaymentMethodForm from "../../../components/user/PaymentMethodForm";
-import SelectInstructor from "../../../components/user/SelectInstructor";
 import apiClient from "../../../utils/config/axiosConfig";
 import { UserMyDTO } from "../../../dto/UserMyDTO";
 import { Instructor } from "../../../dto/UserInstructorDTO";
@@ -64,7 +63,6 @@ const weightOptions: Option[] = [
 ];
 
 interface PassedState {
-    studentInfo?: StudentInfo[];
     selectedInstructor?: Instructor | null;
     basicFee?: number;
     levelOptionFee?: number;
@@ -76,6 +74,7 @@ interface PassedState {
     lessonDate?: string;
     startTime?: string;
     duration?: number;
+    studentInfo?: StudentInfo[];
     [key: string]: any;
 }
 
@@ -91,10 +90,8 @@ const Payment: React.FC = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
-    //전달 받은 데이터
     const passedState: PassedState = location.state || {};
 
-    //store에서 꺼내올 정보들
     const {
         resortName: reserveResortName,
         lessonType: reserveLessonType,
@@ -104,8 +101,12 @@ const Payment: React.FC = () => {
         duration,
     } = userReserveStore();
 
-    const { teamId, basicFee, levelOptionFee, peopleOptionFee } =
-        teamInfoStore();
+    const {
+        teamId,
+        basicFee: teamBasicFee,
+        levelOptionFee: teamLevelOptionFee,
+        peopleOptionFee: teamPeopleOptionFee,
+    } = teamInfoStore();
 
     useEffect(() => {
         const fetchMyProfile = async () => {
@@ -144,27 +145,23 @@ const Payment: React.FC = () => {
             : { text: "0원", calculation: "" };
     };
 
-    const basicFeeResult = calculateFee(passedState.basicFee, duration);
-    const levelOptionFeeResult = calculateFee(
-        passedState.levelOptionFee,
-        duration
-    );
-    const peopleOptionFeeResult = calculateFee(
-        passedState.peopleOptionFee,
-        duration
-    );
-    const designatedFeeResult = passedState.designatedFee
-        ? `${passedState.designatedFee}원`
-        : "0원";
+    const basicFee = passedState.selectedInstructor?.basicFee || teamBasicFee;
+    const levelOptionFee =
+        passedState.selectedInstructor?.levelOptionFee || teamLevelOptionFee;
+    const peopleOptionFee =
+        passedState.selectedInstructor?.peopleOptionFee || teamPeopleOptionFee;
+    const designatedFee =
+        selectedInstructor?.designatedFee || passedState.designatedFee;
+
+    const basicFeeResult = calculateFee(basicFee, duration);
+    const levelOptionFeeResult = calculateFee(levelOptionFee, duration);
+    const peopleOptionFeeResult = calculateFee(peopleOptionFee, duration);
+    const designatedFeeResult = designatedFee ? `${designatedFee}원` : "0원";
 
     const totalFee =
-        ((passedState.basicFee ?? 0) +
-            (passedState.peopleOptionFee ?? 0) +
-            (passedState.levelOptionFee ?? 0)) *
-            duration +
-        (passedState.designatedFee ?? 0);
+        (basicFee + peopleOptionFee + (levelOptionFee ?? 0)) * duration +
+        (designatedFee ?? 0);
 
-    //학생 정보 초기화
     const initialStudentInfo = Array.from({ length: studentCount }, () => ({
         name: "",
         age: "",
@@ -174,18 +171,16 @@ const Payment: React.FC = () => {
         footSize: 260,
     }));
 
-    //전체 데이터 초기화
     const initialData = {
         ...passedState,
         instId: selectedInstructor?.instructorId,
-        designatedFees: selectedInstructor?.designatedFee,
+        designatedFees: designatedFee,
         studentInfo: passedState.studentInfo || initialStudentInfo,
         requestComplain: "",
     };
 
     const [data, setData] = useState(initialData);
 
-    //학생 정보 입력
     const handleInputChange = (
         index: number,
         field: keyof StudentInfo,
@@ -208,7 +203,6 @@ const Payment: React.FC = () => {
         naver: false,
     });
 
-    //약관 전체 동의
     const handleAgreeAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = e.target.checked;
         setAgreements({
@@ -218,7 +212,6 @@ const Payment: React.FC = () => {
         });
     };
 
-    //약관 동의 입력
     const handleAgreementChange = (
         field: keyof typeof agreements,
         value: boolean
@@ -226,7 +219,6 @@ const Payment: React.FC = () => {
         setAgreements({ ...agreements, [field]: value });
     };
 
-    //결제 방법 입력
     const handlePaymentChange = (
         field: keyof typeof paymentMethod,
         value: boolean
@@ -234,7 +226,6 @@ const Payment: React.FC = () => {
         setPaymentMethod({ ...paymentMethod, [field]: value });
     };
 
-    //발사이즈 입력
     const handleFootSizeChange = (index: number, change: number) => {
         const updatedStudentInfo = data.studentInfo.map(
             (student: StudentInfo, i: number) => {
@@ -250,10 +241,15 @@ const Payment: React.FC = () => {
         setData({ ...data, studentInfo: updatedStudentInfo });
     };
 
-    //컴플레인 입력
-    const [requestComplain, handleRequestChange] = useState<string>("");
+    const handleRequestChange = (
+        event: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        setData({
+            ...data,
+            requestComplain: event.target.value,
+        });
+    };
 
-    //예약 제출
     const handleReservation = async () => {
         // 필수 약관 동의 체크
         if (!agreements.personalInfo || !agreements.thirdParty) {
@@ -289,7 +285,7 @@ const Payment: React.FC = () => {
                 designatedFee: selectedInstructor?.designatedFee ?? 0,
                 peopleOptionFee,
                 levelOptionFee: levelOptionFee ?? 0,
-                requestComplain: requestComplain || "",
+                requestComplain: data.requestComplain || "",
                 studentInfo: data.studentInfo.map((student: StudentInfo) => ({
                     ...student,
                     height:
@@ -402,13 +398,10 @@ const Payment: React.FC = () => {
                                     <div className="text-xs text-gray-500">
                                         요청사항
                                     </div>
-                                    <input
+                                    <textarea
                                         className="w-full p-2 border rounded"
-                                        type="text"
-                                        value={requestComplain}
-                                        onChange={(e) =>
-                                            handleRequestChange(e.target.value)
-                                        }
+                                        value={data.requestComplain}
+                                        onChange={handleRequestChange}
                                         placeholder="요청사항을 입력해주세요"
                                     />
                                 </div>
@@ -495,7 +488,7 @@ const Payment: React.FC = () => {
                                 <div className="text-sm text-gray-500">
                                     지정 옵션비
                                 </div>
-                                <div>{designatedFeeResult ?? 0}</div>
+                                <div>{designatedFeeResult}</div>
                             </div>
                             <div className="w-full my-[1%] border-[1px] border-black"></div>
                             <div className="w-full flex flex-row justify-between pb-3">
