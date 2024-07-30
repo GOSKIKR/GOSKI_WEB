@@ -9,7 +9,19 @@ import {
 import UserNotification from "../user/UserNotification";
 import MobileSettingModal from "./MobileSettingModal";
 
+import axios from "axios";
+
 import apiClient from "../../utils/config/axiosConfig";
+
+type ProfileData = {
+  birthDate: string;
+  email: string;
+  gender: string;
+  phoneNumber: string;
+  profileUrl: string;
+  role: string;
+  userName: string;
+};
 
 const NavbarUserMobile = () => {
   const [isLogin, setIsLogin] = useState(
@@ -20,6 +32,15 @@ const NavbarUserMobile = () => {
   const [showSetting, setShowSetting] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [profileData, setProfileData] = useState<ProfileData>({
+    birthDate: "",
+    email: "",
+    gender: "",
+    phoneNumber: "",
+    profileUrl: "",
+    role: "",
+    userName: "",
+  });
 
   const navigate = useNavigate();
 
@@ -28,8 +49,10 @@ const NavbarUserMobile = () => {
       const refreshToken = localStorage.getItem("refreshtoken");
       const accessToken = localStorage.getItem("accesstoken");
 
-      await apiClient().get("/user/signout", {
+      await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/signout`, {
         headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${refreshToken}`,
           AccessToken: `Bearer ${accessToken}`,
         },
@@ -81,6 +104,34 @@ const NavbarUserMobile = () => {
   const handleCloseSettingModal = () => {
     setShowSetting(false);
   };
+
+  // 로그인시 사용자 정보 불러오기
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const accessToken = localStorage.getItem("accesstoken");
+
+        const response = await apiClient().get("/user/profile/user", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        console.log("response:", response);
+        setProfileData(response.data.data);
+
+        if (response.status === 200) {
+          console.log("사용자 정보 불러오기 성공:", response.data);
+        }
+      } catch (error) {
+        console.error("사용자 정보 불러오기 중 오류 발생:", error);
+      }
+    };
+
+    if (isLogin) {
+      fetchUser();
+    }
+  }, [isLogin]);
 
   return (
     <div className="flex w-full h-12 bg-primary-600  items-center px-4 relative">
