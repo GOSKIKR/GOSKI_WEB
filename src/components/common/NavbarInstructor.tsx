@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import UserNotification from "../user/UserNotification";
@@ -11,12 +11,13 @@ import { UserMyService } from "../../api/UserMyService";
 import { UserMyDTO } from "../../dto/UserMyDTO";
 import useLoginStore from "../../store/loginStore";
 
+import axios from "axios";
+
 const userService = new UserService();
 const userMyService = new UserMyService();
 
-
 const NavbarInstructor = () => {
-  const {role} = useLoginStore();
+  const { role } = useLoginStore();
 
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -39,30 +40,61 @@ const NavbarInstructor = () => {
     navigate("/login");
   };
 
-  useEffect( () =>  {
-    const fetchProfile = async() => {
-      const response =  role === 'INSTRUCTOR' ? 
-            await userService.getInstructorProfile() : 
-            await userMyService.getUserProfile() ;
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const response =
+        role === "INSTRUCTOR"
+          ? await userService.getInstructorProfile()
+          : await userMyService.getUserProfile();
 
-        if(response) {
-          console.log(response);
-          setProfileData(response)
-        }
-    }
-      
+      if (response) {
+        console.log(response);
+        setProfileData(response);
+      }
+    };
+
     if (isLogin) {
       fetchProfile();
     }
-  }, [role, isLogin,setProfileData]);
+  }, [role, isLogin, setProfileData]);
+
+  // const logout = async () => {
+  //   try {
+  //     const refreshToken = localStorage.getItem("refreshtoken");
+  //     const accessToken = localStorage.getItem("accesstoken");
+
+  //     await apiClient().get("/user/signout", {
+  //       headers: {
+  //         Authorization: `Bearer ${refreshToken}`,
+  //         AccessToken: `Bearer ${accessToken}`,
+  //       },
+  //     });
+
+  //     // 로그아웃 성공 후 처리
+  //     localStorage.removeItem("refreshtoken");
+  //     localStorage.removeItem("accesstoken");
+  //     setIsLogin(false);
+  //     localStorage.removeItem("instructor-store")
+  //     localStorage.removeItem("login-store")
+  //     navigate("/login");
+  //     return true; // 로그아웃 성공
+  //   } catch (error) {
+  //     console.error("로그아웃 중 오류 발생:", error);
+  //     localStorage.removeItem("accesstoken");
+  //     localStorage.removeItem("refreshtoken");
+  //     return false; // 로그아웃 실패
+  //   }
+  // };
 
   const logout = async () => {
     try {
       const refreshToken = localStorage.getItem("refreshtoken");
       const accessToken = localStorage.getItem("accesstoken");
 
-      await apiClient().get("/user/signout", {
+      await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/signout`, {
         headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${refreshToken}`,
           AccessToken: `Bearer ${accessToken}`,
         },
@@ -72,9 +104,10 @@ const NavbarInstructor = () => {
       localStorage.removeItem("refreshtoken");
       localStorage.removeItem("accesstoken");
       setIsLogin(false);
-      localStorage.removeItem("instructor-store")
-      localStorage.removeItem("login-store")
+      localStorage.removeItem("instructor-store");
+      localStorage.removeItem("login-store");
       navigate("/login");
+
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
@@ -131,7 +164,7 @@ const NavbarInstructor = () => {
             </button>
           </div>
           <div className="navbar-user__profile">
-          {profileData.profileUrl ? (
+            {profileData.profileUrl ? (
               <img
                 src={profileData.profileUrl}
                 alt="Profile"

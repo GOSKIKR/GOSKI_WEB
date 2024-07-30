@@ -198,7 +198,8 @@ const NavbarUser = () => {
       localStorage.removeItem("refreshtoken");
       localStorage.removeItem("accesstoken");
       setIsLogin(false);
-      localStorage.removeItem("login-store")
+      localStorage.removeItem("login-store");
+      navigate("/login");
 
       return true; // 로그아웃 성공
     } catch (error) {
