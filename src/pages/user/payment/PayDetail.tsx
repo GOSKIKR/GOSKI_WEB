@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
+import { TeamInfoDTO } from "../../../dto/TeamDTO";
+import { TeamService } from "../../../api/TeamService";
 
 const formatTime = (time: string) => {
     return time.slice(0, 2) + ":" + time.slice(2);
@@ -47,11 +49,9 @@ const getStatusName = (status: string) => {
 
 const PayDetail = () => {
     const navigate = useNavigate();
+    const [teamInfo, setTeamInfo] = useState<TeamInfoDTO | null>(null);
     const location = useLocation();
     const { lesson, paymentDetail } = location.state || {};
-
-    console.log(lesson);
-    console.log(paymentDetail);
 
     const goToCancle = () => {
         navigate(`/user/payment/cancel`, { state: { lesson, paymentDetail } });
@@ -75,6 +75,15 @@ const PayDetail = () => {
 
     const totalFee = paymentDetail?.totalAmount ?? 0;
 
+    const fetchTeamInfo = async () => {
+        if (!lesson) return;
+        const teamService = new TeamService();
+        const teamData = await teamService.getTeamInfo(lesson.teamId);
+        setTeamInfo(teamData);
+    };
+
+    fetchTeamInfo();
+
     return (
         <div>
             <NavbarUser />
@@ -84,11 +93,15 @@ const PayDetail = () => {
                 </div>
                 <div className="flex flex-col bg-primary-50 w-4/5 h-full rounded-lg shadow-md items-center py-12 space-y-10">
                     <div className="flex sm:flex-row flex-col bg-white w-4/5 sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
-                        <img
-                            src={lesson.profileUrl}
-                            alt="Profile"
-                            className="w-32 h-32 rounded-full"
-                        />
+                        <div className="flex items-center justify-center sm:h-32 sm:w-32 h-20 w-20">
+                            <img
+                                src={
+                                    lesson?.profileUrl ||
+                                    teamInfo?.teamProfileImageUrl
+                                }
+                                className="w-full h-full cursor-not-allowed rounded-lg"
+                            />
+                        </div>
                         <div className="flex flex-col ml-8 items-start space-y-2">
                             <div
                                 className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(

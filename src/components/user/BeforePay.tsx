@@ -39,16 +39,7 @@ const BeforePay: React.FC<BeforePayProps> = ({ onClose, instructorList }) => {
         navigate(`/user/payment`, {
             state: {
                 selectedInstructor,
-                basicFee,
-                levelOptionFee,
                 designatedFee: selectedInstructor?.designatedFee,
-                peopleOptionFee,
-                reserveResortName,
-                reserveLessonType,
-                studentCount,
-                lessonDate,
-                startTime,
-                duration,
             },
         });
     };

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserLessonDTO } from "../../dto/UserLessonDTO";
 import { UserPaylistDTO } from "../../dto/PaymentDTO";
+import { TeamInfoDTO } from "../../dto/TeamDTO";
+import { TeamService } from "../../api/TeamService";
 
 interface LessonlistCardProps {
     lesson: UserLessonDTO;
@@ -13,6 +15,18 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
     paymentDetail,
 }) => {
     const navigate = useNavigate();
+    const [teamInfo, setTeamInfo] = useState<TeamInfoDTO | null>(null);
+
+    useEffect(() => {
+        const fetchTeamInfo = async () => {
+            if (!lesson) return;
+            const teamService = new TeamService();
+            const teamData = await teamService.getTeamInfo(lesson.teamId);
+            setTeamInfo(teamData);
+        };
+
+        fetchTeamInfo();
+    }, [lesson]);
 
     const goToPayDetail = () => {
         navigate(`/user/payment/detail`, { state: { lesson, paymentDetail } });
@@ -63,10 +77,15 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
     return (
         <div className="bg-primary-50 h-40 w-full rounded-md shadow-lg flex flex-row px-3 sm:px-16 space-x-1 items-center">
             <div className="flex flex-row space-x-5 w-3/4 items-center">
-                <img
-                    src={lesson.profileUrl}
-                    className="sm:h-32 sm:w-32 h-20 w-20 rounded-lg cursor-not-allowed"
-                />
+                <div className="flex items-center justify-center sm:h-32 sm:w-32 h-20 w-20">
+                    <img
+                        src={
+                            lesson?.profileUrl || teamInfo?.teamProfileImageUrl
+                        }
+                        className="w-full h-full cursor-not-allowed rounded-lg"
+                    />
+                </div>
+
                 <div className="flex flex-col sm:w- w-3/4 pl-2 sm:px-4 sm:text-md text-sm sm:space-y-1 space-y-1">
                     <div
                         className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(
@@ -92,6 +111,7 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                         ).toLocaleTimeString("en-US", {
                             hour: "2-digit",
                             minute: "2-digit",
+                            hour12: false,
                         })}`}
                     </p>
                     <div className="flex flex-row ml-2 space-x-3">
@@ -102,9 +122,9 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                             <div>팀</div>
                         </div>
                         <div className="flex flex-row">
-                            <div>강사</div>
+                            {lesson.instructorName ? <div>강사</div> : ""}
                             <div className="text-primary-600 ml-1">
-                                {lesson.instructorName}
+                                {lesson.instructorName || ""}
                             </div>
                         </div>
                     </div>

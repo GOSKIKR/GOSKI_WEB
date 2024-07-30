@@ -134,13 +134,13 @@ const SetFilter: React.FC = () => {
             <div className="w-full">
                 {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
             </div>
-            <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
+            <div className="flex flex-col justify-center items-center px-4 pb-12 pt-20 space-y-3">
                 <img
                     src="/assets/images/AppLogo.png"
                     alt="App Logo"
                     className="w-16 h-auto"
                 />
-                <div className="text-xl font-extrabold">GOSKI 강습 예약</div>
+                <div className="text-xl font-[1000]">GOSKI 강습 예약</div>
             </div>
             <div className="flex flex-col sm:flex-row sm:space-x-10 w-full justify-center items-center sm:items-stretch">
                 <div className="p-6 w-[380px] sm:w-1/2 bg-primary-50 rounded-lg shadow-md space-y-6 mb-8">
