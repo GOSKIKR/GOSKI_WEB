@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import axios from "axios";
 
@@ -77,7 +78,7 @@ const NavbarUser = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isLogin, setIsLogin] = useState(
-    localStorage.getItem("accesstoken") ? true : false
+    sessionStorage.getItem("accesstoken") ? true : false
   );
 
   const [profileData, setProfileData] = useState<ProfileData>({
@@ -92,8 +93,12 @@ const NavbarUser = () => {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   const handleLoginBtn = () => {
-    navigate("/login");
+    if (location.pathname !== "/login") {
+      navigate("/login");
+    }
   };
 
   // useEffect(() => {
@@ -156,7 +161,7 @@ const NavbarUser = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const accessToken = localStorage.getItem("accesstoken");
+        const accessToken = sessionStorage.getItem("accesstoken");
 
         const response = await apiClient().get("/user/profile/user", {
           headers: {
@@ -182,8 +187,8 @@ const NavbarUser = () => {
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshtoken");
-      const accessToken = localStorage.getItem("accesstoken");
+      const refreshToken = sessionStorage.getItem("refreshtoken");
+      const accessToken = sessionStorage.getItem("accesstoken");
 
       await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/signout`, {
         headers: {
@@ -195,17 +200,17 @@ const NavbarUser = () => {
       });
 
       // 로그아웃 성공 후 처리
-      localStorage.removeItem("refreshtoken");
-      localStorage.removeItem("accesstoken");
+      sessionStorage.removeItem("refreshtoken");
+      sessionStorage.removeItem("accesstoken");
       setIsLogin(false);
-      localStorage.removeItem("login-store");
+      sessionStorage.removeItem("login-store");
       navigate("/login");
 
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
-      localStorage.removeItem("accesstoken");
-      localStorage.removeItem("refreshtoken");
+      sessionStorage.removeItem("accesstoken");
+      sessionStorage.removeItem("refreshtoken");
       return false; // 로그아웃 실패
     }
   };
@@ -279,7 +284,14 @@ const NavbarUser = () => {
           <div
             onClick={() => {
               setIsLogin(true);
-              handleLoginBtn();
+              {
+                location.pathname !== "/login" ? handleLoginBtn() : undefined;
+              }
+            }}
+            style={{
+              opacity: location.pathname === "/login" ? 0.5 : 1,
+              cursor:
+                location.pathname === "/login" ? "not-allowed" : "pointer",
             }}
             className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
           >

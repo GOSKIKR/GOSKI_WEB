@@ -31,7 +31,7 @@ const ProtectedRoute = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("accesstoken");
+    const token = sessionStorage.getItem("accesstoken");
     if (!token) {
       setIsAuthenticated(false);
       setShowModal(true);

@@ -25,7 +25,7 @@ const TeamInfo: React.FC = () => {
   const navigate = useNavigate();
 
   const openModal = () => {
-    if (localStorage.getItem("accesstoken") === null) {
+    if (sessionStorage.getItem("accesstoken") === null) {
       alert("로그인이 필요한 서비스입니다.");
       navigate("/login");
       return;
@@ -88,7 +88,7 @@ const TeamInfo: React.FC = () => {
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
-        const accessToken = localStorage.getItem("accesstoken");
+        const accessToken = sessionStorage.getItem("accesstoken");
         const response = await apiClient().post(
           `/lesson/reserve/novice/${teamId}`,
           {

@@ -25,7 +25,7 @@ type ProfileData = {
 
 const NavbarUserMobile = () => {
   const [isLogin, setIsLogin] = useState(
-    localStorage.getItem("accesstoken") ? true : false
+    sessionStorage.getItem("accesstoken") ? true : false
   );
   const [showMenu, setShowMenu] = useState(false);
   const [animateMenu, setAnimateMenu] = useState(false);
@@ -46,8 +46,8 @@ const NavbarUserMobile = () => {
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshtoken");
-      const accessToken = localStorage.getItem("accesstoken");
+      const refreshToken = sessionStorage.getItem("refreshtoken");
+      const accessToken = sessionStorage.getItem("accesstoken");
 
       await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/signout`, {
         headers: {
@@ -59,15 +59,15 @@ const NavbarUserMobile = () => {
       });
 
       // 로그아웃 성공 후 처리
-      localStorage.removeItem("refreshtoken");
-      localStorage.removeItem("accesstoken");
+      sessionStorage.removeItem("refreshtoken");
+      sessionStorage.removeItem("accesstoken");
       setIsLogin(false);
 
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
-      localStorage.removeItem("accesstoken");
-      localStorage.removeItem("refreshtoken");
+      sessionStorage.removeItem("accesstoken");
+      sessionStorage.removeItem("refreshtoken");
       return false; // 로그아웃 실패
     }
   };
@@ -109,7 +109,7 @@ const NavbarUserMobile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const accessToken = localStorage.getItem("accesstoken");
+        const accessToken = sessionStorage.getItem("accesstoken");
 
         const response = await apiClient().get("/user/profile/user", {
           headers: {

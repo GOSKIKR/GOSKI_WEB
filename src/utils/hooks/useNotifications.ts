@@ -14,7 +14,7 @@ const useNotifications = (messaging: Messaging) => {
 
   const getNotification = async () => {
     try {
-      const accesstoken = localStorage.getItem("accesstoken");
+      const accesstoken = sessionStorage.getItem("accesstoken");
 
       const response = await apiClient().get("/notification", {
         headers: {
