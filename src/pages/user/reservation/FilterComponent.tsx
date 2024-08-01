@@ -268,11 +268,15 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                             </div>
                         </div>
 
-                        <TimePicker
-                            startTime={filterLessonTime}
-                            setStartTime={setFilterLessonTime}
-                            position={2}
-                        />
+                        <div className="flex flex-col items-center w-full sm:w-1/6 relative">
+                            <label className="mb-1 text-sm">시작 시간</label>
+
+                            <TimePicker
+                                startTime={filterLessonTime}
+                                setStartTime={setFilterLessonTime}
+                                position={2}
+                            />
+                        </div>
 
                         <div className="flex flex-col items-center w-full sm:w-1/6">
                             <label className="mb-1 text-sm">강습 시간</label>
