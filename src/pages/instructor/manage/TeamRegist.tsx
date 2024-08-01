@@ -1,27 +1,32 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Editor from "../../../components/common/Editor";
 import TeamManageHeader from "../../../components/instructor/manage/TeamManageHeader";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import AddTeamMemberModal from "../../../components/instructor/manage/AddTeamMemberModal";
 import TeamMember from "../../../interface/TeamMember";
 import NavbarInstructorMobile from "../../../components/common/NavbarInstructorMobile";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 
 const TeamRegist: React.FC = () => {
     const [profileImage, setProfileImage] = useState<string | null>(null);
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [teamIntro, setTeamIntro] = useState<string>('');
+    const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
-    const[innerWidth,setInnerWidth] = useState(window.innerWidth);
+    const navigate = useNavigate();
+
 
     const handleResize = () => {
         setInnerWidth(window.innerWidth);
     }
 
     useEffect(() => {
-        window.addEventListener("resize",handleResize);
-        return(() => window.removeEventListener("resize",handleResize))
-    })
-
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -47,10 +52,32 @@ const TeamRegist: React.FC = () => {
         setTeamMembers([...teamMembers, member]);
     };
 
+    const handleSubmit = async () => {
+        const requestData = {
+            profileImage,
+            teamIntro,
+            teamMembers,
+        };
+        console.log(requestData);
+
+        try {
+            const response = await axios.post('/api/team', requestData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            console.log(response)
+            alert('팀이 성공적으로 등록되었습니다!');
+            navigate("/instructor/main")
+        } catch (error) {
+            console.error('팀 등록 중 오류가 발생했습니다.', error);
+            alert('팀 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+        }
+    };
 
     return (
         <div>
-            {innerWidth > 640 ? <NavbarInstructor/>  : <NavbarInstructorMobile/>}
+            {innerWidth > 640 ? <NavbarInstructor /> : <NavbarInstructorMobile />}
             <TeamManageHeader />
             <div className="flex justify-center">
                 <div className="p-6">
@@ -83,10 +110,10 @@ const TeamRegist: React.FC = () => {
                     <div className="team-intro mb-6 bg-primary-50 rounded-lg shadow-lg">
                         <div className="flex justify-between items-center p-6">
                             <div className="text-lg font-bold text-center align-middle">팀 소개글</div>
-                            <button className="bg-primary-500 text-white rounded px-4 py-2 hover:bg-primary-700">업로드</button>
+                            <button onClick={handleSubmit} className="bg-primary-500 text-white rounded px-4 py-2 hover:bg-primary-700">업로드</button>
                         </div>
                         <div className="px-6 pb-6">
-                            <Editor />
+                            <Editor value={teamIntro} onChange={setTeamIntro} />
                         </div>
                     </div>
                     <div className={`team-member mb-6 bg-primary-50 rounded-lg shadow-lg ${teamMembers.length === 0 ? 'h-[300px]' : ''}`}>
@@ -105,13 +132,13 @@ const TeamRegist: React.FC = () => {
                                         <div className="text-sm font-bold">{member.role}</div>
                                         <div className="text-sm">{member.name}</div>
                                         <div className="text-sm">{member.phone}</div>
-                                    </div>-
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
                     <div className="flex justify-center">
-                        <button className="bg-primary-700 text-white m-2 px-4 py-2 rounded hover:bg-primary-500">
+                        <button onClick={handleSubmit} className="bg-primary-700 text-white m-2 px-4 py-2 rounded hover:bg-primary-500">
                             팀 등록
                         </button>
                         <button className="bg-primary-900 text-white m-2 px-4 py-2 rounded hover:bg-primary-700">

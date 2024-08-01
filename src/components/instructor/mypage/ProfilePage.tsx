@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import useInstructorStore from '../../../store/InstStore';
+import useLoginStore from '../../../store/loginStore';
 import { UserService } from '../../../api/UserService';
+import { UserMyService } from '../../../api/UserMyService';
+import { UserMyDTO } from '../../../dto/UserMyDTO';
+import { InstructorProfileDTO } from '../../../dto/InstructorDTO';
 
 const userService = new UserService();
+const userMyService = new UserMyService();
 
 const ProfilePage: React.FC = () => {
-    const { userName, profileUrl, gender, role, description, phoneNumber, birthDate, setProfile } = useInstructorStore();
+    const { userName, profileUrl, gender, description, phoneNumber, birthDate, setProfile } = useInstructorStore();
+    const { role } = useLoginStore();
 
     const [profileImage, setProfileImage] = useState<File | null>(null);
     const [profilePreview, setProfilePreview] = useState<string | null>(profileUrl);
@@ -13,24 +19,22 @@ const ProfilePage: React.FC = () => {
     const [isTeamLeader, setIsTeamLeader] = useState<boolean>(role === 'OWNER');
     const [newDescription, setNewDescription] = useState<string>(description);
 
-
     useEffect(() => {
         const fetchProfile = async () => {
-            const profile = await userService.getInstructorProfile();
+            const profile: UserMyDTO | InstructorProfileDTO | null = role === "INSTRUCTOR" 
+                ? await userService.getInstructorProfile() 
+                : await userMyService.getUserProfile();
             if (profile) {
-                console.log(profile)
                 setProfile(profile);
                 setProfilePreview(profile.profileUrl);
                 setSelectedGender(profile.gender);
                 setIsTeamLeader(profile.role === 'OWNER');
-                setNewDescription(profile.description);
+                setNewDescription('description' in profile ? (profile as InstructorProfileDTO).description : '');
             }
         };
 
-        if (!profileUrl) { // profileUrl이 없을 때만 fetchProfile 실행
-            fetchProfile();
-        }
-    }, [setProfile, profileUrl]);
+        fetchProfile();
+    }, [role, setProfile, profileUrl]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -54,10 +58,12 @@ const ProfilePage: React.FC = () => {
     };
 
     const instProfileUpdate = async () => {
-        await userService.updateInstructorProfile(description, profileImage);
-        const updatedProfile = await userService.getInstructorProfile();
-        if(updatedProfile){
-            setProfile(updatedProfile);
+        if (role === "INSTRUCTOR") {
+            await userService.updateInstructorProfile(newDescription, profileImage);
+            const updatedProfile = await userService.getInstructorProfile();
+            if (updatedProfile) {
+                setProfile(updatedProfile);
+            }
         }
     };
 
@@ -141,6 +147,7 @@ const ProfilePage: React.FC = () => {
                             value={newDescription}
                             onChange={(e) => setNewDescription(e.target.value)}
                             className="w-full p-2 border rounded h-24 resize-none"
+                            disabled={role === "OWNER"}
                         />
                     </div>
                     <button

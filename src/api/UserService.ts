@@ -13,7 +13,7 @@ export class UserService {
                     Authorization: `Bearer ${accessToken}`,
                 },
             });
-            console.log(response.data.data);
+            // console.log(response.data.data);
             if (response && response.status === httpStatusCode.OK) {
                 return response.data.data as InstructorProfileDTO;
             }
