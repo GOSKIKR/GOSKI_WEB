@@ -52,7 +52,10 @@ const StudentInfoForm: React.FC<StudentInfoFormProps> = ({
             <div className="font-bold mb-2">강습 인원 정보</div>
             <div className="sm:grid sm:grid-cols-3 flex flex-col gap-4">
                 {studentInfo.map((student, index) => (
-                    <div key={index} className="bg-white p-4 space-y-2">
+                    <div
+                        key={index}
+                        className="bg-white p-4 space-y-2 rounded-md"
+                    >
                         <div className="flex flex-col space-y-2">
                             <input
                                 type="text"
@@ -64,7 +67,7 @@ const StudentInfoForm: React.FC<StudentInfoFormProps> = ({
                                         e.target.value
                                     )
                                 }
-                                className="border p-1 h-8 rounded bg-primary-100 placeholder:text-black"
+                                className="border p-1 px-2 h-7 rounded bg-primary-100 text-xs placeholder:text-black text-black"
                                 placeholder="이름"
                             />
                             <select
@@ -76,7 +79,7 @@ const StudentInfoForm: React.FC<StudentInfoFormProps> = ({
                                         e.target.value
                                     )
                                 }
-                                className="border p-1 rounded bg-primary-100 h-8"
+                                className="border p-1 rounded bg-primary-100 h-7 px-1.5 text-xs text-black"
                                 name="연령대"
                             >
                                 <option value="select">연령대</option>
@@ -91,11 +94,11 @@ const StudentInfoForm: React.FC<StudentInfoFormProps> = ({
                             </select>
                             <div className="flex flex-row flex-1 items-center justify-center text-center">
                                 <button
-                                    className={`grow h-8 rounded-l-lg ${
+                                    className={`grow h-7 rounded-l-lg ${
                                         student.gender === "male"
                                             ? "bg-primary-200"
                                             : "bg-white"
-                                    } border-gray-300 border-y-2 border-l-2`}
+                                    } border-gray-300 border-y-2 border-l-2 text-xs`}
                                     onClick={() =>
                                         handleInputChange(
                                             index,
@@ -107,11 +110,11 @@ const StudentInfoForm: React.FC<StudentInfoFormProps> = ({
                                     남성
                                 </button>
                                 <button
-                                    className={`grow h-8 rounded-r-lg ${
+                                    className={`grow h-7 rounded-r-lg ${
                                         student.gender === "female"
                                             ? "bg-primary-200"
                                             : "bg-white"
-                                    } border-gray-300 border-r-2 border-y-2`}
+                                    } border-gray-300 border-r-2 border-y-2 text-xs`}
                                     onClick={() =>
                                         handleInputChange(
                                             index,
@@ -132,7 +135,7 @@ const StudentInfoForm: React.FC<StudentInfoFormProps> = ({
                                         e.target.value
                                     )
                                 }
-                                className="border p-1 rounded bg-primary-100 h-8"
+                                className="border p-1 px-1.5 rounded bg-primary-100 h-7 text-xs"
                                 name="신장"
                             >
                                 <option value="select">신장</option>
@@ -154,7 +157,7 @@ const StudentInfoForm: React.FC<StudentInfoFormProps> = ({
                                         e.target.value
                                     )
                                 }
-                                className="border p-1 rounded bg-primary-100 h-8"
+                                className="border p-1 px-1.5 text-xs rounded bg-primary-100 h-7"
                                 name="체중"
                             >
                                 <option value="select">체중</option>
@@ -167,29 +170,33 @@ const StudentInfoForm: React.FC<StudentInfoFormProps> = ({
                                     </option>
                                 ))}
                             </select>
-                            <div className="flex items-center justify-center">
-                                <button
-                                    className="border p-1 w-1/5 h-8 rounded bg-primary-200"
+                            <div className="flex items-center justify-center space-x-0.5">
+                                <div
+                                    className="w-1/5 h-7 rounded bg-primary-200 items-center justify-center"
                                     onClick={() =>
                                         handleFootSizeChange(index, -10)
                                     }
                                 >
-                                    -
-                                </button>
+                                    <div className="w-full h-full text-center">
+                                        -
+                                    </div>
+                                </div>
                                 <input
                                     type="number"
                                     value={student.footSize}
                                     readOnly
-                                    className="border p-1 w-3/5 h-8 rounded bg-primary-100 placeholder:text-black text-center"
+                                    className="w-3/5 h-7 rounded bg-primary-100 placeholder:text-black text-center text-xs"
                                 />
-                                <button
-                                    className="border p-1 w-1/5 h-8 rounded bg-primary-200"
+                                <div
+                                    className="w-1/5 h-7 rounded bg-primary-200"
                                     onClick={() =>
                                         handleFootSizeChange(index, 10)
                                     }
                                 >
-                                    +
-                                </button>
+                                    <div className="w-full h-full text-center">
+                                        +
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -75,8 +75,8 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
     };
 
     return (
-        <div className="bg-primary-50 h-40 w-full rounded-md shadow-lg flex flex-row px-3 sm:px-16 space-x-1 items-center">
-            <div className="flex flex-row space-x-5 w-3/4 items-center">
+        <div className="bg-primary-50 h-40 sm:w-4/5 w-full rounded-md shadow-lg flex flex-row px-3 sm:px-16 space-x-1 items-center">
+            <div className="flex flex-row space-x-2 w-4/5 items-center">
                 <div className="flex items-center justify-center sm:h-32 sm:w-32 h-20 w-20">
                     <img
                         src={
@@ -86,7 +86,7 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                     />
                 </div>
 
-                <div className="flex flex-col sm:w- w-3/4 pl-2 sm:px-4 sm:text-md text-sm sm:space-y-1 space-y-1">
+                <div className="flex flex-col w-3/4 sm:px-4 sm:text-md text-sm sm:space-y-1.5 space-y-1">
                     <div
                         className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(
                             lesson.lessonStatus
@@ -95,26 +95,30 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                         {getStatusName(lesson.lessonStatus)}
                     </div>
                     <div className="pl-1.5">{lesson.resortName}</div>
-                    <p className="text-gray-500 sm:text-sm text-xs px-1.5">
-                        {`${lesson.lessonDate} (${new Date(
-                            lesson.lessonDate
-                        ).toLocaleString("ko-KR", {
-                            weekday: "short",
-                        })}) `}
-                        {`${formatTime(lesson.startTime)} ~ ${new Date(
-                            new Date(
-                                `${lesson.lessonDate}T${formatTime(
-                                    lesson.startTime
-                                )}`
-                            ).getTime() +
-                                lesson.duration * 60 * 60 * 1000
-                        ).toLocaleTimeString("en-US", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false,
-                        })}`}
-                    </p>
-                    <div className="flex flex-row ml-2 space-x-3">
+                    <div className="text-gray-500 text-xs px-1.5 sm:flex-row flex-col">
+                        <div>
+                            {`${lesson.lessonDate} (${new Date(
+                                lesson.lessonDate
+                            ).toLocaleString("ko-KR", {
+                                weekday: "short",
+                            })}) `}
+                        </div>
+                        <div>
+                            {`${formatTime(lesson.startTime)} ~ ${new Date(
+                                new Date(
+                                    `${lesson.lessonDate}T${formatTime(
+                                        lesson.startTime
+                                    )}`
+                                ).getTime() +
+                                    lesson.duration * 60 * 60 * 1000
+                            ).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                            })}`}
+                        </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row ml-2 sm:sspace-x-3">
                         <div className="flex flex-row">
                             <div className="text-primary-600">
                                 {lesson.teamName}
@@ -131,7 +135,7 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                 </div>
             </div>
 
-            <div className="flex flex-col sm:w-1/3 w-1/3 h-full sm:px-0 sm:text-md text-xs justify-center sm:items-end items-center space-y-3">
+            <div className="flex flex-col sm:w-1/3 w-1/3 h-full sm:px-0 sm:text-md text-xs justify-center sm:items-end items-center space-y-2">
                 {paymentDetail && (
                     <div className="flex flex-row space-x-2 sm:text-sm text-[10px]">
                         <div className="text-gray-500">결제 금액</div>
@@ -139,7 +143,7 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                     </div>
                 )}
                 <div
-                    className="text-center sm:w-24 sm:text-sm w-20 sm:h-6 text-xs py-0.5 bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white"
+                    className="text-center sm:w-24 w-20 sm:h-6 text-[11px] sm:text-xs bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white flex items-center justify-center"
                     onClick={goToPayDetail}
                 >
                     <div>결제 상세</div>
@@ -148,19 +152,19 @@ const LessonlistCard: React.FC<LessonlistCardProps> = ({
                     <>
                         {lesson.hasFeedback ? (
                             <div
-                                className="text-center space-x-2 sm:w-24 sm:h-6 sm:text-sm w-20 text-xs py-0.5 bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white"
+                                className="text-center space-x-2 sm:w-24 sm:h-6 text-[11px] sm:text-xs w-20  py-0.5 bg-primary-500 hover:bg-primary-800 rounded-md shadow-md text-white flex items-center justify-center"
                                 onClick={goToFeedback}
                             >
                                 <div>피드백 확인</div>
                             </div>
                         ) : (
-                            <div className="text-center space-x-2 sm:w-24 sm:h-6 sm:text-sm w-20 text-xs py-0.5 bg-gray-400 rounded-md shadow-md text-white">
+                            <div className="text-center space-x-2 sm:w-24 sm:h-6 text-[11px] sm:text-xs w-20  py-0.5 bg-gray-400 rounded-md shadow-md text-white flex items-center justify-center">
                                 <div>피드백 미작성</div>
                             </div>
                         )}
 
                         <div
-                            className={`text-center space-x-2 sm:w-24 sm:text-sm sm:h-6 w-20 text-xs py-0.5 rounded-md shadow-md text-white ${
+                            className={`text-center space-x-2 sm:w-24 sm:text-xs text-[11px] sm:h-6 w-20 text-xs py-0.5 rounded-md shadow-md text-white flex items-center justify-center ${
                                 lesson.hasReview
                                     ? "bg-gray-400"
                                     : "bg-primary-500 hover:bg-primary-800  cursor-pointer"

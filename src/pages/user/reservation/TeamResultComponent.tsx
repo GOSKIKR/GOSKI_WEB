@@ -68,7 +68,7 @@ const TeamResultComponent: React.FC<TeamResultComponentProps> = ({
     return (
         <div
             key={data.teamId}
-            className="bg-primary-50 shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer mb-4 mx-5"
+            className="bg-primary-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer mb-4 mx-5"
             onClick={() => handleTeamClicked(data.teamId)}
         >
             <div className="flex flex-row space-x-5 w-full py-2 items-center">
@@ -89,7 +89,7 @@ const TeamResultComponent: React.FC<TeamResultComponentProps> = ({
                     </div>
                     <p className="text-xs text-gray-500">{data.description}</p>
                     <div className="flex items-center flex-row space-x-1">
-                        <IoIosStar className="text-yellow-200" />
+                        <IoIosStar className="text-yellow-400" />
                         <div className="text-sm font-semibold mr-4">
                             {Math.round(data.rating * 100) / 100}
                         </div>
