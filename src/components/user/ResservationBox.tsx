@@ -149,7 +149,7 @@ const ReservationBox = () => {
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
             종류
           </label>
-          <div className="flex flex-1 rounded-lg shadow-md sm:w-28 ">
+          <div className="flex flex-1 rounded-lg shadow-md sm:w-28 w-full ">
             <button
               className={`flex-1 h-9 rounded-l-lg ${
                 lessonType === "SKI"
@@ -182,7 +182,7 @@ const ReservationBox = () => {
               e.target.classList.remove("text-gray-500");
               handleLocationChange(e);
             }}
-            className="px-6 bg-white text-gray-500 rounded-lg shadow-md flex-1 h-9"
+            className="px-6 bg-white text-gray-500 rounded-lg shadow-md flex-1 h-9 w-full"
           >
             <option value="select" disabled hidden>
               장소를 선택하세요
@@ -198,7 +198,7 @@ const ReservationBox = () => {
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
             강습인원
           </label>
-          <div className="flex items-center flex-1 bg-white rounded-lg shadow-md h-9">
+          <div className="flex items-center flex-1 bg-white rounded-lg shadow-md h-9 w-full">
             <button
               onClick={handleParticipantDecrement}
               className={`h-9 w-1/3 text-2xl font-extrabold ${
@@ -226,7 +226,7 @@ const ReservationBox = () => {
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
             일정 선택
           </label>
-          <div className="flex flex-1">
+          <div className="flex flex-1 w-full">
             <input
               type="date"
               onChange={(e) => setSelectedDate(e.target.value)}
@@ -249,7 +249,7 @@ const ReservationBox = () => {
               setDurationTime(parseInt(e.target.value));
               console.log(e.target.value);
             }}
-            className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
+            className="px-6 bg-white shadow-md rounded-lg flex-1 h-9 w-full"
           >
             <option value="">강습 시간을 선택하세요</option>
             {durationTimes.map((time) => (
@@ -263,7 +263,7 @@ const ReservationBox = () => {
           <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
             레벨 선택
           </label>
-          <div className="flex flex-1 shadow-md rounded-lg ">
+          <div className="flex flex-1 shadow-md rounded-lg w-full">
             <button
               className={`h-14 ${
                 level === "BEGINNER"

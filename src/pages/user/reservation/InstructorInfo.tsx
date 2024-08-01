@@ -213,7 +213,7 @@ const InstructorInfo = () => {
             <div className="w-full">
                 {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
             </div>
-            <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
+            <div className="flex flex-col justify-center items-center px-12 py-8 space-y-3">
                 <img
                     src="/assets/images/AppLogo.png"
                     alt="App Logo"
@@ -223,20 +223,20 @@ const InstructorInfo = () => {
                     GOSKI 강습 예약
                 </div>
             </div>
-            <div className="flex flex-col sm:flex-row px-6 sm:px-12 sm:space-x-6 space-y-6 w-full">
+            <div className="flex flex-col sm:flex-row px-6 sm:px-24 sm:space-x-16 space-y-6 w-full sm:justify-center">
                 <div className="flex flex-col w-full sm:w-7/12 bg-white rounded-lg shadow-lg p-8">
-                    <div className="w-full sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
+                    <div className="w-full sm:pb-3 pb-3 text-sm font-extrabold text-gray-700">
                         강사 소개
                     </div>
-                    <div className="flex flex-row w-full h-40 bg-gray-100 rounded-lg items-center px-10 sm:py-6 justify-center space-x-6">
+                    <div className="flex flex-row w-full h-40 bg-gray-100 rounded-lg items-center sm:py-6 justify-center  ">
                         <img
                             src={instructorUrl}
                             alt="Instructor"
-                            className="w-28 h-28 rounded-full object-cover"
+                            className="w-28 h-28 rounded-md object-cover"
                         />
-                        <div className="w-3/5 flex flex-col space-y-1 items-center justify-center">
+                        <div className="w-1/2 flex flex-col space-y-2 items-center pl-12">
                             <div className="w-40 flex flex-row items-center">
-                                <div className="font-bold w-1/3 text-gray-600">
+                                <div className="text-sm font-bold w-1/4 text-gray-500">
                                     직책
                                 </div>
                                 <div className="bg-primary-400 text-white px-2 py-1 rounded-md text-sm">
@@ -248,7 +248,7 @@ const InstructorInfo = () => {
                                 </div>
                             </div>
                             <div className="w-40 flex flex-row items-center">
-                                <div className="font-bold w-1/3 text-gray-600">
+                                <div className="text-sm font-bold w-1/4 text-gray-500">
                                     이름
                                 </div>
                                 <div className="font-bold text-gray-800">
@@ -256,7 +256,7 @@ const InstructorInfo = () => {
                                 </div>
                             </div>
                             <div className="w-40 flex flex-row items-center">
-                                <div className="font-bold w-1/3 text-gray-600">
+                                <div className="text-sm font-bold w-1/4 text-gray-500">
                                     성별
                                 </div>
                                 {gender === "MALE" ? (
@@ -269,19 +269,22 @@ const InstructorInfo = () => {
                     </div>
 
                     {/* 자기소개 */}
-                    <div className="w-full pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
+                    <div className="w-full pt-10 pb-3 text-sm font-extrabold text-gray-700">
                         자기 소개
                     </div>
-                    <div className="flex flex-row w-full h-32 bg-gray-100 rounded-lg items-center px-6 py-4 text-gray-700">
+                    <div className="flex flex-row w-full h-32 bg-gray-100 rounded-lg items-center p-6 text-gray-700 text-sm">
                         {description}
                     </div>
 
                     {/* 자격증 */}
-                    <div className="w-full pt-10 sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
+                    <div className="w-full pt-10 pb-3 text-sm font-extrabold text-gray-700">
                         자격증
                     </div>
-                    <div className="w-full h-48 bg-gray-100 rounded-lg px-6 py-4">
-                        <Slider {...settings}>
+                    <div className="flex items-center justify-center w-full h-48 bg-gray-100 rounded-lg px-6 py-4">
+                        <Slider
+                            {...settings}
+                            className="w-11/12 bg-gray-200 rounded-md"
+                        >
                             {certificateInfo.map((data, index) => (
                                 <div
                                     key={index}
@@ -291,10 +294,10 @@ const InstructorInfo = () => {
                                         <img
                                             src={data.certificateImageUrl}
                                             alt={data.certificateName}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover rounded-md"
                                         />
                                     </div>
-                                    <div className="text-gray-700">
+                                    <div className="text-gray-600 w-full text-center text-sm">
                                         {data.certificateName}
                                     </div>
                                 </div>
@@ -303,15 +306,21 @@ const InstructorInfo = () => {
                     </div>
 
                     {/* 리뷰 */}
-                    <div className="w-full flex flex-row pt-10 sm:pb-6 pb-3 text-lg font-extrabold  items-center space-x-4">
-                        <div>리뷰 ({reviewCount})</div>
-                        <div className="flex flex-row items-center space-x-1">
-                            <FaStar color="#FEFD48" />
-                            <div className="text-base text-gray-500">
-                                {Math.round(rating * 10) / 10}
+                    <div className="w-full pt-10 pb-3 text-sm font-extrabold text-gray-700">
+                        리뷰
+                    </div>
+                    {reviewCount > 0 && (
+                        <div className="w-full flex flex-row pt-10 sm:pb-6 pb-3 text-lg font-extrabold  items-center space-x-4">
+                            <div>리뷰 ({reviewCount})</div>
+                            <div className="flex flex-row items-center space-x-1">
+                                <FaStar color="#FEFD48" />
+                                <div className="text-base text-gray-500">
+                                    {Math.round(rating * 10) / 10}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
+
                     <div className="flex flex-col w-full h-120 justify-between items-center text-lg font-extrabold text-gray-700 overflow-hidden">
                         <div className="w-full overflow-y-auto snap-proximity">
                             {reviews?.length > 0 ? (
@@ -347,7 +356,7 @@ const InstructorInfo = () => {
                                     </div>
                                 ))
                             ) : (
-                                <div className="flex flex-col w-full bg-white space-y-2 p-4 my-2 rounded-md shadow-sm">
+                                <div className="flex flex-col w-full bg-white space-y-2 p-4 my-2 rounded-md shadow-sm text-base">
                                     <div className="text-gray-700">
                                         리뷰가 없습니다.
                                     </div>
@@ -357,7 +366,7 @@ const InstructorInfo = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col sm:w-4/12">
+                <div className="flex flex-col sm:w-1/4">
                     <div className="flex flex-row items-center pb-2">
                         <div className="font-extrabold">최종 결제금액</div>
                         <div
@@ -409,7 +418,7 @@ const InstructorInfo = () => {
                         <div>{designatedFeeResult ?? 0}</div>
                     </div>
                     <div className="w-full my-[1%] border-[1px] border-black"></div>
-                    <div className="w-full flex flex-row justify-between pb-3">
+                    <div className="w-full flex flex-row justify-between pb-5">
                         <div className="font-extrabold">총 결제금액</div>
                         <div className="text-blue-500 font-extrabold">
                             {totalFee}원
@@ -418,7 +427,7 @@ const InstructorInfo = () => {
 
                     <button
                         onClick={goToPay}
-                        className="h-12 w-full bg-blue-500 text-white rounded-lg shadow-md text-center flex items-center justify-center cursor-pointer hover:bg-blue-600 transition duration-200"
+                        className="h-12 w-full bg-primary-500 text-white rounded-lg shadow-md text-center flex items-center justify-center cursor-pointer hover:bg-primary-700 transition duration-200"
                     >
                         예약하기
                     </button>

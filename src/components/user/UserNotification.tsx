@@ -13,6 +13,13 @@ type NotificationContentProps = {
   read?: boolean;
 };
 
+type NotificationContentErrorProps = {
+  id: number;
+  content: string;
+  error: string;
+  title: string;
+};
+
 type NotificationItemProps = NotificationContentProps & {
   handleDelete: (id: number) => void;
 };
@@ -63,8 +70,11 @@ const UserNotification = ({
   setShowNotification,
   setShowSettings,
 }: UserNotificationProps): JSX.Element => {
-  //쪽지 불러오기
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notificationContent, setNotificationContent] = useState<
+    (NotificationContentProps | NotificationContentErrorProps)[]
+  >([]);
+
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -80,20 +90,33 @@ const UserNotification = ({
     fetchNotifications();
   }, []);
 
-  const [notificationContent, setNotificationContent] = useState<
-    NotificationContentProps[]
-  >(
-    notifications.map((notification: any) => {
+  useEffect(() => {
+    const parsedNotifications = notifications.map((notification: any) => {
       if (typeof notification.content === "string") {
-        const parsedContent = JSON.parse(notification.content);
-        return {
-          id: notification.id,
-          ...parsedContent,
-        };
+        try {
+          const parsedContent = JSON.parse(notification.content);
+          return {
+            id: notification.notificationId,
+            ...parsedContent,
+          };
+        } catch (error) {
+          console.error(
+            `Error parsing JSON for notification with id ${notification.notificationId}:`,
+            error
+          );
+          return {
+            id: notification.notificationId,
+            content: notification.content,
+            error: "Invalid JSON format",
+            title: "Invalid Notification",
+          };
+        }
       }
       return notification;
-    })
-  );
+    });
+    setNotificationContent(parsedNotifications);
+  }, [notifications]);
+
   const [unreadCount, setUnreadCount] = useState(0);
 
   const handleNotificationBtn = () => {
@@ -101,37 +124,36 @@ const UserNotification = ({
     setShowSettings(false);
   };
 
-  // 전체 알림 조회
   useEffect(() => {
-    if (notificationContent.length > 0) {
-      setUnreadCount(notificationContent.length);
-    } else {
-      setUnreadCount(0);
-    }
-  }, []);
+    setUnreadCount(
+      notificationContent.reduce((count, notification) => {
+        if ("read" in notification && !notification.read) {
+          return count + 1;
+        }
+        return count;
+      }, 0)
+    );
+  }, [notificationContent]);
 
-  // 알림 읽음 처리
   const handleRead = async () => {
     try {
       const response = await apiClient().patch(`/notification/read-all`);
       if (response.status === 200) {
         console.log("알림 읽음 처리 성공:", response.data);
+        setNotificationContent((prev) =>
+          prev.map((notification) =>
+            "read" in notification
+              ? { ...notification, read: true }
+              : notification
+          )
+        );
         setUnreadCount(0);
-        // setNotificationContent((prev) =>
-        //   prev.map((notification) =>
-        //     notification.id === id
-        //       ? { ...notification, read: true }
-        //       : notification
-        //   )
-        // );
-        // setUnreadCount((prev) => prev - 1);
       }
     } catch (error) {
       console.error("알림 읽음 처리 중 오류 발생:", error);
     }
   };
 
-  // 알림 삭제
   const handleDelete = async (id: number) => {
     try {
       const response = await apiClient().delete(`/notification/delete/${id}`);
@@ -140,16 +162,13 @@ const UserNotification = ({
         setNotificationContent((prev) =>
           prev.filter((notification) => notification.id !== id)
         );
-        if (!notificationContent.find((n) => n.id === id)?.read) {
-          setUnreadCount((prev) => prev - 1);
-        }
+        setUnreadCount((prev) => prev - 1);
       }
     } catch (error) {
       console.error("알림 삭제 중 오류 발생:", error);
     }
   };
 
-  // 전체 알림 삭제
   const handleDeleteAll = async () => {
     try {
       const response = await apiClient().delete(`/notification/delete-all`);
@@ -163,23 +182,11 @@ const UserNotification = ({
     }
   };
 
-  // 알림 데이터 파싱
-  useEffect(() => {
-    const parsedNotifications = notifications.map((notification: any) => {
-      if (typeof notification.content === "string") {
-        const parsedContent = JSON.parse(notification.content);
-        return {
-          id: notification.notificationId,
-          ...parsedContent,
-        };
-      }
-      return notification;
-    });
-    setNotificationContent(parsedNotifications);
-  }, [notifications]);
-
-  console.log("원시 알림데이터", notifications);
-  console.log("파싱된 알림데이터", notificationContent);
+  const isNotificationContentError = (
+    notification: NotificationContentProps | NotificationContentErrorProps
+  ): notification is NotificationContentErrorProps => {
+    return (notification as NotificationContentErrorProps).error !== undefined;
+  };
 
   return (
     <div className="relative flex items-center justify-center w-10 h-10">
@@ -207,15 +214,37 @@ const UserNotification = ({
             </button>
           </div>
           <div className="flex flex-col p-2">
-            {notificationContent.map((notification, index) => (
-              <NotificationItem
-                key={index}
-                {...notification}
-                handleDelete={
-                  () => handleDelete(notification.id) // 알림 삭제 처리
-                }
-              />
-            ))}
+            {notificationContent.map((notification, index) =>
+              isNotificationContentError(notification) ? (
+                <div
+                  key={index}
+                  className="notification-errr flex flex-col p-4 my-2 bg-white rounded-lg shadow-md cursor-pointer "
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center">
+                      <div className="text-lg font-semibold">
+                        {notification.content}
+                      </div>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(notification.id);
+                      }}
+                      className="text-red-500 hover:text-red-700 transition duration-300"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <NotificationItem
+                  key={index}
+                  {...notification}
+                  handleDelete={() => handleDelete(notification.id)}
+                />
+              )
+            )}
           </div>
         </div>
       )}

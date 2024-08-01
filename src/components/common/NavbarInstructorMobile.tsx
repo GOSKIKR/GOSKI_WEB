@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../utils/config/axiosConfig";
+import axios from "axios";
 
 import UserNotification from "../user/UserNotification";
 
@@ -16,14 +17,44 @@ const NavbarInstructorMobile = () => {
 
   const navigate = useNavigate();
 
-  const handleLogout = async () =>  {
-    // 로그아웃 로직 추가
+  // const handleLogout = async () =>  {
+  //   // 로그아웃 로직 추가
+  //   try {
+  //     const refreshToken = localStorage.getItem("refreshtoken")
+  //     const accessToken = localStorage.getItem("accesstoken");
+
+  //     await apiClient().get("/user/signout", {
+  //       headers: {
+  //         Authorization: `Bearer ${refreshToken}`,
+  //         AccessToken: `Bearer ${accessToken}`,
+  //       },
+  //     });
+
+  //     // 로그아웃 성공 후 처리
+  //     localStorage.removeItem("refreshtoken");
+  //     localStorage.removeItem("accesstoken");
+  //     setIsLogin(false);
+  //     localStorage.removeItem("instructor-store")
+  //     localStorage.removeItem("login-store")
+  //     navigate("/login");
+  //     return true; // 로그아웃 성공
+  //   } catch (error) {
+  //     console.error("로그아웃 중 오류 발생:", error);
+  //     localStorage.removeItem("accesstoken");
+  //     localStorage.removeItem("refreshtoken");
+  //     return false; // 로그아웃 실패
+  //   }
+  // };
+
+  const handleLogout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshtoken")
+      const refreshToken = localStorage.getItem("refreshtoken");
       const accessToken = localStorage.getItem("accesstoken");
 
-      await apiClient().get("/user/signout", {
+      await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/signout`, {
         headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${refreshToken}`,
           AccessToken: `Bearer ${accessToken}`,
         },
@@ -33,9 +64,10 @@ const NavbarInstructorMobile = () => {
       localStorage.removeItem("refreshtoken");
       localStorage.removeItem("accesstoken");
       setIsLogin(false);
-      localStorage.removeItem("instructor-store")
-      localStorage.removeItem("login-store")
+      localStorage.removeItem("instructor-store");
+      localStorage.removeItem("login-store");
       navigate("/login");
+
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);

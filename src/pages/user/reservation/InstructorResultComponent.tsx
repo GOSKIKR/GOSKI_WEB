@@ -81,27 +81,27 @@ const InstructorResultComponent: React.FC<InstructorResultComponentProps> = ({
     return (
         <div
             key={data.instructorId}
-            className="bg-primary-50 shadow-lg rounded-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300 ease-in-out transform w-40 h-80 flex flex-col items-center justify-center m-4"
+            className="bg-primary-50 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg sm:w-1/4 w-1/2 h-80 flex flex-col items-center justify-center mx-3 my-4"
             onClick={() => handleInstructorClicked(data.instructorId)}
         >
             {/* 강사 사진 (1/3 영역) */}
-            <div className="h-32 w-32 overflow-hidden rounded-lg">
+            <div className="h-36 w-36 overflow-hidden rounded-lg">
                 <img
                     src={data.instructorUrl}
                     alt="instructor"
-                    className="w-full h-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 ease-in-out"
                 />
             </div>
 
             {/* 정보 영역 (2/3) */}
-            <div className="h-1/2 p-4 px-3 flex flex-col justify-between">
+            <div className="h-1/2 w-full pt-4 px-4 flex flex-col justify-between">
                 <div>
                     <h3 className="text-base font-semibold mb-2">
                         {data.userName}
                     </h3>
                     <div>
                         <div className="text-xs text-primary-400">자격증</div>
-                        <p className="text-xs text-gray-600 mb-4">
+                        <p className="text-[10px] text-gray-600 mb-4">
                             {data.certificateInfoVOs
                                 .map(
                                     (certificate) => certificate.certificateName
@@ -109,15 +109,16 @@ const InstructorResultComponent: React.FC<InstructorResultComponentProps> = ({
                                 .join(" ")}
                         </p>
                     </div>
-                    <p className="flex flex-row text-xs font-medium">
-                        <IoIosStar className="text-yellow-200 mr-1" />
-                        평점{" "}
-                        {Math.round((data.rating + Number.EPSILON) * 100) /
-                            100}{" "}
-                        리뷰({data.reviewCount})
-                    </p>
                 </div>
-                <div className="pt-2">
+                <div>
+                    {data.reviewCount > 0 && (
+                        <p className="flex w-full flex-row text-xs font-medium items-center">
+                            <IoIosStar className="text-yellow-400 mr-1" />
+                            {Math.round((data.rating + Number.EPSILON) * 100) /
+                                100}{" "}
+                            ({data.reviewCount})
+                        </p>
+                    )}
                     <p className="text-xs font-bold">
                         가격 {data.basicFee.toLocaleString()}원 ~
                     </p>
