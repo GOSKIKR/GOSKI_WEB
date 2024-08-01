@@ -156,11 +156,17 @@ const TeamInfo: React.FC = () => {
                 </div>
                 <div className="flex flex-col w-full sm:w-4/12 self-start sticky top-5">
                     <div className="w-full">
-                        <TimePicker
-                            startTime={selectedStartTime}
-                            setStartTime={setSelectedStartTime}
-                            position={1}
-                        />
+                        <div className="flex flex-row items-center sm:space-x-4 mb-4">
+                            <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
+                                시작 시간
+                            </label>
+                            <TimePicker
+                                startTime={selectedStartTime}
+                                setStartTime={setSelectedStartTime}
+                                position={1}
+                            />
+                        </div>
+
                         <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 강습 시간
