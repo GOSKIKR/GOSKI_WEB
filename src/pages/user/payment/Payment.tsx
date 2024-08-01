@@ -15,6 +15,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import "../../../../public/assets/css/tooltip.css";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import { LuDot } from "react-icons/lu";
 
 const convertLessonType = (lessonTypeString: string): number => {
     if (lessonTypeString === "SKI") {
@@ -91,6 +92,7 @@ const Payment: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const passedState: PassedState = location.state || {};
+    const [requestComplain, handleRequestChange] = useState<string>("");
 
     const {
         resortName: reserveResortName,
@@ -241,15 +243,6 @@ const Payment: React.FC = () => {
         setData({ ...data, studentInfo: updatedStudentInfo });
     };
 
-    const handleRequestChange = (
-        event: React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
-        setData({
-            ...data,
-            requestComplain: event.target.value,
-        });
-    };
-
     const handleReservation = async () => {
         // 필수 약관 동의 체크
         if (!agreements.personalInfo || !agreements.thirdParty) {
@@ -338,7 +331,7 @@ const Payment: React.FC = () => {
                     <NavbarUserMobile />
                 )}
             </div>
-            <div className="p-10">
+            <div className="p-10 pb-20">
                 <div className="text-2xl font-bold mb-8">결제하기</div>
                 <div className="flex flex-col sm:flex-row sm:space-x-5">
                     <div className="w-full sm:w-3/5 space-y-5">
@@ -346,34 +339,24 @@ const Payment: React.FC = () => {
                             <div className="font-extrabold text-lg mb-2">
                                 강습 예약 정보
                             </div>
-                            <div className="flex flex-row space-x-12">
+                            <div className="flex flex-row space-x-12 pl-2">
                                 <div className="flex flex-col w-36">
-                                    <div className="text-xs text-gray-500">
-                                        스키장 이름
-                                    </div>
                                     <div>{reserveResortName}</div>
-                                </div>
-                                {selectedInstructor &&
-                                    Object.keys(selectedInstructor).length >
-                                        0 && (
-                                        <div className="flex flex-col w-1/3">
-                                            <div className="text-xs text-gray-500">
-                                                지정 강사
-                                            </div>
-                                            <div>
-                                                {selectedInstructor.userName}
-                                            </div>
-                                        </div>
+                                    {selectedInstructor && (
+                                        <div>{selectedInstructor.userName}</div>
                                     )}
+                                </div>
                             </div>
 
-                            <div className="flex flex-row space-x-12 pt-3">
+                            <div className="flex flex-row space-x-8 pt-4 pl-2">
                                 <div className="flex flex-col w-1/3">
                                     <div className="text-xs text-gray-500">
                                         일시
                                     </div>
-                                    <div className="text-sm">{lessonDate}</div>
-                                    <div className="text-sm">{`${formatTime(
+                                    <div className="text-sm pt-1 text-gray-700">
+                                        {lessonDate}
+                                    </div>
+                                    <div className="text-sm text-gray-700">{`${formatTime(
                                         startTime
                                     )} ~ ${new Date(
                                         new Date(
@@ -392,16 +375,21 @@ const Payment: React.FC = () => {
                                     <div className="text-xs text-gray-500">
                                         인원
                                     </div>
-                                    <div>{studentCount}명</div>
+                                    <div className="text-sm text-gray-700 pt-1">
+                                        {studentCount}명
+                                    </div>
                                 </div>
-                                <div className="flex flex-col w-2/5">
+                                <div className="flex flex-col w-3/5">
                                     <div className="text-xs text-gray-500">
                                         요청사항
                                     </div>
-                                    <textarea
-                                        className="w-full p-2 border rounded"
-                                        value={data.requestComplain}
-                                        onChange={handleRequestChange}
+                                    <input
+                                        type="text"
+                                        className="w-full p-2 border rounded text-xs"
+                                        value={requestComplain}
+                                        onChange={(e) =>
+                                            handleRequestChange(e.target.value)
+                                        }
                                         placeholder="요청사항을 입력해주세요"
                                     />
                                 </div>
@@ -413,13 +401,17 @@ const Payment: React.FC = () => {
                                 <div className="text-xs text-gray-500">
                                     예약자
                                 </div>
-                                <div>{profile?.userName}</div>
+                                <div className="text-sm">
+                                    {profile?.userName}
+                                </div>
                             </div>
-                            <div className="flex flex-row space-x-4 items-center">
+                            <div className="flex flex-row space-x-4 items-center pt-1">
                                 <div className="text-xs text-gray-500">
                                     연락처
                                 </div>
-                                <div>{profile?.phoneNumber}</div>
+                                <div className="text-sm">
+                                    {profile?.phoneNumber}
+                                </div>
                             </div>
                         </div>
                         <StudentInfoForm
@@ -449,49 +441,57 @@ const Payment: React.FC = () => {
                             </div>
 
                             <div className="w-full flex flex-row justify-between items-center">
-                                <div className="text-sm text-gray-500">
+                                <div className="text-xs text-gray-500">
                                     기존 강습비
                                 </div>
                                 <div className="flex flex-col items-end">
                                     <div className="text-gray-400 text-xs">
                                         {basicFeeResult.calculation}
                                     </div>
-                                    <div>{basicFeeResult.text}</div>
+                                    <div className="text-sm">
+                                        {basicFeeResult.text}
+                                    </div>
                                 </div>
                             </div>
                             <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
                             <div className="w-full flex flex-row justify-between items-center">
-                                <div className="text-sm text-gray-500">
+                                <div className="text-xs text-gray-500">
                                     레벨 옵션비
                                 </div>
                                 <div className="flex flex-col items-end">
                                     <div className="text-gray-400 text-xs">
                                         {levelOptionFeeResult.calculation}
                                     </div>
-                                    <div>{levelOptionFeeResult.text}</div>
+                                    <div className="text-sm">
+                                        {levelOptionFeeResult.text}
+                                    </div>
                                 </div>
                             </div>
                             <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
                             <div className="w-full flex flex-row justify-between items-center">
-                                <div className="text-sm text-gray-500">
+                                <div className="text-xs text-gray-500">
                                     인원 옵션비
                                 </div>
                                 <div className="flex flex-col items-end">
                                     <div className="text-gray-400 text-xs">
                                         {peopleOptionFeeResult.calculation}
                                     </div>
-                                    <div>{peopleOptionFeeResult.text}</div>
+                                    <div className="text-sm">
+                                        {peopleOptionFeeResult.text}
+                                    </div>
                                 </div>
                             </div>
                             <div className="w-full my-1 border-[0.5px] border-gray-300"></div>
-                            <div className="w-full flex flex-row justify-between">
-                                <div className="text-sm text-gray-500">
+                            <div className="w-full flex flex-row justify-between mb-2">
+                                <div className="text-xs text-gray-500">
                                     지정 옵션비
                                 </div>
-                                <div>{designatedFeeResult}</div>
+                                <div className="text-sm">
+                                    {designatedFeeResult}
+                                </div>
                             </div>
                             <div className="w-full my-[1%] border-[1px] border-black"></div>
-                            <div className="w-full flex flex-row justify-between pb-3">
+                            <div className="w-full flex flex-row justify-between pb-3 mt-2">
                                 <div className="font-extrabold">
                                     총 결제금액
                                 </div>
@@ -510,10 +510,16 @@ const Payment: React.FC = () => {
                             handlePaymentChange={handlePaymentChange}
                         />
                         <div
-                            className="bg-primary-500 p-5 rounded-lg shadow-md text-white text-center cursor-pointer"
+                            className="bg-primary-500 p-5 rounded-lg shadow-md text-white text-center text-lg cursor-pointer flex flex-row items-center justify-center space-x-2"
                             onClick={handleReservation}
                         >
-                            예약하기
+                            {totalFee > 0 && (
+                                <div className="flex flex-row items-center space-x-2">
+                                    <div>{totalFee}원</div>
+                                    <LuDot />
+                                </div>
+                            )}
+                            <div className="font-extrabold">예약하기</div>
                         </div>
                     </div>
                 </div>

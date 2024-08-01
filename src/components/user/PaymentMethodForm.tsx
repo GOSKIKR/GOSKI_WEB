@@ -12,7 +12,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
     return (
         <div className="bg-primary-50 p-5 rounded-lg shadow-md">
             <div className="font-bold mb-2">결제 방법</div>
-            <div className="flex flex-row">
+            <div className="flex flex-row space-x-6">
                 <div className="flex flex-row items-center">
                     <input
                         type="radio"
@@ -24,7 +24,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
                     />{" "}
                     <img
                         src="/assets/images/kakaoPay.png"
-                        className="py-2 ml-4 h-2/3 w-auto"
+                        className="py-2 ml-4 h-12 w-auto"
                     />
                 </div>
                 <div className="flex flex-row items-center">
@@ -38,7 +38,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
                     />{" "}
                     <img
                         src="/assets/images/naverPay.png"
-                        className="py-2 ml-4 h-2/3 w-auto"
+                        className="py-2 ml-4 h-12 w-auto"
                     />
                 </div>
             </div>
