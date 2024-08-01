@@ -48,7 +48,7 @@ const NavbarInstructor = () => {
           : await userMyService.getUserProfile();
 
       if (response) {
-        console.log(response);
+        // console.log(response);
         setProfileData(response);
       }
     };
