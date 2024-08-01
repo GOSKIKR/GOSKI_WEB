@@ -1,6 +1,7 @@
-import { create,StateCreator} from "zustand";
+import { create, StateCreator } from "zustand";
 import { persist, PersistOptions } from "zustand/middleware";
 import { CertificateUrlVO, InstructorProfileDTO } from "../dto/InstructorDTO";
+import { UserMyDTO } from "../dto/UserMyDTO";
 
 interface InstructorState {
     userName: string;
@@ -13,7 +14,7 @@ interface InstructorState {
     dayoff: number;
     permission: number;
     certificates: { certificateId: number, certificateImageUrl: string }[];
-    setProfile: (profile: InstructorProfileDTO) => void;
+    setProfile: (profile: UserMyDTO | InstructorProfileDTO) => void;
     setDescription: (newDesc: string) => void;
     setCertificates: (certificates: { certificateId: number, certificateImageUrl: string }[]) => void;
 }
@@ -36,23 +37,20 @@ const useInstructorStore = create<InstructorState>(
             dayoff: 0,
             permission: 0,
             certificates: [],
-            setProfile: (profile: InstructorProfileDTO) => set(() => ({
+            setProfile: (profile: UserMyDTO | InstructorProfileDTO) => set(() => ({
                 userName: profile.userName,
                 gender: profile.gender,
                 profileUrl: profile.profileUrl,
                 role: profile.role,
                 phoneNumber: profile.phoneNumber,
-                description: profile.description,
+                description: 'description' in profile ? profile.description : '',
                 birthDate: profile.birthDate,
-                dayoff: profile.dayoff,
-                permission: profile.permission,
-                certificates: profile.certificates.map(cert => ({
-                    certificateId: cert.certificateId,
-                    certificateImageUrl: cert.certificateImageUrl,
-                }))
+                dayoff: 'dayoff' in profile ? profile.dayoff : 0,
+                permission: 'permission' in profile ? profile.permission : 0,
+                certificates: 'certificates' in profile ? profile.certificates : []
             })),
-            setDescription: (newDesc:string) => set(() => ({ description: newDesc })),
-            setCertificates: (certificates : CertificateUrlVO[]) => set(() => ({ certificates })),
+            setDescription: (newDesc: string) => set(() => ({ description: newDesc })),
+            setCertificates: (certificates: CertificateUrlVO[]) => set(() => ({ certificates })),
         }),
         {
             name: "instructor-store", // 이름을 지정하여 localStorage에 저장
