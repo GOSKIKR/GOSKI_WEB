@@ -9,6 +9,7 @@ const TeamInfoEdit : React.FC = () => {
     const [profileImage, setProfileImage] = useState<string | ArrayBuffer | null>(null);
     const [profileUrl, setProfileUrl] = useState("");
     const [description, setDescription] = useState("");
+    const [teamIntro, setTeamIntro] = useState<string>('');
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +84,7 @@ const TeamInfoEdit : React.FC = () => {
                             <button className="bg-primary-500 text-white rounded px-4 py-2 hover:bg-primary-700">수정하기</button>
                         </div>
                         <div className="px-6 pb-6">
-                            <Editor/>
+                            <Editor value={teamIntro} onChange={setTeamIntro} />
                         </div>
                     </div>
                     <div className="flex justify-center">
