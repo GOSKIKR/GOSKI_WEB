@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import useLoginStore from "../../../store/loginStore";
 
 const TeamManageHeader: React.FC = () => {
     const location = useLocation();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 640);
+
+    const {role} = useLoginStore();
 
     const handleResize = () => {
         setIsSmallScreen(window.innerWidth <= 640);
@@ -40,6 +43,7 @@ const TeamManageHeader: React.FC = () => {
                         </div>
                         {isDropdownOpen && (
                             <div className="absolute left-0 right-0 mt-2 bg-primary-50 border rounded shadow-lg z-10">
+                                {role === "OWNER" && (
                                 <Link
                                     to="/instructor/team/regist"
                                     className={`block px-4 py-2 text-center ${location.pathname === '/instructor/team/regist' ? 'text-primary-700' : 'text-black'}`}
@@ -47,6 +51,7 @@ const TeamManageHeader: React.FC = () => {
                                 >
                                     팀 등록
                                 </Link>
+                                )}
                                 <Link
                                     to="/instructor/team/edit"
                                     className={`block px-4 py-2 text-center ${location.pathname === '/instructor/team/edit' ? 'text-primary-700' : 'text-black'}`}
