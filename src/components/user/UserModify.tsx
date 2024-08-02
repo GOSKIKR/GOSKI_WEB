@@ -52,7 +52,7 @@ const UserModify = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const accessToken = localStorage.getItem("accesstoken");
+        const accessToken = sessionStorage.getItem("accesstoken");
 
         const response = await apiClient().get("/user/profile/user", {
           headers: {
@@ -89,7 +89,7 @@ const UserModify = () => {
     // multipart/form-data 형식으로 이미지 업로드
     const fetchImageUpload = async () => {
       try {
-        const accessToken = localStorage.getItem("accesstoken");
+        const accessToken = sessionStorage.getItem("accesstoken");
         if (!accessToken) {
           console.error("No access token found");
           return;

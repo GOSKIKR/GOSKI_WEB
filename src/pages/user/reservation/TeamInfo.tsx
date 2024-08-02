@@ -24,16 +24,100 @@ const TeamInfo: React.FC = () => {
 
     const navigate = useNavigate();
 
-    const openModal = () => {
-        if (localStorage.getItem("accesstoken") === null) {
-            alert("로그인이 필요한 서비스입니다.");
-            navigate("/login");
-            return;
-        } else if (!instructorList || instructorList.length === 0) {
-            navigate("/user/payment");
-        } else {
-            setIsModalOpen(true);
-        }
+  const openModal = () => {
+    if (sessionStorage.getItem("accesstoken") === null) {
+      alert("로그인이 필요한 서비스입니다.");
+      navigate("/login");
+      return;
+    } else if (!instructorList || instructorList.length === 0) {
+      navigate("/user/payment");
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const {
+    teamId,
+    teamName,
+    description,
+    cost,
+    teamProfileUrl,
+    rating,
+    instructors,
+    teamImages,
+    basicFee,
+    peopleOptionFee,
+    designatedFee,
+    levelOptionFee,
+    lessonType,
+    reviewCount,
+    reviews,
+  } = teamInfoStore();
+
+  const {
+    resortId: reserveResortId,
+    resortName: reserveResortName,
+    lessonType: reserveLessonType,
+    studentCount,
+    lessonDate,
+    startTime,
+    duration,
+    level,
+  } = userReserveStore();
+
+  const {
+    resortId,
+    resortName,
+    resortLocation,
+    longitude,
+    latitude,
+    lessonTime,
+  } = userResortsStore();
+
+  useEffect(() => {
+    setFilterLessonDuration(duration);
+    setFilterLessonDurationTimes(lessonTime);
+    setSelectedStartTime(startTime);
+  }, [lessonTime]);
+
+  // 팀원 리스트 받아오기
+  useEffect(() => {
+    const fetchInstructors = async () => {
+      try {
+        const accessToken = sessionStorage.getItem("accesstoken");
+        const response = await apiClient().post(
+          `/lesson/reserve/novice/${teamId}`,
+          {
+            instructorsList: instructors,
+            studentCount,
+            duration,
+            level,
+            lessonType,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setInstructorList(response.data.data);
+        console.log(instructorList);
+      } catch (error) {
+        console.error("Error fetching instructors:", error);
+      }
+    };
+    fetchInstructors();
+  }, [teamId, studentCount, duration, level]);
+
+  //새로고침시 경고창
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
     };
 
     const closeModal = () => {

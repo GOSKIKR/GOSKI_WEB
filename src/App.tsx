@@ -38,95 +38,79 @@ import PaySuccess from "./pages/user/payment/PaySuccess";
 import PayFail from "./pages/user/payment/PayFail";
 
 import useLoginStore from "./store/loginStore";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 const App: React.FC = () => {
-    const {role} = useLoginStore();
+  const { role } = useLoginStore();
 
-    return (
-        <div>
-            <Routes>
-                <Route path="/" element={<UserMain />} />
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<UserMain />} />
 
-                <Route path="/notice" element={<Notice />} />
+        <Route path="/notice" element={<Notice />} />
 
-                <Route path="/login" element={<Login />} />
-                <Route
-                    path="/login/forgot-password"
-                    element={<ForgotPassword />}
-                />
-                <Route path="/login/register" element={<Register />} />
-                <Route path="/dm/ws" element={<ChatComponent />} />
-                <Route path="/user/coupon" element={<Coupon />} />
-                <Route path="/reserve/set" element={<SetFilter />} />
-                <Route path="/reserve/result" element={<FilterResult />} />
-                <Route path="/reserve/info/team" element={<TeamInfo />} />
-                <Route
-                    path="/reserve/info/instructor"
-                    element={<InstructorInfo />}
-                />
-                <Route path="/user/payment/detail" element={<PayDetail />} />
-                <Route path="/user/payment/cancel" element={<PayCancel />} />
-                <Route path="/user/payment" element={<Payment />} />
-                <Route path="/user/payment/approve" element={<PayApprove />} />
-                <Route path="/user/payment/success" element={<PaySuccess />} />
-                <Route path="/user/payment/fail" element={<PayFail />} />
-                <Route path="/user/review" element={<WriteReview />} />
-                <Route path="/user/feedback" element={<UserFeedback />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/login/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login/register" element={<Register />} />
 
-                <Route path="/user/my" element={<UserMypage />} />
+        <Route path="/reserve/set" element={<SetFilter />} />
+        <Route path="/reserve/result" element={<FilterResult />} />
+        <Route path="/reserve/info/team" element={<TeamInfo />} />
+        <Route path="/reserve/info/instructor" element={<InstructorInfo />} />
 
-                <Route path="/instructor/main" element={<InstructorMain />} />
-                <Route path="/instructor/boss/main" element={<BossMain />} />
-                <Route
-                    path="/instructor/team"
-                    element={<Navigate to="/instructor/team/regist" />}
-                />
-                <Route
-                    path="/instructor/detail/:lessonId"
-                    element={<LessonDetail />}
-                />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dm/ws" element={<ChatComponent />} />
+          <Route path="/user/coupon" element={<Coupon />} />
+          <Route path="/user/payment/detail" element={<PayDetail />} />
+          <Route path="/user/payment/cancel" element={<PayCancel />} />
+          <Route path="/user/payment" element={<Payment />} />
+          <Route path="/user/payment/approve" element={<PayApprove />} />
+          <Route path="/user/payment/success" element={<PaySuccess />} />
+          <Route path="/user/payment/fail" element={<PayFail />} />
+          <Route path="/user/review" element={<WriteReview />} />
+          <Route path="/user/feedback" element={<UserFeedback />} />
 
-                <Route
-                    path="/instructor/team/regist"
-                    element={<TeamRegist />}
-                />
-                <Route
-                    path="/instructor/team/edit"
-                    element={<TeamInfoEdit />}
-                />
-                <Route
-                    path="/instructor/team/lessonfee"
-                    element={<TeamLessonFeeSetting />}
-                />
-                <Route
-                    path="/instructor/team/member"
-                    element={<TeamMember />}
-                />
+          <Route path="/user/my" element={<UserMypage />} />
 
-                <Route
-                    path="/instructor/my-lesson"
-                    element={<MyLessonList />}
-                />
+          <Route path="/instructor/main" element={<InstructorMain />} />
+          <Route path="/instructor/boss/main" element={<BossMain />} />
+          <Route
+            path="/instructor/team"
+            element={<Navigate to="/instructor/team/regist" />}
+          />
+          <Route
+            path="/instructor/detail/:lessonId"
+            element={<LessonDetail />}
+          />
 
-                <Route
-                    path="/instructor/regist-feedback"
-                    element={<FeedbackRegist />}
-                />
+          <Route path="/instructor/team/regist" element={<TeamRegist />} />
+          <Route path="/instructor/team/edit" element={<TeamInfoEdit />} />
+          <Route
+            path="/instructor/team/lessonfee"
+            element={<TeamLessonFeeSetting />}
+          />
+          <Route path="/instructor/team/member" element={<TeamMember />} />
 
-                <Route
-                    path="/instructor/edit-feedback"
-                    element={<FeedbackEdit />}
-                />
+          <Route path="/instructor/my-lesson" element={<MyLessonList />} />
 
-                <Route path="/instructor/settlement" element={<Settlement />} />
+          <Route
+            path="/instructor/regist-feedback"
+            element={<FeedbackRegist />}
+          />
 
-                <Route path="/instructor/edit-info" element={<MyPageInfo />} />
-                <Route path="/instructor/edit-cert" element={<MyPageCert />} />
+          <Route path="/instructor/edit-feedback" element={<FeedbackEdit />} />
 
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </div>
-    );
+          <Route path="/instructor/settlement" element={<Settlement />} />
+
+          <Route path="/instructor/edit-info" element={<MyPageInfo />} />
+          <Route path="/instructor/edit-cert" element={<MyPageCert />} />
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
+  );
 };
 
 export default App;

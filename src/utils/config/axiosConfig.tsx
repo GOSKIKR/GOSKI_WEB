@@ -17,7 +17,7 @@ const apiClient = (isFormData?: boolean): AxiosInstance => {
   // 요청 인터셉터 설정
   client.interceptors.request.use(
     (config) => {
-      const token = localStorage.getItem("accesstoken"); //토큰 설정
+      const token = sessionStorage.getItem("accesstoken"); //토큰 설정
       if (token) {
         //토큰이 있으면 헤더 설정
         config.headers.Authorization = `Bearer ${token}`;
