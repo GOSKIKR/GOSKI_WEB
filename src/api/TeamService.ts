@@ -25,7 +25,6 @@ export class TeamService {
         },
       });
       if (response && response.status === httpStatusCode.OK) {
-        console.log(response.data.data);
         return response.data.data as AllInstDTO[];
       }
     } catch (error) {
@@ -42,7 +41,6 @@ export class TeamService {
         },
       });
       if (response && response.status === httpStatusCode.OK) {
-        console.log(response.data.data);
         return response.data.data as Team[];
       }
     } catch (error) {
@@ -59,7 +57,6 @@ export class TeamService {
         },
       });
       if (response && response.status === httpStatusCode.OK) {
-        console.log(response.data.data);
         return response.data.data as TeamInfoDTO;
       }
     } catch (error) {
@@ -79,7 +76,6 @@ export class TeamService {
         }
       );
       if (response && response.status === httpStatusCode.OK) {
-        console.log(response.data.data);
         return response.data.data as TeamInstInfoDTO[];
       }
     } catch (error) {
@@ -101,7 +97,6 @@ export class TeamService {
         }
       );
       if (response && response.status === httpStatusCode.OK) {
-        console.log(response.data.data);
         return response.data.data as TeamInviteDTO[];
       }
     } catch (error) {
@@ -189,7 +184,6 @@ export class TeamService {
       });
       if (response && response.status === httpStatusCode.OK) {
         alert("초대 요청이 전송되었습니다.");
-        console.log(response);
       }
     } catch (error) {
       console.error("초대 요청 취소에 실패하였습니다.");
@@ -207,7 +201,6 @@ export class TeamService {
       });
       if (response && response.status === httpStatusCode.OK) {
         alert("초대 요청이 취소되었습니다.");
-        console.log(response);
       }
     } catch (error) {
       console.error("초대 요청 취소에 실패하였습니다.");

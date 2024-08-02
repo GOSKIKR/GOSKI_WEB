@@ -8,37 +8,37 @@ import TeamAD from "../../../components/user/TeamAD";
 import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 
 const UserMain: React.FC = () => {
-  const [data, setData] = useState(null);
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+    const [data, setData] = useState(null);
+    const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
-  const handleResize = () => {
-    setInnerWidth(window.innerWidth);
-  };
+    const handleResize = () => {
+        setInnerWidth(window.innerWidth);
+    };
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full">
-        {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
-      </div>
-      <div className="w-full mt-4">
-        <ADCarousel />
-      </div>
-      <div className="w-full mt-8 bg-white rounded-lg shadow-md">
-        <ReservationBox />
-      </div>
-      <div className="w-full mt-8">
-        <TeamAD />
-      </div>
-      <div className="w-full mt-8">
-        <Footer />
-      </div>
-    </div>
-  );
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+            <div className="w-full">
+                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+            </div>
+            <div className="w-full">
+                <ADCarousel />
+            </div>
+            <div className="w-full pt-8 px-8 bg-white ">
+                <ReservationBox />
+                <div className="w-full my-16">
+                    <TeamAD />
+                </div>
+            </div>
+            <div className="w-full">
+                <Footer />
+            </div>
+        </div>
+    );
 };
 
 export default UserMain;

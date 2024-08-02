@@ -68,9 +68,9 @@ const Login = () => {
           sessionStorage.setItem("accesstoken", response.headers.accesstoken);
           // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
           sessionStorage.setItem("refreshtoken", response.headers.refreshtoken);
-          setRole(response.data.data);
-          console.log(role);
-          role === "STUDENT" ? navigate("/") : navigate("/instructor/main");
+          const newRole = response.data.data;
+          setRole(newRole);
+          newRole === "STUDENT" ? navigate("/") : navigate("/instructor/main");
         }
       } catch (error) {
         sessionStorage.removeItem("accesstoken");

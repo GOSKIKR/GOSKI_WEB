@@ -68,50 +68,51 @@ const TeamResultComponent: React.FC<TeamResultComponentProps> = ({
     return (
         <div
             key={data.teamId}
-            className="bg-primary-50 shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer mb-4 w-full"
+            className="bg-primary-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer mb-4 mx-5"
             onClick={() => handleTeamClicked(data.teamId)}
         >
-            <div className="flex flex-row space-x-5 w-full items-center">
+            <div className="flex flex-row space-x-5 w-full py-2 items-center">
                 {/* Image 박스 */}
-                <img
-                    src={data.teamProfileUrl}
-                    alt="team-profile"
-                    className="sm:h-32 sm:w-32 h-20 w-20 rounded-lg cursor-not-allowed"
-                />
+                <div className=" sm:h-32 sm:w-32 h-20 w-20 p-2 ml-4">
+                    <img
+                        src={data.teamProfileUrl}
+                        alt="team-profile"
+                        className="w-full h-full rounded-lg cursor-not-allowed"
+                    />
+                </div>
 
                 {/* Team Info 박스 */}
-                <div className="flex flex-col space-y-2 w-3/6 p-4">
+                <div className="flex flex-col space-y-2 sm:w-80 p-4">
                     <div className="flex flex-ro text-base font-semibold">
                         <div className="text-primary-600">{data.teamName}</div>
                         <div>팀</div>
                     </div>
-                    <p className="text-sm text-gray-500">{data.description}</p>
+                    <p className="text-xs text-gray-500">{data.description}</p>
                     <div className="flex items-center flex-row space-x-1">
-                        <IoIosStar className="text-yellow-200" />
+                        <IoIosStar className="text-yellow-400" />
                         <div className="text-sm font-semibold mr-4">
-                            평점 {Math.round(data.rating * 100) / 100}
+                            {Math.round(data.rating * 100) / 100}
                         </div>
                     </div>
                 </div>
 
                 {/* Price 박스 */}
-                <div className="w-2/6 p-4 flex flex-col space-y-2">
-                    <h4 className="font-semibold">요금 정보</h4>
-                    <div className="flex flex-col space-y-1">
-                        <div className="flex flex-row space-x-2">
-                            <p className="text-sm font-xs w-24">기본 요금</p>
-                            <p className="text-sm font-bold">
-                                {data.basicFee.toLocaleString()}원
-                            </p>
-                        </div>
-                        <div className="flex flex-row space-x-2">
-                            <p className="text-sm font-xs w-24">
-                                인원 옵션 요금
-                            </p>
-                            <p className="text-sm">
-                                {data.peopleOptionFee.toLocaleString()}원
-                            </p>
-                        </div>
+                <div className="w-2/6 p-4 h-full flex flex-col">
+                    <div className="flex flex-row space-x-2 items-center">
+                        <p className="text-xs font-xs w-24 text-gray-500">
+                            기본 요금
+                        </p>
+                        <p className="text-sm font-bold">
+                            {data.basicFee.toLocaleString()}원
+                        </p>
+                    </div>
+                    <div className="flex flex-row space-x-2 items-center">
+                        <p className="text-xs font-xs w-24 text-gray-500">
+                            인원 옵션 요금
+                        </p>
+                        <p className="text-sm">
+                            {data.peopleOptionFee.toLocaleString()}원
+                        </p>
                     </div>
                 </div>
             </div>

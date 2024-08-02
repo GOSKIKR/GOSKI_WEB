@@ -25,7 +25,7 @@ const TeamInfo: React.FC = () => {
   const navigate = useNavigate();
 
   const openModal = () => {
-    if (sessionStorage.getItem("accesstoken") === null) {
+    if (localStorage.getItem("accesstoken") === null) {
       alert("로그인이 필요한 서비스입니다.");
       navigate("/login");
       return;
@@ -42,41 +42,17 @@ const TeamInfo: React.FC = () => {
 
   const {
     teamId,
-    teamName,
-    description,
-    cost,
-    teamProfileUrl,
-    rating,
     instructors,
     teamImages,
     basicFee,
-    peopleOptionFee,
-    designatedFee,
     levelOptionFee,
+    peopleOptionFee,
     lessonType,
-    reviewCount,
-    reviews,
   } = teamInfoStore();
 
-  const {
-    resortId: reserveResortId,
-    resortName: reserveResortName,
-    lessonType: reserveLessonType,
-    studentCount,
-    lessonDate,
-    startTime,
-    duration,
-    level,
-  } = userReserveStore();
+  const { studentCount, startTime, duration, level } = userReserveStore();
 
-  const {
-    resortId,
-    resortName,
-    resortLocation,
-    longitude,
-    latitude,
-    lessonTime,
-  } = userResortsStore();
+  const { lessonTime } = userResortsStore();
 
   useEffect(() => {
     setFilterLessonDuration(duration);
@@ -84,11 +60,27 @@ const TeamInfo: React.FC = () => {
     setSelectedStartTime(startTime);
   }, [lessonTime]);
 
+  const calculateFee = (fee: number | undefined, duration: number) => {
+    return fee && fee > 0
+      ? {
+          text: `${fee * duration}원`,
+          calculation: `${fee}원 x ${duration} = ${fee * duration}원`,
+        }
+      : { text: "0원", calculation: "" };
+  };
+
+  const basicFeeResult = calculateFee(basicFee, duration);
+  const levelOptionFeeResult = calculateFee(levelOptionFee, duration);
+  const peopleOptionFeeResult = calculateFee(peopleOptionFee, duration);
+
+  const totalFee =
+    (basicFee + peopleOptionFee + (levelOptionFee ?? 0)) * duration;
+
   // 팀원 리스트 받아오기
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
-        const accessToken = sessionStorage.getItem("accesstoken");
+        const accessToken = localStorage.getItem("accesstoken");
         const response = await apiClient().post(
           `/lesson/reserve/novice/${teamId}`,
           {
@@ -162,13 +154,19 @@ const TeamInfo: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col sm:w-4/12 self-start sticky top-5">
+        <div className="flex flex-col w-full sm:w-4/12 self-start sticky top-5">
           <div className="w-full">
-            <TimePicker
-              startTime={selectedStartTime}
-              setStartTime={setSelectedStartTime}
-              position={1}
-            />
+            <div className="flex flex-row items-center sm:space-x-4 mb-4">
+              <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
+                시작 시간
+              </label>
+              <TimePicker
+                startTime={selectedStartTime}
+                setStartTime={setSelectedStartTime}
+                position={1}
+              />
+            </div>
+
             <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
               <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                 강습 시간
@@ -188,22 +186,39 @@ const TeamInfo: React.FC = () => {
               </select>
             </div>
           </div>
-          <div className="flex flex-col px-8 py-6 space-y-3 w-full h-60 bg-primary-50 rounded-lg shadow-md items-center justify-center mb-8">
+          <div className="flex flex-col px-3 py-6 space-y-2 w-full h-72 bg-primary-50 rounded-lg shadow-md items-center justify-center mb-8">
             <div className="font-extrabold pb-2 w-full">최종 결제금액</div>
             <div className="w-full flex flex-row justify-between">
-              <div>기존 강습비</div>
-              <div>{basicFee}원</div>
+              <div className="text-xs">기존 강습비</div>
+              <div className="flex flex-col items-end">
+                <div className="text-gray-400 text-xs">
+                  {basicFeeResult.calculation}
+                </div>
+                <div className="text-sm">{basicFeeResult.text}</div>
+              </div>
             </div>
             <div className="w-full flex flex-row justify-between">
-              <div>레벨 옵션비</div>
-              <div>{levelOptionFee ? levelOptionFee : 0}원</div>
+              <div className="text-xs">레벨 옵션비</div>
+              <div className="flex flex-col items-end">
+                <div className="text-gray-400 text-xs">
+                  {levelOptionFeeResult.calculation}
+                </div>
+                <div>{levelOptionFeeResult.text}</div>
+              </div>
+            </div>
+            <div className="w-full flex flex-row justify-between">
+              <div className="text-xs">인원 옵션비</div>
+              <div className="flex flex-col items-end">
+                <div className="text-gray-400 text-xs">
+                  {peopleOptionFeeResult.calculation}
+                </div>
+                <div>{peopleOptionFeeResult.text}</div>
+              </div>
             </div>
             <div className="w-full my-[1%] border-[1px] border-black"></div>
             <div className="w-full flex flex-row justify-between pb-3">
               <div className="font-extrabold">총 결제금액</div>
-              <div className="text-blue-500 font-extrabold">
-                {basicFee + levelOptionFee}원
-              </div>
+              <div className="text-blue-500 font-extrabold">{totalFee}원</div>
             </div>
 
             <div

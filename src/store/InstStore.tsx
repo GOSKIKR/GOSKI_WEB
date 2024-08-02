@@ -1,6 +1,7 @@
 import { create, StateCreator } from "zustand";
 import { persist, PersistOptions } from "zustand/middleware";
 import { CertificateUrlVO, InstructorProfileDTO } from "../dto/InstructorDTO";
+import { UserMyDTO } from "../dto/UserMyDTO";
 
 interface InstructorState {
   userName: string;
