@@ -25,7 +25,7 @@ const ProfilePage: React.FC = () => {
                 ? await userService.getInstructorProfile() 
                 : await userMyService.getUserProfile();
             if (profile) {
-                setProfile(profile);
+                setProfile(profile as InstructorProfileDTO);
                 setProfilePreview(profile.profileUrl);
                 setSelectedGender(profile.gender);
                 setIsTeamLeader(profile.role === 'OWNER');

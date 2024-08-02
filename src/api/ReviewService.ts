@@ -33,7 +33,7 @@ export class ReviewService{
         return response.data.data as InstructorReviewDTO[];
       }
     } catch (error) {
-      alert("강사 강습 리뷰 조회 실패");
+      console.error(error)
     }
     return null;
   }
