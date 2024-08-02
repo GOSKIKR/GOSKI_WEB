@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import axios from "axios";
 
@@ -77,7 +78,7 @@ const NavbarUser = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isLogin, setIsLogin] = useState(
-    localStorage.getItem("accesstoken") ? true : false
+    sessionStorage.getItem("accesstoken") ? true : false
   );
 
   const [profileData, setProfileData] = useState<ProfileData>({
@@ -92,8 +93,12 @@ const NavbarUser = () => {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   const handleLoginBtn = () => {
-    navigate("/login");
+    if (location.pathname !== "/login") {
+      navigate("/login");
+    }
   };
 
   // useEffect(() => {
@@ -156,7 +161,7 @@ const NavbarUser = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const accessToken = localStorage.getItem("accesstoken");
+        const accessToken = sessionStorage.getItem("accesstoken");
 
         const response = await apiClient().get("/user/profile/user", {
           headers: {
@@ -182,8 +187,8 @@ const NavbarUser = () => {
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshtoken");
-      const accessToken = localStorage.getItem("accesstoken");
+      const refreshToken = sessionStorage.getItem("refreshtoken");
+      const accessToken = sessionStorage.getItem("accesstoken");
 
       await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/signout`, {
         headers: {
@@ -195,17 +200,17 @@ const NavbarUser = () => {
       });
 
       // 로그아웃 성공 후 처리
-      localStorage.removeItem("refreshtoken");
-      localStorage.removeItem("accesstoken");
+      sessionStorage.removeItem("refreshtoken");
+      sessionStorage.removeItem("accesstoken");
       setIsLogin(false);
-      localStorage.removeItem("login-store");
+      sessionStorage.removeItem("login-store");
       navigate("/login");
 
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
-      localStorage.removeItem("accesstoken");
-      localStorage.removeItem("refreshtoken");
+      sessionStorage.removeItem("accesstoken");
+      sessionStorage.removeItem("refreshtoken");
       return false; // 로그아웃 실패
     }
   };
@@ -221,72 +226,88 @@ const NavbarUser = () => {
   };
 
   return (
-    <div className="flex flex-row h-12 w-full justify-between items-center bg-primary-600 px-4 shadow-md z-50">
-      <div
-        onClick={() => navigate("/")}
-        className="text-white text-2xl font-bold cursor-pointer"
-      >
-        GOSKI
-      </div>
-      <div className="flex flex-1 pl-10 justify-start space-x-8">
-        <div
-          onClick={() => navigate("/reserve/set")}
-          className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
-        >
-          강습 예약
-        </div>
-        <div
-          onClick={() => navigate("/notice")}
-          className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
-        >
-          이용 안내
-        </div>
-      </div>
-      {isLogin ? (
-        <div className="flex items-center space-x-6">
-          <UserNotification
-            showNotification={showNotification}
-            setShowNotification={setShowNotification}
-            setShowSettings={setShowSettings}
-          />
-          <UserSettings
-            setShowNotification={setShowNotification}
-            showSettings={showSettings}
-            setShowSettings={setShowSettings}
-          />
+    <div className="w-full bg-primary-600">
+      <div className="container mx-auto px-5 max-w-screen-xl">
+        <div className="flex flex-row h-12 w-full justify-between items-center px-4 z-50">
           <div
-            className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer"
-            onClick={() => handleLogout()}
+            onClick={() => navigate("/")}
+            className="text-white text-2xl font-bold cursor-pointer"
           >
-            <IoMdLogOut className="text-primary-600 text-2xl" />
+            GOSKI
           </div>
-          <div className="cursor-pointer" onClick={() => navigate("/user/my")}>
-            {profileData.profileUrl ? (
-              <img
-                src={profileData.profileUrl}
-                alt="Profile"
-                className="w-10 h-10 rounded-full border-2 border-white"
+          <div className="flex flex-1 pl-10 justify-start space-x-8">
+            <div
+              onClick={() => navigate("/reserve/set")}
+              className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
+            >
+              강습 예약
+            </div>
+            <div
+              onClick={() => navigate("/notice")}
+              className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
+            >
+              이용 안내
+            </div>
+          </div>
+          {isLogin ? (
+            <div className="flex items-center space-x-6">
+              <UserNotification
+                showNotification={showNotification}
+                setShowNotification={setShowNotification}
+                setShowSettings={setShowSettings}
               />
-            ) : (
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <CgProfile className="text-2xl" />
+              <UserSettings
+                setShowNotification={setShowNotification}
+                showSettings={showSettings}
+                setShowSettings={setShowSettings}
+              />
+              <div
+                className="flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer"
+                onClick={() => handleLogout()}
+              >
+                <IoMdLogOut className="text-primary-600 text-2xl" />
               </div>
-            )}
-          </div>
+              <div
+                className="cursor-pointer"
+                onClick={() => navigate("/user/my")}
+              >
+                {profileData.profileUrl ? (
+                  <img
+                    src={profileData.profileUrl}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full border-2 border-white"
+                  />
+                ) : (
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <CgProfile className="text-2xl" />
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <div
+                onClick={() => {
+                  setIsLogin(true);
+                  {
+                    location.pathname !== "/login"
+                      ? handleLoginBtn()
+                      : undefined;
+                  }
+                }}
+                style={{
+                  opacity: location.pathname === "/login" ? 0.5 : 1,
+                  cursor:
+                    location.pathname === "/login" ? "not-allowed" : "pointer",
+                }}
+                className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
+              >
+                로그인
+              </div>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="flex items-center">
-          <div
-            onClick={() => {
-              setIsLogin(true);
-              handleLoginBtn();
-            }}
-            className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
-          >
-            로그인
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };

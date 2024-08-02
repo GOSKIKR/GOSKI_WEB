@@ -17,15 +17,13 @@ const TeamInfo: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [instructorList, setInstructorList] = useState([]);
 
-    const [filterLessonDurationTimes, setFilterLessonDurationTimes] = useState<
-        number[]
-    >([]);
+    const [filterLessonDurationTimes, setFilterLessonDurationTimes] = useState<number[]>([]);
     const [filterLessonDuration, setFilterLessonDuration] = useState<number>(0);
 
     const navigate = useNavigate();
 
     const openModal = () => {
-        if (localStorage.getItem("accesstoken") === null) {
+        if (sessionStorage.getItem("accesstoken") === null) {
             alert("로그인이 필요한 서비스입니다.");
             navigate("/login");
             return;
@@ -42,17 +40,41 @@ const TeamInfo: React.FC = () => {
 
     const {
         teamId,
+        teamName,
+        description,
+        cost,
+        teamProfileUrl,
+        rating,
         instructors,
         teamImages,
         basicFee,
-        levelOptionFee,
         peopleOptionFee,
+        designatedFee,
+        levelOptionFee,
         lessonType,
+        reviewCount,
+        reviews,
     } = teamInfoStore();
 
-    const { studentCount, startTime, duration, level } = userReserveStore();
+    const {
+        resortId: reserveResortId,
+        resortName: reserveResortName,
+        lessonType: reserveLessonType,
+        studentCount,
+        lessonDate,
+        startTime,
+        duration,
+        level,
+    } = userReserveStore();
 
-    const { lessonTime } = userResortsStore();
+    const {
+        resortId,
+        resortName,
+        resortLocation,
+        longitude,
+        latitude,
+        lessonTime,
+    } = userResortsStore();
 
     useEffect(() => {
         setFilterLessonDuration(duration);
@@ -60,27 +82,11 @@ const TeamInfo: React.FC = () => {
         setSelectedStartTime(startTime);
     }, [lessonTime]);
 
-    const calculateFee = (fee: number | undefined, duration: number) => {
-        return fee && fee > 0
-            ? {
-                  text: `${fee * duration}원`,
-                  calculation: `${fee}원 x ${duration} = ${fee * duration}원`,
-              }
-            : { text: "0원", calculation: "" };
-    };
-
-    const basicFeeResult = calculateFee(basicFee, duration);
-    const levelOptionFeeResult = calculateFee(levelOptionFee, duration);
-    const peopleOptionFeeResult = calculateFee(peopleOptionFee, duration);
-
-    const totalFee =
-        (basicFee + peopleOptionFee + (levelOptionFee ?? 0)) * duration;
-
     // 팀원 리스트 받아오기
     useEffect(() => {
         const fetchInstructors = async () => {
             try {
-                const accessToken = localStorage.getItem("accesstoken");
+                const accessToken = sessionStorage.getItem("accesstoken");
                 const response = await apiClient().post(
                     `/lesson/reserve/novice/${teamId}`,
                     {
@@ -105,7 +111,7 @@ const TeamInfo: React.FC = () => {
         fetchInstructors();
     }, [teamId, studentCount, duration, level]);
 
-    //새로고침시 경고창
+    // 새로고침시 경고창
     useEffect(() => {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
             e.preventDefault();
@@ -119,10 +125,26 @@ const TeamInfo: React.FC = () => {
         };
     }, []);
 
+    const calculateFee = (fee: number | undefined, duration: number) => {
+        return fee && fee > 0
+            ? {
+                  text: `${fee * duration}원`,
+                  calculation: `${fee}원 x ${duration} = ${fee * duration}원`,
+              }
+            : { text: "0원", calculation: "" };
+    };
+
+    const basicFeeResult = calculateFee(basicFee, duration);
+    const levelOptionFeeResult = calculateFee(levelOptionFee, duration);
+    const peopleOptionFeeResult = calculateFee(peopleOptionFee, duration);
+
+    const totalFee =
+        (basicFee + peopleOptionFee + (levelOptionFee ?? 0)) * duration;
+
     return (
         <div>
             <div className="w-full">
-                {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+                {window.innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
             </div>
             <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
                 <img
@@ -156,11 +178,17 @@ const TeamInfo: React.FC = () => {
                 </div>
                 <div className="flex flex-col w-full sm:w-4/12 self-start sticky top-5">
                     <div className="w-full">
-                        <TimePicker
-                            startTime={selectedStartTime}
-                            setStartTime={setSelectedStartTime}
-                            position={1}
-                        />
+                        <div className="flex flex-row items-center sm:space-x-4 mb-4">
+                            <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
+                                시작 시간
+                            </label>
+                            <TimePicker
+                                startTime={selectedStartTime}
+                                setStartTime={setSelectedStartTime}
+                                position={1}
+                            />
+                        </div>
+
                         <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 강습 시간
@@ -235,7 +263,7 @@ const TeamInfo: React.FC = () => {
 
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg relative sm:w-10/12 h-5/6 overflow-y-auto ">
+                    <div className="bg-white p-6 rounded-lg shadow-lg relative sm:w-10/12 h-5/6 overflow-y-auto">
                         <button
                             onClick={closeModal}
                             className="absolute top-6 right-6 text-gray-500 hover:text-gray-800"

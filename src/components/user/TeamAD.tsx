@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const logoList = [
-  "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-  "https://cdn.pixabay.com/photo/2016/01/19/18/00/earth-1149733__480.jpg",
-  "https://cdn.pixabay.com/photo/2014/03/27/22/38/tree-299578__480.jpg",
-  "https://cdn.pixabay.com/photo/2013/10/02/23/03/tree-190054__480.jpg",
-  "https://cdn.pixabay.com/photo/2015/09/18/20/14/tree-949923__480.jpg",
-  "https://cdn.pixabay.com/photo/2016/12/27/22/38/tree-1934910__480.jpg",
+  "/assets/images/TeamAD01.png",
+  "/assets/images/TeamAD02.png",
+  "/assets/images/TeamAD03.png",
+  "/assets/images/TeamAD04.png",
+  "/assets/images/TeamAD05.png",
+  "/assets/images/TeamLogo6.png",
 ];
 
 const TeamAD = () => {
@@ -40,19 +40,19 @@ const TeamAD = () => {
         onMouseLeave={handleMouseLeave}
         style={{
           width: `${sliderWidth}px`,
-          animationDuration: `${logoList.length * 4}s`,
+          animationDuration: `${logoList.length * 8}s`,
         }}
       >
         {[...logoList, ...logoList, ...logoList, ...logoList].map(
           (logo, index) => (
             <div
               key={`${logo}-${index}`}
-              className="flex-shrink-0 w-[200px] h-[100px] mx-4"
+              className="flex-shrink-0 w-[250px] h-auto mx-4"
             >
               <img
                 src={logo}
                 alt={`Logo ${index + 1}`}
-                className="w-full h-full object-contain"
+                className="w-full h-full"
               />
             </div>
           )

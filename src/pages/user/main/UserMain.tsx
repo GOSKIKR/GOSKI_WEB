@@ -21,20 +21,20 @@ const UserMain: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen ">
       <div className="w-full">
         {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
       </div>
-      <div className="w-full mt-4">
+      <div className="container mx-auto px-5 max-w-screen-xl pt-8 bg-white ">
         <ADCarousel />
       </div>
-      <div className="w-full mt-8 bg-white rounded-lg shadow-md">
+      <div className="container mx-auto px-5 max-w-screen-xl pt-8 bg-white ">
         <ReservationBox />
+        <div className="w-full my-16">
+          <TeamAD />
+        </div>
       </div>
-      <div className="w-full mt-8">
-        <TeamAD />
-      </div>
-      <div className="w-full mt-8">
+      <div className="w-full">
         <Footer />
       </div>
     </div>

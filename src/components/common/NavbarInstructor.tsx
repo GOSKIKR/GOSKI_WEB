@@ -22,7 +22,7 @@ const NavbarInstructor = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isLogin, setIsLogin] = useState(
-    localStorage.getItem("accesstoken") ? true : false
+    sessionStorage.getItem("accesstoken") ? true : false
   );
   const [profileData, setProfileData] = useState<UserMyDTO>({
     birthDate: "",
@@ -48,7 +48,7 @@ const NavbarInstructor = () => {
           : await userMyService.getUserProfile();
 
       if (response) {
-        console.log(response);
+        // console.log(response);
         setProfileData(response);
       }
     };
@@ -60,8 +60,8 @@ const NavbarInstructor = () => {
 
   // const logout = async () => {
   //   try {
-  //     const refreshToken = localStorage.getItem("refreshtoken");
-  //     const accessToken = localStorage.getItem("accesstoken");
+  //     const refreshToken = sessionStorage.getItem("refreshtoken");
+  //     const accessToken = sessionStorage.getItem("accesstoken");
 
   //     await apiClient().get("/user/signout", {
   //       headers: {
@@ -71,25 +71,25 @@ const NavbarInstructor = () => {
   //     });
 
   //     // 로그아웃 성공 후 처리
-  //     localStorage.removeItem("refreshtoken");
-  //     localStorage.removeItem("accesstoken");
+  //     sessionStorage.removeItem("refreshtoken");
+  //     sessionStorage.removeItem("accesstoken");
   //     setIsLogin(false);
-  //     localStorage.removeItem("instructor-store")
-  //     localStorage.removeItem("login-store")
+  //     sessionStorage.removeItem("instructor-store")
+  //     sessionStorage.removeItem("login-store")
   //     navigate("/login");
   //     return true; // 로그아웃 성공
   //   } catch (error) {
   //     console.error("로그아웃 중 오류 발생:", error);
-  //     localStorage.removeItem("accesstoken");
-  //     localStorage.removeItem("refreshtoken");
+  //     sessionStorage.removeItem("accesstoken");
+  //     sessionStorage.removeItem("refreshtoken");
   //     return false; // 로그아웃 실패
   //   }
   // };
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshtoken");
-      const accessToken = localStorage.getItem("accesstoken");
+      const refreshToken = sessionStorage.getItem("refreshtoken");
+      const accessToken = sessionStorage.getItem("accesstoken");
 
       await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/signout`, {
         headers: {
@@ -101,18 +101,18 @@ const NavbarInstructor = () => {
       });
 
       // 로그아웃 성공 후 처리
-      localStorage.removeItem("refreshtoken");
-      localStorage.removeItem("accesstoken");
+      sessionStorage.removeItem("refreshtoken");
+      sessionStorage.removeItem("accesstoken");
       setIsLogin(false);
-      localStorage.removeItem("instructor-store");
-      localStorage.removeItem("login-store");
+      sessionStorage.removeItem("instructor-store");
+      sessionStorage.removeItem("login-store");
       navigate("/login");
 
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
-      localStorage.removeItem("accesstoken");
-      localStorage.removeItem("refreshtoken");
+      sessionStorage.removeItem("accesstoken");
+      sessionStorage.removeItem("refreshtoken");
       return false; // 로그아웃 실패
     }
   };

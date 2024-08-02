@@ -14,7 +14,7 @@ import { httpStatusCode } from "../../../utils/config/httpStatus";
 const Login = () => {
   const navigate = useNavigate();
 
-  const {role, setRole} = useLoginStore();
+  const { role, setRole } = useLoginStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,7 +43,7 @@ const Login = () => {
   //           password,
   //         });
   //         console.log(response.data);
-  //         localStorage.setItem("token", response.data.token);
+  //         sessionStorage.setItem("token", response.data.token);
   //         navigate("/");
   //       } catch (error) {
   //         console.error(error);
@@ -64,18 +64,18 @@ const Login = () => {
           email,
           password,
         });
-        if(response && response.status === httpStatusCode.OK) {
-          localStorage.setItem("accesstoken", response.headers.accesstoken);
+        if (response && response.status === httpStatusCode.OK) {
+          sessionStorage.setItem("accesstoken", response.headers.accesstoken);
           // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
-          localStorage.setItem("refreshtoken", response.headers.refreshtoken);
-          setRole(response.data.data);
-          console.log(role)
-          role === 'STUDENT' ? navigate("/") : navigate("/instructor/main")
+          sessionStorage.setItem("refreshtoken", response.headers.refreshtoken);
+          const newRole = response.data.data
+          setRole(newRole);
+          newRole === 'STUDENT' ? navigate("/") : navigate("/instructor/main")
           
         }
       } catch (error) {
-        localStorage.removeItem("accesstoken");
-        alert("로그인 실패!")
+        sessionStorage.removeItem("accesstoken");
+        alert("로그인 실패!");
         console.error("Login error:", error);
       }
       console.log("Form Submitted", { email });

@@ -42,18 +42,18 @@
 // // 리프레시 토큰 저장
 // const storeRefreshToken = async (token: string) => {
 //   const encryptedToken = await encryptToken(token);
-//   localStorage.setItem("refreshToken", encryptedToken);
+//   sessionStorage.setItem("refreshToken", encryptedToken);
 // };
 
 // // 리프레시 토큰 가져오기
 // const getRefreshToken = async () => {
-//   const encryptedToken = localStorage.getItem("refreshtoken");
+//   const encryptedToken = sessionStorage.getItem("refreshtoken");
 //   return encryptedToken ? await decryptToken(encryptedToken) : null;
 // };
 
 // // 리프레시 토큰 삭제
 // const removeRefreshToken = () => {
-//   localStorage.removeItem("refreshtoken");
+//   sessionStorage.removeItem("refreshtoken");
 // };
 
 // export {
@@ -137,18 +137,18 @@ const decryptToken = async (encryptedToken: string) => {
 // 리프레시 토큰 저장
 const storeRefreshToken = async (token: string) => {
   const encryptedToken = await encryptToken(token);
-  localStorage.setItem("refreshtoken", encryptedToken);
+  sessionStorage.setItem("refreshtoken", encryptedToken);
 };
 
 // 리프레시 토큰 가져오기
 const getRefreshToken = async () => {
-  const encryptedToken = localStorage.getItem("refreshtoken");
+  const encryptedToken = sessionStorage.getItem("refreshtoken");
   return encryptedToken ? await decryptToken(encryptedToken) : null;
 };
 
 // 리프레시 토큰 삭제
 const removeRefreshToken = () => {
-  localStorage.removeItem("refreshtoken");
+  sessionStorage.removeItem("refreshtoken");
 };
 
 export {
