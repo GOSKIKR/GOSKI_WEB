@@ -39,6 +39,8 @@ import PayFail from "./pages/user/payment/PayFail";
 
 import useLoginStore from "./store/loginStore";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import KakaoLogin from "./pages/user/auth/KakaoLogin";
+import KakaoLoginInst from "./pages/instructor/auth/KakaoLoginInst";
 
 const App: React.FC = () => {
   const { role } = useLoginStore();
@@ -53,6 +55,15 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/login/forgot-password" element={<ForgotPassword />} />
         <Route path="/login/register" element={<Register />} />
+
+        <Route
+          path="api/v1/user/signin/student/kakao"
+          element={<KakaoLogin />}
+        />
+        <Route
+          path="api/v1/user/signin/inst/kakao"
+          element={<KakaoLoginInst />}
+        />
 
         <Route path="/reserve/set" element={<SetFilter />} />
         <Route path="/reserve/result" element={<FilterResult />} />

@@ -33,6 +33,35 @@ const Login = () => {
 
   const isFormValid = email !== "" && password !== "";
 
+  //카카오 로그인 인가 코드 받아오기
+  const KAKAO_AUTH_URL_LOCAL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+    import.meta.env.VITE_KAKAO_REST_API_KEY
+  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_LOCAL}`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+    import.meta.env.VITE_KAKAO_REST_API_KEY
+  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
+  const KAKAO_AUTH_URL_INST_LOCAL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+    import.meta.env.VITE_KAKAO_REST_API_KEY
+  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_INST_LOCAL}`;
+  const KAKAO_AUTH_URL_INST = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+    import.meta.env.VITE_KAKAO_REST_API_KEY
+  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_INST}`;
+
+  const handleKakaoLogin = () => {
+    // return async () => {
+    //   if (userOrInstructor === "user") {
+    //     window.location.href = import.meta.env.DEV
+    //       ? KAKAO_AUTH_URL_LOCAL
+    //       : KAKAO_AUTH_URL;
+    //   } else {
+    //     window.location.href = import.meta.env.DEV
+    //       ? KAKAO_AUTH_URL_INST_LOCAL
+    //       : KAKAO_AUTH_URL_INST;
+    //   }
+    // };
+    window.location.href = KAKAO_AUTH_URL_LOCAL;
+  };
+
   // const handleSubmit = (e: React.FormEvent) => {
   //   e.preventDefault();
   //   if (isFormValid) {
@@ -68,10 +97,9 @@ const Login = () => {
           sessionStorage.setItem("accesstoken", response.headers.accesstoken);
           // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
           sessionStorage.setItem("refreshtoken", response.headers.refreshtoken);
-          const newRole = response.data.data
+          const newRole = response.data.data;
           setRole(newRole);
-          newRole === 'STUDENT' ? navigate("/") : navigate("/instructor/main")
-          
+          newRole === "STUDENT" ? navigate("/") : navigate("/instructor/main");
         }
       } catch (error) {
         sessionStorage.removeItem("accesstoken");
@@ -223,11 +251,11 @@ const Login = () => {
                 소셜 계정으로 로그인
               </span>
               <div className="flex justify-around">
-                <div className="flex flex-row w-full items-center justify-center p-2 rounded-full cursor-pointer hover:shadow-lg transition duration-500 ease-in-out bg-yellow-300">
-                  <div
-                    className="flex items-center justify-center"
-                    onClick={() => navigate("/login/kakao")}
-                  >
+                <div
+                  className="flex flex-row w-full items-center justify-center p-2 rounded-full cursor-pointer hover:shadow-lg transition duration-500 ease-in-out bg-yellow-300"
+                  onClick={handleKakaoLogin}
+                >
+                  <div className="flex items-center justify-center">
                     <img
                       src="/assets/images/kakaoLogin.png"
                       alt="Kakao"
