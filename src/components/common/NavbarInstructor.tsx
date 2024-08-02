@@ -138,7 +138,7 @@ const NavbarInstructor = () => {
         >
           강습내역
         </div>
-        {role === "INSTRUCTOR" &&  (
+        {role === "OWNER" &&  (
           <div
             className="text-black sm:text-xl text-sm p-5 cursor-pointer"
             onClick={() => navigate("/instructor/settlement")}

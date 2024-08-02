@@ -184,7 +184,7 @@ const NavbarInstructorMobile = () => {
             >
               강습내역
             </button>
-            {role === "INSTRUCTOR" && (
+            {role === "OWNER" && (
               <button
               className="px-4 py-2 text-left hover:bg-gray-100"
               onClick={() => {
