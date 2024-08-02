@@ -27,12 +27,70 @@ const ADCarousel = () => {
         "transform duration-1000 ease-in-out"
     );
 
+    const [buttonColor, setButtonColor] = useState("white");
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+
     useEffect(() => {
         const timer = setInterval(() => {
             slideNextBtn();
         }, 5000);
         return () => clearInterval(timer);
     }, [currCarousel]);
+
+    useEffect(() => {
+        analyzeImageColor();
+    }, [currCarousel]);
+
+    // 캔버스에 이미지를 그리고 색상을 분석하는 함수
+    const analyzeImageColor = () => {
+        const img = new Image();
+        img.src = dummyImages[currCarousel - 1];
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+            if (canvasRef.current) {
+                const canvas = canvasRef.current;
+                const context = canvas.getContext("2d");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                context?.drawImage(img, 0, 0, img.width, img.height);
+
+                const imageData = context?.getImageData(0, 0, img.width, img.height).data;
+                const edgePixels = getEdgePicels(imageData, canvas.width, canvas.height);
+                const averageColor = getAverageColor(edgePixels);
+                const brightness = getBrightness(averageColor);
+
+                setButtonColor(brightness > 128 ? "black" : "white");
+            }
+        }
+    }
+
+    // 이미지의 가장자리 픽셀을 구하는 함수
+    const getEdgePicels = (imageData: Uint8ClampedArray | undefined, width: number, height: number) => {
+        const edgePixels = [];
+        for (let i = 0; i < imageData!.length; i += 4) {
+            const x = (i / 4) % width;
+            const y = Math.floor((i / 4) / width);
+            if (x === 0 || y === 0 || x === width - 1 || y === height - 1) {
+                edgePixels.push([imageData![i], imageData![i + 1], imageData![i + 2]]);
+            }
+        }
+        return edgePixels;
+    }
+
+    const getAverageColor = (pixels: number[][]) => {
+        const sum = pixels.reduce((acc, pixel) => 
+            [acc[0] + pixel[0], acc[1] + pixel[1], acc[2] + pixel[2]], [0, 0, 0]);
+            return sum.map(channel=> Math.round(channel / pixels.length));
+    }
+
+    const getBrightness = (rgb: number[]) => {
+        return Math.sqrt(
+            rgb[0] * rgb[0] * 0.299 +
+            rgb[1] * rgb[1] * 0.587 +
+            rgb[2] * rgb[2] * 0.114
+        );
+    }
 
     const makeNewImageArray = () => {
         const dataStart = dummyImages[0];
@@ -76,6 +134,7 @@ const ADCarousel = () => {
 
     return (
         <div className="flex relative overflow-hidden w-full">
+            <canvas ref={canvasRef} className="hidden" />
             <div
                 className={`whitespace-nowrap w-full ${carouselTransition}`}
                 style={{ transform: `translateX(${-currCarousel * 100}%)` }}
@@ -104,11 +163,13 @@ const ADCarousel = () => {
                 </button>
             </div>
             <div className="absolute bottom-4 w-full flex justify-center">
+
                 {dummyImages.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrCarousel(index + 1)}
-                        className="text-xl mx-2 text-white"
+                        className={`text-xl mx-2`}
+                        style={{ color: buttonColor }}
                     >
                         {index + 1 === currCarousel ? (
                             <FaCircle size={15} />

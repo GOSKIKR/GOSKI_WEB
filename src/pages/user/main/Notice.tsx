@@ -30,7 +30,7 @@ const Notice = () => {
   return (
     <div className="flex  flex-col">
       {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
-      <div className="w-full h-screen p-5 box-border">
+      <div className="container mx-auto px-5 max-w-screen-xl pt-8 bg-white">
         <h1 className="text-2xl font-bold text-blue-600 mb-4">이용 안내</h1>
         <div className="bg-gray-100 p-6 rounded-lg shadow-sm">
           <p className="text-base text-gray-800">
@@ -112,7 +112,7 @@ const Notice = () => {
             감사합니다.
           </div>
         </div>
-        <InfiniteBanner />
+        {/* <InfiniteBanner /> */}
       </div>
     </div>
   );
