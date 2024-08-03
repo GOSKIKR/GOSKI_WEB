@@ -176,7 +176,7 @@ const ADCarousel = () => {
                         ) : (
                             <FaRegCircle size={15} />
                         )}
-                    </button>
+                    </button>      
                 ))}
             </div>
         </div>
