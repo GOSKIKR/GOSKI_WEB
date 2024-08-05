@@ -200,7 +200,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
         <div className="flex flex-wrap w-full bg-primary-50 rounded-lg shadow-md sm:mx-5 p-5 space-y-5 sm:space-y-0 justify-between">
           <div className="flex flex-col sm:flex-row w-full sm:justify-between items-center space-y-5 sm:space-y-0">
-            <div className="flex flex-row w-full justify-between items-center space-x-5">
+            <div className="flex flex-col sm:flex-row w-full justify-between items-center ">
               <div className="flex flex-col items-center w-full sm:w-1/6">
                 <label className="mb-1 text-sm">장소</label>
                 <select
@@ -248,20 +248,17 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
               <div className="flex flex-col items-center w-full sm:w-1/6 relative">
                 <label className="mb-1 text-sm">날짜</label>
-                <div className="flex flex-1">
-                  <input
-                    type="date"
-                    value={filterDate}
-                    onChange={(e) => setFilterDate(e.target.value)}
-                    className="shadow-md w-full px-2 sm:h-7 rounded-md sm:text-sm text-xs"
-                    min={today}
-                  />
-                </div>
+                <input
+                  type="date"
+                  value={filterDate}
+                  onChange={(e) => setFilterDate(e.target.value)}
+                  className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
+                  min={today}
+                />
               </div>
 
               <div className="flex flex-col items-center w-full sm:w-1/6 relative">
                 <label className="mb-1 text-sm">시작 시간</label>
-
                 <TimePicker
                   startTime={filterLessonTime}
                   setStartTime={setFilterLessonTime}

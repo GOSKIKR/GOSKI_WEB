@@ -36,7 +36,7 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
             ))}
           </div>
         ) : (
-          <div className="flex flex-row w-full items-center overflow-auto">
+          <div className="flex flex-col sm:flex-row w-full items-center overflow-auto">
             {filteredData.map((data: any) => (
               <InstructorResultComponent
                 key={data.instructorId}

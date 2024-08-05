@@ -19,6 +19,17 @@ import instructorInfoStore from "../../../store/instructorInfoStore";
 const FilterResult: React.FC = () => {
   const navigate = useNavigate();
 
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setInnerWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const [selectedResortName, setSelectedResortName] = useState("");
   const [selectedLessonType, setSelectedLessonType] = useState("");
   const [selectedStudentCount, setSelectedStudentCount] = useState(0);
@@ -185,7 +196,7 @@ const FilterResult: React.FC = () => {
           handleSearchClick={handleSearch}
         />
       </div>
-      <div className="flex-grow overflow-hidden">
+      <div className="flex-grow overflow-y-auto">
         {/* ResultComponent가 남은 공간을 차지하고 overflow 처리 */}
         <div className="container mx-auto px-5 max-w-screen-xl">
           <ResultComponent
