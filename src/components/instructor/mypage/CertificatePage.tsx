@@ -38,12 +38,15 @@ const CertificatePage: React.FC = () => {
     const handleImageChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            console.log(file.name);
             setNewCertificates(newCertificates.map((cert, i) => i === index ? { ...cert, newCertImage: file } : cert));
             const reader = new FileReader();
             reader.onloadend = () => {
                 setCertificates(certificates.map((cert, i) => i === index ? { ...cert, certificateImageUrl: reader.result as string } : cert));
             };
             reader.readAsDataURL(file);
+        } else {
+            alert('자격증 이미지가 비어서는 안됩니다.');
         }
     };
 
@@ -68,7 +71,7 @@ const CertificatePage: React.FC = () => {
         deleteCertificateUrls.forEach((cert) => {
             formData.append("deletedCertificateIds",cert.certificateId.toString());
             formData.append("deleteCertificateUrls",cert.certificateImageUrl)
-        })
+        });
 
         newCertificates.forEach(cert => {
             formData.append('certificateIds', cert.certificateId.toString());
@@ -81,6 +84,8 @@ const CertificatePage: React.FC = () => {
         const updatedProfile = await userService.getInstructorProfile();
         if(updatedProfile){
             setProfile(updatedProfile);
+            setDeleteCertificateUrls([]);
+            setNewCertificates([]);
         }
     };
 

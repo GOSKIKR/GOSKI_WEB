@@ -6,12 +6,12 @@ interface CustomJwtPayload extends JwtPayload {
 
 export const getRole = () => {
     const accessToken = sessionStorage.getItem("accesstoken");
-    let role2 = "";
+    let role = "";
     if (accessToken) {
         const decodedToken = jwtDecode<CustomJwtPayload>(accessToken);
-        role2 = decodedToken.role;
+        role = decodedToken.role;
     } else {
         console.error("Access token is null");
     }
-    return role2;
+    return role;
 }
