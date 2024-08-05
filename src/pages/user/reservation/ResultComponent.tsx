@@ -23,10 +23,10 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
 }) => {
     console.log(filteredData);
     return (
-        <div className="h-full w-full overflow-y-auto p-4 pb-12 items-center justify-center">
+        <div className="h-full w-full overflow-y-auto  pb-12 items-center justify-center">
             {filteredData.length !== 0 && filteredData ? (
                 selectedLevel === "BEGINNER" ? (
-                    <div className="flex flex-col items-center overflow-auto justify-center">
+                    <div className="flex flex-col items-center overflow-auto justify-center mx-10">
                         {filteredData.map((data: any) => (
                             <TeamResultComponent
                                 key={data.teamId}

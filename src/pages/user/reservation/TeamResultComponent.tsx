@@ -68,12 +68,12 @@ const TeamResultComponent: React.FC<TeamResultComponentProps> = ({
     return (
         <div
             key={data.teamId}
-            className="bg-primary-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer mb-4 mx-5"
+            className="w-full bg-primary-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer mb-4 "
             onClick={() => handleTeamClicked(data.teamId)}
         >
-            <div className="flex flex-row space-x-5 w-full py-2 items-center">
+            <div className="flex flex-row  w-full py-2 items-center justify-center space-x-3">
                 {/* Image 박스 */}
-                <div className=" sm:h-32 sm:w-32 h-20 w-20 p-2 ml-4">
+                <div className=" sm:h-32 sm:w-32 h-20 w-20 p-2 ml-4 mr-4">
                     <img
                         src={data.teamProfileUrl}
                         alt="team-profile"
@@ -97,7 +97,7 @@ const TeamResultComponent: React.FC<TeamResultComponentProps> = ({
                 </div>
 
                 {/* Price 박스 */}
-                <div className="w-2/6 p-4 h-full flex flex-col">
+                <div className="w-1/3 p-4 h-full flex flex-col">
                     <div className="flex flex-row space-x-2 items-center">
                         <p className="text-xs font-xs w-24 text-gray-500">
                             기본 요금

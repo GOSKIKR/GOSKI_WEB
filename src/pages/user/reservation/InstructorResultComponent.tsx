@@ -94,22 +94,19 @@ const InstructorResultComponent: React.FC<InstructorResultComponentProps> = ({
             </div>
 
             {/* 정보 영역 (2/3) */}
-            <div className="h-1/2 w-full pt-4 px-4 flex flex-col justify-between">
+            <div className="h-1/2 w-full px-4 flex flex-col justify-center">
+                <h3 className="text-base font-semibold mb-5">
+                    {data.userName}
+                </h3>
                 <div>
-                    <h3 className="text-base font-semibold mb-2">
-                        {data.userName}
-                    </h3>
-                    <div>
-                        <div className="text-xs text-primary-400">자격증</div>
-                        <p className="text-[10px] text-gray-600 mb-4">
-                            {data.certificateInfoVOs
-                                .map(
-                                    (certificate) => certificate.certificateName
-                                )
-                                .join(" ")}
-                        </p>
-                    </div>
+                    <div className="text-xs text-primary-400">자격증</div>
+                    <p className="text-[10px] text-gray-600 mb-4">
+                        {data.certificateInfoVOs
+                            .map((certificate) => certificate.certificateName)
+                            .join(" ")}
+                    </p>
                 </div>
+
                 <div>
                     {data.reviewCount > 0 && (
                         <p className="flex w-full flex-row text-xs font-medium items-center">

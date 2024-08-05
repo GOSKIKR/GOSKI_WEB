@@ -193,16 +193,18 @@ const FilterResult: React.FC = () => {
             </div>
             <div className="flex-grow overflow-hidden">
                 {/* ResultComponent가 남은 공간을 차지하고 overflow 처리 */}
-                <ResultComponent
-                    filteredData={
-                        selectedLevel === "BEGINNER"
-                            ? beginnerFilteredData
-                            : intermediateFilteredData
-                    }
-                    selectedLevel={selectedLevel}
-                    goToTeamDetail={goToTeamDetail}
-                    goToInstructorDetail={goToInstructorDetail}
-                />
+                <div className="container mx-auto px-5 max-w-screen-xl">
+                    <ResultComponent
+                        filteredData={
+                            selectedLevel === "BEGINNER"
+                                ? beginnerFilteredData
+                                : intermediateFilteredData
+                        }
+                        selectedLevel={selectedLevel}
+                        goToTeamDetail={goToTeamDetail}
+                        goToInstructorDetail={goToInstructorDetail}
+                    />
+                </div>
             </div>
         </div>
     );
