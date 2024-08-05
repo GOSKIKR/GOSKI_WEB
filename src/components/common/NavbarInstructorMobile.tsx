@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiClient from "../../utils/config/axiosConfig";
 import axios from "axios";
-import useLoginStore from "../../store/loginStore";
 
 import UserNotification from "../user/UserNotification";
+import { getRole } from "../../utils/getRole";
 
 const NavbarInstructorMobile = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -13,7 +12,7 @@ const NavbarInstructorMobile = () => {
     sessionStorage.getItem("accesstoken") ? true : false
   );
 
-  const { role } = useLoginStore();
+  const role = getRole();
 
   const [showSettings, setShowSettings] = useState(false);
   const [showNotification, setShowNotification] = useState(false);

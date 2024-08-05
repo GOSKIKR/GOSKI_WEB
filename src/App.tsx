@@ -37,11 +37,9 @@ import PayApprove from "./pages/user/payment/PayApprove";
 import PaySuccess from "./pages/user/payment/PaySuccess";
 import PayFail from "./pages/user/payment/PayFail";
 
-import useLoginStore from "./store/loginStore";
 import ProtectedRoute from "./utils/ProtectedRoute";
 
 const App: React.FC = () => {
-  const { role } = useLoginStore();
 
   return (
     <div>

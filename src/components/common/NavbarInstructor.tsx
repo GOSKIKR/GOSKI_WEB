@@ -9,7 +9,7 @@ import apiClient from "../../utils/config/axiosConfig";
 import { UserService } from "../../api/UserService";
 import { UserMyService } from "../../api/UserMyService";
 import { UserMyDTO } from "../../dto/UserMyDTO";
-import useLoginStore from "../../store/loginStore";
+import { getRole } from "../../utils/getRole";
 
 import axios from "axios";
 
@@ -17,7 +17,7 @@ const userService = new UserService();
 const userMyService = new UserMyService();
 
 const NavbarInstructor = () => {
-  const { role } = useLoginStore();
+  const role = getRole();
 
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);

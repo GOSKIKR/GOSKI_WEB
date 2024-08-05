@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import useLoginStore from "../../../store/loginStore";
+import { getRole } from "../../../utils/getRole";
 
 const TeamManageHeader: React.FC = () => {
     const location = useLocation();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 640);
 
-    const {role} = useLoginStore();
+    const role = getRole();
+
 
     const handleResize = () => {
         setIsSmallScreen(window.innerWidth <= 640);

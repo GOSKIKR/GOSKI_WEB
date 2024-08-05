@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useLoginStore from "../../../store/loginStore";
 
 import { CiMail } from "react-icons/ci";
 import { IoKeyOutline } from "react-icons/io5";
@@ -13,8 +12,6 @@ import { httpStatusCode } from "../../../utils/config/httpStatus";
 
 const Login = () => {
   const navigate = useNavigate();
-
-  const { role, setRole } = useLoginStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,7 +66,6 @@ const Login = () => {
           // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
           sessionStorage.setItem("refreshtoken", response.headers.refreshtoken);
           const newRole = response.data.data
-          setRole(newRole);
           newRole === 'STUDENT' ? navigate("/") : navigate("/instructor/main")
           
         }
