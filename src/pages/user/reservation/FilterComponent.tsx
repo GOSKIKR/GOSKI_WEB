@@ -201,7 +201,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         <div className="flex flex-wrap w-full bg-primary-50 rounded-lg shadow-md sm:mx-5 p-5 space-y-5 sm:space-y-0 justify-between">
           <div className="flex flex-col sm:flex-row w-full sm:justify-between items-center space-y-5 sm:space-y-0">
             <div className="flex flex-col sm:flex-row w-full justify-between items-center ">
-              <div className="flex flex-col items-center w-full sm:w-1/6">
+              <div className="flex flex-col items-center w-full sm:w-1/6 px-1">
                 <label className="mb-1 text-sm">장소</label>
                 <select
                   value={filterLessonLocation}
@@ -216,7 +216,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                 </select>
               </div>
 
-              <div className="flex flex-col items-center w-full sm:w-1/6">
+              <div className="flex flex-col items-center w-full sm:w-1/6 px-1">
                 <label className="mb-1 text-sm">인원</label>
                 <select
                   value={filterLessonParticipant}
@@ -233,7 +233,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                 </select>
               </div>
 
-              <div className="flex flex-col items-center w-full sm:w-1/6">
+              <div className="flex flex-col items-center w-full sm:w-1/6 px-1">
                 <label className="mb-1 text-sm">난이도</label>
                 <select
                   value={filterLessonLevel}
@@ -246,18 +246,18 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                 </select>
               </div>
 
-              <div className="flex flex-col items-center w-full sm:w-1/6 relative">
+              <div className="flex flex-col items-center w-full sm:w-1/6 px-1">
                 <label className="mb-1 text-sm">날짜</label>
                 <input
                   type="date"
                   value={filterDate}
                   onChange={(e) => setFilterDate(e.target.value)}
-                  className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
+                  className="w-full sm:w-full py-[2px] rounded shadow-md text-sm"
                   min={today}
                 />
               </div>
 
-              <div className="flex flex-col items-center w-full sm:w-1/6 relative">
+              <div className="flex flex-col items-center w-full sm:w-1/6 px-1">
                 <label className="mb-1 text-sm">시작 시간</label>
                 <TimePicker
                   startTime={filterLessonTime}
@@ -266,7 +266,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                 />
               </div>
 
-              <div className="flex flex-col items-center w-full sm:w-1/6">
+              <div className="flex flex-col items-center w-full sm:w-1/6 px-1">
                 <label className="mb-1 text-sm">강습 시간</label>
                 <select
                   // value={duration}

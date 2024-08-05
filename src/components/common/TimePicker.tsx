@@ -48,26 +48,35 @@ const TimePicker: React.FC<TimePickerProps> = ({
   };
 
   return (
-    <div
+    // <div
+    //   className={`${
+    //     position === 1
+    //       ? "flex flex-col sm:flex-row items-center sm:space-x-4 "
+    //       : position === 2
+    //       ? "w-full sm:w-full py-[2px] rounded shadow-md text-sm"
+    //       : "flex flex-col items-center w-full sm:w-1/6"
+    //   }`}
+    // >
+    <select
+      value={formatTime(startTime)}
+      onChange={(e) => handleSaveTime(e.target.value)}
+      // className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
+      // className="px-6 bg-white shadow-md rounded-lg flex-1 h-8"
       className={`${
         position === 1
-          ? "flex flex-col sm:flex-row items-center sm:space-x-4 "
+          ? "px-6 bg-white shadow-md rounded-lg flex-1 h-8 w-full "
+          : position === 2
+          ? "w-full sm:w-full py-[2px] rounded shadow-md text-sm"
           : "flex flex-col items-center w-full sm:w-1/6"
       }`}
     >
-      <select
-        value={formatTime(startTime)}
-        onChange={(e) => handleSaveTime(e.target.value)}
-        className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
-        // className="px-6 bg-white shadow-md rounded-lg flex-1 h-8"
-      >
-        {timeOptions.map((time) => (
-          <option key={time} value={time}>
-            {time}
-          </option>
-        ))}
-      </select>
-    </div>
+      {timeOptions.map((time) => (
+        <option key={time} value={time}>
+          {time}
+        </option>
+      ))}
+    </select>
+    // </div>
   );
 };
 
