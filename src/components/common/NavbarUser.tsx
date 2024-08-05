@@ -297,8 +297,7 @@ const NavbarUser = () => {
                 }}
                 style={{
                   opacity: location.pathname === "/login" ? 0.5 : 1,
-                  cursor:
-                    location.pathname === "/login" ? "not-allowed" : "pointer",
+                  display: location.pathname === "/login" ? "none" : "block",
                 }}
                 className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
               >
