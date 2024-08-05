@@ -59,6 +59,19 @@ const UserLessonlist = () => {
                       getStatusName(lesson.lessonStatus) === selectedStatus
               );
 
+    const getEmptyMessage = () => {
+        switch (selectedStatus) {
+            case "강습 예정":
+                return "예정된 강습이 없습니다.";
+            case "진행 중":
+                return "진행중인 강습이 없습니다.";
+            case "강습 완료":
+                return "완료된 강습이 없습니다.";
+            default:
+                return "강습이 없습니다";
+        }
+    };
+
     return (
         <div className="flex flex-col space-y-10 w-full mb-4 items-center">
             <div className="w-full sm:h-16 h-12 sm:text-base text-sm bg-primary-50 rounded-3xl shadow-md flex flex-row items-center text-center divide-x divide-black">
@@ -76,15 +89,19 @@ const UserLessonlist = () => {
                     </div>
                 ))}
             </div>
-            {filteredLessons.map((userLessons) => (
-                <LessonlistCard
-                    key={userLessons.lessonId}
-                    lesson={userLessons}
-                    paymentDetail={getPaymentDetailByLessonId(
-                        userLessons.lessonId
-                    )}
-                />
-            ))}
+            {filteredLessons.length > 0 ? (
+                filteredLessons.map((userLesson) => (
+                    <LessonlistCard
+                        key={userLesson.lessonId}
+                        lesson={userLesson}
+                        paymentDetail={getPaymentDetailByLessonId(
+                            userLesson.lessonId
+                        )}
+                    />
+                ))
+            ) : (
+                <div>{getEmptyMessage()}</div>
+            )}
         </div>
     );
 };
