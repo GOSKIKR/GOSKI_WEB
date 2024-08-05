@@ -79,12 +79,14 @@ const TeamManageHeader: React.FC = () => {
                 ) : (
                     <div className="sm:flex sm:flex-row sm:text-right text-center flex flex-col items-center">
                         <div className="flex sm:flex-row flex-col">
-                            <Link 
-                                to="/instructor/team/regist" 
-                                className={`sm:ml-1 mb-2 sm:mb-0 cursor-pointer ${location.pathname ==='/instructor/team/regist' ? 'text-primary-700' : 'text-black'}`}
-                            >
-                                팀 등록 |
-                            </Link>
+                            {role === "OWNER" && (
+                                <Link 
+                                    to="/instructor/team/regist" 
+                                    className={`sm:ml-1 mb-2 sm:mb-0 cursor-pointer ${location.pathname ==='/instructor/team/regist' ? 'text-primary-700' : 'text-black'}`}
+                                >
+                                    팀 등록 |
+                                </Link>
+                            )}
                             <Link 
                                 to="/instructor/team/edit" 
                                 className={`sm:ml-1 mb-2 sm:mb-0 cursor-pointer ${location.pathname ==='/instructor/team/edit' ? 'text-primary-700' : 'text-black'}`}
