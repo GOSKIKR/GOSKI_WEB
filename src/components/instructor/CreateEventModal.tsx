@@ -92,32 +92,30 @@ const CreateEventModal: React.FC<EventModalProps> = ({
             alert("일정을 선택해주세요.");
             return;
         }
-        if (!startTime) {
-            alert("시작 시간을 입력해주세요.");
-            return;
-        }
-        if (!level) {
-            alert("레벨을 선택해주세요.");
-            return;
-        }
-        if (!duration) {
-            alert("강습 시간을 선택해주세요.");
-            return;
-        }
-        if (!userName) {
-            alert("예약자를 입력해주세요.");
-            return;
-        }
-        if (!content) {
-            alert("특이사항을 입력해주세요.");
-            return;
-        }
 
-        // Check if selected date and time is in the past
-        const selectedDateTime = new Date(`${lessonDate}T${startTime}`);
-        if (selectedDateTime < new Date()) {
-            alert("과거의 시간은 선택할 수 없습니다.");
-            return;
+        if (lessonType !== "DAYOFF") {
+            if (!startTime) {
+                alert("시작 시간을 입력해주세요.");
+                return;
+            }
+            if (!level) {
+                alert("레벨을 선택해주세요.");
+                return;
+            }
+            if (!duration) {
+                alert("강습 시간을 선택해주세요.");
+                return;
+            }
+            if (!userName) {
+                alert("예약자를 입력해주세요.");
+                return;
+            }
+            // Check if selected date and time is in the past
+            const selectedDateTime = new Date(`${lessonDate}T${startTime}`);
+            if (selectedDateTime < new Date()) {
+                alert("과거의 시간은 선택할 수 없습니다.");
+                return;
+            }
         }
 
         const eventToSave = {
@@ -242,69 +240,83 @@ const CreateEventModal: React.FC<EventModalProps> = ({
                         />
                     </div>
                 </div>
-                <div className="flex flex-row space-x-2">
-                    <div className="mb-3 w-1/3">
-                        <label className="block mb-1 text-sm">레벨</label>
-                        <select
-                            name="level"
-                            value={newEvent.level}
-                            onChange={handleInputChange}
-                            className="w-full h-7 text-xs px-1 border rounded-lg"
-                        >
-                            <option value="">레벨을 선택하세요</option>
-                            <option value="BEGINNER">초급</option>
-                            <option value="INTERMEDIATE">중급</option>
-                            <option value="ADVANCED">고급</option>
-                        </select>
-                    </div>
-                    <div className="mb-3 w-1/3">
-                        <label className="block mb-1 text-sm">강습 시간</label>
-                        <select
-                            name="duration"
-                            value={newEvent.duration}
-                            onChange={handleNumberChange}
-                            className="w-full h-7 text-xs px-1 border rounded-lg"
-                        >
-                            <option value={1}>1시간</option>
-                            <option value={2}>2시간</option>
-                            <option value={3}>3시간</option>
-                        </select>
-                    </div>
-                    <div className="mb-3 w-1/3">
-                        <label className="block mb-1 text-sm">강습 인원</label>
-                        <select
-                            name="studentCount"
-                            value={newEvent.studentCount}
-                            onChange={handleNumberChange}
-                            className="w-full h-7 text-xs px-1 border rounded-lg"
-                        >
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                        </select>
-                    </div>
-                </div>
-                <div className="mb-3">
-                    <label className="block mb-1 text-sm">예약자</label>
-                    <input
-                        type="text"
-                        name="userName"
-                        value={newEvent.userName}
-                        onChange={handleInputChange}
-                        placeholder="예약자를 입력하세요"
-                        className="w-full h-7 text-xs px-1 border rounded-lg"
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="block mb-1 text-sm">특이사항</label>
-                    <textarea
-                        name="content"
-                        value={newEvent.content}
-                        onChange={handleInputChange}
-                        placeholder="특이사항을 입력하세요"
-                        className="w-full h-7 text-xs px-1 border rounded-lg"
-                    />
-                </div>
+                {newEvent.lessonType !== "DAYOFF" && (
+                    <>
+                        <div className="flex flex-row space-x-2">
+                            <div className="mb-3 w-1/3">
+                                <label className="block mb-1 text-sm">
+                                    레벨
+                                </label>
+                                <select
+                                    name="level"
+                                    value={newEvent.level}
+                                    onChange={handleInputChange}
+                                    className="w-full h-7 text-xs px-1 border rounded-lg"
+                                >
+                                    <option value="">레벨을 선택하세요</option>
+                                    <option value="BEGINNER">초급</option>
+                                    <option value="INTERMEDIATE">중급</option>
+                                    <option value="ADVANCED">고급</option>
+                                </select>
+                            </div>
+                            <div className="mb-3 w-1/3">
+                                <label className="block mb-1 text-sm">
+                                    강습 시간
+                                </label>
+                                <select
+                                    name="duration"
+                                    value={newEvent.duration}
+                                    onChange={handleNumberChange}
+                                    className="w-full h-7 text-xs px-1 border rounded-lg"
+                                >
+                                    <option value={1}>1시간</option>
+                                    <option value={2}>2시간</option>
+                                    <option value={3}>3시간</option>
+                                </select>
+                            </div>
+                            <div className="mb-3 w-1/3">
+                                <label className="block mb-1 text-sm">
+                                    강습 인원
+                                </label>
+                                <select
+                                    name="studentCount"
+                                    value={newEvent.studentCount}
+                                    onChange={handleNumberChange}
+                                    className="w-full h-7 text-xs px-1 border rounded-lg"
+                                >
+                                    <option value={1}>1</option>
+                                    <option value={2}>2</option>
+                                    <option value={3}>3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className="block mb-1 text-sm">예약자</label>
+                            <input
+                                type="text"
+                                name="userName"
+                                value={newEvent.userName}
+                                onChange={handleInputChange}
+                                placeholder="예약자를 입력하세요"
+                                className="w-full h-7 text-xs px-1 border rounded-lg"
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className="block mb-1 text-sm">
+                                특이사항
+                            </label>
+                            <input
+                                type="text"
+                                name="content"
+                                value={newEvent.content}
+                                onChange={handleInputChange}
+                                placeholder="특이사항을 입력하세요"
+                                className="w-full h-7 text-xs px-1 border rounded-lg"
+                            />
+                        </div>
+                    </>
+                )}
+
                 <div className="flex flex-row space-x-2 w-full items-center justify-center">
                     <button
                         onClick={handleAddEvent}
