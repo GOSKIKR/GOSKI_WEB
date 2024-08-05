@@ -144,6 +144,9 @@ const NavbarUserMobile = () => {
       {!isLogin ? (
         <div
           className="text-white cursor-pointer"
+          style={{
+            display: location.pathname === "/login" ? "none" : "block",
+          }}
           onClick={() => navigate("/login")}
         >
           로그인
