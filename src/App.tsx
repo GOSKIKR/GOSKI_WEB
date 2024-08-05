@@ -77,7 +77,7 @@ const App: React.FC = () => {
           <Route element={<AuthorizedRoute allowedRoles={['OWNER','INSTRUCTOR']}/>}>
             <Route path="/instructor/main" element={<InstructorMain />} />
             <Route path="/instructor/boss/main" element={<BossMain />} />
-            <Route path="/instructor/team" element={<Navigate to="/instructor/team/regist"/>}/>
+            <Route path="/instructor/team" element={<Navigate to="/instructor/team/edit"/>}/>
             <Route path="/instructor/detail/:lessonId"  element={<LessonDetail />}/>
             <Route path="/instructor/team/edit" element={<TeamInfoEdit />} />
             <Route path="/instructor/team/lessonfee" element={<TeamLessonFeeSetting />}/>
