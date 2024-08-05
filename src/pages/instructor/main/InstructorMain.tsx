@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
 import { useNavigate } from "react-router-dom";
 import NavbarInstructor from "../../../components/common/NavbarInstructor";
 import { Event, CreateEvent } from "../../../dto/EventDTO";
@@ -35,16 +33,16 @@ const InstructorMain = () => {
     const [userId, setUserId] = useState<number | undefined>(undefined);
 
     const colors = [
-        "#FFB3BA",
-        "#FFDFBA",
-        "#FFFFBA",
-        "#BAFFC9",
-        "#BAE1FF",
-        "#D7B3FF",
-        "#FFB3E4",
-        "#FFB3BA",
-        "#FFDFBA",
-        "#BAE1FF",
+        "#FFB3BA", // light pastel red
+        "#FFDFBA", // light pastel orange
+        "#FFFFBA", // light pastel yellow
+        "#BAFFC9", // light pastel green
+        "#BAE1FF", // light pastel blue
+        "#D7B3FF", // light pastel purple
+        "#FFB3E4", // light pastel pink
+        "#FFB3BA", // light pastel red
+        "#FFDFBA", // light pastel orange
+        "#BAE1FF", // light pastel blue
     ];
 
     useEffect(() => {
@@ -65,6 +63,7 @@ const InstructorMain = () => {
 
         fetchTeams();
         fetchMyEvents();
+        console.log(events);
     }, []);
 
     useEffect(() => {
@@ -103,7 +102,7 @@ const InstructorMain = () => {
 
     const parseLessonType = (lessonType: string) => {
         const availability = lessonType.slice(0, 3);
-        let type = "모두";
+        let type = "휴무";
         if (availability === "101") {
             type = "SKI";
         } else if (availability === "110") {
@@ -123,30 +122,30 @@ const InstructorMain = () => {
 
         if (selectedTeam) {
             return (
-                <div className="flex items-center justify-center">
-                    <div className="w-12 h-full flex flex-col items-center">
-                        <b className="flex flex-col space-y-0 pt-2 items-center text-black">
-                            <div>1:{studentCount}</div>
-                            <div>{lessonType}</div>
-                            <div className="py-2">{instructorName}</div>
-                        </b>
-                    </div>
+                <div className="w-full h-full flex flex-col items-center justify-center text-black">
+                    {lessonType !== "휴무" && (
+                        <div className="text-xs text-gray-600">
+                            1:{studentCount}
+                        </div>
+                    )}
+                    <div className="text-xs text-gray-500">{lessonType}</div>
+                    <div className="py-1 text-sm">{instructorName}</div>
                 </div>
             );
         } else {
             return (
-                <div className="flex items-center justify-center">
-                    <div className="w-20 h-full flex flex-col items-center">
-                        <b className="flex flex-col space-y-0 pt-2 items-center">
-                            <div>1:{studentCount}</div>
-                            <div>{lessonType}</div>
-                            <div className="py-2 flex flex-row space-x-2 items-center">
-                                <div>예약자</div>
-                                <div className="font-extrabold">
-                                    {eventInfo.event.extendedProps.reserver}
-                                </div>
-                            </div>
-                        </b>
+                <div className="w-full h-full flex flex-col items-center justify-center text-white">
+                    {lessonType !== "휴무" && (
+                        <div className="text-xs text-white">
+                            1:{studentCount}
+                        </div>
+                    )}
+                    <div>{lessonType}</div>
+                    <div className="py-2 flex flex-row space-x-2 items-center">
+                        <div>예약자</div>
+                        <div className="font-extrabold">
+                            {eventInfo.event.extendedProps.reserver}
+                        </div>
                     </div>
                 </div>
             );
