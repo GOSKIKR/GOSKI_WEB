@@ -39,6 +39,7 @@ import PayFail from "./pages/user/payment/PayFail";
 
 import ProtectedRoute from "./utils/ProtectedRoute";
 import AuthorizedRoute from "./utils/AuthorizedRoute";
+import PublicRoute from "./utils/PublicRoute";
 
 const App: React.FC = () => {
 
@@ -47,16 +48,17 @@ const App: React.FC = () => {
       <Routes>
         
         <Route path="/" element={<UserMain />} />
-
-        <Route path="/notice" element={<Notice />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/login/forgot-password" element={<ForgotPassword />} />
-        <Route path="/login/register" element={<Register />} />
-
         <Route path="/reserve/set" element={<SetFilter />} />
         <Route path="/reserve/result" element={<FilterResult />} />
         <Route path="/reserve/info/team" element={<TeamInfo />} />
         <Route path="/reserve/info/instructor" element={<InstructorInfo />} />
+        <Route path="/notice" element={<Notice />} />
+
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/login/forgot-password" element={<ForgotPassword />} />
+          <Route path="/login/register" element={<Register />} />
+        </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AuthorizedRoute allowedRoles={['STUDENT']}/>}>
