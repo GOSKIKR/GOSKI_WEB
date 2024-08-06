@@ -18,7 +18,7 @@ export class UserService {
                 return response.data.data as InstructorProfileDTO;
             }
         } catch (error) {
-            alert("강사 프로필 조회 실패");
+            console.error(error)
         }
         return null;
     }

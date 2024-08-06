@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiClient from "../../utils/config/axiosConfig";
 import axios from "axios";
 
 import UserNotification from "../user/UserNotification";
+import { getRole } from "../../utils/getRole";
 
 const NavbarInstructorMobile = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -11,6 +11,8 @@ const NavbarInstructorMobile = () => {
   const [isLogin, setIsLogin] = useState(
     sessionStorage.getItem("accesstoken") ? true : false
   );
+
+  const role = getRole();
 
   const [showSettings, setShowSettings] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
@@ -181,14 +183,16 @@ const NavbarInstructorMobile = () => {
             >
               강습내역
             </button>
-            <button
+            {role === "OWNER" && (
+              <button
               className="px-4 py-2 text-left hover:bg-gray-100"
               onClick={() => {
                 navigate("/instructor/settlement");
               }}
-            >
+              >
               정산
-            </button>
+              </button>
+          )}
           </div>
         )}
       </div>

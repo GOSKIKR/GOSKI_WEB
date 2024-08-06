@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import useInstructorStore from '../../../store/InstStore';
-import useLoginStore from '../../../store/loginStore';
 import { UserService } from '../../../api/UserService';
 import { UserMyService } from '../../../api/UserMyService';
 import { UserMyDTO } from '../../../dto/UserMyDTO';
 import { InstructorProfileDTO } from '../../../dto/InstructorDTO';
+import { getRole } from '../../../utils/getRole';
 
 const userService = new UserService();
 const userMyService = new UserMyService();
 
 const ProfilePage: React.FC = () => {
     const { userName, profileUrl, gender, description, phoneNumber, birthDate, setProfile } = useInstructorStore();
-    const { role } = useLoginStore();
+    const role = getRole()
 
     const [profileImage, setProfileImage] = useState<File | null>(null);
     const [profilePreview, setProfilePreview] = useState<string | null>(profileUrl);

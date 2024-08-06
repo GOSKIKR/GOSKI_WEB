@@ -21,7 +21,7 @@ const CertificatePage: React.FC = () => {
     const handleLevelSelect = () => {
         if (selectedLevel !== null) {
             const newCertIndex = newCertificates.length;
-            setNewCertificates([...newCertificates, { certificateId: selectedLevel, newCertImage: new File([], '') }]);
+            setNewCertificates([...newCertificates, { certificateId: selectedLevel, newCertImage: null }]);
             setCertificates([...certificates, { certificateId: selectedLevel, certificateImageUrl: '' }]);
             setIsModalOpen(false);
             setSelectedLevel(null);
@@ -38,12 +38,16 @@ const CertificatePage: React.FC = () => {
     const handleImageChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            console.log(file);
             setNewCertificates(newCertificates.map((cert, i) => i === index ? { ...cert, newCertImage: file } : cert));
             const reader = new FileReader();
+            console.log(reader.result)
             reader.onloadend = () => {
                 setCertificates(certificates.map((cert, i) => i === index ? { ...cert, certificateImageUrl: reader.result as string } : cert));
             };
             reader.readAsDataURL(file);
+            console.log("handleImageChange 새 자격증 " ,newCertificates);
+            console.log("handleImageChange 지금 있는 자격증", certificates);
         }
     };
 
@@ -66,21 +70,29 @@ const CertificatePage: React.FC = () => {
         const formData = new FormData();
 
         deleteCertificateUrls.forEach((cert) => {
-            formData.append("deletedCertificateIds",cert.certificateId.toString());
-            formData.append("deleteCertificateUrls",cert.certificateImageUrl)
-        })
+            formData.append("deletedCertificateIds", cert.certificateId.toString());
+            formData.append("deleteCertificateUrls", cert.certificateImageUrl);
+        });
 
-        newCertificates.forEach(cert => {
+        for (const cert of newCertificates) {
             formData.append('certificateIds', cert.certificateId.toString());
             if (cert.newCertImage) {
                 formData.append('certificateImages', cert.newCertImage);
+            } else {
+                alert('자격증 이미지가 비어서는 안됩니다.');
+                return;
             }
-        });
+        }
+
+        console.log("instProfileUpdate 새 자격증 " ,newCertificates);
+        console.log("instProfileUpdate 지금 있는 자격증", certificates);
 
         await userService.updateInstructorCerts(formData);
         const updatedProfile = await userService.getInstructorProfile();
-        if(updatedProfile){
+        if (updatedProfile) {
             setProfile(updatedProfile);
+            setDeleteCertificateUrls([]);
+            setNewCertificates([]);
         }
     };
 
