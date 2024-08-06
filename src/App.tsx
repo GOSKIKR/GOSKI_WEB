@@ -45,18 +45,21 @@ const App: React.FC = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<UserMain />} />
+        <Route element={<AuthorizedRoute allowedRoles={['STUDENT']}/>}>
+        
+          <Route path="/" element={<UserMain />} />
 
-        <Route path="/notice" element={<Notice />} />
+          <Route path="/notice" element={<Notice />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/login/forgot-password" element={<ForgotPassword />} />
-        <Route path="/login/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/login/forgot-password" element={<ForgotPassword />} />
+          <Route path="/login/register" element={<Register />} />
 
-        <Route path="/reserve/set" element={<SetFilter />} />
-        <Route path="/reserve/result" element={<FilterResult />} />
-        <Route path="/reserve/info/team" element={<TeamInfo />} />
-        <Route path="/reserve/info/instructor" element={<InstructorInfo />} />
+          <Route path="/reserve/set" element={<SetFilter />} />
+          <Route path="/reserve/result" element={<FilterResult />} />
+          <Route path="/reserve/info/team" element={<TeamInfo />} />
+          <Route path="/reserve/info/instructor" element={<InstructorInfo />} />
+        </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AuthorizedRoute allowedRoles={['STUDENT']}/>}>
