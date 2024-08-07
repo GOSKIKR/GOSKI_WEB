@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Team, TeamInstInfoDTO, TeamInviteDTO } from "../../../dto/TeamDTO";
 import { TeamService } from "../../../api/TeamService";
+import { InstructorTeamService } from "../../../api/InstTeamService";
+import { getRole } from "../../../utils/getRole";
 
 
 interface DropdownMenuProps {
@@ -21,6 +23,7 @@ interface DropdownMenuProps {
 }
 
 const teamService = new TeamService();
+const instructorTeamService = new InstructorTeamService();
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
     setProfileUrl, setDescription,
@@ -33,7 +36,10 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     const location = useLocation();
 
     const fetchTeamList = async () => {
-        const response = await teamService.getTeamList();
+        const role = getRole();
+        const response = role === "OWNER" ?  
+                    await teamService.getTeamList() : 
+                    await instructorTeamService.getTeamList();
         if (response) {
             setTeamList(response);
             if (response.length > 0) {
