@@ -19,6 +19,7 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 import { Instructor } from "../../../dto/UserInstructorDTO";
 import { FaRegStar } from "react-icons/fa6";
 import TimePicker from "../../../components/common/TimePicker";
+import userResortsStore from "../../../store/userResortsStore";
 
 const renderStars = (score: number) => {
     const filledStars = Math.floor(score);
@@ -147,6 +148,8 @@ const InstructorInfo = () => {
         level,
     } = userReserveStore();
 
+    const { lessonTime } = userResortsStore();
+
     const [selectedStartTime, setSelectedStartTime] =
         useState<string>(startTime);
     const [selectedLessonTime, setSelectedLessonTime] = useState(duration);
@@ -223,6 +226,12 @@ const InstructorInfo = () => {
         lessonType,
         reviews,
     ]);
+
+    useEffect(() => {
+        setFilterLessonDuration(duration);
+        setFilterLessonDurationTimes(lessonTime);
+        setSelectedStartTime(startTime);
+    }, [lessonTime]);
 
     return (
         <div className="min-h-screen h-auto bg-gray-50">
