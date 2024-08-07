@@ -38,6 +38,7 @@ const ReservationBox = () => {
     const [durationTimes, setdurationTimes] = useState<number[]>([]);
     const [selectedDurationTime, setDurationTime] = useState<number>(0);
     const [level, setLevel] = useState<string>("");
+    const [formattedStartTime, setFormattedStartTime] = useState("");
 
     const [lessonStartTime, setLessonStartTime] = useState("");
 
@@ -45,6 +46,22 @@ const ReservationBox = () => {
     const { setResortInfo } = userResortsStore();
 
     const navigate = useNavigate();
+
+    const generateTimeOptions = () => {
+        const options = [];
+        for (let hour = 8; hour < 22; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const timeString = `${hour.toString().padStart(2, "0")}:${minute
+                    .toString()
+                    .padStart(2, "0")}`;
+                options.push(timeString);
+            }
+        }
+        options.push(`22:00`);
+        return options;
+    };
+
+    const timeOptions = generateTimeOptions();
 
     // 초기 리조트 정보 설정
     useEffect(() => {
@@ -137,11 +154,11 @@ const ReservationBox = () => {
     // 현재 날짜
     const today = new Date();
 
-    //timepicker 위치 설정
-    const [timePickerPosition, setTimePickerPosition] = useState<number>(0);
-    useEffect(() => {
-        setTimePickerPosition(1);
-    }, []);
+    const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedTime = e.target.value;
+        setLessonStartTime(selectedTime);
+        setFormattedStartTime(selectedTime.replace(":", ""));
+    };
 
     return (
         <div className="flex flex-col lg:flex-row lg:space-x-4 w-full justify-start items-center lg:items-stretch sm:bg-[url('/assets/images/bgski.jpg')] bg-blend-darken bg-gray-700 bg-opacity-30 bg-cover bg-center sm:p-4 lg:p-8 rounded-lg shadow-lg">
@@ -248,11 +265,18 @@ const ReservationBox = () => {
                     <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold text-sm text-gray-500">
                         강습 시작 시간
                     </label>
-                    <TimePicker
-                        startTime={lessonStartTime}
-                        setStartTime={setLessonStartTime}
-                        position={timePickerPosition}
-                    />
+                    <select
+                        value={lessonStartTime}
+                        onChange={handleTimeChange}
+                        className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
+                    >
+                        <option value="">시작 시간을 선택하세요</option>
+                        {timeOptions.map((time) => (
+                            <option key={time} value={time}>
+                                {time}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
