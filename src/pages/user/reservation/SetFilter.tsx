@@ -10,6 +10,7 @@ import { ResortDTO } from "../../../dto/ResortDTO";
 import { ReserveDTO } from "../../../dto/ReserveDTO";
 import userReserveStore from "../../../store/userReserveStore";
 import userResortsStore from "../../../store/userResortsStore";
+import TimePicker from "../../../components/common/TimePicker";
 
 const SetFilter: React.FC = () => {
     const navigate = useNavigate();
@@ -104,29 +105,32 @@ const SetFilter: React.FC = () => {
         }
     };
 
-    const generateTimeSlots = () => {
-        const slots = [];
-        for (let i = 8; i < 22; i++) {
-            const hour = i.toString().padStart(2, "0");
-            slots.push(`${hour}:00`);
-            slots.push(`${hour}:30`);
-        }
-        slots.push("22:00");
-        return slots;
-    };
-
-    const timeSlots = generateTimeSlots();
-
     const today = new Date();
 
     const formatTime = (time: string) => {
         return time.replace(":", "");
     };
 
-    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const time = e.target.value;
-        setStartTime(time);
-        setFormattedStartTime(formatTime(time));
+    const generateTimeOptions = () => {
+        const options = [];
+        for (let hour = 8; hour < 22; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const timeString = `${hour.toString().padStart(2, "0")}:${minute
+                    .toString()
+                    .padStart(2, "0")}`;
+                options.push(timeString);
+            }
+        }
+        options.push(`22:00`);
+        return options;
+    };
+
+    const timeOptions = generateTimeOptions();
+
+    const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedTime = e.target.value;
+        setStartTime(selectedTime);
+        setFormattedStartTime(selectedTime.replace(":", ""));
     };
 
     return (
@@ -243,15 +247,19 @@ const SetFilter: React.FC = () => {
                         <label className="mb-1 mr-4 sm:w-28 text-center w-24 font-bold">
                             시작 시간
                         </label>
-                        <div className="flex flex-1">
-                            <input
-                                type="time"
-                                value={startTime}
-                                onChange={handleTimeChange}
-                                className="w-full p-2 bg-white shadow-md rounded-lg h-9 text-center"
-                                step="1800" // 30 minutes
-                            />
-                        </div>
+
+                        <select
+                            value={startTime}
+                            onChange={handleTimeChange}
+                            className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
+                        >
+                            <option value="">시작 시간을 선택하세요</option>
+                            {timeOptions.map((time) => (
+                                <option key={time} value={time}>
+                                    {time}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="flex items-center mb-4">
                         <label className="mb-1 mr-4 sm:w-28 text-center w-24 font-bold">
