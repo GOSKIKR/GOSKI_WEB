@@ -125,7 +125,7 @@ const ReservationBox = () => {
             lessonType: lessonType,
             studentCount: participant,
             lessonDate: selectedDate.toISOString().split("T")[0],
-            startTime: lessonStartTime,
+            startTime: formattedStartTime,
             duration: selectedDurationTime,
             level: level,
         } as Resort);

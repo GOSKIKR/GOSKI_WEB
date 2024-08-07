@@ -13,11 +13,8 @@ import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 import instructorInfoStore from "../../../store/instructorInfoStore";
 import userReserveStore from "../../../store/userReserveStore";
 import "react-tooltip/dist/react-tooltip.css";
-import { Tooltip } from "react-tooltip";
 import "../../../../public/assets/css/tooltip.css";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 import { Instructor } from "../../../dto/UserInstructorDTO";
-import { FaRegStar } from "react-icons/fa6";
 import TimePicker from "../../../components/common/TimePicker";
 import userResortsStore from "../../../store/userResortsStore";
 
@@ -87,25 +84,6 @@ const InstructorInfo = () => {
     const [selectedInstructor, setSelectedInstructor] =
         useState<Instructor | null>(null);
 
-    const goToPay = () => {
-        if (!sessionStorage.getItem("accesstoken")) {
-            alert("로그인이 필요한 서비스입니다.");
-            navigate("/login");
-            return;
-        }
-        navigate("/user/payment", {
-            state: {
-                selectedInstructor,
-                userName,
-                designatedFee,
-                levelOptionFee,
-                basicFee,
-                peopleOptionFee,
-                duration,
-            },
-        });
-    };
-
     const settings = {
         arrows: true,
         dots: false,
@@ -146,9 +124,10 @@ const InstructorInfo = () => {
         startTime,
         duration,
         level,
+        setReservationInfo,
     } = userReserveStore();
 
-    const { lessonTime } = userResortsStore();
+    const { resortId, resortName, lessonTime } = userResortsStore();
 
     const [selectedStartTime, setSelectedStartTime] =
         useState<string>(startTime);
@@ -232,6 +211,66 @@ const InstructorInfo = () => {
         setFilterLessonDurationTimes(lessonTime);
         setSelectedStartTime(startTime);
     }, [lessonTime]);
+
+    const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedTime = e.target.value;
+        setSelectedStartTime(selectedTime.replace(":", ""));
+    };
+
+    const handleDurationChange = (
+        event: React.ChangeEvent<HTMLSelectElement>
+    ) => {
+        const duration = parseInt(event.target.value);
+        setFilterLessonDuration(duration);
+        setSelectedLessonTime(duration);
+    };
+
+    const generateTimeOptions = () => {
+        const options = [];
+        for (let hour = 8; hour < 22; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const timeString = `${hour.toString().padStart(2, "0")}:${minute
+                    .toString()
+                    .padStart(2, "0")}`;
+                options.push(timeString);
+            }
+        }
+        options.push(`22:00`);
+        return options;
+    };
+
+    const timeOptions = generateTimeOptions();
+
+    const goToPay = () => {
+        if (!sessionStorage.getItem("accesstoken")) {
+            alert("로그인이 필요한 서비스입니다.");
+            navigate("/login");
+            return;
+        }
+
+        setReservationInfo({
+            resortId,
+            resortName,
+            lessonType,
+            studentCount,
+            lessonDate,
+            startTime: selectedStartTime,
+            duration: filterLessonDuration,
+            level,
+        });
+
+        navigate("/user/payment", {
+            state: {
+                selectedInstructor,
+                userName,
+                designatedFee,
+                levelOptionFee,
+                basicFee,
+                peopleOptionFee,
+                duration: selectedLessonTime,
+            },
+        });
+    };
 
     return (
         <div className="min-h-screen h-auto bg-gray-50">
@@ -388,11 +427,20 @@ const InstructorInfo = () => {
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 시작 시간
                             </label>
-                            <TimePicker
-                                startTime={selectedStartTime}
-                                setStartTime={setSelectedStartTime}
-                                position={1}
-                            />
+                            <select
+                                value={`${selectedStartTime.slice(
+                                    0,
+                                    2
+                                )}:${selectedStartTime.slice(2)}`}
+                                onChange={handleTimeChange}
+                                className="px-2 w-full bg-white shadow-md rounded-md flex-1 h-9 text-xs py-1 sm:text-sm"
+                            >
+                                {timeOptions.map((time) => (
+                                    <option key={time} value={time}>
+                                        {time}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
@@ -400,19 +448,17 @@ const InstructorInfo = () => {
                                 강습 시간
                             </label>
                             <select
-                                value={filterLessonDuration.toString()}
-                                onChange={(e) =>
-                                    setFilterLessonDuration(
-                                        parseInt(e.target.value)
-                                    )
-                                }
-                                className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
+                                value={filterLessonDuration}
+                                onChange={handleDurationChange}
+                                className="border rounded-md p-1"
                             >
-                                {filterLessonDurationTimes.map((time) => (
-                                    <option key={time} value={time}>
-                                        {time}시간
-                                    </option>
-                                ))}
+                                {filterLessonDurationTimes.map(
+                                    (time, index) => (
+                                        <option key={index} value={time}>
+                                            {time}시간
+                                        </option>
+                                    )
+                                )}
                             </select>
                         </div>
                     </div>
