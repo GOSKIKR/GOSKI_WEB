@@ -20,6 +20,12 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [userOrInstructor, setUserOrInstructor] = useState("user");
 
+  const [roleState, setRoleState] = useState("STUDENT");
+
+  useEffect(() => {
+    setRole(roleState);
+  }, [roleState]);
+  console.log(role);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   const handleResize = () => {
@@ -36,10 +42,10 @@ const Login = () => {
   //카카오 로그인 인가 코드 받아오기
   const KAKAO_AUTH_URL_LOCAL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_KAKAO_REST_API_KEY
-  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_LOCAL}`;
+  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_LOCAL}&prompt=login`;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_KAKAO_REST_API_KEY
-  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
+  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}&prompt=login`;
   const KAKAO_AUTH_URL_INST_LOCAL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_KAKAO_REST_API_KEY
   }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_INST_LOCAL}`;
@@ -48,17 +54,6 @@ const Login = () => {
   }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_INST}`;
 
   const handleKakaoLogin = () => {
-    // return async () => {
-    //   if (userOrInstructor === "user") {
-    //     window.location.href = import.meta.env.DEV
-    //       ? KAKAO_AUTH_URL_LOCAL
-    //       : KAKAO_AUTH_URL;
-    //   } else {
-    //     window.location.href = import.meta.env.DEV
-    //       ? KAKAO_AUTH_URL_INST_LOCAL
-    //       : KAKAO_AUTH_URL_INST;
-    //   }
-    // };
     window.location.href = KAKAO_AUTH_URL_LOCAL;
   };
 
@@ -156,7 +151,10 @@ const Login = () => {
             <div className="flex justify-center">
               <div className="flex flex-row w-full justify-center rounded-md overflow-hidden">
                 <div
-                  onClick={() => setUserOrInstructor("user")}
+                  onClick={() => {
+                    setUserOrInstructor("user");
+                    setRoleState("STUDENT");
+                  }}
                   className={`flex w-1/2 justify-center cursor-pointer rounded-tl-lg hover:bg-primary-500 hover:text-white
                             ${
                               userOrInstructor === "user"
@@ -168,7 +166,10 @@ const Login = () => {
                   일반 사용자
                 </div>
                 <div
-                  onClick={() => setUserOrInstructor("instructor")}
+                  onClick={() => {
+                    setUserOrInstructor("instructor");
+                    setRoleState("INSTRUCTOR");
+                  }}
                   className={`flex w-1/2 justify-center cursor-pointer rounded-tr-lg hover:bg-primary-500 hover:text-white
               ${
                 userOrInstructor === "instructor"
