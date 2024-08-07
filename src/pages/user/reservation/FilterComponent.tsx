@@ -61,8 +61,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
     const [locationsInfo, setLocationsInfo] = useState<ResortLocations[]>([]);
 
-    console.log(filteredData);
-
     const {
         resortName,
         lessonType,
@@ -173,6 +171,27 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         handleSearchClick();
     };
 
+    const generateTimeOptions = () => {
+        const options = [];
+        for (let hour = 8; hour < 22; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const timeString = `${hour.toString().padStart(2, "0")}:${minute
+                    .toString()
+                    .padStart(2, "0")}`;
+                options.push(timeString);
+            }
+        }
+        options.push(`22:00`);
+        return options;
+    };
+
+    const timeOptions = generateTimeOptions();
+
+    const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedTime = e.target.value;
+        setFilterLessonTime(selectedTime.replace(":", ""));
+    };
+
     return (
         <div className="container mx-auto px-5 max-w-screen-xl">
             <div className="w-full flex flex-col items-center space-y-5 py-10">
@@ -276,11 +295,20 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                                     시작 시간
                                 </label>
 
-                                <TimePicker
-                                    startTime={filterLessonTime}
-                                    setStartTime={setFilterLessonTime}
-                                    position={2}
-                                />
+                                <select
+                                    value={`${filterLessonTime.slice(
+                                        0,
+                                        2
+                                    )}:${filterLessonTime.slice(2)}`}
+                                    onChange={handleTimeChange}
+                                    className="px-2 w-full bg-white shadow-md rounded-md flex-1 h-9 text-xs py-1 sm:text-sm"
+                                >
+                                    {timeOptions.map((time) => (
+                                        <option key={time} value={time}>
+                                            {time}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div className="flex flex-col items-center w-full sm:w-1/6">

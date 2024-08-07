@@ -23,7 +23,7 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
 }) => {
     console.log(filteredData);
     return (
-        <div className="h-full w-full overflow-y-auto  pb-12 items-center justify-center">
+        <div className="h-full w-full overflow-y-auto pb-12 items-center justify-center">
             {filteredData.length !== 0 && filteredData ? (
                 selectedLevel === "BEGINNER" ? (
                     <div className="flex flex-col items-center overflow-auto justify-center mx-10">
@@ -36,7 +36,7 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
                         ))}
                     </div>
                 ) : (
-                    <div className="flex flex-row w-full items-center overflow-auto">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 sm:gap-4 gap-2 w-full items-center overflow-auto">
                         {filteredData.map((data: any) => (
                             <InstructorResultComponent
                                 key={data.instructorId}

@@ -40,6 +40,10 @@ const BeforePay: React.FC<BeforePayProps> = ({ onClose, instructorList }) => {
             state: {
                 selectedInstructor,
                 designatedFee: selectedInstructor?.designatedFee,
+                levelOptionFee,
+                basicFee,
+                peopleOptionFee,
+                duration,
             },
         });
     };

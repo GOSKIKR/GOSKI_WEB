@@ -91,7 +91,7 @@ const BossMain = () => {
 
     const parseLessonType = (lessonType: string) => {
         const availability = lessonType.slice(0, 3);
-        let type = "모두";
+        let type = "휴무";
         if (availability === "101") {
             type = "SKI";
         } else if (availability === "110") {

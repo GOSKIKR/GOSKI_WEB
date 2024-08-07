@@ -6,7 +6,8 @@ import FilterComponent from "./FilterComponent";
 import ResultComponent from "./ResultComponent";
 
 import apiClient from "../../../utils/config/axiosConfig";
-
+import userResortsStore from "../../../store/userResortsStore";
+import { ResortService } from "../../../api/ResortService";
 import {
     TeamsFilterResult,
     InstructorsFilterResult,
@@ -48,6 +49,23 @@ const FilterResult: React.FC = () => {
         duration,
         level,
     } = userReserveStore();
+
+    const { setReservationInfo } = userReserveStore();
+    const { setResortInfo } = userResortsStore();
+    const [locations, setLocations] = useState<any[]>([]);
+    const [lessonTimes, setLessonTimes] = useState<number[]>([]);
+
+    useEffect(() => {
+        const fetchResorts = async () => {
+            const resortService = new ResortService();
+            const resorts = await resortService.getResortInformation();
+            if (resorts) {
+                setLocations(resorts);
+                setLessonTimes(resorts[0] ? resorts[0].lessonTime : []);
+            }
+        };
+        fetchResorts();
+    }, []);
 
     useEffect(() => {
         const fetchTeamData = async () => {
@@ -193,7 +211,7 @@ const FilterResult: React.FC = () => {
             </div>
             <div className="flex-grow overflow-hidden">
                 {/* ResultComponent가 남은 공간을 차지하고 overflow 처리 */}
-                <div className="container mx-auto px-5 max-w-screen-xl">
+                <div className="container mx-auto px-5 max-w-screen-xl w-full h-full">
                     <ResultComponent
                         filteredData={
                             selectedLevel === "BEGINNER"
