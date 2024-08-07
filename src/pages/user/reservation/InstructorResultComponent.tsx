@@ -81,11 +81,11 @@ const InstructorResultComponent: React.FC<InstructorResultComponentProps> = ({
     return (
         <div
             key={data.instructorId}
-            className="bg-primary-50 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg sm:w-1/4 w-1/2 h-80 flex flex-col items-center justify-center mx-3 my-4"
+            className="bg-primary-50 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg flex flex-col items-center justify-center mx-3 py-3 h-72 w-40"
             onClick={() => handleInstructorClicked(data.instructorId)}
         >
             {/* 강사 사진 (1/3 영역) */}
-            <div className="h-36 w-36 overflow-hidden rounded-lg">
+            <div className="h-32 w-32 overflow-hidden rounded-lg">
                 <img
                     src={data.instructorUrl}
                     alt="instructor"
@@ -94,8 +94,8 @@ const InstructorResultComponent: React.FC<InstructorResultComponentProps> = ({
             </div>
 
             {/* 정보 영역 (2/3) */}
-            <div className="h-1/2 w-full px-4 flex flex-col justify-center">
-                <h3 className="text-base font-semibold mb-5">
+            <div className="h-1/2 w-full px-4 pt-3 flex flex-col justify-center">
+                <h3 className="text-base font-semibold mb-2">
                     {data.userName}
                 </h3>
                 <div>
