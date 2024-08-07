@@ -28,16 +28,18 @@ const CalendarView: React.FC<CalendarViewProps> = ({
     setModalOpen,
 }) => {
     return (
-        <div className="relative flex flex-col w-full h-auto sm:px-24 calendar-bg">
+        <div className="relative flex flex-col w-full sm:px-24 calendar-bg">
             <FullCalendar
                 ref={calendarRef}
                 plugins={[timeGridPlugin, interactionPlugin]}
+                expandRows={true}
                 headerToolbar={{
                     left: "timeGridWeek,timeGridDay",
                     center: "customPrev title customNext",
                     right: "",
                 }}
                 initialView="timeGridWeek"
+                handleWindowResize={true}
                 events={events}
                 navLinks={true}
                 eventClick={handleEventClick}
