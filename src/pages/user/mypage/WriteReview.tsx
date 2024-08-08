@@ -111,18 +111,18 @@ const WriteReview: React.FC = () => {
             <div className="w-full">
                 {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
             </div>
-            <div className="flex flex-col w-full h-full items-center mb-12">
+            <div className="flex flex-col w-full min-w-[500px] h-full items-center mb-12">
                 <div className="w-full px-12 pt-8 pb-12 font-extrabold text-black text-2xl h-full">
                     리뷰 작성
                 </div>
                 <div className="flex flex-col bg-primary-50 w-4/5 rounded-lg shadow-md items-center py-12 space-y-10">
-                    <div className="flex sm:flex-row flex-col bg-white w-4/5 sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
+                    <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 bg-white w-4/5 sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
                         <img
                             src={lesson.profileUrl}
                             alt="Profile"
                             className="w-32 h-32 rounded-full"
                         />
-                        <div className="flex flex-col ml-8 items-start space-y-2">
+                        <div className="flex flex-col sm:ml-8 items-center sm:items-start space-y-2">
                             <div
                                 className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(
                                     lesson.lessonStatus

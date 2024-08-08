@@ -36,7 +36,7 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
                         ))}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-4 sm:gap-4 gap-2 w-full items-center overflow-auto">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full items-center overflow-auto">
                         {filteredData.map((data: any) => (
                             <InstructorResultComponent
                                 key={data.instructorId}
