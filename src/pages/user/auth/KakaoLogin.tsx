@@ -28,8 +28,8 @@ const KakaoLogin = () => {
     }
   }, []);
 
-  console.log("role:", role);
-  console.log("code:", code);
+  console.log("role:", role, typeof role);
+  console.log("code:", code, typeof code);
 
   //   POST /api/v1/user/signin/kakao HTTP/1.1
   // Host:
@@ -53,12 +53,16 @@ const KakaoLogin = () => {
       });
       console.log("response.data:", response.data);
       if (response.status === 200) {
-        const accesstoken = response.headers["accessToken"];
-        const refreshtoken = response.headers["refreshToken"];
+        const accesstoken = response.headers["accesstoken"];
+        const refreshtoken = response.headers["refreshtoken"];
         if (accesstoken) {
-          sessionStorage.setItem("KAKAOaccessToken", accesstoken);
-          sessionStorage.setItem("KAKAOrefreshToken", refreshtoken);
-          navigate("/login");
+          sessionStorage.setItem("accesstoken", accesstoken);
+          sessionStorage.setItem("refreshtoken", refreshtoken);
+          if (role === "STUDENT") {
+            navigate("/");
+          } else {
+            navigate("/instructor/main");
+          }
         } else {
           console.log("토큰이 존재하지 않습니다.");
           navigate("/login/register");

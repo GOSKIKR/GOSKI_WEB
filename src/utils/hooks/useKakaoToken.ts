@@ -26,6 +26,7 @@ const getKakaoToken = async (data: IKakaoTokenData) => {
       code: data.code,
     },
   });
+  console.log("response.data:", response.data);
   return response.data;
 };
 

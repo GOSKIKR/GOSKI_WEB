@@ -26,6 +26,7 @@ const Login = () => {
     setRole(roleState);
   }, [roleState]);
   console.log(role);
+  console.log(roleState);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   const handleResize = () => {
@@ -48,13 +49,19 @@ const Login = () => {
   }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}&prompt=login`;
   const KAKAO_AUTH_URL_INST_LOCAL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_KAKAO_REST_API_KEY
-  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_INST_LOCAL}`;
+  }&redirect_uri=${
+    import.meta.env.VITE_KAKAO_REDIRECT_URI_INST_LOCAL
+  }&prompt=login`;
   const KAKAO_AUTH_URL_INST = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_KAKAO_REST_API_KEY
-  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_INST}`;
+  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_INST}&prompt=login`;
 
   const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL_LOCAL;
+    if (roleState === "STUDENT") {
+      window.location.href = KAKAO_AUTH_URL_LOCAL;
+    } else {
+      window.location.href = KAKAO_AUTH_URL_INST_LOCAL;
+    }
   };
 
   // const handleSubmit = (e: React.FormEvent) => {
