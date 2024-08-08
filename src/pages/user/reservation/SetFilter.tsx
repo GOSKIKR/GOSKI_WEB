@@ -11,6 +11,7 @@ import { ReserveDTO } from "../../../dto/ReserveDTO";
 import userReserveStore from "../../../store/userReserveStore";
 import userResortsStore from "../../../store/userResortsStore";
 import TimePicker from "../../../components/common/TimePicker";
+import lessonInfoData from "../../../../public/assets/text/lessonInfo.json";
 
 const SetFilter: React.FC = () => {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ const SetFilter: React.FC = () => {
 
     const { setReservationInfo } = userReserveStore();
     const { setResortInfo } = userResortsStore();
+    const [lessonInfo, setLessonInfo] = useState<any>(null);
 
     useEffect(() => {
         const fetchResorts = async () => {
@@ -38,6 +40,7 @@ const SetFilter: React.FC = () => {
             }
         };
         fetchResorts();
+        setLessonInfo(lessonInfoData);
     }, []);
 
     const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -336,7 +339,44 @@ const SetFilter: React.FC = () => {
                 </div>
 
                 <div className="w-[380px] sm:w-2/6 h-4/5 bg-primary-50 rounded-lg shadow-md flex justify-center items-center mt-8 sm:mt-0">
-                    레벨 선택 설명 들어갈 공간
+                    {lessonInfo && (
+                        <div className="p-6">
+                            <h2 className="text-lg font-bold w-full text-center tetx-lg">
+                                강습 레벨
+                            </h2>
+                            <div className="flex flex-col space-y-2 pt-2">
+                                <div className="flex flex-col">
+                                    <p className="font-bold">초급 강습</p>
+                                    <p className="text-sm pt-1 text-gray-600 ">
+                                        {lessonInfo.lessonTypes.BEGINNER}
+                                    </p>
+                                </div>
+                                <div className="flex flex-col">
+                                    <p className="font-bold">중급 강습</p>
+                                    <p className="text-sm pt-1 text-gray-600">
+                                        {lessonInfo.lessonTypes.INTERMEDIATE}
+                                    </p>
+                                </div>
+                                <div className="flex flex-col">
+                                    <p className="font-bold">고급 강습</p>
+                                    <p className="text-sm pt-1 text-gray-600">
+                                        {lessonInfo.lessonTypes.ADVANCED}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h2 className="text-lg font-bold mt-4">준비물</h2>
+                            <p className="text-sm pt-1 text-gray-600">
+                                {lessonInfo.equipment}
+                            </p>
+                            <h2 className="text-lg font-bold mt-4">
+                                유의 사항
+                            </h2>
+                            <p className="text-sm pt-1 text-gray-600">
+                                {lessonInfo.precautions}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
