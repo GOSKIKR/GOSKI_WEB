@@ -277,7 +277,7 @@ const InstructorInfo = () => {
             <div className="w-full">
                 {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
             </div>
-            <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
+            <div className="flex flex-col min-w-80 justify-center items-center px-4 py-8 space-y-3">
                 <img
                     src="/assets/images/AppLogo.png"
                     alt="App Logo"
@@ -287,7 +287,7 @@ const InstructorInfo = () => {
                     GOSKI 강습 예약
                 </div>
             </div>
-            <div className="flex flex-col sm:flex-row px-6 sm:px-12 sm:space-x-6 space-y-6 w-full">
+            <div className="flex flex-col min-w-80 sm:flex-row px-6 sm:px-12 sm:space-x-6 space-y-6 w-full">
                 <div className="flex flex-col w-full sm:w-7/12 bg-white rounded-lg shadow-lg p-8">
                     <div className="w-full sm:pb-6 pb-3 text-lg font-extrabold text-gray-700">
                         강사 소개
@@ -422,8 +422,8 @@ const InstructorInfo = () => {
                 </div>
 
                 <div className="flex flex-col w-full sm:w-4/12 self-start sticky top-5">
-                    <div className="w-full">
-                        <div className="flex flex-row items-center sm:space-x-4 mb-4">
+                    <div className="flex w-full sm:flex-col flex-row py-8 sm:py-0">
+                        <div className="flex flex-col sm:flex-row w-1/2 sm:w-full items-center sm:space-x-4 mb-4">
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 시작 시간
                             </label>
@@ -433,7 +433,7 @@ const InstructorInfo = () => {
                                     2
                                 )}:${selectedStartTime.slice(2)}`}
                                 onChange={handleTimeChange}
-                                className="px-2 w-full bg-white shadow-md rounded-md flex-1 h-9 text-xs py-1 sm:text-sm"
+                                className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
                             >
                                 {timeOptions.map((time) => (
                                     <option key={time} value={time}>
@@ -443,14 +443,14 @@ const InstructorInfo = () => {
                             </select>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
+                        <div className="flex flex-col sm:flex-row w-1/2 sm:w-full items-center sm:space-x-4 mb-4">
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 강습 시간
                             </label>
                             <select
                                 value={filterLessonDuration}
                                 onChange={handleDurationChange}
-                                className="border rounded-md p-1"
+                                className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
                             >
                                 {filterLessonDurationTimes.map(
                                     (time, index) => (

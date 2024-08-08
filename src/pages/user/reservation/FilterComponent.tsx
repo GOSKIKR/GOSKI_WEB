@@ -220,117 +220,130 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                     </div>
                 </div>
 
-                <div className="flex flex-wrap w-full bg-primary-50 rounded-lg shadow-md sm:mx-5 p-5 space-y-5 sm:space-y-0 justify-between">
+                <div className="flex flex-wrap w-full min-w-80 bg-primary-50 rounded-lg shadow-md sm:mx-5 p-5 space-y-5 sm:space-y-0 justify-between">
                     <div className="flex flex-col sm:flex-row w-full sm:justify-between items-center space-y-5 sm:space-y-0">
-                        <div className="flex flex-row w-full justify-between items-center space-x-5">
-                            <div className="flex flex-col items-center w-full sm:w-1/6">
-                                <label className="mb-1 text-sm">장소</label>
-                                <select
-                                    value={filterLessonLocation}
-                                    onChange={(e) => handleLocationChange(e)}
-                                    className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
-                                >
-                                    {locationsInfo.map((resort) => (
-                                        <option
-                                            key={resort.resortId}
-                                            value={resort.resortName}
-                                        >
-                                            {resort.resortName}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="flex flex-col items-center w-full sm:w-1/6">
-                                <label className="mb-1 text-sm">인원</label>
-                                <select
-                                    value={filterLessonParticipant}
-                                    onChange={(e) =>
-                                        setFilterLessonParticipant(
-                                            parseInt(e.target.value)
-                                        )
-                                    }
-                                    className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
-                                >
-                                    {[...Array(8).keys()].map((i) => (
-                                        <option key={i} value={i + 1}>
-                                            {i + 1}명
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="flex flex-col items-center w-full sm:w-1/6">
-                                <label className="mb-1 text-sm">난이도</label>
-                                <select
-                                    value={filterLessonLevel}
-                                    onChange={(e) =>
-                                        setFilterLessonLevel(e.target.value)
-                                    }
-                                    className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
-                                >
-                                    <option value={"BEGINNER"}>초급</option>
-                                    <option value={"INTERMEDIATE"}>중급</option>
-                                    <option value={"ADVANCED"}>고급</option>
-                                </select>
-                            </div>
-
-                            <div className="flex flex-col items-center w-full sm:w-1/6 relative">
-                                <label className="mb-1 text-sm">날짜</label>
-                                <div className="flex flex-1">
-                                    <input
-                                        type="date"
-                                        value={filterDate}
+                        <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 w-full justify-between items-center sm:space-x-8 space-x-2">
+                            <div className="flex flex-row w-full space-x-5 sm:w-1/2">
+                                <div className="flex flex-col items-center w-full sm:w-1/3">
+                                    <label className="mb-1 sm:text-sm text-xs">
+                                        장소
+                                    </label>
+                                    <select
+                                        value={filterLessonLocation}
                                         onChange={(e) =>
-                                            setFilterDate(e.target.value)
+                                            handleLocationChange(e)
                                         }
-                                        className="shadow-md w-full px-2 sm:h-7 rounded-md sm:text-sm text-xs"
-                                        min={today}
-                                    />
+                                        className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
+                                    >
+                                        {locationsInfo.map((resort) => (
+                                            <option
+                                                key={resort.resortId}
+                                                value={resort.resortName}
+                                            >
+                                                {resort.resortName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex flex-col items-center w-full sm:w-1/3">
+                                    <label className="mb-1 sm:text-sm text-xs">
+                                        인원
+                                    </label>
+                                    <select
+                                        value={filterLessonParticipant}
+                                        onChange={(e) =>
+                                            setFilterLessonParticipant(
+                                                parseInt(e.target.value)
+                                            )
+                                        }
+                                        className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
+                                    >
+                                        {[...Array(8).keys()].map((i) => (
+                                            <option key={i} value={i + 1}>
+                                                {i + 1}명
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex flex-col items-center w-full sm:w-1/3">
+                                    <label className="mb-1 sm:text-sm text-xs">
+                                        난이도
+                                    </label>
+                                    <select
+                                        value={filterLessonLevel}
+                                        onChange={(e) =>
+                                            setFilterLessonLevel(e.target.value)
+                                        }
+                                        className="w-full sm:w-full px-2 py-1 rounded shadow-md text-sm"
+                                    >
+                                        <option value={"BEGINNER"}>초급</option>
+                                        <option value={"INTERMEDIATE"}>
+                                            중급
+                                        </option>
+                                        <option value={"ADVANCED"}>고급</option>
+                                    </select>
                                 </div>
                             </div>
+                            <div className="flex flex-row w-full space-x-5 sm:w-1/2">
+                                <div className="flex flex-col items-center w-full sm:w-1/3 relative">
+                                    <label className="mb-1 sm:text-sm text-xs">
+                                        날짜
+                                    </label>
+                                    <div className="flex flex-1">
+                                        <input
+                                            type="date"
+                                            value={filterDate}
+                                            onChange={(e) =>
+                                                setFilterDate(e.target.value)
+                                            }
+                                            className="shadow-md w-full px-2 sm:h-7 rounded-md sm:text-sm text-[9px]"
+                                            min={today}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col items-center w-full sm:w-1/3 relative">
+                                    <label className="mb-1 sm:text-sm text-xs">
+                                        시작 시간
+                                    </label>
 
-                            <div className="flex flex-col items-center w-full sm:w-1/6 relative">
-                                <label className="mb-1 text-sm">
-                                    시작 시간
-                                </label>
-
-                                <select
-                                    value={`${filterLessonTime.slice(
-                                        0,
-                                        2
-                                    )}:${filterLessonTime.slice(2)}`}
-                                    onChange={handleTimeChange}
-                                    className="px-2 w-full bg-white shadow-md rounded-md flex-1 h-9 text-xs py-1 sm:text-sm"
-                                >
-                                    {timeOptions.map((time) => (
-                                        <option key={time} value={time}>
-                                            {time}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="flex flex-col items-center w-full sm:w-1/6">
-                                <label className="mb-1 text-sm">
-                                    강습 시간
-                                </label>
-                                <select
-                                    // value={duration}
-                                    value={filterLessonDuration.toString()}
-                                    onChange={(e) =>
-                                        setFilterLessonDuration(
-                                            parseInt(e.target.value)
-                                        )
-                                    }
-                                    className="px-2 w-full bg-white shadow-md rounded-md flex-1 h-9 text-xs py-1 sm:text-sm"
-                                >
-                                    {filterLessonDurationTimes.map((time) => (
-                                        <option key={time} value={time}>
-                                            {time}시간
-                                        </option>
-                                    ))}
-                                </select>
+                                    <select
+                                        value={`${filterLessonTime.slice(
+                                            0,
+                                            2
+                                        )}:${filterLessonTime.slice(2)}`}
+                                        onChange={handleTimeChange}
+                                        className="px-2 w-full bg-white shadow-md rounded-md flex-1 h-9 text-xs py-1 sm:text-sm"
+                                    >
+                                        {timeOptions.map((time) => (
+                                            <option key={time} value={time}>
+                                                {time}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex flex-col items-center w-full sm:w-1/3">
+                                    <label className="mb-1 sm:text-sm text-xs">
+                                        강습 시간
+                                    </label>
+                                    <select
+                                        // value={duration}
+                                        value={filterLessonDuration.toString()}
+                                        onChange={(e) =>
+                                            setFilterLessonDuration(
+                                                parseInt(e.target.value)
+                                            )
+                                        }
+                                        className="px-2 w-full bg-white shadow-md rounded-md flex-1 h-9 text-xs py-1 sm:text-sm"
+                                    >
+                                        {filterLessonDurationTimes.map(
+                                            (time) => (
+                                                <option key={time} value={time}>
+                                                    {time}시간
+                                                </option>
+                                            )
+                                        )}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>

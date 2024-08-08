@@ -162,7 +162,7 @@ const ReservationBox = () => {
 
     return (
         <div className="flex flex-col lg:flex-row lg:space-x-4 w-full justify-start items-center lg:items-stretch sm:bg-[url('/assets/images/bgski.jpg')] bg-blend-darken bg-gray-700 bg-opacity-30 bg-cover bg-center sm:p-4 lg:p-8 rounded-lg shadow-lg">
-            <div className="flex flex-col space-y-4 w-full sm:w-1/2 lg:w-120 bg-primary-50 p-6 rounded-lg shadow-md pr-10 brightness-100">
+            <div className="flex flex-col space-y-4 w-full sm:w-1/2 lg:w-120 bg-primary-50 sm:min-w-[450px] p-6 rounded-lg shadow-md pr-10 brightness-100">
                 <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-0">
                     <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold text-sm text-gray-500">
                         종류
@@ -256,7 +256,7 @@ const ReservationBox = () => {
                             onChange={(value) => {
                                 setSelectedDate(value as Date);
                             }}
-                            className="shadow-lg sm:w-[250px] w-[220px] sm:text-sm text-xs"
+                            className="shadow-lg sm:w-[250px] w-full h-auto sm:text-sm text-xs"
                             minDate={today}
                         />
                     </div>
@@ -268,7 +268,7 @@ const ReservationBox = () => {
                     <select
                         value={lessonStartTime}
                         onChange={handleTimeChange}
-                        className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
+                        className="px-6 bg-white shadow-md rounded-lg flex-1 h-9 w-full"
                     >
                         <option value="">시작 시간을 선택하세요</option>
                         {timeOptions.map((time) => (
