@@ -266,14 +266,14 @@ const InstructorMain = () => {
             <NavbarInstructor />
             <div className="flex flex-col py-10 space-y-12 sm:space-x-10 min-w-[500px]">
                 <div className="bg-primary-50 flex flex-col sm:mx-12 mx-8 rounded-lg py-8 px-4">
-                    <div className="flex sm:space-x-4 sm:px-20 mb-4 sm:mb-8">
+                    <div className="flex space-x-4 sm:px-20 mb-4">
                         <button
                             onClick={() => setSelectedTeam(null)}
-                            className={`sm:w-52 w-16 h-10 ${
+                            className={`sm:w-40 w-24 min-w-24 h-10 ${
                                 selectedTeam === null
                                     ? "bg-primary-700 text-white"
                                     : "bg-white text-black"
-                            } text-sm sm:text-lg rounded-lg flex items-center justify-center`}
+                            } text-sm px-3 rounded-lg flex items-center justify-center shadow-md`}
                         >
                             내 스케줄
                         </button>
