@@ -81,7 +81,7 @@ const InstructorResultComponent: React.FC<InstructorResultComponentProps> = ({
     return (
         <div
             key={data.instructorId}
-            className=" bg-primary-50 min-w-32 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg flex flex-col items-center justify-center mx-3 py-3 h-72 w-40"
+            className=" bg-primary-50 shadow-md min-w-32 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg flex flex-col items-center justify-center mx-3 py-3 h-72 w-40"
             onClick={() => handleInstructorClicked(data.instructorId)}
         >
             {/* 강사 사진 (1/3 영역) */}

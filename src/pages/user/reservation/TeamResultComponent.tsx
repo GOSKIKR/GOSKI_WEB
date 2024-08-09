@@ -68,7 +68,7 @@ const TeamResultComponent: React.FC<TeamResultComponentProps> = ({
     return (
         <div
             key={data.teamId}
-            className="w-full min-w-72 bg-primary-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer mb-4 "
+            className="w-full min-w-72 bg-primary-50 shadow-md rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer mb-4 "
             onClick={() => handleTeamClicked(data.teamId)}
         >
             <div className="flex flex-row w-full py-2 items-center justify-center space-x-3 ">
