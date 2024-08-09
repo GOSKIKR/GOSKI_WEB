@@ -71,7 +71,7 @@ const Login = () => {
         }
       } catch (error) {
         sessionStorage.removeItem("accesstoken");
-        alert("로그인 실패!");
+        alert("해당 사용자 정보가 존재하지 않습니다");
         console.error("Login error:", error);
       }
       console.log("Form Submitted", { email });
