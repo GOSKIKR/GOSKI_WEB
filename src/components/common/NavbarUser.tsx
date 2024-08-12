@@ -200,17 +200,15 @@ const NavbarUser = () => {
       });
 
       // 로그아웃 성공 후 처리
-      sessionStorage.removeItem("refreshtoken");
-      sessionStorage.removeItem("accesstoken");
+      sessionStorage.clear();
+
       setIsLogin(false);
-      sessionStorage.removeItem("login-store");
-      navigate("/login");
+      // navigate("/login");
 
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
-      sessionStorage.removeItem("accesstoken");
-      sessionStorage.removeItem("refreshtoken");
+      sessionStorage.clear();
       return false; // 로그아웃 실패
     }
   };
@@ -296,9 +294,7 @@ const NavbarUser = () => {
                   }
                 }}
                 style={{
-                  opacity: location.pathname === "/login" ? 0.5 : 1,
-                  cursor:
-                    location.pathname === "/login" ? "not-allowed" : "pointer",
+                  display: location.pathname === "/login" ? "none" : "block",
                 }}
                 className="text-white text-lg cursor-pointer hover:text-primary-300 transition duration-300"
               >
