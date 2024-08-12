@@ -75,11 +75,15 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 
 #### 알림 
 
-#### 강습 내역 / 피드백 작성
+#### 강습 내역 / 팀원 관리
+| <img src="exec/screen/강습내역.png" width="33%" /> | <img src="exec/screen/팀원 관리.png" width="33%" /> | <img src="exec/screen/강습비 설정.png" width="33%" /> |
+| :------------------------------------: | :----------------------------------------: | :-------------------------------------------: |
+|                강습 내역                 |                팀원 관리                |                   강습비 설정                   |
 
-
-#### 리뷰 내역
-
+#### 피드백 / 리뷰 내역
+| <img src="exec/screen/피드백 등록.png" width="33%" /> | <img src="exec/screen/피드백 수정.png" width="33%" /> | <img src="exec/screen/리뷰 조회.png" width="33%" /> |
+| :------------------------------------: | :----------------------------------------: | :-------------------------------------------: |
+|                피드백 등록                 |                피드백 수정                 |                   리뷰 조회                   |
 
 
 <div id="3"></div>
@@ -179,7 +183,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
     <tr>
         <td align="center">
         <td align="center">
-        <td align="center">
+        <td align="center" style="width: 16.66%; word-wrap: break-word;">팀 관리 화면 제작<br/>피드백/리뷰 화면 제작
         <td align="center">
         <td align="center" style="width: 16.66%; word-wrap: break-word;">유저 강습 예약 화면 제작<br/>유저 결제 화면 제작<br/>유저 마이페이지 화면 제작<br/>강사 메인페이지(일정관리)제작
 </table>
