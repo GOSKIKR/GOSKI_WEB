@@ -150,6 +150,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 
 <div id="4"></div>
 &nbsp;
+
 ## 🗂️ 시스템 아키텍처
 <img src="exec/images/goski-architecture.png" alt="시스템 아키텍처">
 
