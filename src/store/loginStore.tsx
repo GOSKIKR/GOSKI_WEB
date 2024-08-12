@@ -2,29 +2,29 @@ import { create, StateCreator } from "zustand";
 import { persist, PersistOptions } from "zustand/middleware";
 
 interface loginState {
-  role: string;
-  setRole: (role: string) => void;
+    role: string;
+    setRole: (role: string) => void;
 }
 
 type loginPersist = (
-  config: StateCreator<loginState>,
-  options: PersistOptions<loginState>
+    config: StateCreator<loginState>,
+    options: PersistOptions<loginState>
 ) => StateCreator<loginState>;
 
 const useLoginStore = create<loginState>(
-  (persist as loginPersist)(
-    (set) => ({
-      role: "",
-      setRole: (role: string) =>
+    (persist as loginPersist)(
+        (set) => ({
+            role: "",
+            setRole: (role: string) =>
         set(() => ({
-          role: role,
+            role: role,
         })),
     }),
     {
-      name: "login-store",
-      getStorage: () => sessionStorage,
+        name: "login-store",
+        getStorage: () => sessionStorage,
     }
-  )
+    )
 );
 
 export default useLoginStore;

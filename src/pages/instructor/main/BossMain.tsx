@@ -32,15 +32,15 @@ const BossMain = () => {
     const calendarRef = useRef<FullCalendar>(null);
 
     const colors = [
-        "#FFB3BA",
-        "#FFDFBA",
-        "#FFFFBA",
-        "#BAFFC9",
-        "#BAE1FF",
-        "#D7B3FF",
-        "#FFB3E4",
-        "#FFB3BA",
-        "#FFDFBA",
+        "#FFB3BA", // light pastel red
+        "#FFDFBA", // light pastel orange
+        "#FFFFBA", // light pastel yellow
+        "#BAFFC9", // light pastel green
+        "#BAE1FF", // light pastel blue
+        "#D7B3FF", // light pastel purple
+        "#FFB3E4", // light pastel pink
+        "#FFB3BA", // light pastel red
+        "#FFDFBA", // light pastel orange
         "#BAE1FF",
     ];
 
@@ -91,7 +91,7 @@ const BossMain = () => {
 
     const parseLessonType = (lessonType: string) => {
         const availability = lessonType.slice(0, 3);
-        let type = "모두";
+        let type = "휴무";
         if (availability === "101") {
             type = "SKI";
         } else if (availability === "110") {
@@ -113,9 +113,15 @@ const BossMain = () => {
             <div className="flex items-center justify-center">
                 <div className="w-12 h-full flex flex-col items-center">
                     <b className="flex flex-col space-y-0 pt-2 items-center text-black">
-                        <div>1:{studentCount}</div>
-                        <div>{lessonType}</div>
-                        <div className="py-2">{instructorName}</div>
+                        {lessonType !== "휴무" && (
+                            <div className="text-xs text-gray-600">
+                                1:{studentCount}
+                            </div>
+                        )}
+                        <div className="text-xs text-gray-500">
+                            {lessonType}
+                        </div>
+                        <div className="py-1 text-sm">{instructorName}</div>
                     </b>
                 </div>
             </div>
@@ -230,7 +236,7 @@ const BossMain = () => {
     return (
         <div>
             <NavbarInstructor />
-            <div className="flex flex-col py-10 space-y-12 sm:space-x-10">
+            <div className="flex flex-col py-10 space-y-12 sm:space-x-10 min-w-[500px]">
                 <div className="bg-primary-50 flex flex-col sm:mx-12 mx-8 rounded-lg py-8 px-4">
                     <TeamSelect
                         teams={teams}

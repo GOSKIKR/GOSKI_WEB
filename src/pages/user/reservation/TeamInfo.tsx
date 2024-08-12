@@ -17,7 +17,9 @@ const TeamInfo: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [instructorList, setInstructorList] = useState([]);
 
-    const [filterLessonDurationTimes, setFilterLessonDurationTimes] = useState<number[]>([]);
+    const [filterLessonDurationTimes, setFilterLessonDurationTimes] = useState<
+        number[]
+    >([]);
     const [filterLessonDuration, setFilterLessonDuration] = useState<number>(0);
 
     const navigate = useNavigate();
@@ -65,6 +67,7 @@ const TeamInfo: React.FC = () => {
         startTime,
         duration,
         level,
+        setReservationInfo,
     } = userReserveStore();
 
     const {
@@ -141,12 +144,51 @@ const TeamInfo: React.FC = () => {
     const totalFee =
         (basicFee + peopleOptionFee + (levelOptionFee ?? 0)) * duration;
 
+    const generateTimeOptions = () => {
+        const options = [];
+        for (let hour = 8; hour < 22; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const timeString = `${hour.toString().padStart(2, "0")}:${minute
+                    .toString()
+                    .padStart(2, "0")}`;
+                options.push(timeString);
+            }
+        }
+        options.push(`22:00`);
+        return options;
+    };
+
+    const timeOptions = generateTimeOptions();
+
+    const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedTime = e.target.value;
+        setSelectedStartTime(selectedTime.replace(":", ""));
+    };
+
+    const handleReservation = () => {
+        setReservationInfo({
+            resortId,
+            resortName,
+            lessonType,
+            studentCount,
+            lessonDate,
+            startTime: selectedStartTime,
+            duration: filterLessonDuration,
+            level,
+        });
+        openModal();
+    };
+
     return (
         <div>
-            <div className="w-full">
-                {window.innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
+            <div className="w-full min-w-screen">
+                {window.innerWidth > 640 ? (
+                    <NavbarUser />
+                ) : (
+                    <NavbarUserMobile />
+                )}
             </div>
-            <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
+            <div className="flex flex-col min-w-80 justify-center items-center px-4 py-8 space-y-3">
                 <img
                     src="/assets/images/AppLogo.png"
                     alt="App Logo"
@@ -154,8 +196,8 @@ const TeamInfo: React.FC = () => {
                 />
                 <div className="text-xl font-extrabold">GOSKI 강습 예약</div>
             </div>
-            <div className="flex flex-col sm:flex-row px-12 sm:space-x-6 space-y-6">
-                <div className="w-full sm:w-7/12 h-[2400px] bg-primary-50 rounded-lg shadow-md">
+            <div className="flex flex-col min-w-80 sm:flex-row px-12 sm:space-x-6 space-y-6">
+                <div className="w-full min-w-72 sm:w-7/12 h-[2400px] bg-primary-50 rounded-lg shadow-md">
                     <div className="px-6 py-6 text-lg font-bold">팀 소개</div>
                     <div className="">
                         {teamImages ? (
@@ -177,19 +219,33 @@ const TeamInfo: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex flex-col w-full sm:w-4/12 self-start sticky top-5">
-                    <div className="w-full">
-                        <div className="flex flex-row items-center sm:space-x-4 mb-4">
+                    <div className="flex w-full sm:flex-col flex-row py-8 sm:py-0">
+                        <div className="flex flex-col sm:flex-row w-1/2 sm:w-full items-center sm:space-x-4 mb-4">
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 시작 시간
                             </label>
-                            <TimePicker
+                            {/* <TimePicker
                                 startTime={selectedStartTime}
                                 setStartTime={setSelectedStartTime}
                                 position={1}
-                            />
+                            /> */}
+                            <select
+                                value={`${selectedStartTime.slice(
+                                    0,
+                                    2
+                                )}:${selectedStartTime.slice(2)}`}
+                                onChange={handleTimeChange}
+                                className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
+                            >
+                                {timeOptions.map((time) => (
+                                    <option key={time} value={time}>
+                                        {time}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
+                        <div className="flex flex-col sm:flex-row w-1/2 sm:w-full items-center sm:space-x-4 mb-4">
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 강습 시간
                             </label>
@@ -252,7 +308,7 @@ const TeamInfo: React.FC = () => {
                         </div>
 
                         <div
-                            onClick={openModal}
+                            onClick={handleReservation}
                             className="h-20 w-1/2 p-1 bg-white rounded-lg shadow-md text-black text-center flex items-center justify-center cursor-pointer hover:bg-slate-200"
                         >
                             예약하기

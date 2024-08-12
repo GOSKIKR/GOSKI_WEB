@@ -14,7 +14,7 @@ export interface InstructorProfileDTO extends UserMyDTO{
 
 export interface NewCertificate {
     certificateId: number;
-    newCertImage?: File;
+    newCertImage : File | null;
 }
 
 export interface InstPermissionDTO {

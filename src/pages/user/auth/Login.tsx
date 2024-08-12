@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useLoginStore from "../../../store/loginStore";
 
 import { CiMail } from "react-icons/ci";
 import { IoKeyOutline } from "react-icons/io5";
@@ -16,8 +15,6 @@ import KakaoLoginModal from "../../../components/common/KakaoLoginModal";
 const Login = () => {
   const navigate = useNavigate();
 
-  const { role, setRole } = useLoginStore();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userOrInstructor, setUserOrInstructor] = useState("user");
@@ -26,11 +23,11 @@ const Login = () => {
 
   const [isKakaoModalOpen, setIsKakaoModalOpen] = useState(false);
 
-  useEffect(() => {
-    setRole(roleState);
-  }, [roleState]);
-  console.log(role);
-  console.log(roleState);
+  // useEffect(() => {
+  //   setRole(roleState);
+  // }, [roleState]);
+  // console.log(role);
+  // console.log(roleState);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
   const handleResize = () => {
@@ -105,12 +102,17 @@ const Login = () => {
           // await storeRefreshToken(response.data.refreshToken); // 암호화하여 저장
           sessionStorage.setItem("refreshtoken", response.headers.refreshtoken);
           const newRole = response.data.data;
-          setRole(newRole);
-          newRole === "STUDENT" ? navigate("/") : navigate("/instructor/main");
+          if (newRole === "STUDENT") {
+            navigate("/");
+          } else if (newRole === "INSTRUCTOR") {
+            navigate("/instructor/main");
+          } else {
+            navigate("/instructor/boss/main");
+          }
         }
       } catch (error) {
         sessionStorage.removeItem("accesstoken");
-        alert("로그인 실패!");
+        alert("해당 사용자 정보가 존재하지 않습니다");
         console.error("Login error:", error);
       }
       console.log("Form Submitted", { email });

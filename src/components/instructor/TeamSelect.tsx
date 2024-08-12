@@ -13,16 +13,16 @@ const TeamSelect: React.FC<TeamSelectorProps> = ({
     onSelectTeam,
 }) => {
     return (
-        <div className="flex sm:space-x-4 justify-between sm:px-20 mb-4 sm:mb-8">
+        <div className="flex flex-wrap justify-start gap-3 mb-4 sm:mb-8">
             {teams.map((team) => (
                 <button
                     key={team.teamId}
                     onClick={() => onSelectTeam(team.teamId)}
-                    className={`sm:w-52 w-16 h-10 ${
+                    className={`sm:w-40 w-24 min-w-24 h-10 ${
                         selectedTeam === team.teamId
                             ? "bg-primary-700 text-white"
                             : "bg-white text-black"
-                    } text-sm px-3 rounded-lg flex items-center justify-center`}
+                    } shadow-md text-sm px-3 rounded-lg flex items-center justify-center`}
                 >
                     {team.teamName}
                 </button>

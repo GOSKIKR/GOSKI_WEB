@@ -9,7 +9,7 @@ import apiClient from "../../utils/config/axiosConfig";
 import { UserService } from "../../api/UserService";
 import { UserMyService } from "../../api/UserMyService";
 import { UserMyDTO } from "../../dto/UserMyDTO";
-import useLoginStore from "../../store/loginStore";
+import { getRole } from "../../utils/getRole";
 
 import axios from "axios";
 
@@ -17,7 +17,7 @@ const userService = new UserService();
 const userMyService = new UserMyService();
 
 const NavbarInstructor = () => {
-  const { role } = useLoginStore();
+  const role = getRole();
 
   const [showNotification, setShowNotification] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -117,6 +117,10 @@ const NavbarInstructor = () => {
     }
   };
 
+  const handleNavigate = () => {
+    role === "OWNER" ? navigate("/instructor/team/regist") : navigate("/instructor/team/edit")
+  }
+
   return (
     <div className="flex flex-row h-12 w-full justify-between items-center bg-primary-200 box-border px-4 z-50">
       <div
@@ -128,7 +132,7 @@ const NavbarInstructor = () => {
       <div className="flex flex-row flex-1 justify-normal">
         <div
           className="text-black sm:text-xl text-sm p-5 cursor-pointer"
-          onClick={() => navigate("/instructor/team/regist")}
+          onClick={handleNavigate}
         >
           팀 관리
         </div>
@@ -138,12 +142,14 @@ const NavbarInstructor = () => {
         >
           강습내역
         </div>
-        <div
-          className="text-black sm:text-xl text-sm p-5 cursor-pointer"
-          onClick={() => navigate("/instructor/settlement")}
-        >
-          정산
-        </div>
+        {role === "OWNER" &&  (
+          <div
+            className="text-black sm:text-xl text-sm p-5 cursor-pointer"
+            onClick={() => navigate("/instructor/settlement")}
+          >
+            정산
+          </div>
+        )}
       </div>
       {isLogin ? (
         <div className="basis-1/4 flex flex-row justify-around  box-border">
