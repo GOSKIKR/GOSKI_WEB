@@ -11,6 +11,8 @@ import NavbarUserMobile from "../../../components/common/NavbarUserMobile";
 import apiClient from "../../../utils/config/axiosConfig";
 import { httpStatusCode } from "../../../utils/config/httpStatus";
 
+import KakaoLoginModal from "../../../components/common/KakaoLoginModal";
+
 const Login = () => {
   const navigate = useNavigate();
 
@@ -21,6 +23,8 @@ const Login = () => {
   const [userOrInstructor, setUserOrInstructor] = useState("user");
 
   const [roleState, setRoleState] = useState("STUDENT");
+
+  const [isKakaoModalOpen, setIsKakaoModalOpen] = useState(false);
 
   useEffect(() => {
     setRole(roleState);
@@ -48,15 +52,16 @@ const Login = () => {
     import.meta.env.VITE_KAKAO_REST_API_KEY
   }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}&prompt=login`;
   const KAKAO_AUTH_URL_INST_LOCAL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
-    import.meta.env.VITE_KAKAO_REST_API_KEY
+    import.meta.env.VITE_KAKAO_INST_REST_API_KEY
   }&redirect_uri=${
     import.meta.env.VITE_KAKAO_REDIRECT_URI_INST_LOCAL
   }&prompt=login`;
   const KAKAO_AUTH_URL_INST = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
-    import.meta.env.VITE_KAKAO_REST_API_KEY
+    import.meta.env.VITE_KAKAO_INST_REST_API_KEY
   }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI_INST}&prompt=login`;
 
   const handleKakaoLogin = () => {
+    setIsKakaoModalOpen(true);
     if (roleState === "STUDENT") {
       window.location.href = KAKAO_AUTH_URL_LOCAL;
     } else {
@@ -290,6 +295,9 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {/* {isKakaoModalOpen && (
+        <KakaoLoginModal setIsKakaoModalOpen={setIsKakaoModalOpen} />
+      )} */}
     </div>
   );
 };

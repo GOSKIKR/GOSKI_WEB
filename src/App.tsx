@@ -60,10 +60,7 @@ const App: React.FC = () => {
           path="api/v1/user/signin/student/kakao"
           element={<KakaoLogin />}
         />
-        <Route
-          path="api/v1/user/signin/inst/kakao"
-          element={<KakaoLoginInst />}
-        />
+        <Route path="api/v1/user/signin/inst/kakao" element={<KakaoLogin />} />
 
         <Route path="/reserve/set" element={<SetFilter />} />
         <Route path="/reserve/result" element={<FilterResult />} />

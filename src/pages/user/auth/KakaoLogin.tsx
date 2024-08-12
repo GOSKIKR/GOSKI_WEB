@@ -8,9 +8,9 @@ const KakaoLogin = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const code = params.get("code");
-  const client_id = import.meta.env.VITE_KAKAO_REST_API_KEY;
-  const redirect_uri = import.meta.env.VITE_KAKAO_REDIRECT_URI_LOCAL;
-  const [userData, setUserData] = useState(null);
+  // const client_id = import.meta.env.VITE_KAKAO_REST_API_KEY;
+  // const redirect_uri = import.meta.env.VITE_KAKAO_REDIRECT_URI_LOCAL;
+  // const [userData, setUserData] = useState(null);
 
   const navigate = useNavigate();
 
