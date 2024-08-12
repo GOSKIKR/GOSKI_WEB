@@ -71,13 +71,13 @@ const UserFeedback = () => {
                     <div className="sm:w-4/5 w-full">
                         <div className="font-bold mb-2">강습 예약 정보</div>
                         <div className="bg-primary-50 p-4 rounded-lg mb-6">
-                            <div className="flex sm:flex-row flex-col bg-white w-full sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
+                            <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 bg-white w-full sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
                                 <img
                                     src={lesson.profileUrl}
                                     alt="Profile"
                                     className="w-32 h-32 rounded-full"
                                 />
-                                <div className="flex flex-col ml-8 items-start space-y-2">
+                                <div className="flex flex-col sm:ml-8 items-center sm:items-start space-y-2">
                                     <div
                                         className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(
                                             lesson.lessonStatus

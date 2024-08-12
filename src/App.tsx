@@ -38,16 +38,24 @@ import PaySuccess from "./pages/user/payment/PaySuccess";
 import PayFail from "./pages/user/payment/PayFail";
 
 import ProtectedRoute from "./utils/ProtectedRoute";
+import KakaoLogin from "./pages/user/auth/KakaoLogin";
+import KakaoLoginInst from "./pages/instructor/auth/KakaoLoginInst";
 import AuthorizedRoute from "./utils/AuthorizedRoute";
 import PublicRoute from "./utils/PublicRoute";
 
 const App: React.FC = () => {
-
   return (
     <div>
       <Routes>
-        
         <Route path="/" element={<UserMain />} />
+        <Route path="/notice" element={<Notice />} />
+
+        <Route
+          path="api/v1/user/signin/student/kakao"
+          element={<KakaoLogin />}
+        />
+        <Route path="api/v1/user/signin/inst/kakao" element={<KakaoLogin />} />
+
         <Route path="/reserve/set" element={<SetFilter />} />
         <Route path="/reserve/result" element={<FilterResult />} />
         <Route path="/reserve/info/team" element={<TeamInfo />} />
@@ -61,7 +69,7 @@ const App: React.FC = () => {
         </Route>
 
         <Route element={<ProtectedRoute />}>
-          <Route element={<AuthorizedRoute allowedRoles={['STUDENT']}/>}>
+          <Route element={<AuthorizedRoute allowedRoles={["STUDENT"]} />}>
             <Route path="/dm/ws" element={<ChatComponent />} />
             <Route path="/user/coupon" element={<Coupon />} />
             <Route path="/user/payment/detail" element={<PayDetail />} />
@@ -76,26 +84,42 @@ const App: React.FC = () => {
             <Route path="/user/my" element={<UserMypage />} />
           </Route>
 
-          <Route element={<AuthorizedRoute allowedRoles={['OWNER','INSTRUCTOR']}/>}>
+          <Route
+            element={<AuthorizedRoute allowedRoles={["OWNER", "INSTRUCTOR"]} />}
+          >
             <Route path="/instructor/main" element={<InstructorMain />} />
             <Route path="/instructor/boss/main" element={<BossMain />} />
-            <Route path="/instructor/team" element={<Navigate to="/instructor/team/edit"/>}/>
-            <Route path="/instructor/detail/:lessonId"  element={<LessonDetail />}/>
+            <Route
+              path="/instructor/team"
+              element={<Navigate to="/instructor/team/edit" />}
+            />
+            <Route
+              path="/instructor/detail/:lessonId"
+              element={<LessonDetail />}
+            />
             <Route path="/instructor/team/edit" element={<TeamInfoEdit />} />
-            <Route path="/instructor/team/lessonfee" element={<TeamLessonFeeSetting />}/>
+            <Route
+              path="/instructor/team/lessonfee"
+              element={<TeamLessonFeeSetting />}
+            />
             <Route path="/instructor/team/member" element={<TeamMember />} />
             <Route path="/instructor/my-lesson" element={<MyLessonList />} />
-            <Route path="/instructor/regist-feedback" element={<FeedbackRegist />}/>
-            <Route path="/instructor/edit-feedback" element={<FeedbackEdit />} />
+            <Route
+              path="/instructor/regist-feedback"
+              element={<FeedbackRegist />}
+            />
+            <Route
+              path="/instructor/edit-feedback"
+              element={<FeedbackEdit />}
+            />
             <Route path="/instructor/edit-info" element={<MyPageInfo />} />
             <Route path="/instructor/edit-cert" element={<MyPageCert />} />
 
-            <Route element={<AuthorizedRoute allowedRoles={['OWNER']}/>}>
-              <Route path="/instructor/settlement" element={<Settlement />} /> 
+            <Route element={<AuthorizedRoute allowedRoles={["OWNER"]} />}>
+              <Route path="/instructor/settlement" element={<Settlement />} />
               <Route path="/instructor/team/regist" element={<TeamRegist />} />
             </Route>
           </Route>
-
         </Route>
 
         <Route path="*" element={<NotFound />} />

@@ -181,14 +181,14 @@ const TeamInfo: React.FC = () => {
 
     return (
         <div>
-            <div className="w-full">
+            <div className="w-full min-w-screen">
                 {window.innerWidth > 640 ? (
                     <NavbarUser />
                 ) : (
                     <NavbarUserMobile />
                 )}
             </div>
-            <div className="flex flex-col justify-center items-center px-4 py-8 space-y-3">
+            <div className="flex flex-col min-w-80 justify-center items-center px-4 py-8 space-y-3">
                 <img
                     src="/assets/images/AppLogo.png"
                     alt="App Logo"
@@ -196,8 +196,8 @@ const TeamInfo: React.FC = () => {
                 />
                 <div className="text-xl font-extrabold">GOSKI 강습 예약</div>
             </div>
-            <div className="flex flex-col sm:flex-row px-12 sm:space-x-6 space-y-6">
-                <div className="w-full sm:w-7/12 h-[2400px] bg-primary-50 rounded-lg shadow-md">
+            <div className="flex flex-col min-w-80 sm:flex-row px-12 sm:space-x-6 space-y-6">
+                <div className="w-full min-w-72 sm:w-7/12 h-[2400px] bg-primary-50 rounded-lg shadow-md">
                     <div className="px-6 py-6 text-lg font-bold">팀 소개</div>
                     <div className="">
                         {teamImages ? (
@@ -219,8 +219,8 @@ const TeamInfo: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex flex-col w-full sm:w-4/12 self-start sticky top-5">
-                    <div className="w-full">
-                        <div className="flex flex-row items-center sm:space-x-4 mb-4">
+                    <div className="flex w-full sm:flex-col flex-row py-8 sm:py-0">
+                        <div className="flex flex-col sm:flex-row w-1/2 sm:w-full items-center sm:space-x-4 mb-4">
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 시작 시간
                             </label>
@@ -235,7 +235,7 @@ const TeamInfo: React.FC = () => {
                                     2
                                 )}:${selectedStartTime.slice(2)}`}
                                 onChange={handleTimeChange}
-                                className="px-2 w-full bg-white shadow-md rounded-md flex-1 h-9 text-xs py-1 sm:text-sm"
+                                className="px-6 bg-white shadow-md rounded-lg flex-1 h-9"
                             >
                                 {timeOptions.map((time) => (
                                     <option key={time} value={time}>
@@ -245,7 +245,7 @@ const TeamInfo: React.FC = () => {
                             </select>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mb-4">
+                        <div className="flex flex-col sm:flex-row w-1/2 sm:w-full items-center sm:space-x-4 mb-4">
                             <label className="mb-1 sm:mb-0 sm:w-28 text-center w-24 font-bold">
                                 강습 시간
                             </label>

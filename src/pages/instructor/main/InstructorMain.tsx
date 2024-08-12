@@ -122,7 +122,7 @@ const InstructorMain = () => {
 
         if (selectedTeam) {
             return (
-                <div className="w-full h-full flex flex-col items-center justify-center text-black">
+                <div className="w-full h-full flex flex-col items-center justify-center text-black  overflow-hidden text-ellipsis whitespace-nowrap">
                     {lessonType !== "휴무" && (
                         <div className="text-xs text-gray-600">
                             1:{studentCount}
@@ -134,14 +134,14 @@ const InstructorMain = () => {
             );
         } else {
             return (
-                <div className="w-full h-full flex flex-col items-center justify-center text-white">
+                <div className="w-full h-full flex flex-col items-center justify-center text-white overflow-hidden text-ellipsis whitespace-nowrap">
                     {lessonType !== "휴무" && (
                         <div className="text-xs text-white">
                             1:{studentCount}
                         </div>
                     )}
-                    <div>{lessonType}</div>
-                    <div className="py-2 flex flex-row space-x-2 items-center">
+                    <div className="text-xs">{lessonType}</div>
+                    <div className="flex flex-row space-x-2 items-center text-xs">
                         <div>예약자</div>
                         <div className="font-extrabold">
                             {eventInfo.event.extendedProps.reserver}
@@ -264,16 +264,16 @@ const InstructorMain = () => {
     return (
         <div>
             <NavbarInstructor />
-            <div className="flex flex-col py-10 space-y-12 sm:space-x-10">
+            <div className="flex flex-col py-10 space-y-12 sm:space-x-10 min-w-[500px]">
                 <div className="bg-primary-50 flex flex-col sm:mx-12 mx-8 rounded-lg py-8 px-4">
-                    <div className="flex sm:space-x-4 sm:px-20 mb-4 sm:mb-8">
+                    <div className="flex space-x-4 sm:px-20 mb-4">
                         <button
                             onClick={() => setSelectedTeam(null)}
-                            className={`sm:w-52 w-16 h-10 ${
+                            className={`sm:w-40 w-24 min-w-24 h-10 ${
                                 selectedTeam === null
                                     ? "bg-primary-700 text-white"
                                     : "bg-white text-black"
-                            } text-sm sm:text-lg rounded-lg flex items-center justify-center`}
+                            } text-sm px-3 rounded-lg flex items-center justify-center shadow-md`}
                         >
                             내 스케줄
                         </button>

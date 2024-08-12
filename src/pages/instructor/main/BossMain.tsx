@@ -236,7 +236,7 @@ const BossMain = () => {
     return (
         <div>
             <NavbarInstructor />
-            <div className="flex flex-col py-10 space-y-12 sm:space-x-10">
+            <div className="flex flex-col py-10 space-y-12 sm:space-x-10 min-w-[500px]">
                 <div className="bg-primary-50 flex flex-col sm:mx-12 mx-8 rounded-lg py-8 px-4">
                     <TeamSelect
                         teams={teams}

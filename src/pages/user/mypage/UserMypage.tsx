@@ -23,7 +23,7 @@ const UserMypage: React.FC = () => {
     };
 
     return (
-        <div className="w-screen flex flex-col items-center">
+        <div className="w-screen flex flex-col items-center ">
             <div className="w-full">
                 {innerWidth > 640 ? <NavbarUser /> : <NavbarUserMobile />}
             </div>

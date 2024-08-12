@@ -204,13 +204,15 @@ const UserNotification = ({
       </button>
       {showNotification && (
         <div className="absolute top-12 right-0 z-50 w-64 p-2 bg-white rounded-lg shadow-lg">
-          <div className="w-full bg-primary-400 text-white text-center py-2 rounded-t-lg">
-            알림
-            <button onClick={handleDeleteAll} className="text-red-500 ml-2">
-              전체 삭제
+          <div className="flex justify-between w-full bg-primary-400 text-white text-center py-2 rounded-t-lg">
+            <button onClick={handleRead} className="text-blue-500 pl-2">
+              읽음
             </button>
-            <button onClick={handleRead} className="text-blue-500 ml-2">
-              읽음 처리
+            <div className="text-white text-center text-lg font-semibold">
+              알림
+            </div>
+            <button onClick={handleDeleteAll} className="text-red-500 pr-2">
+              전체 삭제
             </button>
           </div>
           <div className="flex flex-col p-2">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import NavbarUser from "../../../components/common/NavbarUser";
 import { TeamInfoDTO } from "../../../dto/TeamDTO";
@@ -75,24 +75,26 @@ const PayDetail = () => {
 
     const totalFee = paymentDetail?.totalAmount ?? 0;
 
-    const fetchTeamInfo = async () => {
-        if (!lesson) return;
-        const teamService = new TeamService();
-        const teamData = await teamService.getTeamInfo(lesson.teamId);
-        setTeamInfo(teamData);
-    };
+    useEffect(() => {
+        const fetchTeamInfo = async () => {
+            if (!lesson) return;
+            const teamService = new TeamService();
+            const teamData = await teamService.getTeamInfo(lesson.teamId);
+            setTeamInfo(teamData);
+        };
 
-    fetchTeamInfo();
+        fetchTeamInfo();
+    }, [lesson]);
 
     return (
         <div>
             <NavbarUser />
-            <div className="flex flex-col w-full h-full pl-12 items-start mb-12">
+            <div className="flex flex-col min-w-[500px] w-full h-full pl-12 items-start mb-12">
                 <div className="pt-12 pb-12 font-extrabold text-black text-2xl">
                     결제 상세
                 </div>
                 <div className="flex flex-col bg-primary-50 w-4/5 h-full rounded-lg shadow-md items-center py-12 space-y-10">
-                    <div className="flex sm:flex-row flex-col bg-white w-4/5 sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
+                    <div className="flex sm:flex-row flex-col space-y-4 sm:space-y-0 sm:space-x-8 bg-white w-4/5 sm:h-1/2 h-4/6 rounded-lg items-center justify-center py-10">
                         <div className="flex items-center justify-center sm:h-32 sm:w-32 h-20 w-20">
                             <img
                                 src={
@@ -102,7 +104,7 @@ const PayDetail = () => {
                                 className="w-full h-full cursor-not-allowed rounded-lg"
                             />
                         </div>
-                        <div className="flex flex-col ml-8 items-start space-y-2">
+                        <div className="flex flex-col items-center space-y-2">
                             <div
                                 className={`font-extrabold w-20 text-center rounded-md ${getStatusColor(
                                     lesson.lessonStatus

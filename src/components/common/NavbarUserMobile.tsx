@@ -59,15 +59,13 @@ const NavbarUserMobile = () => {
       });
 
       // 로그아웃 성공 후 처리
-      sessionStorage.removeItem("refreshtoken");
-      sessionStorage.removeItem("accesstoken");
+      sessionStorage.clear();
       setIsLogin(false);
 
       return true; // 로그아웃 성공
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
-      sessionStorage.removeItem("accesstoken");
-      sessionStorage.removeItem("refreshtoken");
+      sessionStorage.clear();
       return false; // 로그아웃 실패
     }
   };
@@ -144,6 +142,9 @@ const NavbarUserMobile = () => {
       {!isLogin ? (
         <div
           className="text-white cursor-pointer"
+          style={{
+            display: location.pathname === "/login" ? "none" : "block",
+          }}
           onClick={() => navigate("/login")}
         >
           로그인

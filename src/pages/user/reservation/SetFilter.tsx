@@ -341,7 +341,7 @@ const SetFilter: React.FC = () => {
                 <div className="w-[380px] sm:w-2/6 h-4/5 bg-primary-50 rounded-lg shadow-md flex justify-center items-center mt-8 sm:mt-0">
                     {lessonInfo && (
                         <div className="p-6">
-                            <h2 className="text-lg font-bold w-full text-center tetx-lg">
+                            <h2 className="text-lg font-bold w-full text-center">
                                 강습 레벨
                             </h2>
                             <div className="flex flex-col space-y-2 pt-2">
@@ -365,11 +365,13 @@ const SetFilter: React.FC = () => {
                                 </div>
                             </div>
 
-                            <h2 className="text-lg font-bold mt-4">준비물</h2>
+                            <h2 className="text-lg font-bold w-full text-center mt-5">
+                                준비물
+                            </h2>
                             <p className="text-sm pt-1 text-gray-600">
                                 {lessonInfo.equipment}
                             </p>
-                            <h2 className="text-lg font-bold mt-4">
+                            <h2 className="text-lg font-bold w-full text-center mt-5">
                                 유의 사항
                             </h2>
                             <p className="text-sm pt-1 text-gray-600">

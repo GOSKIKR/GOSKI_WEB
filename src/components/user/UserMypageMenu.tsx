@@ -14,7 +14,7 @@ const UserMypageMenu: React.FC<UserMypageMenuProps> = ({
     };
 
     return (
-        <div className="flex flex-row space-x-4 pt-12 pb-12 justify-between w-4/5 sm:w-2/3">
+        <div className="flex flex-row min-w-96 space-x-4 pt-12 pb-12 justify-between w-4/5 sm:w-2/3">
             <div
                 className={`cursor-pointer text-black text-xl font-bold`}
                 onClick={() => setActivePage("lessonHistory")}

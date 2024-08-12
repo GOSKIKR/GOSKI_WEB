@@ -85,29 +85,26 @@ const UserSettings = ({
           <div className="flex flex-col gap-2 p-4">
             {settings.length > 0 && (
               <>
-                <div>
+                <div className="flex justify-between items-center">
                   <label>강습 예약 알림</label>
                   <input
                     type="checkbox"
-                    className="mr-2"
                     checked={settings[0].status}
                     onChange={() => handleToggle(0)}
                   />
                 </div>
-                <div>
+                <div className="flex justify-between items-center">
                   <label>피드백 수신 알림</label>
                   <input
                     type="checkbox"
-                    className="mr-2"
                     checked={settings[1].status}
                     onChange={() => handleToggle(1)}
                   />
                 </div>
-                <div>
+                <div className="flex justify-between items-center">
                   <label>쪽지 수신 알림</label>
                   <input
                     type="checkbox"
-                    className="mr-2"
                     checked={settings[2].status}
                     onChange={() => handleToggle(2)}
                   />
