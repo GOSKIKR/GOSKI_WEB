@@ -11,7 +11,7 @@ interface TeamResultComponentProps {
         teamProfileUrl: string;
         rating: number;
         instructors: number[];
-        teamImages: {
+        teamImageVOs: {
             teamImageId: number;
             imageUrl: string;
         }[];
@@ -53,7 +53,7 @@ const TeamResultComponent: React.FC<TeamResultComponentProps> = ({
                 teamProfileUrl: data.teamProfileUrl,
                 rating: data.rating,
                 instructors: data.instructors,
-                teamImages: data.teamImages,
+                teamImageVOs: data.teamImageVOs,
                 basicFee: data.basicFee,
                 peopleOptionFee: data.peopleOptionFee,
                 designatedFee: data.designatedFee,
