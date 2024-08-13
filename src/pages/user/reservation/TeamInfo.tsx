@@ -48,7 +48,7 @@ const TeamInfo: React.FC = () => {
         teamProfileUrl,
         rating,
         instructors,
-        teamImages,
+        teamImageVOs,
         basicFee,
         peopleOptionFee,
         designatedFee,
@@ -87,6 +87,7 @@ const TeamInfo: React.FC = () => {
 
     // 팀원 리스트 받아오기
     useEffect(() => {
+        console.log(teamImageVOs);
         const fetchInstructors = async () => {
             try {
                 const accessToken = sessionStorage.getItem("accesstoken");
@@ -200,8 +201,8 @@ const TeamInfo: React.FC = () => {
                 <div className="w-full min-w-72 sm:w-7/12 h-[2400px] bg-primary-50 rounded-lg shadow-md">
                     <div className="px-6 py-6 text-lg font-bold">팀 소개</div>
                     <div className="">
-                        {teamImages ? (
-                            teamImages.map((image, index) => (
+                        {teamImageVOs ? (
+                            teamImageVOs.map((image, index) => (
                                 <img
                                     key={index}
                                     src={image.imageUrl}
