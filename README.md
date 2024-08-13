@@ -61,7 +61,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
 | :------------------------------------: | :----------------------------------------: | :-------------------------------------------: |
 |               필터 설정                |                필터 설정 결과 - 초급                 |             필터 설정 결과 - 중급, 고급    |       
 
-| <img src="exec/screen/필터설정.png" width="300px" /> |<img src="exec/screen/강사상세.png" width="300px" /> |  <img src="exec/screen/지정강사선택.png" width="300px" /> | <img src="exec/screen/결제하기.png" width="300px" /> |
+| <img src="exec/screen/팀상세.png" width="300px" /> |<img src="exec/screen/강사상세.png" width="300px" /> |  <img src="exec/screen/지정강사선택.png" width="300px" /> | <img src="exec/screen/결제하기.png" width="300px" /> |
 | :------------------------------------: | :----------------------------------------: | :------------------------------------: | :----------------------------------------: | 
 |               초급(팀) 상세 페이지                |                중,고급(강사) 상세 페이지                 |                지정 강사 선택                |                결제                 |  
 
@@ -188,7 +188,7 @@ GOSKI와 함께라면팀 단위 및 개인 단위 스케줄을 최적으로 분�
             <img src="exec/images/김현지.png" width="140px" /> <br> 김현지 <br>(Front-End) </a> <br></td>
     </tr>
     <tr>
-        <td align="center">
+        <td align="center"style="width: 16.66%; word-wrap: break-word;">INFRA, 백엔드 유지보수
         <td align="center">
         <td align="center" style="width: 16.66%; word-wrap: break-word;">팀 관리 화면 제작<br/>피드백/리뷰 화면 제작
         <td align="center">
