@@ -207,7 +207,7 @@ const TeamInfo: React.FC = () => {
                                     key={index}
                                     src={image.imageUrl}
                                     alt="team image"
-                                    className="w-full h-[300px] object-cover"
+                                    className="w-full h-auto object-cover"
                                 />
                             ))
                         ) : (
